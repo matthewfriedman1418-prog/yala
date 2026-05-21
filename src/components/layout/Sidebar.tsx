@@ -1,0 +1,180 @@
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useUIStore } from '@/lib/store/ui';
+import { useAuthStore } from '@/lib/store/auth';
+import { cn } from '@/lib/utils';
+import type { ComponentType } from 'react';
+import {
+  Dice5, Zap, Trophy, Star, Gift, Target,
+  MessageCircle, Users, Wallet, TrendingUp, Shield, HelpCircle,
+  BarChart3, Layers, Clock, Gem
+} from 'lucide-react';
+
+interface NavItem {
+  href: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  badge?: string;
+}
+
+interface NavSection {
+  label: string;
+  items: NavItem[];
+}
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    label: 'PLAY',
+    items: [
+      { href: '/casino', label: 'Casino', icon: Dice5 },
+      { href: '/originals', label: 'Yala Originals', icon: Zap, badge: 'HOT' },
+      { href: '/sportsbook', label: 'Sportsbook', icon: BarChart3, badge: 'BETA' },
+    ],
+  },
+  {
+    label: 'REWARDS',
+    items: [
+      { href: '/vip', label: 'VIP Club', icon: Crown },
+      { href: '/rakeback', label: 'Rakeback', icon: TrendingUp },
+      { href: '/daily-bonus', label: 'Daily Bonus', icon: Gift },
+      { href: '/missions', label: 'Missions', icon: Target },
+      { href: '/leaderboards', label: 'Leaderboards', icon: Trophy },
+      { href: '/rewards', label: 'Rewards Hub', icon: Star },
+      { href: '/promotions', label: 'Promotions', icon: Gem },
+    ],
+  },
+  {
+    label: 'SOCIAL',
+    items: [
+      { href: '/rooms', label: 'Rooms', icon: Users },
+      { href: '/affiliate', label: 'Affiliate', icon: Layers },
+    ],
+  },
+  {
+    label: 'ACCOUNT',
+    items: [
+      { href: '/wallet', label: 'Wallet', icon: Wallet },
+      { href: '/vault', label: 'Vault', icon: Shield },
+      { href: '/profile/transactions', label: 'History', icon: Clock },
+    ],
+  },
+  {
+    label: 'INFO',
+    items: [
+      { href: '/responsible-gaming', label: 'Responsible Gaming', icon: Shield },
+      { href: '/support', label: 'Help & Support', icon: HelpCircle },
+      { href: '/providers', label: 'Providers', icon: Layers },
+    ],
+  },
+];
+
+function Crown({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M2 20h20M4 20l2-8 6 4 4-8 4 8 2-8" />
+    </svg>
+  );
+}
+
+export function Sidebar() {
+  const pathname = usePathname();
+  const { toggleChat } = useUIStore();
+  const { isLoggedIn } = useAuthStore();
+  const { openAuthModal } = useUIStore();
+
+  return (
+    <aside className="w-60 h-screen flex flex-col border-r border-[#1E1E1E] overflow-y-auto no-scrollbar" style={{ backgroundColor: '#0A0A0A' }}>
+      {/* Logo */}
+      <Link href="/" className="flex items-center gap-2 px-5 py-5 border-b border-[#1E1E1E] flex-shrink-0">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D6A84F, #A07830)' }}>
+          <span className="text-black font-bold text-sm font-display">Y</span>
+        </div>
+        <div>
+          <span className="font-display text-xl font-bold tracking-wide" style={{ color: '#D6A84F' }}>YALA</span>
+          <span className="text-[10px] block text-[#9CA3AF] -mt-0.5 tracking-widest uppercase">Desert Casino</span>
+        </div>
+      </Link>
+
+      {/* Auth buttons (logged out) */}
+      {!isLoggedIn && (
+        <div className="px-4 py-4 border-b border-[#1E1E1E] space-y-2 flex-shrink-0">
+          <button
+            onClick={() => openAuthModal('register')}
+            className="w-full py-2 px-4 rounded-lg text-sm font-semibold text-black transition-all"
+            style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
+          >
+            Sign Up
+          </button>
+          <button
+            onClick={() => openAuthModal('login')}
+            className="w-full py-2 px-4 rounded-lg text-sm font-semibold border border-[#D6A84F]/30 text-[#D6A84F] hover:bg-[#D6A84F]/10 transition-all"
+          >
+            Login
+          </button>
+        </div>
+      )}
+
+      {/* Nav sections */}
+      <nav className="flex-1 py-3 px-3 space-y-5">
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.label}>
+            <p className="text-[10px] font-semibold text-[#9CA3AF] tracking-widest uppercase px-2 mb-1">{section.label}</p>
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all',
+                      isActive
+                        ? 'nav-item-active font-medium'
+                        : 'text-[#9CA3AF] hover:text-[#F5E8C8] hover:bg-white/5'
+                    )}
+                  >
+                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge && (
+                      <span className={cn(
+                        'text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide',
+                        item.badge === 'HOT' ? 'bg-red-500/20 text-red-400' :
+                        item.badge === 'BETA' ? 'bg-blue-500/20 text-blue-400' :
+                        'bg-[#D6A84F]/20 text-[#D6A84F]'
+                      )}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </nav>
+
+      {/* Chat button */}
+      <div className="px-3 pb-4 flex-shrink-0">
+        <button
+          onClick={toggleChat}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#9CA3AF] hover:text-[#F5E8C8] hover:bg-white/5 border border-[#1E1E1E] transition-all"
+        >
+          <MessageCircle className="w-4 h-4" />
+          <span>Live Chat</span>
+          <div className="ml-auto flex items-center gap-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] text-emerald-400">247</span>
+          </div>
+        </button>
+
+        {/* Legal strip */}
+        <div className="mt-3 text-center">
+          <p className="text-[9px] text-[#9CA3AF]/60 leading-tight">18+ | No Real Money Gambling</p>
+          <p className="text-[9px] text-[#9CA3AF]/60 leading-tight">Void Where Prohibited</p>
+        </div>
+      </div>
+    </aside>
+  );
+}
