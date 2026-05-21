@@ -70,12 +70,12 @@ export default function CasinoPage() {
         />
 
         {/* Floating pyramid watermark */}
-        <div className="absolute -right-8 -bottom-8 opacity-[0.04]">
-          <svg width="280" height="240" viewBox="0 0 40 34" fill="none">
-            <path d="M2 34h36L20 24z" fill="#2DC97A"/>
-            <path d="M8 24h24L20 14z" fill="#2DC97A"/>
-            <path d="M13 14h14L20 6z" fill="#F0B232"/>
-            <path d="M16.5 6h7L20 1z" fill="#F0B232"/>
+        <div className="absolute -right-8 -bottom-8 opacity-[0.05]">
+          <svg width="280" height="224" viewBox="0 0 40 32" fill="none">
+            <rect x="2" y="25" width="36" height="6" rx="2" fill="#2DC97A"/>
+            <rect x="7" y="17" width="26" height="6" rx="2" fill="#2DC97A"/>
+            <rect x="13" y="9" width="14" height="6" rx="2" fill="#F0B232"/>
+            <rect x="17" y="1" width="6" height="6" rx="2" fill="#F0B232"/>
           </svg>
         </div>
 

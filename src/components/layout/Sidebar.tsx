@@ -32,18 +32,18 @@ function Crown({ className }: { className?: string }) {
   );
 }
 
-/** Yala pyramid icon — matches logo variant #16 */
+/** Yala pyramid icon — 4 stacked horizontal bars, matching logo variant #16 exactly */
 function YalaPyramid({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
-      {/* Bottom layer — widest, dark teal */}
-      <path d="M2 34h36L20 24z" fill="#1A7A4A"/>
-      {/* Middle layer — medium, teal */}
-      <path d="M8 24h24L20 14z" fill="#2DC97A"/>
-      {/* Upper layer — narrower, lime-gold */}
-      <path d="M13 14h14L20 6z" fill="#84CC16"/>
-      {/* Tip — gold */}
-      <path d="M16.5 6h7L20 1z" fill="#F0B232"/>
+    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 32" fill="none">
+      {/* Bar 1 — bottom, widest, ocean blue */}
+      <rect x="2" y="25" width="36" height="6" rx="2" fill="#1A5C8A"/>
+      {/* Bar 2 — teal */}
+      <rect x="7" y="17" width="26" height="6" rx="2" fill="#2DC97A"/>
+      {/* Bar 3 — lime */}
+      <rect x="13" y="9" width="14" height="6" rx="2" fill="#84CC16"/>
+      {/* Bar 4 — top, narrowest, gold */}
+      <rect x="17" y="1" width="6" height="6" rx="2" fill="#F0B232"/>
     </svg>
   );
 }

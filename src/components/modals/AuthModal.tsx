@@ -62,11 +62,11 @@ export function AuthModal() {
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #1A2E22' }}>
             <div className="flex items-center gap-3">
-              <svg width="28" height="24" viewBox="0 0 40 34" fill="none">
-                <path d="M2 34h36L20 24z" fill="#1A7A4A"/>
-                <path d="M8 24h24L20 14z" fill="#2DC97A"/>
-                <path d="M13 14h14L20 6z" fill="#84CC16"/>
-                <path d="M16.5 6h7L20 1z" fill="#F0B232"/>
+              <svg width="28" height="23" viewBox="0 0 40 32" fill="none">
+                <rect x="2" y="25" width="36" height="6" rx="2" fill="#1A5C8A"/>
+                <rect x="7" y="17" width="26" height="6" rx="2" fill="#2DC97A"/>
+                <rect x="13" y="9" width="14" height="6" rx="2" fill="#84CC16"/>
+                <rect x="17" y="1" width="6" height="6" rx="2" fill="#F0B232"/>
               </svg>
               <div>
                 <h2 className="font-display text-xl font-bold" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
