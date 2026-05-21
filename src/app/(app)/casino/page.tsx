@@ -137,11 +137,11 @@ export default function CasinoPage() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => openAuthModal('register')}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
                 style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A', boxShadow: '0 4px 20px rgba(45,201,122,0.3)' }}
               >
-                <Zap className="w-4 h-4" />
-                Play Free — No Purchase Needed
+                <Zap className="w-4 h-4 flex-shrink-0" />
+                Play Free — No Deposit
               </button>
               <button
                 onClick={() => openAuthModal('login')}
