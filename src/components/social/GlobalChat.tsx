@@ -57,21 +57,21 @@ export function GlobalChat() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-14 bottom-0 w-80 z-40 flex flex-col border-l border-[#1E1E1E]"
-            style={{ backgroundColor: '#0A0A0A' }}
+            className="fixed right-0 top-14 bottom-9 w-80 z-40 flex flex-col"
+            style={{ backgroundColor: '#0C1812', borderLeft: '1px solid #1A2E22' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-4 border-b border-[#1E1E1E] flex-shrink-0">
+            <div className="flex items-center justify-between px-4 py-4 flex-shrink-0" style={{ borderBottom: '1px solid #1A2E22' }}>
               <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-[#D6A84F]" />
-                <span className="font-semibold text-sm text-[#F5E8C8]">Live Chat</span>
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400 font-medium">247 online</span>
+                <MessageCircle className="w-4 h-4" style={{ color: '#F0B232' }} />
+                <span className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Live Chat</span>
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)' }}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[10px] font-medium" style={{ color: '#2DC97A' }}>247 online</span>
                 </div>
               </div>
               <button onClick={closeChat} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-                <X className="w-4 h-4 text-[#9CA3AF]" />
+                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
               </button>
             </div>
 
@@ -121,7 +121,7 @@ export function GlobalChat() {
             </div>
 
             {/* Input */}
-            <div className="flex-shrink-0 px-3 py-3 border-t border-[#1E1E1E]">
+            <div className="flex-shrink-0 px-3 py-3" style={{ borderTop: '1px solid #1A2E22' }}>
               {isLoggedIn ? (
                 <form onSubmit={handleSend} className="flex gap-2">
                   <input
@@ -129,13 +129,14 @@ export function GlobalChat() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Say something..."
-                    className="flex-1 px-3 py-2 rounded-lg text-xs bg-white/5 border border-[#2a2a2a] text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F]/50 transition-colors"
+                    className="flex-1 px-3 py-2 rounded-lg text-xs text-[#F5E8C8] focus:outline-none transition-colors"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
                     maxLength={200}
                   />
                   <button
                     type="submit"
                     className="p-2 rounded-lg transition-all hover:opacity-80"
-                    style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
+                    style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
                   >
                     <Send className="w-3.5 h-3.5 text-black" />
                   </button>
@@ -143,8 +144,8 @@ export function GlobalChat() {
               ) : (
                 <button
                   onClick={() => openAuthModal()}
-                  className="w-full py-2 rounded-lg text-xs font-semibold text-black"
-                  style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
+                  className="w-full py-2 rounded-lg text-xs font-bold text-black"
+                  style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
                 >
                   Login to Chat
                 </button>

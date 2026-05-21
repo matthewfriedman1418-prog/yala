@@ -11,6 +11,7 @@ import { BuyCoinsModal } from '../modals/BuyCoinsModal';
 import { RedeemModal } from '../modals/RedeemModal';
 import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
+import { LiveWinFeed } from '../ui/LiveWinFeed';
 import { MessageCircle } from 'lucide-react';
 
 interface AppShellProps {
@@ -22,7 +23,7 @@ export function AppShell({ children }: AppShellProps) {
   const { chatOpen, toggleChat } = useUIStore();
 
   return (
-    <div data-currency={activeCurrency} className="flex h-screen overflow-hidden" style={{ backgroundColor: '#050505' }}>
+    <div data-currency={activeCurrency} className="flex h-screen overflow-hidden" style={{ backgroundColor: '#060E0A' }}>
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex flex-shrink-0">
         <Sidebar />
@@ -31,8 +32,9 @@ export function AppShell({ children }: AppShellProps) {
       {/* Main content area */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header />
+        {/* Extra bottom padding = 36px LiveWinFeed + 16px gap */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-screen-2xl mx-auto px-4 py-6 pb-24 lg:pb-8">
+          <div className="max-w-screen-2xl mx-auto px-4 py-6 pb-28 lg:pb-14">
             {children}
           </div>
         </main>
@@ -54,20 +56,23 @@ export function AppShell({ children }: AppShellProps) {
       <RedeemModal />
       <RainBanner />
 
-      {/* Floating chat button — hidden when chat is open */}
+      {/* Floating chat button — teal-gold gradient, sits above LiveWinFeed */}
       {!chatOpen && (
         <button
           onClick={toggleChat}
-          className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-40 w-12 h-12 rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 active:scale-95"
-          style={{ background: 'linear-gradient(135deg, #D6A84F, #A07830)' }}
+          className="fixed bottom-14 right-4 lg:bottom-12 lg:right-6 z-40 w-12 h-12 rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 active:scale-95"
+          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', boxShadow: '0 4px 16px rgba(45,201,122,0.4)' }}
           aria-label="Open live chat"
         >
-          <MessageCircle className="w-5 h-5 text-black" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#050505] flex items-center justify-center">
+          <MessageCircle className="w-5 h-5 text-black font-bold" />
+          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 flex items-center justify-center" style={{ borderColor: '#060E0A' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-white" />
           </span>
         </button>
       )}
+
+      {/* Live Win Feed — fixed bottom strip */}
+      <LiveWinFeed />
     </div>
   );
 }

@@ -33,20 +33,20 @@ export function PromotionsDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed right-0 top-14 bottom-0 w-96 max-w-[92vw] z-40 flex flex-col border-l border-[#1E1E1E]"
-            style={{ backgroundColor: '#0A0A0A' }}
+            className="fixed right-0 top-14 bottom-9 w-96 max-w-[92vw] z-40 flex flex-col"
+            style={{ backgroundColor: '#0C1812', borderLeft: '1px solid #1A2E22' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E1E1E] flex-shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 flex-shrink-0" style={{ borderBottom: '1px solid #1A2E22' }}>
               <div className="flex items-center gap-2">
-                <Gift className="w-4 h-4" style={{ color: '#D6A84F' }} />
-                <span className="font-display font-bold text-[#F5E8C8]">Desert Deals</span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(214,168,79,0.15)', color: '#D6A84F' }}>
+                <Gift className="w-4 h-4" style={{ color: '#F0B232' }} />
+                <span className="font-display font-bold" style={{ color: '#F5E8C8' }}>Desert Deals</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.12)', color: '#F0B232' }}>
                   {PROMOTIONS.length} Active
                 </span>
               </div>
               <button onClick={closePromotionsDrawer} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-                <X className="w-4 h-4 text-[#9CA3AF]" />
+                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
               </button>
             </div>
 

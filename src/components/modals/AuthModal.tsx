@@ -53,37 +53,48 @@ export function AuthModal() {
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-md rounded-2xl border border-[#1E1E1E] overflow-hidden z-10"
-          style={{ backgroundColor: '#111' }}
+          className="relative w-full max-w-md rounded-2xl overflow-hidden z-10"
+          style={{ backgroundColor: '#101C16', border: '1px solid #1A2E22', boxShadow: '0 24px 64px rgba(0,0,0,0.7)' }}
         >
+          {/* Top gradient bar */}
+          <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #2DC97A, #F0B232, #2DC97A)', backgroundSize: '200% auto', animation: 'shimmer 4s linear infinite' }} />
+
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-[#1E1E1E]">
-            <div>
-              <h2 className="font-display text-xl font-bold" style={{ color: '#D6A84F' }}>
-                {isLogin ? 'Welcome Back' : 'Join Yala'}
-              </h2>
-              <p className="text-xs text-[#9CA3AF] mt-0.5">
-                {isLogin ? 'Enter the oasis' : 'Your desert luxury adventure begins here'}
-              </p>
+          <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #1A2E22' }}>
+            <div className="flex items-center gap-3">
+              <svg width="28" height="24" viewBox="0 0 40 34" fill="none">
+                <path d="M2 34h36L20 24z" fill="#1A7A4A"/>
+                <path d="M8 24h24L20 14z" fill="#2DC97A"/>
+                <path d="M13 14h14L20 6z" fill="#84CC16"/>
+                <path d="M16.5 6h7L20 1z" fill="#F0B232"/>
+              </svg>
+              <div>
+                <h2 className="font-display text-xl font-bold" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                  {isLogin ? 'Welcome Back' : 'Join Yala'}
+                </h2>
+                <p className="text-xs mt-0.5" style={{ color: '#8FA899' }}>
+                  {isLogin ? 'Enter the oasis' : 'Your desert adventure begins here'}
+                </p>
+              </div>
             </div>
             <button onClick={closeAuthModal} className="p-2 rounded-lg hover:bg-white/10 transition-colors">
-              <X className="w-4 h-4 text-[#9CA3AF]" />
+              <X className="w-4 h-4" style={{ color: '#8FA899' }} />
             </button>
           </div>
 
           {/* Tab switcher */}
-          <div className="flex border-b border-[#1E1E1E]">
+          <div className="flex" style={{ borderBottom: '1px solid #1A2E22' }}>
             <button
               onClick={() => openAuthModal('login')}
               className="flex-1 py-3 text-sm font-semibold transition-all"
-              style={isLogin ? { color: '#D6A84F', borderBottom: '2px solid #D6A84F' } : { color: '#9CA3AF' }}
+              style={isLogin ? { color: '#F0B232', borderBottom: '2px solid #F0B232' } : { color: '#8FA899' }}
             >
               Login
             </button>
             <button
               onClick={() => openAuthModal('register')}
               className="flex-1 py-3 text-sm font-semibold transition-all"
-              style={!isLogin ? { color: '#D6A84F', borderBottom: '2px solid #D6A84F' } : { color: '#9CA3AF' }}
+              style={!isLogin ? { color: '#F0B232', borderBottom: '2px solid #F0B232' } : { color: '#8FA899' }}
             >
               Create Account
             </button>
@@ -92,12 +103,12 @@ export function AuthModal() {
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
             {!isLogin && (
               <div>
-                <label className="text-xs font-medium text-[#9CA3AF] block mb-1">Username</label>
+                <label className="text-xs font-medium text-[#8FA899] block mb-1">Username</label>
                 <input
                   type="text"
                   value={form.username}
                   onChange={(e) => setForm({ ...form, username: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-[#2a2a2a] text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl text-sm text-[#F5E8C8] focus:outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
                   placeholder="DesertFox88"
                   required
                 />
@@ -105,31 +116,31 @@ export function AuthModal() {
             )}
 
             <div>
-              <label className="text-xs font-medium text-[#9CA3AF] block mb-1">
+              <label className="text-xs font-medium text-[#8FA899] block mb-1">
                 {isLogin ? 'Username or Email' : 'Email Address'}
               </label>
               <input
                 type={isLogin ? 'text' : 'email'}
                 value={isLogin ? form.username : form.email}
                 onChange={(e) => isLogin ? setForm({ ...form, username: e.target.value }) : setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-[#2a2a2a] text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F] transition-colors"
+                className="w-full px-4 py-3 rounded-xl text-sm text-[#F5E8C8] focus:outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
                 placeholder={isLogin ? 'Enter username or email' : 'you@example.com'}
                 required
               />
             </div>
 
             <div>
-              <label className="text-xs font-medium text-[#9CA3AF] block mb-1">Password</label>
+              <label className="text-xs font-medium text-[#8FA899] block mb-1">Password</label>
               <div className="relative">
                 <input
                   type={showPass ? 'text' : 'password'}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className="w-full px-4 py-3 pr-11 rounded-xl text-sm bg-white/5 border border-[#2a2a2a] text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F] transition-colors"
+                  className="w-full px-4 py-3 pr-11 rounded-xl text-sm text-[#F5E8C8] focus:outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
                   placeholder="••••••••"
                   required
                 />
-                <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#F5E8C8]">
+                <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8FA899] hover:text-[#F5E8C8]">
                   {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -137,12 +148,12 @@ export function AuthModal() {
 
             {!isLogin && (
               <div>
-                <label className="text-xs font-medium text-[#9CA3AF] block mb-1">Referral / Creator Code (optional)</label>
+                <label className="text-xs font-medium text-[#8FA899] block mb-1">Referral / Creator Code (optional)</label>
                 <input
                   type="text"
                   value={form.referral}
                   onChange={(e) => setForm({ ...form, referral: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-[#2a2a2a] text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F] transition-colors uppercase"
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232] transition-colors uppercase"
                   placeholder="YALA or creator code"
                 />
               </div>
@@ -152,16 +163,16 @@ export function AuthModal() {
               <div className="space-y-2">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <div
-                    className={`w-4 h-4 rounded border mt-0.5 flex items-center justify-center flex-shrink-0 transition-colors ${form.agreed ? 'bg-[#D6A84F] border-[#D6A84F]' : 'border-[#444]'}`}
+                    className={`w-4 h-4 rounded border mt-0.5 flex items-center justify-center flex-shrink-0 transition-colors ${form.agreed ? 'bg-[#F0B232] border-[#F0B232]' : 'border-[#2A3A30]'}`}
                     onClick={() => setForm({ ...form, agreed: !form.agreed })}
                   >
                     {form.agreed && <span className="text-black text-xs font-bold">✓</span>}
                   </div>
-                  <span className="text-xs text-[#9CA3AF] leading-relaxed">
+                  <span className="text-xs text-[#8FA899] leading-relaxed">
                     I am 18+ years old and agree to the{' '}
-                    <a href="/terms" className="text-[#D6A84F] underline" target="_blank">Terms of Service</a>,{' '}
-                    <a href="/privacy" className="text-[#D6A84F] underline" target="_blank">Privacy Policy</a>, and{' '}
-                    <a href="/sweepstakes-rules" className="text-[#D6A84F] underline" target="_blank">Sweepstakes Rules</a>.
+                    <a href="/terms" className="text-[#F0B232] underline" target="_blank">Terms of Service</a>,{' '}
+                    <a href="/privacy" className="text-[#F0B232] underline" target="_blank">Privacy Policy</a>, and{' '}
+                    <a href="/sweepstakes-rules" className="text-[#F0B232] underline" target="_blank">Sweepstakes Rules</a>.
                   </span>
                 </label>
               </div>
@@ -178,14 +189,14 @@ export function AuthModal() {
               type="submit"
               disabled={loading}
               className="w-full py-3 rounded-xl font-semibold text-sm text-black transition-all hover:opacity-90 disabled:opacity-50"
-              style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
             >
               {loading ? 'Loading...' : isLogin ? 'Enter the Oasis' : 'Create Account'}
             </button>
 
             {!isLogin && (
               <div className="text-center">
-                <p className="text-[11px] text-[#9CA3AF]/70 leading-relaxed">
+                <p className="text-[11px] text-[#8FA899]/70 leading-relaxed">
                   No Purchase Necessary. Gold Coins have no cash value.<br />
                   18+ only. Void where prohibited.
                 </p>

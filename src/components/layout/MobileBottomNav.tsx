@@ -17,7 +17,7 @@ export function MobileBottomNav() {
   const { toggleMobileMenu } = useUIStore();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-16 border-t border-[#1E1E1E] flex items-center z-40" style={{ backgroundColor: '#0A0A0A' }}>
+    <nav className="fixed bottom-9 left-0 right-0 h-16 flex items-center z-40" style={{ backgroundColor: '#0C1812', borderTop: '1px solid #1A2E22' }}>
       {NAV_ITEMS.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href || pathname.startsWith(item.href);
@@ -27,8 +27,9 @@ export function MobileBottomNav() {
             href={item.href}
             className={cn(
               'flex-1 flex flex-col items-center justify-center gap-1 py-2 transition-colors',
-              isActive ? 'text-[#D6A84F]' : 'text-[#9CA3AF]'
+              isActive ? '' : ''
             )}
+            style={{ color: isActive ? '#F0B232' : '#8FA899' }}
           >
             <Icon className="w-5 h-5" />
             <span className="text-[10px] font-medium">{item.label}</span>
@@ -37,7 +38,7 @@ export function MobileBottomNav() {
       })}
       <button
         onClick={toggleMobileMenu}
-        className="flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[#9CA3AF]"
+        className="flex-1 flex flex-col items-center justify-center gap-1 py-2" style={{ color: '#8FA899' }}
       >
         <Menu className="w-5 h-5" />
         <span className="text-[10px] font-medium">More</span>

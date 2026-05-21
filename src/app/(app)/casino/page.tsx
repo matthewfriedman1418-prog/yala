@@ -1,25 +1,37 @@
 'use client';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { GameCard } from '@/components/casino/GameCard';
 import { ALL_GAMES, YALA_ORIGINALS, ALL_PROVIDERS, type GameCategory } from '@/lib/mock-data/games';
-import { Search, ChevronRight, Zap, TrendingUp } from 'lucide-react';
+import { Search, Zap, TrendingUp, Sparkles, Clock, Users, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { cn, formatGC, formatSC } from '@/lib/utils';
 
-const CATEGORIES: { id: GameCategory | 'all'; label: string }[] = [
-  { id: 'all', label: 'All Games' },
-  { id: 'slots', label: 'Slots' },
-  { id: 'live', label: 'Live Casino' },
-  { id: 'table', label: 'Table Games' },
-  { id: 'megaways', label: 'Megaways' },
-  { id: 'gameshows', label: 'Game Shows' },
-  { id: 'scratch', label: 'Scratch Cards' },
-  { id: 'fish', label: 'Fish Games' },
-  { id: 'casual', label: 'Casual' },
+const CATEGORIES: { id: GameCategory | 'all'; label: string; emoji: string }[] = [
+  { id: 'all', label: 'All Games', emoji: '🎮' },
+  { id: 'slots', label: 'Slots', emoji: '🎰' },
+  { id: 'live', label: 'Live Casino', emoji: '🎥' },
+  { id: 'table', label: 'Table Games', emoji: '🃏' },
+  { id: 'megaways', label: 'Megaways', emoji: '⚡' },
+  { id: 'gameshows', label: 'Game Shows', emoji: '🎪' },
+  { id: 'scratch', label: 'Scratch', emoji: '🎟' },
+  { id: 'fish', label: 'Fish Games', emoji: '🐠' },
+  { id: 'casual', label: 'Casual', emoji: '🎲' },
 ];
+
+const ORIGINALS_COLORS: Record<string, string> = {
+  'mirage-crash': 'linear-gradient(135deg, #7C2D12, #431407)',
+  'oasis-plinko': 'linear-gradient(135deg, #064E3B, #022C22)',
+  'dune-mines': 'linear-gradient(135deg, #78350F, #1C1917)',
+  'golden-dice': 'linear-gradient(135deg, #92400E, #451A03)',
+  'sandstorm-limbo': 'linear-gradient(135deg, #1B6B45, #0C1812)',
+  'emerald-wheel': 'linear-gradient(135deg, #064E3B, #022C22)',
+};
+
+const LIVE_PLAYERS = 2_847;
 
 export default function CasinoPage() {
   const { activeCurrency, goldCoins, sweepCoins } = useWalletStore();
@@ -28,7 +40,8 @@ export default function CasinoPage() {
   const [activeCategory, setActiveCategory] = useState<GameCategory | 'all'>('all');
   const [search, setSearch] = useState('');
   const isGC = activeCurrency === 'GC';
-  const accent = isGC ? '#D6A84F' : '#10B981';
+  const accent = isGC ? '#F0B232' : '#10B981';
+  const accentLight = isGC ? '#FFD166' : '#34D399';
 
   const filteredGames = ALL_GAMES.filter((g) => {
     const matchesCategory = activeCategory === 'all' || g.category === activeCategory;
@@ -41,135 +54,206 @@ export default function CasinoPage() {
 
   return (
     <div className="space-y-8 animate-[fade-in_0.3s_ease-out]">
-      {/* Lobby hero */}
-      <div className="relative rounded-2xl overflow-hidden p-6 sm:p-10 border border-[#1E1E1E]"
-        style={{ background: isGC ? 'radial-gradient(ellipse at 30% 50%, rgba(214,168,79,0.12) 0%, transparent 60%), #0A0A0A' : 'radial-gradient(ellipse at 30% 50%, rgba(16,185,129,0.12) 0%, transparent 60%), #0A0A0A' }}
+      {/* ── HERO ────────────────────────────────────────────── */}
+      <div
+        className="relative rounded-2xl overflow-hidden"
+        style={{
+          background: 'radial-gradient(ellipse at 15% 60%, rgba(45,201,122,0.18) 0%, transparent 55%), radial-gradient(ellipse at 85% 25%, rgba(240,178,50,0.14) 0%, transparent 55%), #0C1812',
+          border: '1px solid #1A2E22',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.4)',
+        }}
       >
-        <svg className="absolute bottom-0 right-0 w-64 opacity-5" viewBox="0 0 200 200" fill="none">
-          <path d="M0 150 Q50 80 100 130 Q150 180 200 100 V200 H0Z" fill={accent} />
-        </svg>
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: accent }} />
-            <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: accent }}>Casino Lobby</span>
+        {/* Decorative grid */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{ backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 39px,#2DC97A 39px,#2DC97A 40px), repeating-linear-gradient(90deg,transparent,transparent 39px,#2DC97A 39px,#2DC97A 40px)' }}
+        />
+
+        {/* Floating pyramid watermark */}
+        <div className="absolute -right-8 -bottom-8 opacity-[0.04]">
+          <svg width="280" height="240" viewBox="0 0 40 34" fill="none">
+            <path d="M2 34h36L20 24z" fill="#2DC97A"/>
+            <path d="M8 24h24L20 14z" fill="#2DC97A"/>
+            <path d="M13 14h14L20 6z" fill="#F0B232"/>
+            <path d="M16.5 6h7L20 1z" fill="#F0B232"/>
+          </svg>
+        </div>
+
+        <div className="relative z-10 px-6 py-8 sm:px-10 sm:py-10">
+          {/* Live stat row */}
+          <div className="flex items-center gap-4 mb-5 flex-wrap">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}>
+              <span className="live-dot" />
+              <span className="text-xs font-semibold" style={{ color: '#2DC97A' }}>
+                {LIVE_PLAYERS.toLocaleString()} playing now
+              </span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
+              <Sparkles className="w-3 h-3" style={{ color: '#F0B232' }} />
+              <span className="text-xs font-semibold" style={{ color: '#F0B232' }}>
+                {ALL_GAMES.length + YALA_ORIGINALS.length}+ Games
+              </span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
+              <Users className="w-3 h-3" style={{ color: '#8FA899' }} />
+              <span className="text-xs font-semibold" style={{ color: '#8FA899' }}>
+                {ALL_PROVIDERS.length} Providers
+              </span>
+            </div>
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>
-            Welcome to the Oasis
+
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3" style={{ color: '#F5E8C8' }}>
+            Welcome to the{' '}
+            <span className="gold-shimmer">Oasis</span>
           </h1>
-          <p className="text-sm max-w-lg mb-6" style={{ color: '#9CA3AF' }}>
-            {ALL_GAMES.length + YALA_ORIGINALS.length}+ games · {ALL_PROVIDERS.length} providers · Provably fair originals
+          <p className="text-sm sm:text-base mb-7 max-w-lg" style={{ color: '#8FA899' }}>
+            Premium social casino · Dual-currency · Provably fair originals
           </p>
+
           {isLoggedIn ? (
-            <div className="flex items-center gap-4">
-              <div className="px-4 py-2 rounded-xl border" style={{ borderColor: `${accent}30`, backgroundColor: `${accent}10` }}>
-                <p className="text-xs" style={{ color: '#9CA3AF' }}>Your Balance</p>
-                <p className="font-bold number-display text-lg" style={{ color: accent }}>
-                  {isGC ? `${formatGC(goldCoins)} GC` : `${formatSC(sweepCoins)} SC`}
-                </p>
+            <div className="flex items-center gap-3 flex-wrap">
+              <div
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl"
+                style={{ background: `${accent}12`, border: `1px solid ${accent}25` }}
+              >
+                <span className="text-sm font-bold" style={{ color: accent }}>{isGC ? '◈' : '◇'}</span>
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide" style={{ color: '#8FA899' }}>Balance</p>
+                  <p className="font-bold number-display text-base leading-none" style={{ color: '#F5E8C8' }}>
+                    {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)} {activeCurrency}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={openBuyCoins}
-                className="px-5 py-2 rounded-xl text-sm font-semibold text-black"
-                style={{ background: `linear-gradient(135deg, ${accent}, ${isGC ? '#F0C97A' : '#34D399'})` }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+                style={{ background: `linear-gradient(135deg, ${accent}, ${accentLight})`, color: '#060E0A', boxShadow: `0 4px 20px ${accent}35` }}
               >
+                <Sparkles className="w-4 h-4" />
                 Get More Coins
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => openAuthModal('register')}
-              className="px-6 py-3 rounded-xl text-sm font-semibold text-black"
-              style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
-            >
-              Sign Up — Play Free
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => openAuthModal('register')}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+                style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A', boxShadow: '0 4px 20px rgba(45,201,122,0.3)' }}
+              >
+                <Zap className="w-4 h-4" />
+                Play Free — No Purchase Needed
+              </button>
+              <button
+                onClick={() => openAuthModal('login')}
+                className="px-4 py-3 rounded-xl text-sm font-semibold transition-all"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              >
+                Login
+              </button>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Yala Originals strip */}
+      {/* ── YALA ORIGINALS ───────────────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #2DC97A, #F0B232)' }} />
             <Zap className="w-4 h-4" style={{ color: accent }} />
-            <h2 className="font-semibold text-[#F5E8C8]">Yala Originals</h2>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 uppercase">Exclusive</span>
+            <h2 className="font-bold text-[#F5E8C8]">Yala Originals</h2>
+            <span className="text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider text-red-400" style={{ background: 'rgba(239,68,68,0.15)' }}>
+              EXCLUSIVE
+            </span>
           </div>
-          <Link href="/originals" className="flex items-center gap-1 text-xs transition-opacity hover:opacity-80" style={{ color: accent }}>
+          <Link href="/originals" className="flex items-center gap-1 text-xs font-medium transition-opacity hover:opacity-80" style={{ color: accent }}>
             View all <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-          {YALA_ORIGINALS.slice(0, 6).map((g) => {
-            const gradientColors: Record<string, string[]> = {
-              'mirage-crash': ['#92400e', '#78350f'],
-              'oasis-plinko': ['#065f46', '#134e4a'],
-              'dune-mines': ['#78350f', '#1c1917'],
-              'golden-dice': ['#a16207', '#78350f'],
-              'sandstorm-limbo': ['#1c1917', '#292524'],
-              'emerald-wheel': ['#065f46', '#052e16'],
-            };
-            const colors = gradientColors[g.slug] || ['#1c1917', '#0a0a0a'];
-            return (
-              <Link key={g.slug} href={`/originals/${g.slug}`} className="group">
+          {YALA_ORIGINALS.slice(0, 6).map((g, i) => (
+            <motion.div
+              key={g.slug}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+            >
+              <Link href={`/originals/${g.slug}`} className="group block">
                 <div
                   className="relative aspect-square rounded-xl overflow-hidden cursor-pointer game-card-hover"
-                  style={{ background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})` }}
+                  style={{ background: ORIGINALS_COLORS[g.slug] || 'linear-gradient(135deg, #1C2E22, #0C1812)' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-2 left-2 right-2">
-                    <p className="text-[10px] font-bold text-white truncate">{g.name}</p>
-                    <p className="text-[9px]" style={{ color: accent }}>{g.type}</p>
+                  {/* Glow overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  {/* Icon area */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <Zap className="w-5 h-5" style={{ color: accent }} />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-2">
+                    <p className="text-[10px] font-bold text-white leading-tight truncate">{g.name}</p>
+                    <p className="text-[9px] font-medium" style={{ color: accent }}>{g.type}</p>
                   </div>
                 </div>
               </Link>
-            );
-          })}
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Hot Games */}
+      {/* ── HOT RIGHT NOW ────────────────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="w-1 h-5 rounded-full bg-red-400" />
             <TrendingUp className="w-4 h-4 text-red-400" />
-            <h2 className="font-semibold text-[#F5E8C8]">Hot Right Now</h2>
+            <h2 className="font-bold text-[#F5E8C8]">Hot Right Now</h2>
+            <span className="text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider text-red-400" style={{ background: 'rgba(239,68,68,0.12)' }}>
+              🔥 TRENDING
+            </span>
           </div>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-          {hotGames.map((g) => <GameCard key={g.id} game={g} size="sm" />)}
+          {hotGames.map((g, i) => (
+            <motion.div key={g.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+              <GameCard game={g} size="sm" />
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Search + categories */}
+      {/* ── SEARCH + CATEGORY TABS ───────────────────────────── */}
       <section>
-        <div className="flex flex-col sm:flex-row gap-3 mb-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search games or providers..."
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm bg-white/5 border border-[#1E1E1E] text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F]/50 transition-colors"
-            />
-          </div>
+        {/* Search bar */}
+        <div className="relative mb-4">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#4A6A55' }} />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search games, providers…"
+            className="w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-colors"
+            style={{
+              background: '#101C16',
+              border: '1px solid #1A2E22',
+              color: '#F5E8C8',
+              outline: 'none',
+            }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = `${accent}60`; }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = '#1A2E22'; }}
+          />
         </div>
 
-        {/* Category tabs */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-5">
+        {/* Category chips */}
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-6">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={cn(
-                'flex-shrink-0 px-4 py-2 rounded-lg text-xs font-semibold transition-all',
-                activeCategory === cat.id
-                  ? 'text-black'
-                  : 'text-[#9CA3AF] bg-white/5 hover:text-[#F5E8C8]'
-              )}
-              style={activeCategory === cat.id ? { background: `linear-gradient(135deg, ${accent}, ${isGC ? '#F0C97A' : '#34D399'})` } : {}}
+              className={cn('category-chip', activeCategory === cat.id ? 'active' : '')}
             >
+              <span>{cat.emoji}</span>
               {cat.label}
             </button>
           ))}
@@ -178,38 +262,71 @@ export default function CasinoPage() {
         {/* Game grid */}
         {filteredGames.length > 0 ? (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {filteredGames.map((g) => <GameCard key={g.id} game={g} size="sm" />)}
+            {filteredGames.map((g, i) => (
+              <motion.div key={g.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: Math.min(i * 0.02, 0.3) }}>
+                <GameCard game={g} size="sm" />
+              </motion.div>
+            ))}
           </div>
         ) : (
-          <div className="text-center py-16 text-[#9CA3AF]">
-            <Search className="w-8 h-8 mx-auto mb-3 opacity-30" />
-            <p className="font-medium">No games found</p>
+          <div className="text-center py-20" style={{ color: '#4A6A55' }}>
+            <Search className="w-8 h-8 mx-auto mb-3 opacity-40" />
+            <p className="font-medium" style={{ color: '#8FA899' }}>No games found</p>
             <p className="text-sm mt-1">Try a different search or category</p>
           </div>
         )}
       </section>
 
-      {/* New Games */}
+      {/* ── NEW ARRIVALS ─────────────────────────────────────── */}
       {activeCategory === 'all' && !search && (
         <section>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-blue-400" />
-              <h2 className="font-semibold text-[#F5E8C8]">New Arrivals</h2>
-            </div>
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-1 h-5 rounded-full bg-blue-400" />
+            <Clock className="w-4 h-4 text-blue-400" />
+            <h2 className="font-bold text-[#F5E8C8]">New Arrivals</h2>
+            <span className="text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider text-blue-400" style={{ background: 'rgba(96,165,250,0.12)' }}>
+              ✨ FRESH
+            </span>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {newGames.map((g) => <GameCard key={g.id} game={g} size="sm" />)}
+            {newGames.map((g, i) => (
+              <motion.div key={g.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+                <GameCard game={g} size="sm" />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── PROVIDERS STRIP ──────────────────────────────────── */}
+      {activeCategory === 'all' && !search && (
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold text-sm" style={{ color: '#8FA899' }}>Game Providers</h2>
+            <Link href="/providers" className="text-xs transition-opacity hover:opacity-80" style={{ color: accent }}>
+              View all →
+            </Link>
+          </div>
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+            {ALL_PROVIDERS.slice(0, 10).map((p) => (
+              <div
+                key={p.slug}
+                className="flex-shrink-0 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"
+                style={{ background: '#101C16', border: '1px solid #1A2E22', color: '#8FA899', whiteSpace: 'nowrap' }}
+              >
+                {p.name}
+              </div>
+            ))}
           </div>
         </section>
       )}
 
       {/* Legal */}
-      <div className="border-t border-[#1E1E1E] pt-6 text-center">
-        <p className="text-xs text-[#9CA3AF]/60">
+      <div className="border-t pt-6 text-center" style={{ borderColor: '#1A2E22' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
           18+ · No Purchase Necessary · Gold Coins have no cash value · Void Where Prohibited · Play Responsibly
         </p>
-        <p className="text-[10px] text-[#9CA3AF]/40 mt-1">
+        <p className="text-[10px] mt-1" style={{ color: 'rgba(143,168,153,0.3)' }}>
           Problem Gambling Helpline: 1-800-522-4700
         </p>
       </div>

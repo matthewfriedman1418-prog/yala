@@ -32,6 +32,22 @@ function Crown({ className }: { className?: string }) {
   );
 }
 
+/** Yala pyramid icon — matches logo variant #16 */
+function YalaPyramid({ size = 32 }: { size?: number }) {
+  return (
+    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
+      {/* Bottom layer — widest, dark teal */}
+      <path d="M2 34h36L20 24z" fill="#1A7A4A"/>
+      {/* Middle layer — medium, teal */}
+      <path d="M8 24h24L20 14z" fill="#2DC97A"/>
+      {/* Upper layer — narrower, lime-gold */}
+      <path d="M13 14h14L20 6z" fill="#84CC16"/>
+      {/* Tip — gold */}
+      <path d="M16.5 6h7L20 1z" fill="#F0B232"/>
+    </svg>
+  );
+}
+
 export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
@@ -83,31 +99,30 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-60 h-screen flex flex-col border-r border-[#1E1E1E] overflow-y-auto no-scrollbar" style={{ backgroundColor: '#0A0A0A' }}>
+    <aside className="w-60 h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar" style={{ backgroundColor: '#0C1812' }}>
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 px-5 py-5 border-b border-[#1E1E1E] flex-shrink-0">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D6A84F, #A07830)' }}>
-          <span className="text-black font-bold text-sm font-display">Y</span>
-        </div>
+      <Link href="/" className="flex items-center gap-2.5 px-4 py-4 border-b border-[#1A2E22] flex-shrink-0">
+        <YalaPyramid size={30} />
         <div>
-          <span className="font-display text-xl font-bold tracking-wide" style={{ color: '#D6A84F' }}>YALA</span>
-          <span className="text-[10px] block text-[#9CA3AF] -mt-0.5 tracking-widest uppercase">Desert Casino</span>
+          <span className="font-display text-xl font-black tracking-wider" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>YALA</span>
+          <span className="text-[10px] block -mt-0.5 tracking-widest uppercase" style={{ color: '#8FA899' }}>Desert Casino</span>
         </div>
       </Link>
 
       {/* Auth buttons (logged out) */}
       {!isLoggedIn && (
-        <div className="px-4 py-4 border-b border-[#1E1E1E] space-y-2 flex-shrink-0">
+        <div className="px-4 py-4 border-b border-[#1A2E22] space-y-2 flex-shrink-0">
           <button
             onClick={() => openAuthModal('register')}
             className="w-full py-2 px-4 rounded-lg text-sm font-semibold text-black transition-all"
-            style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
+            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
           >
             Sign Up
           </button>
           <button
             onClick={() => openAuthModal('login')}
-            className="w-full py-2 px-4 rounded-lg text-sm font-semibold border border-[#D6A84F]/30 text-[#D6A84F] hover:bg-[#D6A84F]/10 transition-all"
+            className="w-full py-2 px-4 rounded-lg text-sm font-semibold border transition-all"
+            style={{ borderColor: 'rgba(45,201,122,0.3)', color: '#2DC97A' }}
           >
             Login
           </button>
