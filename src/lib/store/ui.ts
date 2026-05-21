@@ -20,6 +20,14 @@ interface UIState {
   openBuyCoins: () => void;
   closeBuyCoins: () => void;
 
+  redeemModalOpen: boolean;
+  openRedeemModal: () => void;
+  closeRedeemModal: () => void;
+
+  promotionsDrawerOpen: boolean;
+  openPromotionsDrawer: () => void;
+  closePromotionsDrawer: () => void;
+
   sidebarCollapsed: boolean;
   toggleSidebar: () => void;
 
@@ -51,6 +59,14 @@ export const useUIStore = create<UIState>((set) => ({
   buyCoinsOpen: false,
   openBuyCoins: () => set({ buyCoinsOpen: true }),
   closeBuyCoins: () => set({ buyCoinsOpen: false }),
+
+  redeemModalOpen: false,
+  openRedeemModal: () => set({ redeemModalOpen: true }),
+  closeRedeemModal: () => set({ redeemModalOpen: false }),
+
+  promotionsDrawerOpen: false,
+  openPromotionsDrawer: () => set({ promotionsDrawerOpen: true }),
+  closePromotionsDrawer: () => set({ promotionsDrawerOpen: false }),
 
   sidebarCollapsed: false,
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),

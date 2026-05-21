@@ -7,11 +7,12 @@ import { useUIStore } from '@/lib/store/ui';
 import { MOCK_TRANSACTIONS } from '@/lib/mock-data/transactions';
 import { formatGC, formatSC, formatTime } from '@/lib/utils';
 import { Wallet, ArrowUpRight, ArrowDownLeft, Shield, Plus, ArrowRight } from 'lucide-react';
+import type { ComponentType } from 'react';
 
 export default function WalletPage() {
   const { goldCoins, sweepCoins, bonusBalance, rakebackBalance, vaultBalance, activeCurrency } = useWalletStore();
   const { isLoggedIn } = useAuthStore();
-  const { openAuthModal, openBuyCoins } = useUIStore();
+  const { openAuthModal, openBuyCoins, openRedeemModal } = useUIStore();
   const isGC = activeCurrency === 'GC';
   const accent = isGC ? '#D6A84F' : '#10B981';
 
@@ -42,11 +43,11 @@ export default function WalletPage() {
       {/* Balance cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[
-          { label: 'Gold Coins', value: formatGC(goldCoins), unit: 'GC', color: '#D6A84F', icon: '◈', href: '/wallet/buy' },
-          { label: 'Sweep Coins', value: formatSC(sweepCoins), unit: 'SC', color: '#10B981', icon: '◇', href: '/wallet/redeem' },
-          { label: 'Bonus Balance', value: formatGC(bonusBalance), unit: 'Bonus', color: '#F59E0B', icon: '⊕', href: null },
-          { label: 'Rakeback', value: formatGC(rakebackBalance), unit: 'GC', color: '#8B5CF6', icon: '↩', href: '/rakeback' },
-          { label: 'Vault', value: formatGC(vaultBalance), unit: 'GC', color: '#3B82F6', icon: '🏛', href: '/vault' },
+          { label: 'Gold Coins', value: formatGC(goldCoins), unit: 'GC', color: '#D6A84F', icon: '◈', href: '/wallet/buy' as string | null, action: null as (() => void) | null },
+          { label: 'Sweep Coins', value: formatSC(sweepCoins), unit: 'SC', color: '#10B981', icon: '◇', href: null, action: openRedeemModal },
+          { label: 'Bonus Balance', value: formatGC(bonusBalance), unit: 'Bonus', color: '#F59E0B', icon: '⊕', href: null, action: null },
+          { label: 'Rakeback', value: formatGC(rakebackBalance), unit: 'GC', color: '#8B5CF6', icon: '↩', href: '/rewards' as string | null, action: null },
+          { label: 'Vault', value: formatGC(vaultBalance), unit: 'GC', color: '#3B82F6', icon: '🏛', href: '/vault' as string | null, action: null },
         ].map((item) => (
           <div
             key={item.label}
@@ -55,10 +56,16 @@ export default function WalletPage() {
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-lg">{item.icon}</span>
-              {item.href && (
-                <Link href={item.href} className="text-[#9CA3AF] hover:text-[#F5E8C8] transition-colors">
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+              {(item.href || item.action) && (
+                item.action ? (
+                  <button onClick={item.action} className="text-[#9CA3AF] hover:text-[#F5E8C8] transition-colors">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                ) : (
+                  <Link href={item.href!} className="text-[#9CA3AF] hover:text-[#F5E8C8] transition-colors">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                )
               )}
             </div>
             <p className="font-bold text-xl number-display" style={{ color: item.color }}>{item.value}</p>
@@ -69,25 +76,24 @@ export default function WalletPage() {
 
       {/* Action buttons */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: 'Buy Coins', icon: Plus, href: '/wallet/buy', primary: true },
-          { label: 'Redeem SC', icon: ArrowUpRight, href: '/wallet/redeem', primary: false },
-          { label: 'Crypto', icon: ArrowDownLeft, href: '/wallet/crypto', primary: false },
-          { label: 'Vault', icon: Shield, href: '/vault', primary: false },
-        ].map((action) => {
-          const Icon = action.icon;
-          return (
-            <Link
-              key={action.label}
-              href={action.href}
-              className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
-              style={action.primary
-                ? { background: `linear-gradient(135deg, ${accent}, ${isGC ? '#F0C97A' : '#34D399'})`, color: '#000' }
-                : { background: 'rgba(255,255,255,0.05)', border: '1px solid #1E1E1E', color: '#F5E8C8' }
-              }
-            >
-              <Icon className="w-4 h-4" />
-              {action.label}
+        {([
+          { label: 'Buy Coins', icon: Plus, href: '/wallet/buy', action: null, primary: true },
+          { label: 'Redeem SC', icon: ArrowUpRight, href: null, action: openRedeemModal, primary: false },
+          { label: 'Crypto', icon: ArrowDownLeft, href: '/wallet/crypto', action: null, primary: false },
+          { label: 'Vault', icon: Shield, href: '/vault', action: null, primary: false },
+        ] as { label: string; icon: ComponentType<{ className?: string }>; href: string | null; action: (() => void) | null; primary: boolean }[]).map((a) => {
+          const Icon = a.icon;
+          const btnStyle = a.primary
+            ? { background: `linear-gradient(135deg, ${accent}, ${isGC ? '#F0C97A' : '#34D399'})`, color: '#000' }
+            : { background: 'rgba(255,255,255,0.05)', border: '1px solid #1E1E1E', color: '#F5E8C8' };
+          const cls = 'flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all hover:opacity-90';
+          return a.action ? (
+            <button key={a.label} onClick={a.action} className={cls} style={btnStyle}>
+              <Icon className="w-4 h-4" />{a.label}
+            </button>
+          ) : (
+            <Link key={a.label} href={a.href!} className={cls} style={btnStyle}>
+              <Icon className="w-4 h-4" />{a.label}
             </Link>
           );
         })}

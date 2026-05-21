@@ -1,4 +1,6 @@
 'use client';
+import { useState } from 'react';
+import type { ComponentType } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/auth';
@@ -9,7 +11,7 @@ import { VIP_TIERS } from '@/lib/mock-data/users';
 import { PROMOTIONS } from '@/lib/mock-data/promotions';
 import {
   Gift, TrendingUp, ChevronRight, Star, RotateCw,
-  Target, Trophy, Vault, Calendar
+  Target, Trophy, Vault, Calendar, CheckCircle2
 } from 'lucide-react';
 
 const REWARD_HUBS = [
@@ -22,20 +24,7 @@ const REWARD_HUBS = [
     color: '#D6A84F',
     href: '/daily-bonus',
     cta: 'Claim Now',
-    available: true,
     badge: 'Ready',
-  },
-  {
-    id: 'rakeback',
-    title: 'Rakeback',
-    subtitle: 'Earns while you play',
-    description: 'Claim your accumulated rakeback balance anytime.',
-    icon: TrendingUp,
-    color: '#10B981',
-    href: '/rakeback',
-    cta: 'Claim Rakeback',
-    available: true,
-    badge: 'Available',
   },
   {
     id: 'missions',
@@ -46,7 +35,6 @@ const REWARD_HUBS = [
     color: '#8B5CF6',
     href: '/missions',
     cta: 'View Missions',
-    available: true,
     badge: '3 New',
   },
   {
@@ -58,7 +46,6 @@ const REWARD_HUBS = [
     color: '#F59E0B',
     href: '/leaderboards',
     cta: 'See Rankings',
-    available: true,
     badge: 'Active',
   },
   {
@@ -70,7 +57,6 @@ const REWARD_HUBS = [
     color: '#06B6D4',
     href: '/vault',
     cta: 'Open Vault',
-    available: true,
     badge: 'Earning',
   },
   {
@@ -82,7 +68,6 @@ const REWARD_HUBS = [
     color: '#EC4899',
     href: '/promotions',
     cta: 'View Offers',
-    available: true,
     badge: '8 Active',
   },
 ];
@@ -91,14 +76,22 @@ const FEATURED_PROMOS = PROMOTIONS.slice(0, 3);
 
 export default function RewardsPage() {
   const { isLoggedIn, user } = useAuthStore();
-  const { xp, rakebackBalance, bonusBalance, vaultBalance } = useWalletStore();
-  const { openAuthModal } = useUIStore();
+  const { xp, rakebackBalance, bonusBalance, vaultBalance, claimRakeback } = useWalletStore();
+  const { openAuthModal, openPromotionsDrawer } = useUIStore();
+  const [rakeClaimed, setRakeClaimed] = useState(false);
 
   const currentTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1)) || VIP_TIERS[0];
   const nextTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1) + 1);
   const progress = nextTier
     ? Math.min(100, ((xp - currentTier.xpRequired) / (nextTier.xpRequired - currentTier.xpRequired)) * 100)
     : 100;
+
+  const handleClaimRakeback = () => {
+    if (rakebackBalance <= 0) return;
+    claimRakeback();
+    setRakeClaimed(true);
+    setTimeout(() => setRakeClaimed(false), 3000);
+  };
 
   return (
     <div className="space-y-8 animate-[fade-in_0.3s_ease-out]">
@@ -112,7 +105,7 @@ export default function RewardsPage() {
         <p style={{ color: '#9CA3AF' }}>Everything you&apos;ve earned. All in one place.</p>
       </div>
 
-      {/* VIP Progress Banner (logged in) */}
+      {/* VIP Progress Banner */}
       {isLoggedIn ? (
         <div
           className="relative rounded-2xl overflow-hidden p-5 border"
@@ -163,7 +156,7 @@ export default function RewardsPage() {
               )}
             </div>
 
-            <Link href="/vip" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity" style={{ color: '#D6A84F' }}>
+            <Link href="/vip" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity flex-shrink-0" style={{ color: '#D6A84F' }}>
               VIP Club <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -183,23 +176,44 @@ export default function RewardsPage() {
         </div>
       )}
 
-      {/* Quick balances (logged in) */}
+      {/* Balances + Rakeback inline claim */}
       {isLoggedIn && (
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { label: 'Rakeback', value: formatGC(rakebackBalance), color: '#10B981', href: '/rakeback' },
-            { label: 'Bonus', value: formatGC(bonusBalance), color: '#D6A84F', href: '/wallet' },
-            { label: 'Vault', value: formatGC(vaultBalance), color: '#06B6D4', href: '/vault' },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="glass-card p-4 text-center hover:border-[#D6A84F]/30 transition-all group"
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {/* Rakeback claim card */}
+          <div
+            className="glass-card p-4 flex items-center justify-between sm:col-span-1 col-span-1"
+            style={{ borderColor: rakebackBalance > 0 ? 'rgba(16,185,129,0.3)' : undefined }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                <TrendingUp className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-xs" style={{ color: '#9CA3AF' }}>Rakeback</p>
+                <p className="text-sm font-bold number-display text-emerald-400">{formatGC(rakebackBalance)} GC</p>
+              </div>
+            </div>
+            <button
+              onClick={handleClaimRakeback}
+              disabled={rakebackBalance <= 0 || rakeClaimed}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all disabled:opacity-40"
+              style={{ background: rakeClaimed ? 'rgba(16,185,129,0.2)' : 'linear-gradient(135deg, #10B981, #059669)', color: rakeClaimed ? '#10B981' : '#000' }}
             >
-              <p className="text-xs mb-1.5 group-hover:opacity-80 transition-opacity" style={{ color: '#9CA3AF' }}>{item.label}</p>
-              <p className="text-sm font-bold number-display group-hover:opacity-80 transition-opacity" style={{ color: item.color }}>{item.value}</p>
-            </Link>
-          ))}
+              {rakeClaimed ? <><CheckCircle2 className="w-3 h-3" /> Claimed</> : 'Claim'}
+            </button>
+          </div>
+
+          {/* Bonus */}
+          <Link href="/wallet" className="glass-card p-4 text-center hover:border-[#D6A84F]/30 transition-all group">
+            <p className="text-xs mb-1.5" style={{ color: '#9CA3AF' }}>Bonus Balance</p>
+            <p className="text-sm font-bold number-display group-hover:opacity-80" style={{ color: '#D6A84F' }}>{formatGC(bonusBalance)} GC</p>
+          </Link>
+
+          {/* Vault */}
+          <Link href="/vault" className="glass-card p-4 text-center hover:border-[#D6A84F]/30 transition-all group">
+            <p className="text-xs mb-1.5" style={{ color: '#9CA3AF' }}>Vault Balance</p>
+            <p className="text-sm font-bold number-display group-hover:opacity-80" style={{ color: '#06B6D4' }}>{formatGC(vaultBalance)} GC</p>
+          </Link>
         </div>
       )}
 
@@ -209,6 +223,7 @@ export default function RewardsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {REWARD_HUBS.map((hub, i) => {
             const Icon = hub.icon;
+            const isPromos = hub.id === 'promotions';
             return (
               <motion.div
                 key={hub.id}
@@ -216,34 +231,18 @@ export default function RewardsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
               >
-                <Link
-                  href={hub.href}
-                  className="glass-card p-5 flex flex-col h-full hover:border-[#D6A84F]/25 transition-all group"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center"
-                      style={{ background: `${hub.color}18`, border: `1px solid ${hub.color}30` }}
-                    >
-                      <Icon className="w-5 h-5" style={{ color: hub.color }} />
-                    </div>
-                    <span
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: `${hub.color}20`, color: hub.color }}
-                    >
-                      {hub.badge}
-                    </span>
-                  </div>
-
-                  <p className="font-semibold mb-0.5 group-hover:text-[#D6A84F] transition-colors" style={{ color: '#F5E8C8' }}>{hub.title}</p>
-                  <p className="text-xs mb-2" style={{ color: hub.color }}>{hub.subtitle}</p>
-                  <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: '#9CA3AF' }}>{hub.description}</p>
-
-                  <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: hub.color }}>
-                    {hub.cta}
-                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                  </div>
-                </Link>
+                {isPromos ? (
+                  <button
+                    onClick={openPromotionsDrawer}
+                    className="glass-card p-5 flex flex-col w-full text-left h-full hover:border-[#D6A84F]/25 transition-all group"
+                  >
+                    <HubCardContent hub={hub} Icon={Icon} />
+                  </button>
+                ) : (
+                  <Link href={hub.href} className="glass-card p-5 flex flex-col h-full hover:border-[#D6A84F]/25 transition-all group">
+                    <HubCardContent hub={hub} Icon={Icon} />
+                  </Link>
+                )}
               </motion.div>
             );
           })}
@@ -254,23 +253,21 @@ export default function RewardsPage() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Active Promotions</h2>
-          <Link href="/promotions" className="text-xs font-semibold flex items-center gap-1" style={{ color: '#D6A84F' }}>
+          <button onClick={openPromotionsDrawer} className="text-xs font-semibold flex items-center gap-1" style={{ color: '#D6A84F' }}>
             All Promos <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
+          </button>
         </div>
         <div className="space-y-3">
           {FEATURED_PROMOS.map((promo, i) => (
-            <motion.div
+            <motion.button
               key={promo.id}
+              onClick={openPromotionsDrawer}
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 + i * 0.07 }}
-              className="glass-card p-4 flex items-center gap-4 hover:border-[#D6A84F]/25 transition-all"
+              className="glass-card p-4 flex items-center gap-4 hover:border-[#D6A84F]/25 transition-all w-full text-left"
             >
-              <div
-                className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center"
-                style={{ background: 'rgba(214,168,79,0.1)', border: '1px solid rgba(214,168,79,0.2)' }}
-              >
+              <div className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center" style={{ background: 'rgba(214,168,79,0.1)', border: '1px solid rgba(214,168,79,0.2)' }}>
                 <Gift className="w-5 h-5" style={{ color: '#D6A84F' }} />
               </div>
               <div className="flex-1 min-w-0">
@@ -289,12 +286,12 @@ export default function RewardsPage() {
                   </span>
                 ) : null}
               </div>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
       </div>
 
-      {/* Spin widget teaser */}
+      {/* Free spin teaser */}
       <div
         className="rounded-2xl p-6 border flex flex-col sm:flex-row items-center gap-6"
         style={{ background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.2)' }}
@@ -317,7 +314,6 @@ export default function RewardsPage() {
         </Link>
       </div>
 
-      {/* Legal */}
       <div className="border-t border-[#1E1E1E] pt-4 text-center">
         <p className="text-xs text-[#9CA3AF]/60">
           No Purchase Necessary · 18+ · Gold Coins have no cash value · Void Where Prohibited
@@ -326,3 +322,35 @@ export default function RewardsPage() {
     </div>
   );
 }
+
+function HubCardContent({
+  hub,
+  Icon,
+}: {
+  hub: { color: string; badge: string; title: string; subtitle: string; description: string; cta: string };
+  Icon: ComponentType<{ className?: string; style?: React.CSSProperties }>;
+}) {
+  return (
+    <>
+      <div className="flex items-start justify-between mb-3">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center"
+          style={{ background: `${hub.color}18`, border: `1px solid ${hub.color}30` }}
+        >
+          <Icon className="w-5 h-5" style={{ color: hub.color }} />
+        </div>
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${hub.color}20`, color: hub.color }}>
+          {hub.badge}
+        </span>
+      </div>
+      <p className="font-semibold mb-0.5 group-hover:text-[#D6A84F] transition-colors" style={{ color: '#F5E8C8' }}>{hub.title}</p>
+      <p className="text-xs mb-2" style={{ color: hub.color }}>{hub.subtitle}</p>
+      <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: '#9CA3AF' }}>{hub.description}</p>
+      <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: hub.color }}>
+        {hub.cta}
+        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+      </div>
+    </>
+  );
+}
+

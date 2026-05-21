@@ -43,12 +43,12 @@ export function GlobalChat() {
     <AnimatePresence>
       {chatOpen && (
         <>
-          {/* Mobile overlay */}
+          {/* Mobile overlay — starts below the h-14 header */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 top-14 bg-black/50 z-40 lg:hidden"
             onClick={closeChat}
           />
 
@@ -57,7 +57,7 @@ export function GlobalChat() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-80 z-50 flex flex-col border-l border-[#1E1E1E]"
+            className="fixed right-0 top-14 bottom-0 w-80 z-40 flex flex-col border-l border-[#1E1E1E]"
             style={{ backgroundColor: '#0A0A0A' }}
           >
             {/* Header */}
