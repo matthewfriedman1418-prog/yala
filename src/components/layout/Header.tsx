@@ -36,11 +36,11 @@ export function Header() {
 
   return (
     <header
-      className="h-14 flex items-center px-4 gap-4 flex-shrink-0 relative z-30"
+      className="h-16 flex items-center px-5 gap-4 flex-shrink-0 relative z-30"
       style={{
-        backgroundColor: '#0C1812',
+        background: 'linear-gradient(180deg, #0E1E15 0%, #0C1812 100%)',
         borderBottom: '1px solid #1A2E22',
-        boxShadow: '0 1px 0 rgba(45,201,122,0.06)',
+        boxShadow: '0 1px 0 rgba(45,201,122,0.06), 0 4px 16px rgba(0,0,0,0.3)',
       }}
     >
       {/* Mobile logo */}
@@ -64,32 +64,37 @@ export function Header() {
           {/* Balances */}
           <div className="hidden sm:flex items-center gap-2">
             <div
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border"
-              style={{ borderColor: `${accent}28`, backgroundColor: `${accent}10` }}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl"
+              style={{
+                background: `linear-gradient(135deg, ${accent}14, ${accent}08)`,
+                border: `1px solid ${accent}30`,
+                boxShadow: `0 0 12px ${accent}18`,
+              }}
             >
-              <span className="text-xs font-bold" style={{ color: accent }}>
-                {isGC ? '◈' : '◇'}
-              </span>
-              <span className="text-xs font-semibold number-display" style={{ color: '#F5E8C8' }}>
-                {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}
-              </span>
+              <span className="text-sm font-bold" style={{ color: accent }}>{isGC ? '◈' : '◇'}</span>
+              <div>
+                <p className="text-[9px] uppercase tracking-widest leading-none mb-0.5" style={{ color: `${accent}80` }}>Balance</p>
+                <p className="text-sm font-black number-display leading-none" style={{ color: '#F5E8C8' }}>
+                  {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}
+                </p>
+              </div>
             </div>
             {bonusBalance > 0 && (
-              <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/20 bg-amber-500/8">
-                <span className="text-xs font-bold text-amber-400">⊕</span>
-                <span className="text-xs font-semibold number-display text-[#F5E8C8]">{formatGC(bonusBalance)}</span>
+              <div className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl" style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.2)' }}>
+                <span className="text-xs font-bold" style={{ color: '#F0B232' }}>⊕</span>
+                <span className="text-xs font-semibold number-display" style={{ color: '#F5E8C8' }}>{formatGC(bonusBalance)}</span>
               </div>
             )}
           </div>
 
-          {/* Buy button — gradient #16 style */}
+          {/* Buy button */}
           <button
             onClick={openBuyCoins}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 active:scale-95"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
             style={{
               background: `linear-gradient(135deg, ${accent}, ${accentLight})`,
               color: '#060E0A',
-              boxShadow: `0 0 12px ${accent}40`,
+              boxShadow: `0 2px 16px ${accent}45, inset 0 1px 0 rgba(255,255,255,0.25)`,
             }}
           >
             <Plus className="w-3.5 h-3.5" />

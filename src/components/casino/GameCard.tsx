@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import { useState } from 'react';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
 import type { Game } from '@/lib/mock-data/games';
@@ -52,6 +53,8 @@ function getGradient(key: string): string {
 export function GameCard({ game, size = 'md' }: GameCardProps) {
   const { openComingSoon, openAuthModal } = useUIStore();
   const { isLoggedIn } = useAuthStore();
+  const [imgError, setImgError] = useState(false);
+  const showImage = !!game.imageUrl && !imgError;
 
   const handleClick = () => {
     if (!isLoggedIn) {
@@ -71,17 +74,18 @@ export function GameCard({ game, size = 'md' }: GameCardProps) {
     <button
       onClick={handleClick}
       className={cn('group relative w-full rounded-xl overflow-hidden game-card-hover', sizeClasses[size])}
-      style={{ background: game.imageUrl ? '#0C1812' : getGradient(game.gradient) }}
+      style={{ background: showImage ? '#0C1812' : getGradient(game.gradient) }}
     >
       {/* Cover image */}
-      {game.imageUrl && (
+      {showImage && (
         <Image
-          src={game.imageUrl}
+          src={game.imageUrl!}
           alt={game.name}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           unoptimized
+          onError={() => setImgError(true)}
         />
       )}
 
