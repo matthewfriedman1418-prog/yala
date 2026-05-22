@@ -6,7 +6,7 @@ import { useUIStore } from '@/lib/store/ui';
 import { formatGC } from '@/lib/utils';
 import {
   Copy, CheckCircle2, Users, TrendingUp, Link as LinkIcon,
-  Layers, MousePointer, ShoppingCart, Zap, Share2, Download,
+  MousePointer, ShoppingCart, Zap, Download,
   ChevronRight, Star, ExternalLink
 } from 'lucide-react';
 
@@ -39,107 +39,141 @@ const COMMISSION_TIERS = [
   { tier: 'Platinum',  refs: '50+',   rate: '5,000 GC + 3% wager', bonus: 'Custom deal',  color: '#A78BFA' },
 ];
 
-// Inline sharing card component
-function SharingCard({
-  code,
-  url,
-  earned,
-  refs,
-}: {
-  code: string;
-  url: string;
-  earned: number;
-  refs: number;
-}) {
+// ── Portrait invite card — matches HTML design ──────────────────────────────
+function SharingCard({ code }: { code: string }) {
   return (
     <div
-      className="relative rounded-2xl overflow-hidden select-none"
+      className="relative overflow-hidden select-none w-full"
       style={{
-        background: 'linear-gradient(135deg, #060E0A 0%, #0C1812 50%, #071510 100%)',
-        border: '1px solid rgba(240,178,50,0.3)',
-        boxShadow: '0 16px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(240,178,50,0.08)',
-        aspectRatio: '1.85 / 1',
-        maxWidth: '480px',
-        padding: '28px 32px',
+        aspectRatio: '4 / 5',
+        borderRadius: '24px',
+        background: 'radial-gradient(ellipse 80% 60% at 50% 55%, #0b2418 0%, #081610 45%, #060E0A 75%)',
+        boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(240,178,50,0.18), 0 0 40px rgba(45,201,122,0.06)',
+        containerType: 'inline-size',
       }}
     >
-      {/* BG glow blobs */}
-      <div className="absolute -top-8 -left-8 w-32 h-32 rounded-full opacity-20 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #2DC97A, transparent)', filter: 'blur(30px)' }} />
-      <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full opacity-15 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #F0B232, transparent)', filter: 'blur(40px)' }} />
+      {/* Inner gold frame */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          inset: '10px',
+          borderRadius: '18px',
+          border: '1px solid rgba(240,178,50,0.32)',
+          boxShadow: 'inset 0 0 40px rgba(240,178,50,0.07), 0 0 24px rgba(240,178,50,0.1)',
+          zIndex: 10,
+        }}
+      />
 
-      {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.025] pointer-events-none"
-        style={{ backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(255,255,255,1) 19px,rgba(255,255,255,1) 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,rgba(255,255,255,1) 19px,rgba(255,255,255,1) 20px)' }} />
+      {/* Corner glyphs */}
+      {[
+        { top: '22px', left: '22px',  borderRight: 'none', borderBottom: 'none' },
+        { top: '22px', right: '22px', borderLeft:  'none', borderBottom: 'none' },
+        { bottom: '22px', left: '22px',  borderRight: 'none', borderTop: 'none' },
+        { bottom: '22px', right: '22px', borderLeft:  'none', borderTop: 'none' },
+      ].map((s, i) => (
+        <div key={i} className="absolute pointer-events-none" style={{ ...s, width: 14, height: 14, border: '1px solid rgba(240,178,50,0.4)', zIndex: 11 }} />
+      ))}
 
       {/* Watermark pyramid */}
-      <div className="absolute right-4 top-4 opacity-[0.07] pointer-events-none">
-        <CardPyramid size={80} />
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: 0.07, zIndex: 1 }}>
+        <svg viewBox="0 0 200 200" width="75%" height="75%">
+          <defs>
+            <linearGradient id="pyrFillAff" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stopColor="#FFE08A" stopOpacity="0.8" />
+              <stop offset="1" stopColor="#F0B232" stopOpacity="0.15" />
+            </linearGradient>
+          </defs>
+          <polygon points="100,16 184,176 16,176" fill="none" stroke="url(#pyrFillAff)" strokeWidth="1.2" />
+          <polygon points="100,46 158,158 42,158" fill="none" stroke="url(#pyrFillAff)" strokeWidth="1" />
+          <polygon points="100,76 132,140 68,140" fill="none" stroke="url(#pyrFillAff)" strokeWidth="0.8" />
+          <line x1="100" y1="16" x2="100" y2="176" stroke="url(#pyrFillAff)" strokeWidth="0.6" opacity="0.5" />
+        </svg>
       </div>
 
-      {/* YALA header row */}
-      <div className="relative z-10 flex items-center gap-2 mb-5">
-        <CardPyramid size={20} />
-        <span
-          className="font-display font-black text-lg tracking-widest"
-          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
-        >
-          YALA
-        </span>
-        <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#4A6A55' }}>Casino</span>
-        <div className="flex-1" />
-        <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-          style={{ background: 'rgba(45,201,122,0.1)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.2)' }}>
-          INVITE
-        </span>
+      {/* Green spotlight halo */}
+      <div className="absolute pointer-events-none" style={{
+        top: '35%', left: '50%', width: '90%', height: '60%',
+        transform: 'translate(-50%, -50%)',
+        background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(45,201,122,0.28) 0%, rgba(45,201,122,0.08) 35%, transparent 65%)',
+        filter: 'blur(24px)', mixBlendMode: 'screen', zIndex: 2,
+      }} />
+
+      {/* Gold halo under coin area */}
+      <div className="absolute pointer-events-none" style={{
+        top: '62%', left: '50%', width: '70%', height: '45%',
+        transform: 'translate(-50%, -50%)',
+        background: 'radial-gradient(ellipse 55% 40% at 50% 50%, rgba(255,200,80,0.45) 0%, rgba(240,178,50,0.18) 35%, transparent 70%)',
+        filter: 'blur(18px)', mixBlendMode: 'screen', zIndex: 3,
+      }} />
+
+      {/* Coin visual */}
+      <div className="absolute pointer-events-none" style={{ top: '28%', left: '50%', width: '50%', transform: 'translateX(-50%)', zIndex: 5 }}>
+        {/* Cylinder body */}
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '1.5 / 1',
+        }}>
+          {/* Body */}
+          <div style={{
+            position: 'absolute', left: 0, right: 0, top: '22%', bottom: '6%',
+            borderRadius: '0 0 50% 50% / 0 0 36% 36%',
+            background: 'linear-gradient(90deg, #5a3d0c 0%, #a8731a 14%, #f0b232 38%, #ffe08a 50%, #f0b232 62%, #a8731a 86%, #5a3d0c 100%)',
+            boxShadow: 'inset 0 -14px 28px rgba(80,50,5,0.5), 0 12px 40px rgba(255,200,80,0.28)',
+          }} />
+          {/* Top face */}
+          <div style={{
+            position: 'absolute', left: 0, right: 0, top: 0, height: '44%',
+            borderRadius: '50% / 50%',
+            background: 'radial-gradient(ellipse 30% 55% at 28% 32%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 65%), radial-gradient(ellipse 90% 100% at 50% 30%, #FFE9A8 0%, #FFD56B 22%, #F0B232 48%, #B8801E 78%, #6B4910 100%)',
+            boxShadow: 'inset 0 0 0 2px rgba(120,75,10,0.6), inset 0 4px 8px rgba(255,240,180,0.5), 0 6px 28px rgba(255,200,80,0.4)',
+            zIndex: 3,
+          }} />
+          {/* Y letter */}
+          <div style={{
+            position: 'absolute', left: 0, right: 0, top: 0, height: '44%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: 'serif', fontWeight: 900, fontSize: '36%',
+            color: '#6B4910', textShadow: '0 1px 0 rgba(255,240,180,0.8), 0 -1px 0 rgba(40,25,0,0.5)',
+            zIndex: 4,
+          }}>Y</div>
+        </div>
       </div>
 
-      {/* Headline */}
-      <p className="relative z-10 text-xs mb-4" style={{ color: '#8FA899' }}>
-        You&apos;ve been personally invited to join
-      </p>
-
-      {/* Big code box */}
+      {/* Content */}
       <div
-        className="relative z-10 flex items-center justify-between px-5 py-3 rounded-xl mb-4"
-        style={{
-          background: 'linear-gradient(135deg, rgba(240,178,50,0.1), rgba(240,178,50,0.05))',
-          border: '1px solid rgba(240,178,50,0.35)',
-        }}
+        className="absolute inset-0 flex flex-col"
+        style={{ padding: 'clamp(20px,6%,40px)', zIndex: 9 }}
       >
-        <div>
-          <p className="text-[9px] uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>Your Invite Code</p>
-          <p className="font-mono font-black text-2xl tracking-widest" style={{ color: '#F0B232', letterSpacing: '0.15em' }}>{code}</p>
+        {/* Eyebrow */}
+        <div className="flex items-center justify-center gap-2 mb-auto">
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#2DC97A', display: 'inline-block', boxShadow: '0 0 8px #2DC97A' }} />
+          <span style={{ fontFamily: 'monospace', fontSize: 'clamp(9px,1.3cqi,13px)', fontWeight: 600, letterSpacing: '0.3em', color: '#2DC97A', textTransform: 'uppercase' }}>YALA</span>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#2DC97A', display: 'inline-block', boxShadow: '0 0 8px #2DC97A' }} />
         </div>
-        <div className="text-right">
-          <p className="text-[9px] uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>Free Coins</p>
-          <p className="font-black text-base" style={{ color: '#2DC97A' }}>250K GC</p>
-        </div>
-      </div>
 
-      {/* URL */}
-      <p className="relative z-10 text-[10px] font-mono mb-4" style={{ color: '#4A6A55' }}>{url}</p>
+        {/* Headline */}
+        <div className="text-center" style={{ marginTop: '52%' }}>
+          <p style={{ fontFamily: 'serif', fontWeight: 900, fontSize: 'clamp(28px,8cqi,72px)', lineHeight: 0.9, letterSpacing: '-0.025em', color: '#F5E8C8', marginBottom: '0.15em' }}>GET FREE</p>
+          <p style={{ fontFamily: 'serif', fontWeight: 900, fontSize: 'clamp(28px,8cqi,72px)', lineHeight: 0.9, letterSpacing: '-0.025em', background: 'linear-gradient(180deg,#FFE9A8 0%,#F0B232 55%,#C68A1C 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>COINS</p>
+          <p style={{ marginTop: 'clamp(8px,1.5cqi,14px)', fontSize: 'clamp(10px,1.6cqi,15px)', color: 'rgba(200,215,205,0.65)' }}>Sign up with your friend&apos;s code</p>
+        </div>
 
-      {/* Stats row */}
-      <div className="relative z-10 flex items-center gap-4">
-        <div>
-          <p className="font-black text-sm number-display" style={{ color: '#2DC97A' }}>{refs}</p>
-          <p className="text-[9px] uppercase tracking-wide" style={{ color: '#4A6A55' }}>Players</p>
-        </div>
-        <div className="w-px h-6" style={{ background: '#1A2E22' }} />
-        <div>
-          <p className="font-black text-sm number-display" style={{ color: '#F0B232' }}>{formatGC(earned)}</p>
-          <p className="text-[9px] uppercase tracking-wide" style={{ color: '#4A6A55' }}>GC Earned</p>
-        </div>
-        <div className="w-px h-6" style={{ background: '#1A2E22' }} />
-        <div>
-          <p className="font-black text-sm" style={{ color: '#A78BFA' }}>FREE</p>
-          <p className="text-[9px] uppercase tracking-wide" style={{ color: '#4A6A55' }}>To Join</p>
-        </div>
-        <div className="flex-1 text-right">
-          <p className="text-[8px]" style={{ color: '#2A3E30' }}>No purchase necessary</p>
-          <p className="text-[8px]" style={{ color: '#2A3E30' }}>18+ · Void where prohibited</p>
+        <div style={{ flex: 1 }} />
+
+        {/* Code box */}
+        <div style={{
+          position: 'relative',
+          marginTop: 'clamp(12px,2cqi,20px)',
+          padding: 'clamp(12px,2cqi,18px) clamp(16px,3cqi,24px)',
+          background: 'linear-gradient(180deg,#060d09 0%,#030604 100%)',
+          borderRadius: '12px',
+          border: '1px solid rgba(240,178,50,0.5)',
+          boxShadow: '0 0 24px rgba(240,178,50,0.18), inset 0 0 20px rgba(0,0,0,0.5)',
+          textAlign: 'center',
+        }}>
+          <p style={{ fontFamily: 'monospace', fontSize: 'clamp(8px,1.1cqi,10px)', letterSpacing: '0.36em', color: 'rgba(170,180,175,0.7)', textTransform: 'uppercase', marginBottom: 'clamp(4px,0.8cqi,7px)' }}>USE CODE</p>
+          <p style={{ fontFamily: 'serif', fontWeight: 900, fontSize: 'clamp(24px,5.5cqi,48px)', letterSpacing: '0.1em', background: 'linear-gradient(180deg,#FFE9A8 0%,#F0B232 55%,#C68A1C 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}>{code}</p>
         </div>
       </div>
     </div>
@@ -263,8 +297,51 @@ export default function AffiliatePage() {
   const { isLoggedIn, user } = useAuthStore();
   const { openAuthModal } = useUIStore();
   const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [referralCode, setReferralCode] = useState(user?.referralCode || 'YALA88');
+  const [referralCode, setReferralCode] = useState(user?.referralCode || 'JACKPOT');
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const downloadCard = () => {
+    const w = window.open('', '_blank', 'width=540,height=720');
+    if (!w) return;
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>YALA Invite Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{background:#050805;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Archivo Black',serif}
+      .card{position:relative;width:400px;aspect-ratio:4/5;background:radial-gradient(ellipse 80% 60% at 50% 55%,#0b2418 0%,#081610 45%,#060E0A 75%);border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(240,178,50,.18),0 0 40px rgba(45,201,122,.06)}
+      .frame{position:absolute;inset:10px;border-radius:18px;border:1px solid rgba(240,178,50,.32);pointer-events:none;z-index:10}
+      .content{position:absolute;inset:0;display:flex;flex-direction:column;padding:36px;z-index:9}
+      .eyebrow{text-align:center;font-family:monospace;font-size:11px;letter-spacing:.32em;color:#2DC97A;text-transform:uppercase;margin-bottom:auto}
+      .headline{margin-top:52%;text-align:center}
+      .h1{font-size:60px;line-height:.9;letter-spacing:-.025em;color:#F5E8C8}
+      .h2{font-size:60px;line-height:.9;letter-spacing:-.025em;background:linear-gradient(180deg,#FFE9A8 0%,#F0B232 55%,#C68A1C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+      .sub{margin-top:12px;font-size:13px;color:rgba(200,215,205,.65);font-family:sans-serif;font-weight:400}
+      .spacer{flex:1}
+      .codebox{margin-top:16px;padding:14px 22px;background:linear-gradient(180deg,#060d09 0%,#030604 100%);border-radius:12px;border:1px solid rgba(240,178,50,.5);box-shadow:0 0 24px rgba(240,178,50,.18);text-align:center}
+      .codelabel{font-family:monospace;font-size:9px;letter-spacing:.36em;color:rgba(170,180,175,.7);text-transform:uppercase;margin-bottom:6px}
+      .code{font-size:42px;letter-spacing:.1em;background:linear-gradient(180deg,#FFE9A8 0%,#F0B232 55%,#C68A1C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+    </style>
+    </head><body>
+    <div class="card">
+      <div class="frame"></div>
+      <div class="content">
+        <div class="eyebrow">• YALA •</div>
+        <div class="headline">
+          <div class="h1">GET FREE</div>
+          <div class="h2">COINS</div>
+          <div class="sub">Sign up with your friend's code</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="codebox">
+          <div class="codelabel">USE CODE</div>
+          <div class="code">${referralCode}</div>
+        </div>
+      </div>
+    </div>
+    <script>setTimeout(()=>window.print(),400)</script>
+    </body></html>`);
+    w.document.close();
+  };
 
   const referralUrl = `https://yala.gg/r/${referralCode}`;
   const activeRefs = MOCK_REFERRALS.filter(r => r.status === 'active');
@@ -316,12 +393,7 @@ export default function AffiliatePage() {
             {/* LEFT: Sharing Card */}
             <div className="space-y-3 lg:w-[340px] flex-shrink-0">
               <div ref={cardRef}>
-                <SharingCard
-                  code={referralCode}
-                  url={referralUrl}
-                  earned={totalEarned}
-                  refs={activeRefs.length}
-                />
+                <SharingCard code={referralCode} />
               </div>
               {/* Share buttons */}
               <div className="flex gap-2 flex-wrap">
@@ -346,8 +418,10 @@ export default function AffiliatePage() {
                   {copiedField === 'code' ? 'Copied!' : 'Copy Code'}
                 </button>
                 <button
+                  onClick={downloadCard}
                   className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:bg-white/5"
                   style={{ background: 'rgba(255,255,255,0.04)', color: '#8FA899', border: '1px solid #1A2E22' }}
+                  title="Download / Print card"
                 >
                   <Download className="w-3.5 h-3.5" />
                 </button>
