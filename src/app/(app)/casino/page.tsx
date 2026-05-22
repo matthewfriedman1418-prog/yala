@@ -81,23 +81,25 @@ export default function CasinoPage() {
         </div>
 
         <div className="relative z-10 px-6 py-8 sm:px-10 sm:py-10">
-          {/* Live stat row */}
-          <div className="flex items-center gap-4 mb-5 flex-wrap">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}>
+          {/* Live stat row — horizontal, never wraps */}
+          <div className="flex items-center gap-2 mb-5 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full flex-shrink-0" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}>
               <span className="live-dot" />
-              <span className="text-xs font-semibold" style={{ color: '#2DC97A' }}>
-                {LIVE_PLAYERS.toLocaleString()} playing now
+              <span className="text-xs font-semibold whitespace-nowrap" style={{ color: '#2DC97A' }}>
+                {LIVE_PLAYERS.toLocaleString()} playing
               </span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
-              <Sparkles className="w-3 h-3" style={{ color: '#F0B232' }} />
-              <span className="text-xs font-semibold" style={{ color: '#F0B232' }}>
+            <div className="w-px h-4 flex-shrink-0" style={{ background: '#1A2E22' }} />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full flex-shrink-0" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
+              <Sparkles className="w-3 h-3 flex-shrink-0" style={{ color: '#F0B232' }} />
+              <span className="text-xs font-semibold whitespace-nowrap" style={{ color: '#F0B232' }}>
                 {ALL_GAMES.length + YALA_ORIGINALS.length}+ Games
               </span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
-              <Users className="w-3 h-3" style={{ color: '#8FA899' }} />
-              <span className="text-xs font-semibold" style={{ color: '#8FA899' }}>
+            <div className="w-px h-4 flex-shrink-0" style={{ background: '#1A2E22' }} />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full flex-shrink-0" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
+              <Users className="w-3 h-3 flex-shrink-0" style={{ color: '#8FA899' }} />
+              <span className="text-xs font-semibold whitespace-nowrap" style={{ color: '#8FA899' }}>
                 {ALL_PROVIDERS.length} Providers
               </span>
             </div>
@@ -309,15 +311,31 @@ export default function CasinoPage() {
             </Link>
           </div>
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-            {ALL_PROVIDERS.slice(0, 10).map((p) => (
-              <div
-                key={p.slug}
-                className="flex-shrink-0 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"
-                style={{ background: '#101C16', border: '1px solid #1A2E22', color: '#8FA899', whiteSpace: 'nowrap' }}
-              >
-                {p.name}
-              </div>
-            ))}
+            {ALL_PROVIDERS.slice(0, 10).map((p) => {
+              const initials = p.name.slice(0, 2).toUpperCase();
+              const hue = p.name.charCodeAt(0) % 4;
+              const colors = [
+                { bg: 'rgba(240,178,50,0.08)', border: 'rgba(240,178,50,0.18)', badge: 'rgba(240,178,50,0.15)', text: '#F0B232' },
+                { bg: 'rgba(45,201,122,0.08)', border: 'rgba(45,201,122,0.18)', badge: 'rgba(45,201,122,0.15)', text: '#2DC97A' },
+                { bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.18)', badge: 'rgba(96,165,250,0.15)', text: '#60A5FA' },
+                { bg: 'rgba(167,139,250,0.08)', border: 'rgba(167,139,250,0.18)', badge: 'rgba(167,139,250,0.15)', text: '#A78BFA' },
+              ][hue];
+              return (
+                <div
+                  key={p.slug}
+                  className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-all hover:opacity-90 group"
+                  style={{ background: colors.bg, border: `1px solid ${colors.border}` }}
+                >
+                  <div
+                    className="w-6 h-6 rounded-lg flex items-center justify-center text-[9px] font-black flex-shrink-0 transition-transform group-hover:scale-105"
+                    style={{ background: colors.badge, color: colors.text }}
+                  >
+                    {initials}
+                  </div>
+                  <span className="text-xs font-semibold whitespace-nowrap" style={{ color: '#F5E8C8' }}>{p.name}</span>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}

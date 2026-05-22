@@ -21,7 +21,7 @@ const REWARD_HUBS = [
     subtitle: 'Day 4 of 7 streak',
     description: 'Claim your daily GC reward and keep your streak alive.',
     icon: Calendar,
-    color: '#D6A84F',
+    color: '#F0B232',
     href: '/daily-bonus',
     cta: 'Claim Now',
     badge: 'Ready',
@@ -85,6 +85,7 @@ export default function RewardsPage() {
   const progress = nextTier
     ? Math.min(100, ((xp - currentTier.xpRequired) / (nextTier.xpRequired - currentTier.xpRequired)) * 100)
     : 100;
+  const tierColor = getVIPColor(user?.vipTier || 1);
 
   const handleClaimRakeback = () => {
     if (rakebackBalance <= 0) return;
@@ -95,135 +96,187 @@ export default function RewardsPage() {
 
   return (
     <div className="space-y-8 animate-[fade-in_0.3s_ease-out]">
-      {/* Header */}
+
+      {/* ── HEADER ───────────────────────────────────────────── */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <Gift className="w-4 h-4" style={{ color: '#D6A84F' }} />
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#D6A84F' }}>Rewards</span>
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+            style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}
+          >
+            <Gift className="w-3.5 h-3.5 text-[#F0B232]" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0B232]">Rewards</span>
+          </div>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Rewards Hub</h1>
-        <p style={{ color: '#9CA3AF' }}>Everything you&apos;ve earned. All in one place.</p>
+        <p style={{ color: '#8FA899' }}>Everything you&apos;ve earned. All in one place.</p>
       </div>
 
-      {/* VIP Progress Banner */}
+      {/* ── VIP PROGRESS BANNER ──────────────────────────────── */}
       {isLoggedIn ? (
         <div
-          className="relative rounded-2xl overflow-hidden p-5 border"
+          className="relative rounded-2xl overflow-hidden p-5"
           style={{
-            background: `radial-gradient(ellipse at 20% 50%, ${getVIPColor(user?.vipTier || 1)}18 0%, transparent 60%), #0D0D0D`,
-            borderColor: `${getVIPColor(user?.vipTier || 1)}30`,
+            background: `radial-gradient(ellipse at 15% 50%, ${tierColor}14 0%, transparent 60%), #0C1812`,
+            border: `1px solid ${tierColor}28`,
           }}
         >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div className="flex items-center gap-4">
               <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold"
-                style={{ background: `${getVIPColor(user?.vipTier || 1)}20`, border: `1px solid ${getVIPColor(user?.vipTier || 1)}40` }}
+                className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+                style={{ background: `${tierColor}18`, border: `1px solid ${tierColor}35` }}
               >
                 {currentTier.icon}
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide mb-0.5" style={{ color: '#9CA3AF' }}>VIP Status</p>
-                <p className="font-display text-lg font-bold" style={{ color: getVIPColor(user?.vipTier || 1) }}>
+                <p className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>VIP Status</p>
+                <p className="font-display text-lg font-bold" style={{ color: tierColor }}>
                   {getVIPName(user?.vipTier || 1)}
                 </p>
-                <p className="text-xs number-display" style={{ color: '#9CA3AF' }}>{formatXP(xp)} total XP</p>
+                <p className="text-xs number-display" style={{ color: '#8FA899' }}>{formatXP(xp)} total XP</p>
               </div>
             </div>
 
             <div className="flex-1 max-w-xs w-full">
               {nextTier ? (
                 <div>
-                  <div className="flex justify-between text-xs mb-1.5" style={{ color: '#9CA3AF' }}>
+                  <div className="flex justify-between text-xs mb-2" style={{ color: '#8FA899' }}>
                     <span>{currentTier.name}</span>
                     <span style={{ color: getVIPColor(nextTier.tier) }}>
                       {(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}
                     </span>
                   </div>
-                  <div className="h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: '#1E1E1E' }}>
+                  <div className="h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: '#1A2E22' }}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
                       transition={{ duration: 1, ease: 'easeOut' }}
                       className="h-full rounded-full"
-                      style={{ background: `linear-gradient(90deg, ${getVIPColor(currentTier.tier)}, ${getVIPColor(nextTier.tier)})` }}
+                      style={{ background: `linear-gradient(90deg, ${tierColor}, ${getVIPColor(nextTier.tier)})` }}
                     />
                   </div>
-                  <p className="text-right text-xs mt-1" style={{ color: '#9CA3AF' }}>{progress.toFixed(1)}%</p>
+                  <p className="text-right text-[10px] mt-1 number-display" style={{ color: '#8FA899' }}>
+                    {progress.toFixed(1)}%
+                  </p>
                 </div>
               ) : (
                 <p className="text-sm font-semibold" style={{ color: getVIPColor(6) }}>Maximum tier reached 🏆</p>
               )}
             </div>
 
-            <Link href="/vip" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity flex-shrink-0" style={{ color: '#D6A84F' }}>
+            <Link
+              href="/vip"
+              className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity flex-shrink-0"
+              style={{ color: '#F0B232' }}
+            >
               VIP Club <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
       ) : (
-        <div className="glass-card p-6 text-center">
-          <Star className="w-8 h-8 mx-auto mb-3" style={{ color: '#D6A84F' }} />
+        <div
+          className="rounded-2xl p-6 text-center"
+          style={{ background: 'rgba(12,24,18,0.9)', border: '1px solid rgba(240,178,50,0.15)' }}
+        >
+          <div
+            className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center mb-3"
+            style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}
+          >
+            <Star className="w-6 h-6 text-[#F0B232]" />
+          </div>
           <p className="font-semibold mb-1" style={{ color: '#F5E8C8' }}>Sign in to track your rewards</p>
-          <p className="text-sm mb-4" style={{ color: '#9CA3AF' }}>Earn XP, climb VIP tiers, and unlock exclusive benefits.</p>
+          <p className="text-sm mb-4" style={{ color: '#8FA899' }}>Earn XP, climb VIP tiers, and unlock exclusive benefits.</p>
           <button
             onClick={() => openAuthModal('register')}
-            className="px-6 py-2.5 rounded-xl text-sm font-semibold text-black"
-            style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
+            className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
           >
             Create Free Account
           </button>
         </div>
       )}
 
-      {/* Balances + Rakeback inline claim */}
+      {/* ── BALANCES + RAKEBACK ──────────────────────────────── */}
       {isLoggedIn && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {/* Rakeback claim card */}
+          {/* Rakeback */}
           <div
-            className="glass-card p-4 flex items-center justify-between sm:col-span-1 col-span-1"
-            style={{ borderColor: rakebackBalance > 0 ? 'rgba(16,185,129,0.3)' : undefined }}
+            className="rounded-xl p-4 flex items-center justify-between"
+            style={{
+              background: 'rgba(12,24,18,0.9)',
+              border: `1px solid ${rakebackBalance > 0 ? 'rgba(45,201,122,0.3)' : '#1A2E22'}`,
+            }}
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.2)' }}>
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}
+              >
+                <TrendingUp className="w-4 h-4 text-[#2DC97A]" />
               </div>
               <div>
-                <p className="text-xs" style={{ color: '#9CA3AF' }}>Rakeback</p>
-                <p className="text-sm font-bold number-display text-emerald-400">{formatGC(rakebackBalance)} GC</p>
+                <p className="text-[10px] uppercase tracking-wide" style={{ color: '#8FA899' }}>Rakeback</p>
+                <p className="text-sm font-bold number-display text-[#2DC97A]">{formatGC(rakebackBalance)} GC</p>
               </div>
             </div>
             <button
               onClick={handleClaimRakeback}
               disabled={rakebackBalance <= 0 || rakeClaimed}
               className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all disabled:opacity-40"
-              style={{ background: rakeClaimed ? 'rgba(16,185,129,0.2)' : 'linear-gradient(135deg, #10B981, #059669)', color: rakeClaimed ? '#10B981' : '#000' }}
+              style={{
+                background: rakeClaimed ? 'rgba(45,201,122,0.15)' : 'linear-gradient(135deg, #2DC97A, #10B981)',
+                color: rakeClaimed ? '#2DC97A' : '#060E0A',
+              }}
             >
               {rakeClaimed ? <><CheckCircle2 className="w-3 h-3" /> Claimed</> : 'Claim'}
             </button>
           </div>
 
           {/* Bonus */}
-          <Link href="/wallet" className="glass-card p-4 text-center hover:border-[#D6A84F]/30 transition-all group">
-            <p className="text-xs mb-1.5" style={{ color: '#9CA3AF' }}>Bonus Balance</p>
-            <p className="text-sm font-bold number-display group-hover:opacity-80" style={{ color: '#D6A84F' }}>{formatGC(bonusBalance)} GC</p>
+          <Link
+            href="/wallet"
+            className="rounded-xl p-4 text-center hover:border-[#F0B232]/30 transition-all group"
+            style={{ background: 'rgba(12,24,18,0.9)', border: '1px solid #1A2E22' }}
+          >
+            <p className="text-[10px] uppercase tracking-wide mb-1.5" style={{ color: '#8FA899' }}>Bonus Balance</p>
+            <p className="text-sm font-bold number-display group-hover:opacity-80" style={{ color: '#F0B232' }}>
+              {formatGC(bonusBalance)} GC
+            </p>
           </Link>
 
           {/* Vault */}
-          <Link href="/vault" className="glass-card p-4 text-center hover:border-[#D6A84F]/30 transition-all group">
-            <p className="text-xs mb-1.5" style={{ color: '#9CA3AF' }}>Vault Balance</p>
-            <p className="text-sm font-bold number-display group-hover:opacity-80" style={{ color: '#06B6D4' }}>{formatGC(vaultBalance)} GC</p>
+          <Link
+            href="/vault"
+            className="rounded-xl p-4 text-center hover:border-[#06B6D4]/30 transition-all group"
+            style={{ background: 'rgba(12,24,18,0.9)', border: '1px solid #1A2E22' }}
+          >
+            <p className="text-[10px] uppercase tracking-wide mb-1.5" style={{ color: '#8FA899' }}>Vault Balance</p>
+            <p className="text-sm font-bold number-display group-hover:opacity-80" style={{ color: '#06B6D4' }}>
+              {formatGC(vaultBalance)} GC
+            </p>
           </Link>
         </div>
       )}
 
-      {/* Reward hubs grid */}
+      {/* ── REWARD HUBS GRID ─────────────────────────────────── */}
       <div>
-        <h2 className="font-display text-xl font-bold mb-4" style={{ color: '#F5E8C8' }}>Your Rewards</h2>
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
+          <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Your Rewards</h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {REWARD_HUBS.map((hub, i) => {
             const Icon = hub.icon;
             const isPromos = hub.id === 'promotions';
+            const inner = <HubCardContent hub={hub} Icon={Icon} />;
+            const cardStyle = {
+              background: 'rgba(16,28,22,0.9)',
+              border: '1px solid #1A2E22',
+            };
+            const cls =
+              'rounded-2xl p-5 flex flex-col h-full w-full text-left transition-all hover:border-[#F0B232]/25 group';
+
             return (
               <motion.div
                 key={hub.id}
@@ -232,15 +285,12 @@ export default function RewardsPage() {
                 transition={{ delay: i * 0.06 }}
               >
                 {isPromos ? (
-                  <button
-                    onClick={openPromotionsDrawer}
-                    className="glass-card p-5 flex flex-col w-full text-left h-full hover:border-[#D6A84F]/25 transition-all group"
-                  >
-                    <HubCardContent hub={hub} Icon={Icon} />
+                  <button onClick={openPromotionsDrawer} className={cls} style={cardStyle}>
+                    {inner}
                   </button>
                 ) : (
-                  <Link href={hub.href} className="glass-card p-5 flex flex-col h-full hover:border-[#D6A84F]/25 transition-all group">
-                    <HubCardContent hub={hub} Icon={Icon} />
+                  <Link href={hub.href} className={cls} style={cardStyle}>
+                    {inner}
                   </Link>
                 )}
               </motion.div>
@@ -249,11 +299,15 @@ export default function RewardsPage() {
         </div>
       </div>
 
-      {/* Featured promotions */}
+      {/* ── ACTIVE PROMOTIONS ────────────────────────────────── */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Active Promotions</h2>
-          <button onClick={openPromotionsDrawer} className="text-xs font-semibold flex items-center gap-1" style={{ color: '#D6A84F' }}>
+          <button
+            onClick={openPromotionsDrawer}
+            className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
+            style={{ color: '#F0B232' }}
+          >
             All Promos <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -265,23 +319,27 @@ export default function RewardsPage() {
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 + i * 0.07 }}
-              className="glass-card p-4 flex items-center gap-4 hover:border-[#D6A84F]/25 transition-all w-full text-left"
+              className="w-full text-left rounded-xl p-4 flex items-center gap-4 transition-all hover:border-[#F0B232]/25"
+              style={{ background: 'rgba(16,28,22,0.9)', border: '1px solid #1A2E22' }}
             >
-              <div className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center" style={{ background: 'rgba(214,168,79,0.1)', border: '1px solid rgba(214,168,79,0.2)' }}>
-                <Gift className="w-5 h-5" style={{ color: '#D6A84F' }} />
+              <div
+                className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center"
+                style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}
+              >
+                <Gift className="w-5 h-5 text-[#F0B232]" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm truncate" style={{ color: '#F5E8C8' }}>{promo.title}</p>
-                <p className="text-xs truncate" style={{ color: '#9CA3AF' }}>{promo.subtitle}</p>
+                <p className="text-xs truncate" style={{ color: '#8FA899' }}>{promo.subtitle}</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 {promo.gcBonus ? (
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(214,168,79,0.15)', color: '#D6A84F' }}>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.12)', color: '#F0B232' }}>
                     +{(promo.gcBonus / 1000).toFixed(0)}K GC
                   </span>
                 ) : null}
                 {promo.scBonus ? (
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.15)', color: '#10B981' }}>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.12)', color: '#2DC97A' }}>
                     +{promo.scBonus} SC
                   </span>
                 ) : null}
@@ -291,31 +349,34 @@ export default function RewardsPage() {
         </div>
       </div>
 
-      {/* Free spin teaser */}
+      {/* ── FREE SPIN TEASER ─────────────────────────────────── */}
       <div
-        className="rounded-2xl p-6 border flex flex-col sm:flex-row items-center gap-6"
-        style={{ background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.2)' }}
+        className="rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6"
+        style={{ background: 'rgba(45,201,122,0.06)', border: '1px solid rgba(45,201,122,0.2)' }}
       >
-        <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)' }}>
-          <RotateCw className="w-7 h-7 text-emerald-400" />
+        <div
+          className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
+          style={{ background: 'rgba(45,201,122,0.12)', border: '1px solid rgba(45,201,122,0.25)' }}
+        >
+          <RotateCw className="w-7 h-7 text-[#2DC97A]" />
         </div>
         <div className="flex-1 text-center sm:text-left">
           <p className="font-display font-bold text-lg mb-1" style={{ color: '#F5E8C8' }}>Free Daily Spin</p>
-          <p className="text-sm" style={{ color: '#9CA3AF' }}>
+          <p className="text-sm" style={{ color: '#8FA899' }}>
             Spin the Emerald Wheel once per day: no purchase required. Win up to 10,000 GC or bonus SC.
           </p>
         </div>
         <Link
           href="/daily-bonus"
-          className="flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-bold text-black"
-          style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
+          className="flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+          style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#060E0A' }}
         >
           Spin Now
         </Link>
       </div>
 
-      <div className="border-t border-[#1E1E1E] pt-4 text-center">
-        <p className="text-xs text-[#9CA3AF]/60">
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
           No Purchase Necessary · 18+ · Gold Coins have no cash value · Void Where Prohibited
         </p>
       </div>
@@ -335,17 +396,22 @@ function HubCardContent({
       <div className="flex items-start justify-between mb-3">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: `${hub.color}18`, border: `1px solid ${hub.color}30` }}
+          style={{ background: `${hub.color}15`, border: `1px solid ${hub.color}28` }}
         >
           <Icon className="w-5 h-5" style={{ color: hub.color }} />
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${hub.color}20`, color: hub.color }}>
+        <span
+          className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+          style={{ background: `${hub.color}18`, color: hub.color }}
+        >
           {hub.badge}
         </span>
       </div>
-      <p className="font-semibold mb-0.5 group-hover:text-[#D6A84F] transition-colors" style={{ color: '#F5E8C8' }}>{hub.title}</p>
+      <p className="font-semibold mb-0.5 group-hover:text-[#F0B232] transition-colors" style={{ color: '#F5E8C8' }}>
+        {hub.title}
+      </p>
       <p className="text-xs mb-2" style={{ color: hub.color }}>{hub.subtitle}</p>
-      <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: '#9CA3AF' }}>{hub.description}</p>
+      <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: '#8FA899' }}>{hub.description}</p>
       <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: hub.color }}>
         {hub.cta}
         <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -353,4 +419,3 @@ function HubCardContent({
     </>
   );
 }
-

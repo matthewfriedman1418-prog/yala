@@ -8,7 +8,7 @@ import type { ComponentType } from 'react';
 import {
   Dice5, Zap, Trophy, Star, Gift, Target,
   Users, Wallet, Shield, HelpCircle,
-  BarChart3, Layers, Clock, Gem
+  BarChart3, Layers, Clock, Gem, Paintbrush
 } from 'lucide-react';
 
 interface NavItem {
@@ -99,6 +99,7 @@ export function Sidebar() {
         { href: '/responsible-gaming', label: 'Responsible Gaming', icon: Shield },
         { href: '/support', label: 'Help & Support', icon: HelpCircle },
         { href: '/providers', label: 'Providers', icon: Layers },
+        { href: '/design-lab', label: 'Design Lab', icon: Paintbrush, badge: 'DEV' },
       ],
     },
   ];

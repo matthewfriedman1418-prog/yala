@@ -1,7 +1,5 @@
 'use client';
 
-/** Live win feed — scrolling marquee strip sitting between header and main content */
-
 const WINS = [
   { user: 'DesertFox88', game: 'Oasis Plinko', amount: '48,200 GC', multiplier: '241x', currency: 'GC' },
   { user: 'SaharaWolf', game: 'Sweet Bonanza', amount: '2.5 SC', multiplier: '98x', currency: 'SC' },
@@ -34,11 +32,11 @@ export function LiveWinFeed() {
         className="flex items-center gap-2 px-3 h-full flex-shrink-0"
         style={{
           borderRight: '1px solid #1A2E22',
-          background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(240,178,50,0.08))',
+          background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(240,178,50,0.06))',
         }}
       >
         <span className="live-dot" />
-        <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#2DC97A' }}>
+        <span className="text-[10px] font-bold uppercase tracking-wider whitespace-nowrap" style={{ color: '#2DC97A' }}>
           Live Wins
         </span>
       </div>
@@ -47,26 +45,28 @@ export function LiveWinFeed() {
       <div className="flex-1 overflow-hidden">
         <div className="marquee-track">
           {DOUBLED.map((win, i) => (
-            <div key={i} className="flex items-center gap-1.5 px-4 flex-shrink-0">
-              <span style={{ color: '#1A2E22', fontSize: 16 }}>•</span>
-              <span className="text-[11px] font-semibold" style={{ color: '#8FA899' }}>
+            <div key={i} className="flex items-center gap-1.5 px-3 flex-shrink-0">
+              {/* visible separator */}
+              <span style={{ color: '#2DC97A', opacity: 0.4, fontSize: 10 }}>◆</span>
+              <span className="text-[11px] font-bold" style={{ color: '#F5E8C8' }}>
                 {win.user}
               </span>
-              <span className="text-[11px]" style={{ color: '#4A6A55' }}>won on</span>
-              <span className="text-[11px] font-medium" style={{ color: '#F5E8C8' }}>
-                {win.game}
-              </span>
+              <span className="text-[11px]" style={{ color: '#4A6A55' }}>won</span>
               <span
                 className="text-[11px] font-bold number-display px-1.5 py-0.5 rounded"
                 style={{
-                  color: win.currency === 'GC' ? '#F0B232' : '#10B981',
-                  backgroundColor: win.currency === 'GC' ? 'rgba(240,178,50,0.12)' : 'rgba(16,185,129,0.12)',
+                  color: win.currency === 'GC' ? '#F0B232' : '#2DC97A',
+                  backgroundColor: win.currency === 'GC' ? 'rgba(240,178,50,0.12)' : 'rgba(45,201,122,0.12)',
                 }}
               >
                 {win.amount}
               </span>
-              <span className="text-[10px] font-bold" style={{ color: '#2DC97A' }}>
+              <span className="text-[10px] font-bold" style={{ color: win.currency === 'GC' ? '#F0B232' : '#2DC97A' }}>
                 @{win.multiplier}
+              </span>
+              <span className="text-[10px]" style={{ color: '#4A6A55' }}>on</span>
+              <span className="text-[11px] font-medium" style={{ color: '#8FA899' }}>
+                {win.game}
               </span>
             </div>
           ))}
