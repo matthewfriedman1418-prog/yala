@@ -1,18 +1,30 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { formatGC, formatSC } from '@/lib/utils';
-import { SPORTSBOOK_GAMES, SPORT_TABS, type SportKey, type SBGame } from '@/lib/mock-data/sportsbook';
-import { X, Trash2, ChevronDown, Info } from 'lucide-react';
+import {
+  SPORTSBOOK_GAMES,
+  PLAYER_PROPS,
+  CREATOR_PARLAYS,
+  SPORT_TABS,
+  type SportKey,
+  type SBGame,
+  type PlayerProp,
+  type CreatorParlay,
+} from '@/lib/mock-data/sportsbook';
+import { X, Trash2, ChevronDown, Info, TrendingUp, TrendingDown, Trophy, Zap, Copy, CheckCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // ── Types ──────────────────────────────────────────────────────────────────
-type MarketKey = 'spread' | 'moneyline' | 'total';
+type MarketKey = 'spread' | 'moneyline' | 'total' | 'prop';
+type ContentTab = 'all' | 'live' | 'upcoming' | 'props' | 'creators';
 
 interface BetSelection {
+  id: string; // gameId-market-side or propId-over/under
   gameId: number;
   market: MarketKey;
   side: 'home' | 'away' | 'over' | 'under';
@@ -36,53 +48,135 @@ function calcPayout(stake: number, odds: number) {
   return +(stake * (100 / -odds)).toFixed(0);
 }
 
-function calcParlay(selections: BetSelection[], stake: number) {
-  const dec = selections.reduce((acc, s) => {
+function calcParlayDecimal(selections: { odds: number }[]) {
+  return selections.reduce((acc, s) => {
     const d = s.odds > 0 ? 1 + s.odds / 100 : 1 + 100 / -s.odds;
     return acc * d;
   }, 1);
-  return +((dec - 1) * stake).toFixed(0);
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────
+function calcParlay(selections: { odds: number }[], stake: number) {
+  return +((calcParlayDecimal(selections) - 1) * stake).toFixed(0);
+}
 
+function getInitials(name: string) {
+  return name.split(/\s+/).map((w) => w[0]?.toUpperCase()).slice(0, 2).join('');
+}
+
+// ── TeamLogo ──────────────────────────────────────────────────────────────
+function TeamLogo({
+  logo,
+  abbr,
+  size = 28,
+  sport,
+  isHome,
+}: {
+  logo?: string;
+  abbr: string;
+  size?: number;
+  sport: SBGame['sport'];
+  isHome: boolean;
+}) {
+  const [imgError, setImgError] = useState(false);
+  const color = isHome ? '#F0B232' : '#2DC97A';
+  const bg = isHome ? 'rgba(240,178,50,0.1)' : 'rgba(45,201,122,0.1)';
+  const border = isHome ? '1px solid rgba(240,178,50,0.2)' : '1px solid rgba(45,201,122,0.2)';
+
+  // Soccer uses flag emojis, Tennis/MMA use initials
+  if (sport === 'Soccer' && logo && logo.length <= 8) {
+    return (
+      <div
+        className="flex items-center justify-center flex-shrink-0 rounded-lg text-base"
+        style={{ width: size, height: size, background: bg, border, fontSize: size * 0.55 }}
+      >
+        {logo}
+      </div>
+    );
+  }
+
+  if (logo && !imgError && sport !== 'Tennis' && sport !== 'MMA' && sport !== 'Esports') {
+    return (
+      <div className="flex-shrink-0 relative" style={{ width: size, height: size }}>
+        <Image
+          src={logo}
+          alt={abbr}
+          width={size}
+          height={size}
+          className="object-contain rounded-lg"
+          style={{ background: bg, border }}
+          onError={() => setImgError(true)}
+          unoptimized
+        />
+      </div>
+    );
+  }
+
+  // Initials fallback for Tennis, MMA, Esports, or on error
+  return (
+    <div
+      className="flex items-center justify-center flex-shrink-0 rounded-lg font-black"
+      style={{ width: size, height: size, background: bg, border, color, fontSize: size * 0.36 }}
+    >
+      {abbr.slice(0, 2)}
+    </div>
+  );
+}
+
+// ── OddsButton ────────────────────────────────────────────────────────────
 function OddsButton({
   odds,
   label,
   sublabel,
   active,
   onClick,
+  movement,
+  bestOdds,
 }: {
   odds: number;
   label: string;
   sublabel?: string;
   active: boolean;
   onClick: () => void;
+  movement?: 'up' | 'down';
+  bestOdds?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        'flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg border transition-all text-center min-w-[72px] flex-1',
+        'flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg border transition-all text-center min-w-[72px] flex-1 relative',
         active
           ? 'border-[#F0B232] bg-[rgba(240,178,50,0.12)]'
           : 'border-[#1A2E22] bg-[rgba(255,255,255,0.03)] hover:border-[rgba(45,201,122,0.4)] hover:bg-[rgba(45,201,122,0.06)]'
       )}
     >
+      {bestOdds && !active && (
+        <span
+          className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[7px] font-black uppercase tracking-wide px-1 py-0.5 rounded-full"
+          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A', whiteSpace: 'nowrap' }}
+        >
+          Best
+        </span>
+      )}
       {sublabel && (
         <span className="text-[9px] font-medium" style={{ color: '#8FA899' }}>{sublabel}</span>
       )}
-      <span
-        className="text-sm font-bold number-display leading-none"
-        style={{ color: active ? '#F0B232' : '#F5E8C8' }}
-      >
-        {fmtOdds(odds)}
-      </span>
+      <div className="flex items-center gap-0.5">
+        <span
+          className="text-sm font-bold number-display leading-none"
+          style={{ color: active ? '#F0B232' : odds > 0 ? '#2DC97A' : '#F5E8C8' }}
+        >
+          {fmtOdds(odds)}
+        </span>
+        {movement === 'up' && <TrendingUp className="w-2.5 h-2.5 text-red-400" />}
+        {movement === 'down' && <TrendingDown className="w-2.5 h-2.5 text-emerald-400" />}
+      </div>
       <span className="text-[9px]" style={{ color: '#8FA899' }}>{label}</span>
     </button>
   );
 }
 
+// ── LiveBadge ─────────────────────────────────────────────────────────────
 function LiveBadge({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-1.5">
@@ -92,27 +186,184 @@ function LiveBadge({ label }: { label: string }) {
   );
 }
 
-function GameCard({
-  game,
-  selections,
-  onSelect,
-}: {
-  game: SBGame;
-  selections: BetSelection[];
-  onSelect: (sel: BetSelection) => void;
-}) {
+// ── ScoreDisplay ──────────────────────────────────────────────────────────
+function ScoreDisplay({ home, away, homeAbbr, awayAbbr }: { home?: number; away?: number; homeAbbr: string; awayAbbr: string }) {
+  const prevHome = useRef(home);
+  const prevAway = useRef(away);
+  const [homePulse, setHomePulse] = useState(false);
+  const [awayPulse, setAwayPulse] = useState(false);
+
+  useEffect(() => {
+    if (home !== prevHome.current) {
+      setHomePulse(true);
+      setTimeout(() => setHomePulse(false), 600);
+      prevHome.current = home;
+    }
+  }, [home]);
+
+  useEffect(() => {
+    if (away !== prevAway.current) {
+      setAwayPulse(true);
+      setTimeout(() => setAwayPulse(false), 600);
+      prevAway.current = away;
+    }
+  }, [away]);
+
+  return (
+    <div className="flex items-center gap-2 text-xs font-bold number-display">
+      <motion.span
+        animate={homePulse ? { scale: [1, 1.4, 1], color: ['#F5E8C8', '#2DC97A', '#F5E8C8'] } : {}}
+        transition={{ duration: 0.5 }}
+        style={{ color: '#F5E8C8' }}
+      >
+        {homeAbbr} {home}
+      </motion.span>
+      <span style={{ color: '#4A6A55' }}>–</span>
+      <motion.span
+        animate={awayPulse ? { scale: [1, 1.4, 1], color: ['#F5E8C8', '#2DC97A', '#F5E8C8'] } : {}}
+        transition={{ duration: 0.5 }}
+        style={{ color: '#F5E8C8' }}
+      >
+        {away} {awayAbbr}
+      </motion.span>
+    </div>
+  );
+}
+
+// ── FeaturedHeroCard ──────────────────────────────────────────────────────
+function FeaturedHeroCard({ game, selections, onSelect }: { game: SBGame; selections: BetSelection[]; onSelect: (sel: BetSelection) => void }) {
   const isSelected = (market: MarketKey, side: string) =>
     selections.some((s) => s.gameId === game.id && s.market === market && s.side === side);
 
   const pick = (market: MarketKey, side: 'home' | 'away' | 'over' | 'under', label: string, odds: number) => {
-    onSelect({
-      gameId: game.id,
-      market,
-      side,
-      label,
-      odds,
-      gameLabel: `${game.awayAbbr} @ ${game.homeAbbr}`,
-    });
+    onSelect({ id: `${game.id}-${market}-${side}`, gameId: game.id, market, side, label, odds, gameLabel: `${game.awayAbbr} @ ${game.homeAbbr}` });
+  };
+
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden mb-4"
+      style={{
+        background: 'radial-gradient(ellipse at 20% 50%, rgba(45,201,122,0.12) 0%, transparent 60%), radial-gradient(ellipse at 80% 30%, rgba(240,178,50,0.1) 0%, transparent 55%), #0C1812',
+        border: '1px solid rgba(45,201,122,0.25)',
+        boxShadow: '0 0 40px rgba(45,201,122,0.06)',
+      }}
+    >
+      {/* Live indicator strip */}
+      {game.isLive && (
+        <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, #EF4444, transparent)' }} />
+      )}
+
+      <div className="px-5 py-4">
+        {/* Header row */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            {game.isLive ? (
+              <LiveBadge label={game.liveLabel || 'LIVE'} />
+            ) : (
+              <span className="text-[10px] font-medium" style={{ color: '#8FA899' }}>{game.time}</span>
+            )}
+            <span style={{ color: '#4A6A55' }}>·</span>
+            <span className="text-[10px] font-semibold" style={{ color: '#4A6A55' }}>{game.league}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {game.hasBestOdds && (
+              <span className="text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}>
+                Best Odds
+              </span>
+            )}
+            {game.betCount && (
+              <span className="text-[10px]" style={{ color: '#8FA899' }}>
+                🔥 {game.betCount.toLocaleString()} bets
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Teams */}
+        <div className="flex items-center justify-center gap-6 mb-4">
+          {/* Away */}
+          <div className="flex flex-col items-center gap-2 flex-1">
+            <TeamLogo logo={game.awayLogo} abbr={game.awayAbbr} size={52} sport={game.sport} isHome={false} />
+            <span className="text-sm font-bold text-center" style={{ color: '#F5E8C8' }}>{game.away}</span>
+            {game.isLive && (
+              <motion.span
+                className="text-3xl font-black number-display"
+                style={{ color: '#F5E8C8' }}
+                key={game.awayScore}
+                initial={{ scale: 1.2, color: '#2DC97A' }}
+                animate={{ scale: 1, color: '#F5E8C8' }}
+                transition={{ duration: 0.4 }}
+              >
+                {game.awayScore}
+              </motion.span>
+            )}
+          </div>
+
+          {/* VS */}
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-xs font-bold" style={{ color: '#4A6A55' }}>VS</span>
+            {game.isLive && <span className="live-dot" style={{ background: '#EF4444', width: 8, height: 8 }} />}
+          </div>
+
+          {/* Home */}
+          <div className="flex flex-col items-center gap-2 flex-1">
+            <TeamLogo logo={game.homeLogo} abbr={game.homeAbbr} size={52} sport={game.sport} isHome={true} />
+            <span className="text-sm font-bold text-center" style={{ color: '#F5E8C8' }}>{game.home}</span>
+            {game.isLive && (
+              <motion.span
+                className="text-3xl font-black number-display"
+                style={{ color: '#F5E8C8' }}
+                key={game.homeScore}
+                initial={{ scale: 1.2, color: '#2DC97A' }}
+                animate={{ scale: 1, color: '#F5E8C8' }}
+                transition={{ duration: 0.4 }}
+              >
+                {game.homeScore}
+              </motion.span>
+            )}
+          </div>
+        </div>
+
+        {/* Quick bet buttons */}
+        <div className="flex gap-2">
+          <OddsButton
+            odds={game.moneyline.away}
+            label={`${game.awayAbbr} ML`}
+            sublabel="Away"
+            active={isSelected('moneyline', 'away')}
+            onClick={() => pick('moneyline', 'away', `${game.awayAbbr} ML`, game.moneyline.away)}
+            movement={game.oddsMovement?.mlAway}
+            bestOdds={game.hasBestOdds}
+          />
+          <OddsButton
+            odds={game.total.overOdds}
+            label={`O ${game.total.line}`}
+            sublabel="Over"
+            active={isSelected('total', 'over')}
+            onClick={() => pick('total', 'over', `O ${game.total.line}`, game.total.overOdds)}
+            movement={game.oddsMovement?.totalOver}
+          />
+          <OddsButton
+            odds={game.moneyline.home}
+            label={`${game.homeAbbr} ML`}
+            sublabel="Home"
+            active={isSelected('moneyline', 'home')}
+            onClick={() => pick('moneyline', 'home', `${game.homeAbbr} ML`, game.moneyline.home)}
+            movement={game.oddsMovement?.mlHome}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── GameCard ──────────────────────────────────────────────────────────────
+function GameCard({ game, selections, onSelect }: { game: SBGame; selections: BetSelection[]; onSelect: (sel: BetSelection) => void }) {
+  const isSelected = (market: MarketKey, side: string) =>
+    selections.some((s) => s.gameId === game.id && s.market === market && s.side === side);
+
+  const pick = (market: MarketKey, side: 'home' | 'away' | 'over' | 'under', label: string, odds: number) => {
+    onSelect({ id: `${game.id}-${market}-${side}`, gameId: game.id, market, side, label, odds, gameLabel: `${game.awayAbbr} @ ${game.homeAbbr}` });
   };
 
   const spreadSign = game.spread.line > 0 ? `+${game.spread.line}` : `${game.spread.line}`;
@@ -123,38 +374,39 @@ function GameCard({
       style={{ background: '#101C16', border: '1px solid #1A2E22' }}
     >
       {/* Game header */}
-      <div className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: '1px solid #1A2E22', background: 'rgba(255,255,255,0.02)' }}>
+      <div
+        className="flex items-center justify-between px-4 py-2.5"
+        style={{ borderBottom: '1px solid #1A2E22', background: 'rgba(255,255,255,0.02)' }}
+      >
         <div className="flex items-center gap-2">
-          {game.isLive ? (
-            <LiveBadge label={game.liveLabel || 'LIVE'} />
-          ) : (
+          {game.isLive ? <LiveBadge label={game.liveLabel || 'LIVE'} /> : (
             <span className="text-[10px] font-medium" style={{ color: '#8FA899' }}>{game.time}</span>
           )}
-          <span className="text-[10px]" style={{ color: '#4A6A55' }}>·</span>
+          <span style={{ color: '#4A6A55' }}>·</span>
           <span className="text-[10px]" style={{ color: '#4A6A55' }}>{game.league}</span>
         </div>
-        {game.isLive && (
-          <div className="flex items-center gap-2 text-xs font-bold number-display">
-            <span style={{ color: '#F5E8C8' }}>{game.homeAbbr} {game.homeScore}</span>
-            <span style={{ color: '#4A6A55' }}>–</span>
-            <span style={{ color: '#F5E8C8' }}>{game.awayScore} {game.awayAbbr}</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {game.hasBestOdds && (
+            <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider" style={{ background: 'rgba(45,201,122,0.15)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.25)' }}>
+              Best Odds
+            </span>
+          )}
+          {game.betCount && (
+            <span className="text-[9px]" style={{ color: '#8FA899' }}>🔥 {game.betCount >= 1000 ? `${(game.betCount / 1000).toFixed(1)}K` : game.betCount}</span>
+          )}
+          {game.isLive && (
+            <ScoreDisplay home={game.homeScore} away={game.awayScore} homeAbbr={game.homeAbbr} awayAbbr={game.awayAbbr} />
+          )}
+        </div>
       </div>
 
       {/* Matchup + markets */}
       <div className="px-4 py-3">
-        {/* Team rows */}
-        <div className="space-y-2.5 mb-3">
+        <div className="space-y-2.5">
           {/* Away team */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 min-w-0 flex-1">
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black flex-shrink-0"
-                style={{ background: 'rgba(45,201,122,0.1)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.2)' }}
-              >
-                {game.awayAbbr.slice(0, 2)}
-              </div>
+              <TeamLogo logo={game.awayLogo} abbr={game.awayAbbr} size={28} sport={game.sport} isHome={false} />
               <span className="text-sm font-semibold truncate" style={{ color: '#F5E8C8' }}>{game.away}</span>
             </div>
             <div className="flex gap-1.5 flex-shrink-0">
@@ -164,12 +416,15 @@ function GameCard({
                 sublabel="Spread"
                 active={isSelected('spread', 'away')}
                 onClick={() => pick('spread', 'away', `${game.awayAbbr} ${game.spread.line > 0 ? '-' : '+'}${Math.abs(game.spread.line)}`, game.spread.awayOdds)}
+                movement={game.oddsMovement?.spreadAway}
               />
               <OddsButton
                 odds={game.moneyline.away}
                 label="ML"
                 active={isSelected('moneyline', 'away')}
                 onClick={() => pick('moneyline', 'away', `${game.awayAbbr} ML`, game.moneyline.away)}
+                movement={game.oddsMovement?.mlAway}
+                bestOdds={game.hasBestOdds && game.moneyline.away > 0}
               />
               <OddsButton
                 odds={game.total.overOdds}
@@ -177,6 +432,7 @@ function GameCard({
                 sublabel="Over"
                 active={isSelected('total', 'over')}
                 onClick={() => pick('total', 'over', `O ${game.total.line}`, game.total.overOdds)}
+                movement={game.oddsMovement?.totalOver}
               />
             </div>
           </div>
@@ -184,12 +440,7 @@ function GameCard({
           {/* Home team */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 min-w-0 flex-1">
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black flex-shrink-0"
-                style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}
-              >
-                {game.homeAbbr.slice(0, 2)}
-              </div>
+              <TeamLogo logo={game.homeLogo} abbr={game.homeAbbr} size={28} sport={game.sport} isHome={true} />
               <span className="text-sm font-semibold truncate" style={{ color: '#F5E8C8' }}>{game.home}</span>
             </div>
             <div className="flex gap-1.5 flex-shrink-0">
@@ -199,12 +450,15 @@ function GameCard({
                 sublabel="Spread"
                 active={isSelected('spread', 'home')}
                 onClick={() => pick('spread', 'home', `${game.homeAbbr} ${spreadSign}`, game.spread.homeOdds)}
+                movement={game.oddsMovement?.spreadHome}
               />
               <OddsButton
                 odds={game.moneyline.home}
                 label="ML"
                 active={isSelected('moneyline', 'home')}
                 onClick={() => pick('moneyline', 'home', `${game.homeAbbr} ML`, game.moneyline.home)}
+                movement={game.oddsMovement?.mlHome}
+                bestOdds={game.hasBestOdds && game.moneyline.home > 0}
               />
               <OddsButton
                 odds={game.total.underOdds}
@@ -212,11 +466,494 @@ function GameCard({
                 sublabel="Under"
                 active={isSelected('total', 'under')}
                 onClick={() => pick('total', 'under', `U ${game.total.line}`, game.total.underOdds)}
+                movement={game.oddsMovement?.totalUnder}
               />
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── PropCard ──────────────────────────────────────────────────────────────
+function PropCard({ prop, selections, onSelect }: { prop: PlayerProp; selections: BetSelection[]; onSelect: (sel: BetSelection) => void }) {
+  const overId = `prop-${prop.id}-over`;
+  const underId = `prop-${prop.id}-under`;
+  const overSelected = selections.some((s) => s.id === overId);
+  const underSelected = selections.some((s) => s.id === underId);
+
+  const pickOver = () => onSelect({ id: overId, gameId: prop.id, market: 'prop', side: 'over', label: `${prop.player} O${prop.line} ${prop.stat}`, odds: prop.overOdds, gameLabel: `${prop.team}` });
+  const pickUnder = () => onSelect({ id: underId, gameId: prop.id, market: 'prop', side: 'under', label: `${prop.player} U${prop.line} ${prop.stat}`, odds: prop.underOdds, gameLabel: `${prop.team}` });
+
+  return (
+    <div
+      className="rounded-xl overflow-hidden"
+      style={{ background: '#101C16', border: '1px solid #1A2E22' }}
+    >
+      <div className="px-4 py-3">
+        <div className="flex items-center justify-between gap-3">
+          {/* Player info */}
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            {/* Avatar circle */}
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+            >
+              {getInitials(prop.player)}
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-bold truncate" style={{ color: '#F5E8C8' }}>{prop.player}</p>
+                {prop.isFeatured && (
+                  <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider flex-shrink-0" style={{ background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}>
+                    Featured
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px]" style={{ color: '#8FA899' }}>{prop.team} · {prop.league}</p>
+              <div className="flex items-center gap-2 mt-0.5">
+                <p className="text-xs font-semibold" style={{ color: '#2DC97A' }}>
+                  {prop.stat} {prop.line}
+                </p>
+                {prop.betCount && (
+                  <span className="text-[9px]" style={{ color: '#8FA899' }}>🔥 {prop.betCount.toLocaleString()}</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Over / Under buttons */}
+          <div className="flex gap-1.5 flex-shrink-0">
+            <OddsButton
+              odds={prop.overOdds}
+              label="Over"
+              active={overSelected}
+              onClick={pickOver}
+            />
+            <OddsButton
+              odds={prop.underOdds}
+              label="Under"
+              active={underSelected}
+              onClick={pickUnder}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── CreatorParlayCard ─────────────────────────────────────────────────────
+function CreatorParlayCard({ parlay, onCopySlip }: { parlay: CreatorParlay; onCopySlip: (parlay: CreatorParlay) => void }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    onCopySlip(parlay);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const badgeColor = parlay.badge === 'Hot Streak' ? { bg: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.25)' }
+    : parlay.badge === 'Trending' ? { bg: 'rgba(45,201,122,0.12)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.2)' }
+    : parlay.badge === 'Verified' ? { bg: 'rgba(59,130,246,0.12)', color: '#60A5FA', border: '1px solid rgba(59,130,246,0.2)' }
+    : parlay.badge === 'High Risk' ? { bg: 'rgba(249,115,22,0.12)', color: '#FB923C', border: '1px solid rgba(249,115,22,0.2)' }
+    : null;
+
+  const isBigParlay = parlay.totalOdds >= 500;
+
+  return (
+    <div
+      className="rounded-xl overflow-hidden"
+      style={{ background: '#101C16', border: '1px solid #1A2E22' }}
+    >
+      {/* Creator header */}
+      <div
+        className="flex items-center justify-between px-4 py-3"
+        style={{ borderBottom: '1px solid #1A2E22', background: 'rgba(255,255,255,0.02)' }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
+            style={{ background: parlay.creatorAvatarColor, color: '#060E0A' }}
+          >
+            {parlay.creatorAvatar}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>{parlay.creatorName}</p>
+              {parlay.badge && badgeColor && (
+                <span
+                  className="text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider"
+                  style={{ background: badgeColor.bg, color: badgeColor.color, border: badgeColor.border }}
+                >
+                  {parlay.badge}
+                </span>
+              )}
+            </div>
+            <p className="text-[10px]" style={{ color: '#8FA899' }}>{parlay.creatorHandle} · {parlay.record}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-[10px] uppercase tracking-wide" style={{ color: '#8FA899' }}>Total Odds</p>
+          <p className="text-lg font-black number-display" style={{ color: '#F0B232' }}>
+            {isBigParlay && '🏆 '}{fmtOdds(parlay.totalOdds)}
+          </p>
+        </div>
+      </div>
+
+      {/* Parlay title + legs */}
+      <div className="px-4 py-3">
+        <p className="text-xs font-bold mb-2.5" style={{ color: '#8FA899' }}>
+          {parlay.legs.length}-Leg Parlay — &ldquo;{parlay.title}&rdquo;
+        </p>
+        <div className="space-y-1.5 mb-3">
+          {parlay.legs.map((leg, i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black flex-shrink-0"
+                  style={{ background: 'rgba(45,201,122,0.15)', color: '#2DC97A' }}
+                >
+                  {i + 1}
+                </span>
+                <div>
+                  <p className="text-xs font-semibold" style={{ color: '#F5E8C8' }}>{leg.label}</p>
+                  <p className="text-[10px]" style={{ color: '#8FA899' }}>{leg.game}</p>
+                </div>
+              </div>
+              <span
+                className="text-xs font-bold number-display"
+                style={{ color: leg.odds > 0 ? '#2DC97A' : '#F5E8C8' }}
+              >
+                {fmtOdds(leg.odds)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={handleCopy}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+          style={copied
+            ? { background: 'rgba(45,201,122,0.15)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.3)' }
+            : { background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }
+          }
+        >
+          {copied ? <><CheckCheck className="w-4 h-4" /> Added to Slip!</> : <><Copy className="w-4 h-4" /> Copy Slip</>}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── BetSlip ───────────────────────────────────────────────────────────────
+function BetSlip({
+  selections,
+  betMode,
+  setBetMode,
+  stakeInputs,
+  setStakeInputs,
+  parlayStake,
+  setParlayStake,
+  onRemove,
+  onClear,
+  onPlaceBet,
+  betPlaced,
+  activeCurrency,
+  balance,
+  balanceLabel,
+}: {
+  selections: BetSelection[];
+  betMode: 'single' | 'parlay';
+  setBetMode: (m: 'single' | 'parlay') => void;
+  stakeInputs: Record<string, string>;
+  setStakeInputs: (fn: (prev: Record<string, string>) => Record<string, string>) => void;
+  parlayStake: string;
+  setParlayStake: (v: string) => void;
+  onRemove: (idx: number) => void;
+  onClear: () => void;
+  onPlaceBet: () => void;
+  betPlaced: boolean;
+  activeCurrency: string;
+  balance: number;
+  balanceLabel?: string;
+}) {
+  const parlayDec = calcParlayDecimal(selections);
+  const parlayOddsAmerican = selections.length > 1 ? Math.round((parlayDec - 1) * 100) : null;
+  const parlayOddsDisplay = parlayOddsAmerican !== null ? fmtOdds(parlayOddsAmerican) : null;
+  const parlayPayout = calcParlay(selections, Number(parlayStake) || 0);
+  const isBigParlay = (parlayOddsAmerican ?? 0) >= 500;
+
+  const quickBets = [100, 500, 1000, 5000];
+
+  return (
+    <div className="rounded-xl overflow-hidden" style={{ background: '#101C16', border: '1px solid #1A2E22' }}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3.5" style={{ borderBottom: '1px solid #1A2E22', background: 'rgba(255,255,255,0.02)' }}>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Bet Slip</span>
+          {selections.length > 0 && (
+            <span
+              className="text-[10px] font-black px-1.5 py-0.5 rounded-full"
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+            >
+              {selections.length}
+            </span>
+          )}
+        </div>
+        {selections.length > 0 && (
+          <button onClick={onClear} className="p-1 rounded hover:bg-white/5 transition-colors">
+            <Trash2 className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />
+          </button>
+        )}
+      </div>
+
+      {/* Mode toggle */}
+      {selections.length > 1 && !betPlaced && (
+        <div className="flex mx-3 mt-3 rounded-lg overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+          {(['single', 'parlay'] as const).map((mode) => (
+            <button
+              key={mode}
+              onClick={() => setBetMode(mode)}
+              className="flex-1 py-2 text-xs font-semibold capitalize transition-all"
+              style={betMode === mode
+                ? { background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }
+                : { color: '#8FA899' }
+              }
+            >
+              {mode === 'parlay' ? `Parlay (${selections.length})` : 'Singles'}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <AnimatePresence mode="wait">
+        {betPlaced ? (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            className="px-4 py-8 text-center"
+          >
+            <div
+              className="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-3"
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
+            >
+              <span className="text-2xl">✓</span>
+            </div>
+            <p className="font-bold text-sm mb-1" style={{ color: '#F5E8C8' }}>Bets Placed!</p>
+            <p className="text-xs" style={{ color: '#8FA899' }}>Good luck! Bets are demo only.</p>
+          </motion.div>
+        ) : selections.length === 0 ? (
+          <div className="py-10 px-4 text-center">
+            <span className="text-3xl block mb-2">🎯</span>
+            <p className="text-sm font-medium mb-1" style={{ color: '#F5E8C8' }}>No selections yet</p>
+            <p className="text-xs" style={{ color: '#8FA899' }}>Click any odds to add to your slip</p>
+          </div>
+        ) : betMode === 'single' ? (
+          <motion.div key="singles" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="divide-y" style={{ borderColor: '#1A2E22' }}>
+            {selections.map((sel, i) => {
+              const stakeKey = sel.id;
+              const stake = Number(stakeInputs[stakeKey]) || 0;
+              const payout = calcPayout(stake, sel.odds);
+              return (
+                <div key={sel.id} className="p-3">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold leading-snug truncate" style={{ color: '#F5E8C8' }}>{sel.label}</p>
+                      <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>{sel.gameLabel}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <span className="text-sm font-bold number-display" style={{ color: sel.odds > 0 ? '#2DC97A' : '#F0B232' }}>{fmtOdds(sel.odds)}</span>
+                      <button onClick={() => onRemove(i)} className="p-0.5 rounded hover:bg-white/5">
+                        <X className="w-3 h-3" style={{ color: '#8FA899' }} />
+                      </button>
+                    </div>
+                  </div>
+                  {/* Quick bet buttons */}
+                  <div className="flex gap-1 mb-2">
+                    {quickBets.map((amt) => (
+                      <button
+                        key={amt}
+                        onClick={() => setStakeInputs((prev) => ({ ...prev, [stakeKey]: String(amt) }))}
+                        className="flex-1 py-1 rounded text-[9px] font-bold transition-all hover:opacity-80"
+                        style={{ background: 'rgba(255,255,255,0.05)', color: '#8FA899', border: '1px solid #1A2E22' }}
+                      >
+                        {amt >= 1000 ? `${amt / 1000}K` : amt}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setStakeInputs((prev) => ({ ...prev, [stakeKey]: String(Math.floor(balance)) }))}
+                      className="flex-1 py-1 rounded text-[9px] font-bold transition-all hover:opacity-80"
+                      style={{ background: 'rgba(240,178,50,0.08)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}
+                    >
+                      Max
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      placeholder={`Stake (${activeCurrency})`}
+                      value={stakeInputs[stakeKey] || ''}
+                      onChange={(e) => setStakeInputs((prev) => ({ ...prev, [stakeKey]: e.target.value }))}
+                      className="flex-1 px-2.5 py-1.5 rounded-lg text-xs number-display text-[#F5E8C8] focus:outline-none"
+                      style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
+                    />
+                    {stake > 0 && (
+                      <span className="text-[10px] font-bold number-display" style={{ color: '#2DC97A' }}>
+                        +{payout.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[9px]" style={{ color: '#4A6A55' }}>Implied: {impliedProb(sel.odds)}%</span>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="p-3">
+              <button
+                onClick={onPlaceBet}
+                className="w-full py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+                style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+              >
+                Place {selections.length} Bet{selections.length > 1 ? 's' : ''} (Demo)
+              </button>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div key="parlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 space-y-3">
+            {/* Parlay legs */}
+            <div className="space-y-2">
+              {selections.map((sel, i) => (
+                <div key={sel.id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span
+                      className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black flex-shrink-0"
+                      style={{ background: 'rgba(45,201,122,0.15)', color: '#2DC97A' }}
+                    >
+                      {i + 1}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] font-semibold truncate" style={{ color: '#F5E8C8' }}>{sel.label}</p>
+                      <p className="text-[9px]" style={{ color: '#8FA899' }}>{sel.gameLabel}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                    <span
+                      className="text-xs font-bold number-display"
+                      style={{ color: sel.odds > 0 ? '#2DC97A' : '#F0B232' }}
+                    >
+                      {fmtOdds(sel.odds)}
+                    </span>
+                    <button onClick={() => onRemove(i)}><X className="w-3 h-3" style={{ color: '#8FA899' }} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Parlay odds display */}
+            {parlayOddsDisplay && (
+              <div
+                className="flex items-center justify-between px-3 py-2 rounded-lg"
+                style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.2)' }}
+              >
+                <div className="flex items-center gap-1.5">
+                  {isBigParlay && <Trophy className="w-4 h-4" style={{ color: '#F0B232' }} />}
+                  <span className="text-xs font-semibold" style={{ color: '#8FA899' }}>
+                    {selections.length}-Leg Parlay Odds
+                  </span>
+                </div>
+                <span
+                  className="text-base font-black number-display"
+                  style={{ color: '#F0B232' }}
+                >
+                  {isBigParlay && '🏆 '}{parlayOddsDisplay}
+                </span>
+              </div>
+            )}
+
+            {/* Quick bet + input */}
+            <div className="flex gap-1">
+              {quickBets.map((amt) => (
+                <button
+                  key={amt}
+                  onClick={() => setParlayStake(String(amt))}
+                  className="flex-1 py-1 rounded text-[9px] font-bold transition-all hover:opacity-80"
+                  style={{ background: 'rgba(255,255,255,0.05)', color: '#8FA899', border: '1px solid #1A2E22' }}
+                >
+                  {amt >= 1000 ? `${amt / 1000}K` : amt}
+                </button>
+              ))}
+              <button
+                onClick={() => setParlayStake(String(Math.floor(balance)))}
+                className="flex-1 py-1 rounded text-[9px] font-bold transition-all hover:opacity-80"
+                style={{ background: 'rgba(240,178,50,0.08)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}
+              >
+                Max
+              </button>
+            </div>
+
+            <input
+              type="number"
+              placeholder={`Parlay stake (${activeCurrency})`}
+              value={parlayStake}
+              onChange={(e) => setParlayStake(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg text-xs number-display text-[#F5E8C8] focus:outline-none"
+              style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
+            />
+
+            {Number(parlayStake) > 0 && (
+              <div>
+                <div className="flex items-center justify-between px-2 mb-1.5">
+                  <span className="text-xs" style={{ color: '#8FA899' }}>Potential win</span>
+                  <span className="text-sm font-bold number-display" style={{ color: '#2DC97A' }}>
+                    +{parlayPayout.toLocaleString()} {activeCurrency}
+                  </span>
+                </div>
+                {/* Payout bar */}
+                <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: '#0C1812' }}>
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ background: 'linear-gradient(90deg, #2DC97A, #F0B232)' }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.min(100, (parlayPayout / (parlayPayout + Number(parlayStake))) * 100)}%` }}
+                    transition={{ duration: 0.5 }}
+                  />
+                </div>
+                {/* Insurance upsell */}
+                <div
+                  className="flex items-center gap-2 mt-2 px-2.5 py-2 rounded-lg"
+                  style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)' }}
+                >
+                  <Zap className="w-3 h-3 text-blue-400 flex-shrink-0" />
+                  <p className="text-[10px]" style={{ color: '#8FA899' }}>
+                    <span className="font-semibold text-blue-400">Parlay Insurance:</span> Get a refund if 1 leg loses (VIP only)
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={onPlaceBet}
+              className="w-full py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+            >
+              {isBigParlay ? '🏆 ' : ''}Place Parlay (Demo)
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!betPlaced && (
+        <div className="px-3 pb-3 text-center">
+          <p className="text-[9px]" style={{ color: 'rgba(143,168,153,0.4)' }}>
+            Demo only · No real money · 18+ · Play responsibly
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -228,6 +965,7 @@ export default function SportsbookPage() {
   const { openAuthModal, openBuyCoins } = useUIStore();
 
   const [activeSport, setActiveSport] = useState<SportKey | 'All'>('All');
+  const [contentTab, setContentTab] = useState<ContentTab>('all');
   const [selections, setSelections] = useState<BetSelection[]>([]);
   const [betMode, setBetMode] = useState<'single' | 'parlay'>('single');
   const [stakeInputs, setStakeInputs] = useState<Record<string, string>>({});
@@ -239,31 +977,38 @@ export default function SportsbookPage() {
   const balanceLabel = isGC ? formatGC(balance) : formatSC(balance);
 
   const filteredGames = useMemo(() =>
-    activeSport === 'All'
-      ? SPORTSBOOK_GAMES
-      : SPORTSBOOK_GAMES.filter((g) => g.sport === activeSport),
+    activeSport === 'All' ? SPORTSBOOK_GAMES : SPORTSBOOK_GAMES.filter((g) => g.sport === activeSport),
+    [activeSport]
+  );
+
+  const filteredProps = useMemo(() =>
+    activeSport === 'All' ? PLAYER_PROPS : PLAYER_PROPS.filter((p) => p.sport === activeSport),
     [activeSport]
   );
 
   const liveGames = filteredGames.filter((g) => g.isLive);
   const upcomingGames = filteredGames.filter((g) => !g.isLive);
+  const featuredGame = SPORTSBOOK_GAMES.find((g) => g.isFeatured && g.isLive) ?? SPORTSBOOK_GAMES.find((g) => g.isFeatured);
 
-  const toggleSelection = (sel: BetSelection) => {
+  const toggleSelection = useCallback((sel: BetSelection) => {
     if (!isLoggedIn) { openAuthModal(); return; }
     setSelections((prev) => {
-      const exists = prev.find((s) => s.gameId === sel.gameId && s.market === sel.market && s.side === sel.side);
-      if (exists) return prev.filter((s) => !(s.gameId === sel.gameId && s.market === sel.market && s.side === sel.side));
-      // Remove same game+market but different side
-      const filtered = prev.filter((s) => !(s.gameId === sel.gameId && s.market === sel.market));
-      return [...filtered, sel];
+      const exists = prev.find((s) => s.id === sel.id);
+      if (exists) return prev.filter((s) => s.id !== sel.id);
+      // For game markets (not props), remove same game+market but different side
+      if (sel.market !== 'prop') {
+        const filtered = prev.filter((s) => !(s.gameId === sel.gameId && s.market === sel.market));
+        return [...filtered, sel];
+      }
+      return [...prev, sel];
     });
-  };
+  }, [isLoggedIn, openAuthModal]);
 
-  const removeSelection = (idx: number) => {
+  const removeSelection = useCallback((idx: number) => {
     setSelections((prev) => prev.filter((_, i) => i !== idx));
-  };
+  }, []);
 
-  const handlePlaceBet = () => {
+  const handlePlaceBet = useCallback(() => {
     if (!isLoggedIn) { openAuthModal(); return; }
     setBetPlaced(true);
     setTimeout(() => {
@@ -272,16 +1017,39 @@ export default function SportsbookPage() {
       setStakeInputs({});
       setParlayStake('');
     }, 2500);
-  };
+  }, [isLoggedIn, openAuthModal]);
 
-  const parlayPayout = calcParlay(selections, Number(parlayStake) || 0);
-  const parlayOdds = selections.length > 1
-    ? selections.reduce((acc, s) => {
-        const d = s.odds > 0 ? 1 + s.odds / 100 : 1 + 100 / -s.odds;
-        return acc * d;
-      }, 1)
-    : null;
-  const parlayOddsDisplay = parlayOdds ? fmtOdds(Math.round((parlayOdds - 1) * 100)) : null;
+  const handleCopySlip = useCallback((parlay: CreatorParlay) => {
+    if (!isLoggedIn) { openAuthModal(); return; }
+    const newSels: BetSelection[] = parlay.legs.map((leg, i) => ({
+      id: `creator-${parlay.id}-leg-${i}`,
+      gameId: parlay.id * 100 + i,
+      market: 'moneyline' as const,
+      side: 'home' as const,
+      label: leg.label,
+      odds: leg.odds,
+      gameLabel: leg.game,
+    }));
+    setSelections((prev) => {
+      const existingIds = new Set(prev.map((s) => s.id));
+      const toAdd = newSels.filter((s) => !existingIds.has(s.id));
+      return [...prev, ...toAdd];
+    });
+    setBetMode('parlay');
+  }, [isLoggedIn, openAuthModal]);
+
+  const CONTENT_TABS: { key: ContentTab; label: string; count?: number }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'live', label: 'Live', count: liveGames.length },
+    { key: 'upcoming', label: 'Upcoming', count: upcomingGames.length },
+    { key: 'props', label: 'Player Props', count: filteredProps.length },
+    { key: 'creators', label: 'Creator Picks', count: CREATOR_PARLAYS.length },
+  ];
+
+  const showLive = contentTab === 'all' || contentTab === 'live';
+  const showUpcoming = contentTab === 'all' || contentTab === 'upcoming';
+  const showProps = contentTab === 'props';
+  const showCreators = contentTab === 'creators';
 
   return (
     <div className="animate-[fade-in_0.3s_ease-out]">
@@ -294,7 +1062,6 @@ export default function SportsbookPage() {
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
         }}
       >
-        {/* Watermark */}
         <div className="absolute right-6 top-4 opacity-[0.06]">
           <svg width="80" height="64" viewBox="0 0 40 32" fill="none">
             <rect x="2" y="25" width="36" height="6" rx="2" fill="#3B82F6"/>
@@ -316,7 +1083,7 @@ export default function SportsbookPage() {
               </span>
             </div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>
-              Live Betting & Pre-Match
+              Live Betting &amp; Pre-Match
             </h1>
             <p className="text-sm max-w-lg" style={{ color: '#8FA899' }}>
               {SPORTSBOOK_GAMES.filter((g) => g.isLive).length} events live now · {SPORTSBOOK_GAMES.length} markets open · GC &amp; SC supported
@@ -347,7 +1114,6 @@ export default function SportsbookPage() {
           )}
         </div>
 
-        {/* Demo notice */}
         <div className="flex items-center gap-2 mt-4 px-3 py-2 rounded-lg" style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.15)' }}>
           <Info className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
           <p className="text-[11px]" style={{ color: '#8FA899' }}>
@@ -380,18 +1146,62 @@ export default function SportsbookPage() {
             ))}
           </div>
 
-          {/* Column headers */}
-          <div className="hidden sm:flex items-center px-4 pb-1">
-            <div className="flex-1 text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#4A6A55' }}>Matchup</div>
-            <div className="flex gap-1.5 flex-shrink-0" style={{ width: 240 }}>
-              <div className="text-[10px] uppercase tracking-wider font-semibold text-center flex-1" style={{ color: '#4A6A55' }}>Spread</div>
-              <div className="text-[10px] uppercase tracking-wider font-semibold text-center flex-1" style={{ color: '#4A6A55' }}>Moneyline</div>
-              <div className="text-[10px] uppercase tracking-wider font-semibold text-center flex-1" style={{ color: '#4A6A55' }}>Total</div>
-            </div>
+          {/* Content tabs */}
+          <div className="flex gap-1 overflow-x-auto no-scrollbar pb-1 p-1 rounded-xl" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+            {CONTENT_TABS.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setContentTab(tab.key)}
+                className={cn(
+                  'flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0',
+                  contentTab === tab.key
+                    ? 'text-black'
+                    : 'text-[#8FA899] hover:text-[#F5E8C8]'
+                )}
+                style={contentTab === tab.key ? { background: 'linear-gradient(135deg, #2DC97A, #F0B232)' } : {}}
+              >
+                {tab.label}
+                {tab.count !== undefined && (
+                  <span
+                    className="text-[9px] font-black px-1 rounded-full"
+                    style={contentTab === tab.key
+                      ? { background: 'rgba(0,0,0,0.2)', color: '#060E0A' }
+                      : { background: 'rgba(143,168,153,0.1)', color: '#8FA899' }
+                    }
+                  >
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
 
+          {/* Featured hero card — show on "all" tab when sport isn't filtered */}
+          {contentTab === 'all' && activeSport === 'All' && featuredGame && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}>
+                  Featured Matchup
+                </span>
+              </div>
+              <FeaturedHeroCard game={featuredGame} selections={selections} onSelect={toggleSelection} />
+            </div>
+          )}
+
+          {/* Column headers for game rows */}
+          {(showLive || showUpcoming) && (showLive ? liveGames : []).length + (showUpcoming ? upcomingGames : []).length > 0 && (
+            <div className="hidden sm:flex items-center px-4 pb-1">
+              <div className="flex-1 text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#4A6A55' }}>Matchup</div>
+              <div className="flex gap-1.5 flex-shrink-0" style={{ width: 240 }}>
+                <div className="text-[10px] uppercase tracking-wider font-semibold text-center flex-1" style={{ color: '#4A6A55' }}>Spread</div>
+                <div className="text-[10px] uppercase tracking-wider font-semibold text-center flex-1" style={{ color: '#4A6A55' }}>ML</div>
+                <div className="text-[10px] uppercase tracking-wider font-semibold text-center flex-1" style={{ color: '#4A6A55' }}>Total</div>
+              </div>
+            </div>
+          )}
+
           {/* Live games */}
-          {liveGames.length > 0 && (
+          {showLive && liveGames.length > 0 && (
             <section>
               <div className="flex items-center gap-2 mb-3">
                 <span className="live-dot" style={{ background: '#EF4444' }} />
@@ -411,7 +1221,7 @@ export default function SportsbookPage() {
           )}
 
           {/* Upcoming games */}
-          {upcomingGames.length > 0 && (
+          {showUpcoming && upcomingGames.length > 0 && (
             <section>
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Upcoming</span>
@@ -429,7 +1239,56 @@ export default function SportsbookPage() {
             </section>
           )}
 
-          {filteredGames.length === 0 && (
+          {/* Player props */}
+          {showProps && (
+            <section>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Player Props</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.12)', color: '#2DC97A' }}>
+                  {filteredProps.length}
+                </span>
+              </div>
+              {filteredProps.length === 0 ? (
+                <div className="py-12 text-center" style={{ color: '#4A6A55' }}>
+                  <p className="text-3xl mb-2">🏃</p>
+                  <p className="font-semibold" style={{ color: '#8FA899' }}>No props for this sport</p>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {filteredProps.map((prop, i) => (
+                    <motion.div key={prop.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+                      <PropCard prop={prop} selections={selections} onSelect={toggleSelection} />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* Creator parlays */}
+          {showCreators && (
+            <section>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Featured Parlays</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.12)', color: '#F0B232' }}>
+                  {CREATOR_PARLAYS.length}
+                </span>
+              </div>
+              <p className="text-xs mb-4" style={{ color: '#8FA899' }}>
+                Community &amp; creator parlays — copy any slip directly to your bet slip in one click.
+              </p>
+              <div className="space-y-3">
+                {CREATOR_PARLAYS.map((parlay, i) => (
+                  <motion.div key={parlay.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                    <CreatorParlayCard parlay={parlay} onCopySlip={handleCopySlip} />
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Empty state */}
+          {!showProps && !showCreators && filteredGames.length === 0 && (
             <div className="py-20 text-center" style={{ color: '#4A6A55' }}>
               <p className="text-4xl mb-3">🏆</p>
               <p className="font-semibold" style={{ color: '#8FA899' }}>No games for this sport yet</p>
@@ -438,188 +1297,26 @@ export default function SportsbookPage() {
           )}
         </div>
 
-        {/* ── BET SLIP ────────────────────────────────────────────────── */}
-        <div className="hidden lg:block w-72 flex-shrink-0 sticky top-4">
-          <div className="rounded-xl overflow-hidden" style={{ background: '#101C16', border: '1px solid #1A2E22' }}>
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3.5" style={{ borderBottom: '1px solid #1A2E22', background: 'rgba(255,255,255,0.02)' }}>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Bet Slip</span>
-                {selections.length > 0 && (
-                  <span
-                    className="text-[10px] font-black px-1.5 py-0.5 rounded-full"
-                    style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
-                  >
-                    {selections.length}
-                  </span>
-                )}
-              </div>
-              {selections.length > 0 && (
-                <button onClick={() => setSelections([])} className="p-1 rounded hover:bg-white/5 transition-colors">
-                  <Trash2 className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />
-                </button>
-              )}
-            </div>
+        {/* ── BET SLIP (desktop) ───────────────────────────────────────── */}
+        <div className="hidden lg:block w-72 flex-shrink-0 sticky top-4 space-y-3">
+          <BetSlip
+            selections={selections}
+            betMode={betMode}
+            setBetMode={setBetMode}
+            stakeInputs={stakeInputs}
+            setStakeInputs={setStakeInputs}
+            parlayStake={parlayStake}
+            setParlayStake={setParlayStake}
+            onRemove={removeSelection}
+            onClear={() => setSelections([])}
+            onPlaceBet={handlePlaceBet}
+            betPlaced={betPlaced}
+            activeCurrency={activeCurrency}
+            balance={balance}
+          />
 
-            {/* Mode toggle */}
-            {selections.length > 1 && (
-              <div className="flex mx-3 mt-3 rounded-lg overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
-                {(['single', 'parlay'] as const).map((mode) => (
-                  <button
-                    key={mode}
-                    onClick={() => setBetMode(mode)}
-                    className="flex-1 py-2 text-xs font-semibold capitalize transition-all"
-                    style={betMode === mode
-                      ? { background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }
-                      : { color: '#8FA899' }
-                    }
-                  >
-                    {mode === 'parlay' ? `Parlay (${selections.length})` : 'Singles'}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <AnimatePresence>
-              {betPlaced ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="px-4 py-8 text-center"
-                >
-                  <div
-                    className="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-3"
-                    style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
-                  >
-                    <span className="text-2xl">✓</span>
-                  </div>
-                  <p className="font-bold text-sm mb-1" style={{ color: '#F5E8C8' }}>Bets Placed!</p>
-                  <p className="text-xs" style={{ color: '#8FA899' }}>Good luck! Bets are demo only.</p>
-                </motion.div>
-              ) : selections.length === 0 ? (
-                <div className="py-10 px-4 text-center">
-                  <span className="text-3xl block mb-2">🎯</span>
-                  <p className="text-sm font-medium mb-1" style={{ color: '#F5E8C8' }}>No selections yet</p>
-                  <p className="text-xs" style={{ color: '#8FA899' }}>Click any odds to add to your slip</p>
-                </div>
-              ) : betMode === 'single' ? (
-                <motion.div key="singles" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="divide-y" style={{ borderColor: '#1A2E22' }}>
-                  {selections.map((sel, i) => {
-                    const stake = Number(stakeInputs[`${sel.gameId}-${sel.market}-${sel.side}`]) || 0;
-                    const payout = calcPayout(stake, sel.odds);
-                    return (
-                      <div key={i} className="p-3">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs font-semibold leading-snug truncate" style={{ color: '#F5E8C8' }}>{sel.label}</p>
-                            <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>{sel.gameLabel}</p>
-                          </div>
-                          <div className="flex items-center gap-1.5 flex-shrink-0">
-                            <span className="text-sm font-bold number-display" style={{ color: '#F0B232' }}>{fmtOdds(sel.odds)}</span>
-                            <button onClick={() => removeSelection(i)} className="p-0.5 rounded hover:bg-white/5">
-                              <X className="w-3 h-3" style={{ color: '#8FA899' }} />
-                            </button>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="number"
-                            placeholder={`Stake (${activeCurrency})`}
-                            value={stakeInputs[`${sel.gameId}-${sel.market}-${sel.side}`] || ''}
-                            onChange={(e) => setStakeInputs((prev) => ({ ...prev, [`${sel.gameId}-${sel.market}-${sel.side}`]: e.target.value }))}
-                            className="flex-1 px-2.5 py-1.5 rounded-lg text-xs number-display text-[#F5E8C8] focus:outline-none"
-                            style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
-                          />
-                          {stake > 0 && (
-                            <span className="text-[10px] font-bold number-display" style={{ color: '#2DC97A' }}>
-                              Win: {payout.toLocaleString()}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between mt-1">
-                          <span className="text-[9px]" style={{ color: '#4A6A55' }}>Implied: {impliedProb(sel.odds)}%</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  <div className="p-3">
-                    <button
-                      onClick={handlePlaceBet}
-                      className="w-full py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-                      style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
-                    >
-                      Place {selections.length} Bet{selections.length > 1 ? 's' : ''} (Demo)
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div key="parlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 space-y-3">
-                  {/* Parlay legs */}
-                  <div className="space-y-2">
-                    {selections.map((sel, i) => (
-                      <div key={i} className="flex items-center justify-between">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[11px] font-semibold truncate" style={{ color: '#F5E8C8' }}>{sel.label}</p>
-                          <p className="text-[9px]" style={{ color: '#8FA899' }}>{sel.gameLabel}</p>
-                        </div>
-                        <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
-                          <span className="text-xs font-bold number-display" style={{ color: '#F0B232' }}>{fmtOdds(sel.odds)}</span>
-                          <button onClick={() => removeSelection(i)}><X className="w-3 h-3" style={{ color: '#8FA899' }} /></button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Parlay odds */}
-                  {parlayOddsDisplay && (
-                    <div className="flex items-center justify-between px-3 py-2 rounded-lg" style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.2)' }}>
-                      <span className="text-xs font-semibold" style={{ color: '#8FA899' }}>Parlay Odds</span>
-                      <span className="text-sm font-black number-display" style={{ color: '#F0B232' }}>{parlayOddsDisplay}</span>
-                    </div>
-                  )}
-
-                  <input
-                    type="number"
-                    placeholder={`Parlay stake (${activeCurrency})`}
-                    value={parlayStake}
-                    onChange={(e) => setParlayStake(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg text-xs number-display text-[#F5E8C8] focus:outline-none"
-                    style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
-                  />
-                  {Number(parlayStake) > 0 && (
-                    <div className="flex items-center justify-between px-2">
-                      <span className="text-xs" style={{ color: '#8FA899' }}>Potential win</span>
-                      <span className="text-sm font-bold number-display" style={{ color: '#2DC97A' }}>
-                        {parlayPayout.toLocaleString()} {activeCurrency}
-                      </span>
-                    </div>
-                  )}
-
-                  <button
-                    onClick={handlePlaceBet}
-                    className="w-full py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-                    style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
-                  >
-                    Place Parlay (Demo)
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Footer */}
-            {!betPlaced && (
-              <div className="px-3 pb-3 text-center">
-                <p className="text-[9px]" style={{ color: 'rgba(143,168,153,0.4)' }}>
-                  Demo only · No real money · 18+ · Play responsibly
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Popular markets sidebar card */}
-          <div className="mt-3 rounded-xl p-3" style={{ background: '#101C16', border: '1px solid #1A2E22' }}>
+          {/* Popular markets sidebar */}
+          <div className="rounded-xl p-3" style={{ background: '#101C16', border: '1px solid #1A2E22' }}>
             <p className="text-xs font-bold mb-2.5 flex items-center gap-2" style={{ color: '#F5E8C8' }}>
               🔥 Popular Right Now
             </p>
@@ -629,6 +1326,7 @@ export default function SportsbookPage() {
                 { label: 'Lakers ML', game: 'LAL vs BOS', odds: +105 },
                 { label: 'Jones ML', game: 'Jones vs Miocic', odds: -420 },
                 { label: 'UCL O 2.5', game: 'RMA vs MCI', odds: -145 },
+                { label: 'Mahomes O 285.5', game: 'KC vs PHI', odds: -115 },
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between py-1.5 rounded-lg px-2" style={{ background: 'rgba(255,255,255,0.02)' }}>
                   <div>
@@ -645,11 +1343,10 @@ export default function SportsbookPage() {
         </div>
       </div>
 
-      {/* Mobile bet slip FAB */}
+      {/* ── Mobile bet slip FAB ──────────────────────────────────────────── */}
       {selections.length > 0 && (
         <div className="fixed bottom-12 left-0 right-0 px-4 lg:hidden z-30">
           <button
-            onClick={() => {}}
             className="w-full flex items-center justify-between px-5 py-3.5 rounded-xl font-bold text-sm shadow-xl"
             style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
           >
@@ -664,7 +1361,7 @@ export default function SportsbookPage() {
         </div>
       )}
 
-      {/* Legal */}
+      {/* ── Legal ────────────────────────────────────────────────────────── */}
       <div className="border-t mt-8 pt-5 text-center" style={{ borderColor: '#1A2E22' }}>
         <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
           18+ · Demo only · No real bets placed · Odds are simulated · Void Where Prohibited

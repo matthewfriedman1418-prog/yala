@@ -6,7 +6,7 @@ export default function SweepstakesRulesPage() {
           No Purchase Necessary
         </div>
         <h1 className="font-display text-3xl font-bold mb-2" style={{ color: '#F5E8C8' }}>Official Sweepstakes Rules</h1>
-        <p className="text-sm" style={{ color: '#9CA3AF' }}>Effective: May 21, 2026 — Yala Gaming LLC</p>
+        <p className="text-sm" style={{ color: '#9CA3AF' }}>Effective: May 21, 2026: Yala Gaming LLC</p>
       </div>
 
       <div className="px-5 py-4 rounded-2xl border" style={{ background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.25)' }}>

@@ -39,6 +39,10 @@ interface UIState {
   rainAmount: number;
   triggerRain: (amount: number) => void;
   dismissRain: () => void;
+
+  onboardingOpen: boolean;
+  openOnboarding: () => void;
+  closeOnboarding: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -79,4 +83,8 @@ export const useUIStore = create<UIState>((set) => ({
   rainAmount: 0,
   triggerRain: (amount) => set({ rainActive: true, rainAmount: amount }),
   dismissRain: () => set({ rainActive: false, rainAmount: 0 }),
+
+  onboardingOpen: false,
+  openOnboarding: () => set({ onboardingOpen: true }),
+  closeOnboarding: () => set({ onboardingOpen: false }),
 }));

@@ -48,7 +48,7 @@ export function GlobalChat() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 top-14 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 top-14 bg-black/50 z-39 lg:hidden"
             onClick={closeChat}
           />
 
@@ -57,7 +57,7 @@ export function GlobalChat() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-14 bottom-9 w-80 z-40 flex flex-col"
+            className="fixed right-0 top-14 bottom-0 w-80 z-40 flex flex-col"
             style={{ backgroundColor: '#0C1812', borderLeft: '1px solid #1A2E22' }}
           >
             {/* Header */}

@@ -302,7 +302,7 @@ export default function RewardsPage() {
         <div className="flex-1 text-center sm:text-left">
           <p className="font-display font-bold text-lg mb-1" style={{ color: '#F5E8C8' }}>Free Daily Spin</p>
           <p className="text-sm" style={{ color: '#9CA3AF' }}>
-            Spin the Emerald Wheel once per day — no purchase required. Win up to 10,000 GC or bonus SC.
+            Spin the Emerald Wheel once per day: no purchase required. Win up to 10,000 GC or bonus SC.
           </p>
         </div>
         <Link

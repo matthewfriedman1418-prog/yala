@@ -48,7 +48,7 @@ export const PROMOTIONS: Promotion[] = [
   {
     id: 'promo_003',
     title: 'Weekly Dune Race',
-    subtitle: '100,000 GC prize pool — every week',
+    subtitle: '100,000 GC prize pool: every week',
     description: 'Compete on the weekly leaderboard. The top 50 players by wagered Gold Coins share a 100,000 GC prize pool.',
     type: 'race',
     badge: 'WEEKLY',
@@ -117,7 +117,7 @@ export const PROMOTIONS: Promotion[] = [
   {
     id: 'promo_008',
     title: 'Daily Spin & Win',
-    subtitle: 'Free daily wheel spin — no purchase needed',
+    subtitle: 'Free daily wheel spin: no purchase needed',
     description: 'Spin the Emerald Wheel once per day for free. Win up to 10,000 GC or a bonus SC reward. No purchase necessary.',
     type: 'daily',
     badge: 'FREE PLAY',

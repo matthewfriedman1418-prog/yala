@@ -140,8 +140,8 @@ export default function DailyBonusPage() {
             style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
           >
             {dailyClaimed
-              ? `✓ Day ${currentStreak} Claimed — ${formatGC(STREAK_REWARDS[currentStreak - 1].gc)} GC`
-              : `Claim Day ${currentStreak} — ${formatGC(STREAK_REWARDS[currentStreak - 1].gc)} GC${STREAK_REWARDS[currentStreak - 1].sc ? ` + ${STREAK_REWARDS[currentStreak - 1].sc} SC` : ''}`}
+              ? `✓ Day ${currentStreak} Claimed: ${formatGC(STREAK_REWARDS[currentStreak - 1].gc)} GC`
+              : `Claim Day ${currentStreak}: ${formatGC(STREAK_REWARDS[currentStreak - 1].gc)} GC${STREAK_REWARDS[currentStreak - 1].sc ? ` + ${STREAK_REWARDS[currentStreak - 1].sc} SC` : ''}`}
           </button>
           <p className="text-[10px] text-center mt-2" style={{ color: '#9CA3AF' }}>Resets midnight UTC · No purchase necessary</p>
         </div>

@@ -26,7 +26,7 @@ export default function PromotionsPage() {
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#D6A84F' }}>Promotions</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>Desert Deals</h1>
-          <p className="text-sm max-w-lg" style={{ color: '#9CA3AF' }}>Exclusive offers, bonuses, and rewards — always fresh from the oasis.</p>
+          <p className="text-sm max-w-lg" style={{ color: '#9CA3AF' }}>Exclusive offers, bonuses, and rewards: always fresh from the oasis.</p>
         </div>
       </div>
 

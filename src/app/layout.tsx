@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Yala — Desert Luxury Social Casino",
+  title: "Yala: Desert Luxury Social Casino",
   description: "The premier desert luxury sweepstakes social casino. Play Gold Coins and Sweep Coins games. No purchase necessary. 18+ only. Void where prohibited.",
   keywords: ["social casino", "sweepstakes", "gold coins", "sweep coins", "desert luxury"],
 };

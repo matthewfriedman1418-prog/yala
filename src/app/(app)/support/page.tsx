@@ -45,7 +45,7 @@ export default function SupportPage() {
         <button className="glass-card p-5 text-left hover:border-[#D6A84F]/30 transition-all">
           <Mail className="w-6 h-6 mb-3" style={{ color: '#D6A84F' }} />
           <p className="font-semibold mb-1" style={{ color: '#F5E8C8' }}>Email Support</p>
-          <p className="text-sm" style={{ color: '#9CA3AF' }}>support@yala.com — typically reply within 24h.</p>
+          <p className="text-sm" style={{ color: '#9CA3AF' }}>support@yala.com: typically reply within 24h.</p>
           <span className="text-xs mt-2 block" style={{ color: '#9CA3AF' }}>Response time: &lt; 24 hours</span>
         </button>
       </div>

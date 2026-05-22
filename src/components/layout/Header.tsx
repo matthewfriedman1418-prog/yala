@@ -4,17 +4,22 @@ import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { formatGC, formatSC, getVIPColor, getVIPName } from '@/lib/utils';
-import { Bell, ChevronDown, LogOut, User, Wallet, Plus } from 'lucide-react';
+import { Bell, ChevronDown, LogOut, User, Wallet, Plus, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { WalletToggle } from '../wallet/WalletToggle';
 
 function YalaPyramidMini() {
   return (
-    <svg width="22" height="18" viewBox="0 0 40 32" fill="none">
-      <rect x="2" y="25" width="36" height="6" rx="2" fill="#1A5C8A"/>
-      <rect x="7" y="17" width="26" height="6" rx="2" fill="#2DC97A"/>
-      <rect x="13" y="9" width="14" height="6" rx="2" fill="#84CC16"/>
-      <rect x="17" y="1" width="6" height="6" rx="2" fill="#F0B232"/>
+    <svg width="22" height="19" viewBox="0 0 40 34" fill="none">
+      <defs>
+        <clipPath id="pyr-hd">
+          <polygon points="20,0 40,34 0,34" />
+        </clipPath>
+      </defs>
+      <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-hd)" />
     </svg>
   );
 }
@@ -22,7 +27,7 @@ function YalaPyramidMini() {
 export function Header() {
   const { goldCoins, sweepCoins, bonusBalance, activeCurrency } = useWalletStore();
   const { isLoggedIn, user, logout } = useAuthStore();
-  const { openAuthModal, openBuyCoins } = useUIStore();
+  const { openAuthModal, openBuyCoins, toggleChat, chatOpen } = useUIStore();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
@@ -95,6 +100,17 @@ export function Header() {
           <button className="relative p-2 rounded-lg hover:bg-white/5 transition-colors">
             <Bell className="w-4 h-4" style={{ color: '#8FA899' }} />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
+          </button>
+
+          {/* Chat toggle — desktop only (mobile uses bottom nav) */}
+          <button
+            onClick={toggleChat}
+            className="hidden lg:flex relative p-2 rounded-lg hover:bg-white/5 transition-colors items-center justify-center"
+            style={{ color: chatOpen ? '#2DC97A' : '#8FA899' }}
+            aria-label="Toggle live chat"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-400" />
           </button>
 
           {/* Profile dropdown */}

@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
 import type { Game } from '@/lib/mock-data/games';
@@ -70,10 +71,22 @@ export function GameCard({ game, size = 'md' }: GameCardProps) {
     <button
       onClick={handleClick}
       className={cn('group relative w-full rounded-xl overflow-hidden game-card-hover', sizeClasses[size])}
-      style={{ background: getGradient(game.gradient) }}
+      style={{ background: game.imageUrl ? '#0C1812' : getGradient(game.gradient) }}
     >
+      {/* Cover image */}
+      {game.imageUrl && (
+        <Image
+          src={game.imageUrl}
+          alt={game.name}
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          unoptimized
+        />
+      )}
+
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
       {/* Badges */}
       <div className="absolute top-2 left-2 flex gap-1">

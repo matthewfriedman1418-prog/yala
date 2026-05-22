@@ -357,7 +357,7 @@ export function BuyCoinsModal() {
                           </button>
                         </div>
                         <p className="text-[10px]" style={{ color: '#9CA3AF' }}>
-                          Demo only — no real blockchain transaction required
+                          Demo only: no real blockchain transaction required
                         </p>
                       </div>
 
@@ -368,7 +368,7 @@ export function BuyCoinsModal() {
                         style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
                       >
                         <Bitcoin className="w-4 h-4" />
-                        {loading ? 'Confirming...' : `I've Sent Payment — $${pkg.price}`}
+                        {loading ? 'Confirming...' : `I've Sent Payment: $${pkg.price}`}
                       </button>
                     </motion.div>
                   )}

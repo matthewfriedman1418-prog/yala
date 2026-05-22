@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/store/auth';
 import { X, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 export function AuthModal() {
-  const { authModalOpen, authModalTab, closeAuthModal, openAuthModal } = useUIStore();
+  const { authModalOpen, authModalTab, closeAuthModal, openAuthModal, openOnboarding } = useUIStore();
   const { login, register } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -28,10 +28,12 @@ export function AuthModal() {
     try {
       if (isLogin) {
         await login(form.username || form.email, form.password);
+        closeAuthModal();
       } else {
         await register({ username: form.username, email: form.email, password: form.password });
+        closeAuthModal();
+        openOnboarding();
       }
-      closeAuthModal();
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -62,11 +64,16 @@ export function AuthModal() {
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid #1A2E22' }}>
             <div className="flex items-center gap-3">
-              <svg width="28" height="23" viewBox="0 0 40 32" fill="none">
-                <rect x="2" y="25" width="36" height="6" rx="2" fill="#1A5C8A"/>
-                <rect x="7" y="17" width="26" height="6" rx="2" fill="#2DC97A"/>
-                <rect x="13" y="9" width="14" height="6" rx="2" fill="#84CC16"/>
-                <rect x="17" y="1" width="6" height="6" rx="2" fill="#F0B232"/>
+              <svg width="28" height="24" viewBox="0 0 40 34" fill="none">
+                <defs>
+                  <clipPath id="pyr-am">
+                    <polygon points="20,0 40,34 0,34" />
+                  </clipPath>
+                </defs>
+                <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-am)" />
+                <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-am)" />
+                <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-am)" />
+                <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-am)" />
               </svg>
               <div>
                 <h2 className="font-display text-xl font-bold" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>

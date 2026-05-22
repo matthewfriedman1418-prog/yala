@@ -1,6 +1,6 @@
 'use client';
 
-/** Live win feed — scrolling marquee strip at bottom of screen */
+/** Live win feed — scrolling marquee strip sitting between header and main content */
 
 const WINS = [
   { user: 'DesertFox88', game: 'Oasis Plinko', amount: '48,200 GC', multiplier: '241x', currency: 'GC' },
@@ -17,22 +17,25 @@ const WINS = [
   { user: 'SphinxRider', game: 'Dog House Megaways', amount: '6.25 SC', multiplier: '25x', currency: 'SC' },
 ];
 
-const DOUBLED = [...WINS, ...WINS]; // duplicate for seamless loop
+const DOUBLED = [...WINS, ...WINS];
 
 export function LiveWinFeed() {
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-30 h-9 flex items-center overflow-hidden"
+      className="h-9 flex-shrink-0 flex items-center overflow-hidden w-full"
       style={{
         backgroundColor: '#0C1812',
-        borderTop: '1px solid #1A2E22',
-        boxShadow: '0 -2px 16px rgba(0,0,0,0.4)',
+        borderBottom: '1px solid #1A2E22',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
       }}
     >
       {/* Label */}
       <div
         className="flex items-center gap-2 px-3 h-full flex-shrink-0"
-        style={{ borderRight: '1px solid #1A2E22', background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(240,178,50,0.08))' }}
+        style={{
+          borderRight: '1px solid #1A2E22',
+          background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(240,178,50,0.08))',
+        }}
       >
         <span className="live-dot" />
         <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#2DC97A' }}>
@@ -45,21 +48,14 @@ export function LiveWinFeed() {
         <div className="marquee-track">
           {DOUBLED.map((win, i) => (
             <div key={i} className="flex items-center gap-1.5 px-4 flex-shrink-0">
-              {/* Separator */}
               <span style={{ color: '#1A2E22', fontSize: 16 }}>•</span>
-
-              {/* User */}
               <span className="text-[11px] font-semibold" style={{ color: '#8FA899' }}>
                 {win.user}
               </span>
-
-              {/* Game */}
               <span className="text-[11px]" style={{ color: '#4A6A55' }}>won on</span>
               <span className="text-[11px] font-medium" style={{ color: '#F5E8C8' }}>
                 {win.game}
               </span>
-
-              {/* Amount */}
               <span
                 className="text-[11px] font-bold number-display px-1.5 py-0.5 rounded"
                 style={{
@@ -69,8 +65,6 @@ export function LiveWinFeed() {
               >
                 {win.amount}
               </span>
-
-              {/* Multiplier */}
               <span className="text-[10px] font-bold" style={{ color: '#2DC97A' }}>
                 @{win.multiplier}
               </span>

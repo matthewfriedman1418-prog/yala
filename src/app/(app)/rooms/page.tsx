@@ -25,7 +25,7 @@ export default function RoomsPage() {
 
   const handleJoin = (room: typeof MOCK_ROOMS[0]) => {
     if (!isLoggedIn) { openAuthModal(); return; }
-    alert(`Joining "${room.name}" — demo mode. Room functionality coming soon!`);
+    alert(`Joining "${room.name}": demo mode. Room functionality coming soon!`);
   };
 
   return (
@@ -71,7 +71,7 @@ export default function RoomsPage() {
           <div className="flex gap-3">
             <button onClick={() => setShowCreate(false)} className="flex-1 py-2.5 rounded-xl text-sm border" style={{ borderColor: '#2a2a2a', color: '#9CA3AF' }}>Cancel</button>
             <button
-              onClick={() => { setShowCreate(false); alert('Room created! Demo mode — full room functionality coming soon.'); }}
+              onClick={() => { setShowCreate(false); alert('Room created! Demo mode: full room functionality coming soon.'); }}
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-black"
               style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}
             >

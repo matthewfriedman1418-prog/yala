@@ -32,18 +32,23 @@ function Crown({ className }: { className?: string }) {
   );
 }
 
-/** Yala pyramid icon — 4 stacked horizontal bars, matching logo variant #16 exactly */
+/** Yala pyramid icon — solid triangle clipped into 4 horizontal color bands (logo #16) */
 function YalaPyramid({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 32" fill="none">
-      {/* Bar 1 — bottom, widest, ocean blue */}
-      <rect x="2" y="25" width="36" height="6" rx="2" fill="#1A5C8A"/>
-      {/* Bar 2 — teal */}
-      <rect x="7" y="17" width="26" height="6" rx="2" fill="#2DC97A"/>
-      {/* Bar 3 — lime */}
-      <rect x="13" y="9" width="14" height="6" rx="2" fill="#84CC16"/>
-      {/* Bar 4 — top, narrowest, gold */}
-      <rect x="17" y="1" width="6" height="6" rx="2" fill="#F0B232"/>
+    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
+      <defs>
+        <clipPath id="pyr-sb">
+          <polygon points="20,0 40,34 0,34" />
+        </clipPath>
+      </defs>
+      {/* gold top */}
+      <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-sb)" />
+      {/* lime */}
+      <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-sb)" />
+      {/* teal */}
+      <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-sb)" />
+      {/* ocean blue base */}
+      <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-sb)" />
     </svg>
   );
 }

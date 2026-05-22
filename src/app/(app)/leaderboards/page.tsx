@@ -83,7 +83,7 @@ export default function LeaderboardsPage() {
       <div className="glass-card overflow-hidden">
         <div className="px-4 py-3 border-b border-[#1E1E1E] flex items-center justify-between">
           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#9CA3AF' }}>
-            {period.charAt(0).toUpperCase() + period.slice(1)} Rankings — {mode} Wagers
+            {period.charAt(0).toUpperCase() + period.slice(1)} Rankings: {mode} Wagers
           </p>
           <TrendingUp className="w-4 h-4" style={{ color: accent }} />
         </div>

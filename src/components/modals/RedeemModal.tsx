@@ -76,7 +76,7 @@ export function RedeemModal() {
             <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl" style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.15)' }}>
               <AlertCircle className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
               <p className="text-[11px]" style={{ color: '#9CA3AF' }}>
-                <span className="text-emerald-400 font-semibold">No Purchase Necessary</span> — earn free SC daily.{' '}
+                <span className="text-emerald-400 font-semibold">No Purchase Necessary</span>: earn free SC daily.{' '}
                 <a href="/sweepstakes-rules" className="underline text-emerald-400/70">Rules</a>
               </p>
             </div>
