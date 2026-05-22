@@ -78,10 +78,11 @@ export function Sidebar() {
     {
       label: 'REWARDS',
       items: [
-        { href: '/daily-bonus',  label: 'Daily Bonus',  icon: Gift },
+        { href: '/rewards',      label: 'Rewards Hub',  icon: Trophy },
+        { href: '/daily-bonus',  label: 'Free Play',    icon: Gift },
         { href: '/vip',          label: 'VIP Club',     icon: Crown },
         { href: '/missions',     label: 'Missions',     icon: Target },
-        { href: '/leaderboards', label: 'Leaderboards', icon: Trophy },
+        { href: '/leaderboards', label: 'Leaderboards', icon: BarChart3 },
         { action: openPromotionsDrawer, label: 'Promotions', icon: Gem, badge: '8' },
       ],
     },

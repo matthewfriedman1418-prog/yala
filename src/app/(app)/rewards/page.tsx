@@ -10,14 +10,14 @@ import { formatGC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { VIP_TIERS } from '@/lib/mock-data/users';
 import { PROMOTIONS } from '@/lib/mock-data/promotions';
 import {
-  Gift, TrendingUp, ChevronRight, Star, RotateCw,
+  Gift, TrendingUp, ChevronRight, Star,
   Target, Trophy, Vault, Calendar, CheckCircle2,
-  Zap, Crown, Medal, Users, Flame
+  Zap, Crown, Medal, Users, Flame,
 } from 'lucide-react';
 
 // ─── Daily Race Data ──────────────────────────────────────────────────────────
 const RACE_PRIZE_POOL = 500_000;
-const RACE_ENDS_IN_SECONDS_INITIAL = 14 * 3600 + 32 * 60 + 9; // 14h 32m 09s
+const RACE_ENDS_IN_SECONDS_INITIAL = 14 * 3600 + 32 * 60 + 9;
 
 const RACE_LEADERS = [
   { rank: 1, name: 'CryptoKing99',  avatar: '👑', wagered: 2_847_500, prize: 125_000, color: '#F0B232' },
@@ -100,13 +100,13 @@ const REWARD_HUBS = [
   {
     id: 'vault',
     title: 'Vault',
-    subtitle: '5% daily interest',
-    description: 'Lock your Gold Coins and earn passive daily interest.',
+    subtitle: 'Protect your coins',
+    description: "Lock Gold Coins you don't want to spend. They won't be used while playing.",
     icon: Vault,
     color: '#06B6D4',
     href: '/vault',
     cta: 'Open Vault',
-    badge: 'Earning',
+    badge: 'Protected',
   },
   {
     id: 'promotions',
@@ -341,6 +341,46 @@ export default function RewardsPage() {
         </div>
       </div>
 
+      {/* ── REWARD HUBS GRID ─────────────────────────────────── */}
+      <div>
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
+          <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Your Rewards</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {REWARD_HUBS.map((hub, i) => {
+            const Icon = hub.icon;
+            const isPromos = hub.id === 'promotions';
+            const inner = <HubCardContent hub={hub} Icon={Icon} />;
+            const cardStyle = {
+              background: 'rgba(16,28,22,0.9)',
+              border: '1px solid #1A2E22',
+            };
+            const cls =
+              'rounded-2xl p-5 flex flex-col h-full w-full text-left transition-all hover:border-[#F0B232]/25 group';
+
+            return (
+              <motion.div
+                key={hub.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.06 }}
+              >
+                {isPromos ? (
+                  <button onClick={openPromotionsDrawer} className={cls} style={cardStyle}>
+                    {inner}
+                  </button>
+                ) : (
+                  <Link href={hub.href} className={cls} style={cardStyle}>
+                    {inner}
+                  </Link>
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* ── VIP PROGRESS BANNER ──────────────────────────────── */}
       {isLoggedIn ? (
         <div
@@ -488,46 +528,6 @@ export default function RewardsPage() {
         </div>
       )}
 
-      {/* ── REWARD HUBS GRID ─────────────────────────────────── */}
-      <div>
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
-          <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Your Rewards</h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {REWARD_HUBS.map((hub, i) => {
-            const Icon = hub.icon;
-            const isPromos = hub.id === 'promotions';
-            const inner = <HubCardContent hub={hub} Icon={Icon} />;
-            const cardStyle = {
-              background: 'rgba(16,28,22,0.9)',
-              border: '1px solid #1A2E22',
-            };
-            const cls =
-              'rounded-2xl p-5 flex flex-col h-full w-full text-left transition-all hover:border-[#F0B232]/25 group';
-
-            return (
-              <motion.div
-                key={hub.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}
-              >
-                {isPromos ? (
-                  <button onClick={openPromotionsDrawer} className={cls} style={cardStyle}>
-                    {inner}
-                  </button>
-                ) : (
-                  <Link href={hub.href} className={cls} style={cardStyle}>
-                    {inner}
-                  </Link>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-
       {/* ── ACTIVE PROMOTIONS ────────────────────────────────── */}
       <div>
         <div className="flex items-center justify-between mb-4">
@@ -576,32 +576,6 @@ export default function RewardsPage() {
             </motion.button>
           ))}
         </div>
-      </div>
-
-      {/* ── FREE SPIN TEASER ─────────────────────────────────── */}
-      <div
-        className="rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6"
-        style={{ background: 'rgba(45,201,122,0.06)', border: '1px solid rgba(45,201,122,0.2)' }}
-      >
-        <div
-          className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
-          style={{ background: 'rgba(45,201,122,0.12)', border: '1px solid rgba(45,201,122,0.25)' }}
-        >
-          <RotateCw className="w-7 h-7 text-[#2DC97A]" />
-        </div>
-        <div className="flex-1 text-center sm:text-left">
-          <p className="font-display font-bold text-lg mb-1" style={{ color: '#F5E8C8' }}>Free Daily Spin</p>
-          <p className="text-sm" style={{ color: '#8FA899' }}>
-            Spin the Emerald Wheel once per day: no purchase required. Win up to 10,000 GC or bonus SC.
-          </p>
-        </div>
-        <Link
-          href="/daily-bonus"
-          className="flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-          style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#060E0A' }}
-        >
-          Spin Now
-        </Link>
       </div>
 
       <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>

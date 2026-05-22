@@ -26,8 +26,6 @@ const CATEGORIES: { id: GameCategory | 'all'; label: string; icon: string }[] = 
   { id: 'casual',    label: 'Casual',      icon: '🎲' },
 ];
 
-const LIVE_PLAYERS = 2_847;
-
 // Featured game for the hero spotlight
 const FEATURED_GAME = ALL_GAMES.find(g => g.slug === 'sultan-riches')!;
 
@@ -223,6 +221,168 @@ function OriginalCard({ orig }: { orig: typeof YALA_ORIGINALS[0] }) {
   );
 }
 
+// ─── Recent Bets ─────────────────────────────────────────────────────────────
+type BetTab = 'all' | 'big' | 'lucky' | 'mine';
+
+type BetEntry = {
+  id: number;
+  game: string;
+  icon: string;
+  user: string;
+  bet: number;
+  currency: 'GC' | 'SC';
+  multiplier: number;
+  profit: number;
+};
+
+const RECENT_BETS: BetEntry[] = [
+  { id: 1,  game: 'Book of Dead',          icon: '📖', user: 'GoldR***King',  bet: 5000,  currency: 'GC', multiplier: 120.5, profit:  597500 },
+  { id: 2,  game: 'Yala Crash',             icon: '🌄', user: 'Spin***Ace',   bet: 2500,  currency: 'GC', multiplier: 0,     profit: -2500  },
+  { id: 3,  game: 'Gates of Olympus',       icon: '⚡', user: 'Nigh***Fox88', bet: 1000,  currency: 'GC', multiplier: 85.2,  profit:  84200 },
+  { id: 4,  game: 'Lightning Roulette',     icon: '⚡', user: 'Emer***Wave',  bet: 10,    currency: 'SC', multiplier: 72.0,  profit:  710   },
+  { id: 5,  game: 'Dune Mines',             icon: '💣', user: 'Thun***derX',  bet: 3000,  currency: 'GC', multiplier: 0,     profit: -3000  },
+  { id: 6,  game: 'Emerald Wheel',          icon: '🎡', user: 'Neon***Luck',  bet: 500,   currency: 'GC', multiplier: 24.0,  profit:  11500 },
+  { id: 7,  game: 'Sweet Bonanza',          icon: '🍬', user: 'Coin***King',  bet: 2000,  currency: 'GC', multiplier: 0,     profit: -2000  },
+  { id: 8,  game: 'Yala Plinko',            icon: '💧', user: 'Nigh***Hunt',  bet: 750,   currency: 'GC', multiplier: 68.0,  profit:  50250 },
+  { id: 9,  game: 'Blackjack',              icon: '♠️', user: 'Neon***Run',   bet: 5000,  currency: 'GC', multiplier: 2.0,   profit:  5000  },
+  { id: 10, game: 'Desert Roulette',        icon: '🎡', user: 'Spin***Ace',   bet: 1500,  currency: 'GC', multiplier: 0,     profit: -1500  },
+  { id: 11, game: 'Golden Dice',            icon: '🎲', user: 'GoldR***King', bet: 10000, currency: 'GC', multiplier: 4.5,   profit:  35000 },
+  { id: 12, game: 'Crazy Time',             icon: '🎪', user: 'Luck***Star',  bet: 20,    currency: 'SC', multiplier: 50.0,  profit:  980   },
+  { id: 13, game: 'Pharaoh Towers',         icon: '🏛', user: 'Thun***derX',  bet: 1000,  currency: 'GC', multiplier: 0,     profit: -1000  },
+  { id: 14, game: 'Oasis Hi-Lo',            icon: '🃏', user: 'Emer***Wave',  bet: 2500,  currency: 'GC', multiplier: 3.0,   profit:  5000  },
+  { id: 15, game: 'Scorpion Cases',         icon: '📦', user: 'Coin***King',  bet: 500,   currency: 'GC', multiplier: 15.0,  profit:  7000  },
+  { id: 16, game: 'Sandstorm Limbo',        icon: '🌪', user: 'Nigh***Fox88', bet: 3000,  currency: 'GC', multiplier: 0,     profit: -3000  },
+  { id: 17, game: 'Caravan Keno',           icon: '🎯', user: 'Neon***Luck',  bet: 250,   currency: 'GC', multiplier: 200.0, profit:  49750 },
+  { id: 18, game: 'Sultan Riches',          icon: '👑', user: 'Nigh***Hunt',  bet: 2000,  currency: 'GC', multiplier: 0,     profit: -2000  },
+  { id: 19, game: 'Lightning Roulette',     icon: '⚡', user: 'Luck***Star',  bet: 5,     currency: 'SC', multiplier: 500.0, profit:  2495  },
+  { id: 20, game: 'Book of Dead',           icon: '📖', user: 'GoldR***King', bet: 8000,  currency: 'GC', multiplier: 0,     profit: -8000  },
+];
+
+const BET_TABS: { id: BetTab; label: string }[] = [
+  { id: 'all',   label: 'All Games'   },
+  { id: 'big',   label: 'Big Players' },
+  { id: 'lucky', label: 'Lucky Wins'  },
+  { id: 'mine',  label: 'My Games'    },
+];
+
+function filterBets(bets: BetEntry[], tab: BetTab, isLoggedIn: boolean): BetEntry[] {
+  if (tab === 'big')   return bets.filter(b => (b.currency === 'GC' ? b.bet >= 5000 : b.bet >= 10));
+  if (tab === 'lucky') return bets.filter(b => b.profit > 0 && b.multiplier >= 15);
+  if (tab === 'mine')  return isLoggedIn ? bets.filter((_, i) => i % 4 === 0) : [];
+  return bets;
+}
+
+function RecentBetsTable({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const [activeTab, setActiveTab] = useState<BetTab>('all');
+  const rows = filterBets(RECENT_BETS, activeTab, isLoggedIn);
+
+  return (
+    <div className="rounded-2xl overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 pt-5 pb-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-0.5 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #2DC97A, transparent)' }} />
+          <TrendingUp className="w-4 h-4 text-[#2DC97A]" />
+          <h2 className="font-bold text-[#F5E8C8] text-sm">Recent Bets</h2>
+        </div>
+        {/* Tabs */}
+        <div className="flex gap-1">
+          {BET_TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              style={
+                activeTab === tab.id
+                  ? { background: 'rgba(45,201,122,0.15)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.3)' }
+                  : { background: 'transparent', color: '#8FA899', border: '1px solid transparent' }
+              }
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Column headers */}
+      <div
+        className="grid px-5 py-2.5 mt-3 text-[10px] font-bold uppercase tracking-widest"
+        style={{
+          gridTemplateColumns: '2fr 1.5fr 1fr 0.8fr 1fr',
+          borderBottom: '1px solid #1A2E22',
+          color: '#4A6A55',
+        }}
+      >
+        <span>Game</span>
+        <span>Player</span>
+        <span>Bet</span>
+        <span>Multiplier</span>
+        <span className="text-right">Profit</span>
+      </div>
+
+      {/* Rows */}
+      <div className="divide-y divide-[#1A2E22]">
+        {rows.length === 0 ? (
+          <div className="py-10 text-center" style={{ color: '#4A6A55' }}>
+            {activeTab === 'mine' ? 'Sign in to see your bets' : 'No bets to show'}
+          </div>
+        ) : (
+          rows.map((bet, i) => {
+            const isWin = bet.profit > 0;
+            const fmtBet = bet.currency === 'GC'
+              ? `${bet.bet.toLocaleString()} GC`
+              : `${bet.bet} SC`;
+            const fmtProfit = bet.currency === 'GC'
+              ? `${isWin ? '+' : ''}${bet.profit.toLocaleString()} GC`
+              : `${isWin ? '+' : ''}${bet.profit} SC`;
+
+            return (
+              <motion.div
+                key={bet.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.03 }}
+                className="grid px-5 py-3 items-center hover:bg-white/[0.02] transition-colors"
+                style={{ gridTemplateColumns: '2fr 1.5fr 1fr 0.8fr 1fr' }}
+              >
+                {/* Game */}
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  >
+                    {bet.icon}
+                  </div>
+                  <span className="text-xs font-medium truncate" style={{ color: '#F5E8C8' }}>{bet.game}</span>
+                </div>
+
+                {/* Player */}
+                <span className="text-xs font-mono" style={{ color: '#8FA899' }}>{bet.user}</span>
+
+                {/* Bet */}
+                <span className="text-xs number-display" style={{ color: '#8FA899' }}>{fmtBet}</span>
+
+                {/* Multiplier */}
+                <span className="text-xs font-semibold number-display" style={{ color: isWin ? '#F0B232' : '#4A6A55' }}>
+                  {isWin ? `${bet.multiplier}x` : '—'}
+                </span>
+
+                {/* Profit */}
+                <span
+                  className="text-xs font-bold number-display text-right"
+                  style={{ color: isWin ? '#2DC97A' : '#EF4444' }}
+                >
+                  {fmtProfit}
+                </span>
+              </motion.div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CasinoPage() {
   const { activeCurrency, goldCoins, sweepCoins } = useWalletStore();
   const { isLoggedIn } = useAuthStore();
@@ -267,17 +427,9 @@ export default function CasinoPage() {
         <div className="relative z-10 flex items-stretch gap-0 min-h-[300px]">
 
           {/* LEFT: Copy + CTAs */}
-          <div className="flex-1 px-8 py-8 flex flex-col justify-between">
-            {/* Live indicator */}
-            <div className="flex items-center gap-2">
-              <span className="live-dot" />
-              <span className="text-xs font-semibold" style={{ color: '#2DC97A' }}>
-                {LIVE_PLAYERS.toLocaleString()} playing now
-              </span>
-            </div>
-
+          <div className="flex-1 px-8 py-8 flex flex-col justify-center gap-6">
             {/* Main heading */}
-            <div className="my-4">
+            <div>
               <h1 className="font-display font-black leading-none mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#F5E8C8', letterSpacing: '-0.02em' }}>
                 <span className="gold-shimmer">YALA</span><br />
                 <span style={{ color: '#2DC97A' }}>SOCIAL</span>{' '}
@@ -289,7 +441,7 @@ export default function CasinoPage() {
             </div>
 
             {/* CTAs */}
-            <div>
+            <div className="pt-2">
               {isLoggedIn ? (
                 <div className="flex items-center gap-3 flex-wrap">
                   <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl" style={{ background: `${accent}10`, border: `1px solid ${accent}22` }}>
@@ -638,6 +790,11 @@ export default function CasinoPage() {
           </div>
         </section>
       )}
+
+      {/* ── 10. RECENT BETS ─────────────────────────────────────── */}
+      <section>
+        <RecentBetsTable isLoggedIn={isLoggedIn} />
+      </section>
 
     </div>
   );
