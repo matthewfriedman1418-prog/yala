@@ -9,31 +9,31 @@ export interface LeaderboardUser {
 }
 
 export const VIP_TIERS = [
-  { tier: 1, name: 'Wanderer', color: '#CD7F32', xpRequired: 0, xpToNext: 10000, rakeback: 5, icon: '🌾' },
-  { tier: 2, name: 'Nomad', color: '#C0C0C0', xpRequired: 10000, xpToNext: 50000, rakeback: 8, icon: '🐪' },
-  { tier: 3, name: 'Oasis Seeker', color: '#D6A84F', xpRequired: 50000, xpToNext: 200000, rakeback: 12, icon: '🌴' },
-  { tier: 4, name: 'Caravan Lord', color: '#E5E4E2', xpRequired: 200000, xpToNext: 750000, rakeback: 16, icon: '⛺' },
-  { tier: 5, name: 'Desert Prince', color: '#10B981', xpRequired: 750000, xpToNext: 2000000, rakeback: 20, icon: '👑' },
-  { tier: 6, name: 'Sheikh', color: '#D6A84F', xpRequired: 2000000, xpToNext: null, rakeback: 25, icon: '♾️' },
+  { tier: 1, name: 'Scout',      color: '#CD7F32', xpRequired: 0,       xpToNext: 10000,   rakeback: 5,  icon: '🔰' },
+  { tier: 2, name: 'Contender', color: '#C0C0C0', xpRequired: 10000,   xpToNext: 50000,   rakeback: 8,  icon: '⚡' },
+  { tier: 3, name: 'High Roller',color: '#D6A84F', xpRequired: 50000,   xpToNext: 200000,  rakeback: 12, icon: '⭐' },
+  { tier: 4, name: 'Champion',   color: '#E5E4E2', xpRequired: 200000,  xpToNext: 750000,  rakeback: 16, icon: '🏆' },
+  { tier: 5, name: 'Legend',     color: '#10B981', xpRequired: 750000,  xpToNext: 2000000, rakeback: 20, icon: '💎' },
+  { tier: 6, name: 'Icon',       color: '#D6A84F', xpRequired: 2000000, xpToNext: null,    rakeback: 25, icon: '♾️' },
 ];
 
 export const WEEKLY_LEADERBOARD: LeaderboardUser[] = [
-  { rank: 1, username: 'GoldDuneKing', avatar: 'GK', amount: 4_280_000, currency: 'GC', country: 'US' },
-  { rank: 2, username: 'OasisHunter', avatar: 'OH', amount: 3_154_200, currency: 'GC', country: 'CA' },
-  { rank: 3, username: 'SheikhLuck', avatar: 'SL', amount: 2_890_000, currency: 'GC', country: 'AU' },
-  { rank: 4, username: 'SandstormX', avatar: 'SX', amount: 2_441_000, currency: 'GC', country: 'NZ' },
-  { rank: 5, username: 'DesertFox88', avatar: 'DF', amount: 2_156_800, currency: 'GC', country: 'US', isYou: true },
-  { rank: 6, username: 'MirageRunner', avatar: 'MR', amount: 1_987_300, currency: 'GC', country: 'GB' },
-  { rank: 7, username: 'EmeraldDunes', avatar: 'ED', amount: 1_742_100, currency: 'GC', country: 'US' },
-  { rank: 8, username: 'NightBazaar7', avatar: 'NB', amount: 1_501_500, currency: 'GC', country: 'CA' },
-  { rank: 9, username: 'CaravanKing', avatar: 'CK', amount: 1_289_000, currency: 'GC', country: 'DE' },
-  { rank: 10, username: 'PyramidAce', avatar: 'PA', amount: 1_100_800, currency: 'GC', country: 'FR' },
+  { rank: 1,  username: 'GoldRushKing',  avatar: 'GK', amount: 4_280_000, currency: 'GC', country: 'US' },
+  { rank: 2,  username: 'NightHunter',   avatar: 'NH', amount: 3_154_200, currency: 'GC', country: 'CA' },
+  { rank: 3,  username: 'NeonLuck',      avatar: 'NL', amount: 2_890_000, currency: 'GC', country: 'AU' },
+  { rank: 4,  username: 'ThunderX',      avatar: 'TX', amount: 2_441_000, currency: 'GC', country: 'NZ' },
+  { rank: 5,  username: 'NightFox88',    avatar: 'NF', amount: 2_156_800, currency: 'GC', country: 'US', isYou: true },
+  { rank: 6,  username: 'NeonRunner',    avatar: 'NR', amount: 1_987_300, currency: 'GC', country: 'GB' },
+  { rank: 7,  username: 'EmeraldWave',   avatar: 'EW', amount: 1_742_100, currency: 'GC', country: 'US' },
+  { rank: 8,  username: 'NightOwl7',     avatar: 'NO', amount: 1_501_500, currency: 'GC', country: 'CA' },
+  { rank: 9,  username: 'CoinKing',      avatar: 'CK', amount: 1_289_000, currency: 'GC', country: 'DE' },
+  { rank: 10, username: 'SpinAce',       avatar: 'SA', amount: 1_100_800, currency: 'GC', country: 'FR' },
 ];
 
 export const SC_LEADERBOARD: LeaderboardUser[] = [
-  { rank: 1, username: 'OasisHunter', avatar: 'OH', amount: 842.50, currency: 'SC', country: 'CA' },
-  { rank: 2, username: 'EmeraldDunes', avatar: 'ED', amount: 724.20, currency: 'SC', country: 'US' },
-  { rank: 3, username: 'SandstormX', avatar: 'SX', amount: 611.80, currency: 'SC', country: 'AU' },
-  { rank: 4, username: 'GoldDuneKing', avatar: 'GK', amount: 540.00, currency: 'SC', country: 'US' },
-  { rank: 5, username: 'DesertFox88', avatar: 'DF', amount: 480.50, currency: 'SC', country: 'US', isYou: true },
+  { rank: 1, username: 'NightHunter',  avatar: 'NH', amount: 842.50, currency: 'SC', country: 'CA' },
+  { rank: 2, username: 'EmeraldWave',  avatar: 'EW', amount: 724.20, currency: 'SC', country: 'US' },
+  { rank: 3, username: 'ThunderX',     avatar: 'TX', amount: 611.80, currency: 'SC', country: 'AU' },
+  { rank: 4, username: 'GoldRushKing', avatar: 'GK', amount: 540.00, currency: 'SC', country: 'US' },
+  { rank: 5, username: 'NightFox88',   avatar: 'NF', amount: 480.50, currency: 'SC', country: 'US', isYou: true },
 ];

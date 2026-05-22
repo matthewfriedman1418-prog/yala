@@ -133,7 +133,7 @@ export default function RewardsPage() {
   const currentTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1)) || VIP_TIERS[0];
   const nextTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1) + 1);
   const progress = nextTier
-    ? Math.min(100, ((xp - currentTier.xpRequired) / (nextTier.xpRequired - currentTier.xpRequired)) * 100)
+    ? Math.max(0, Math.min(100, ((xp - currentTier.xpRequired) / (nextTier.xpRequired - currentTier.xpRequired)) * 100))
     : 100;
   const tierColor = getVIPColor(user?.vipTier || 1);
 

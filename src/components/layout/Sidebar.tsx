@@ -4,11 +4,30 @@ import { usePathname } from 'next/navigation';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import type { ComponentType } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Dice5, Zap, Trophy, Gift, Target,
-  Wallet, HelpCircle, BarChart3, Clock, Gem, Paintbrush, Plus, User, Star
+  Wallet, HelpCircle, BarChart3, Clock, Gem, Paintbrush, Plus, User, Star,
+  ChevronDown,
 } from 'lucide-react';
+
+// ── Originals sub-menu ────────────────────────────────────────────────────────
+const ORIGINALS_GAMES = [
+  { href: '/originals/mirage-crash',           label: 'Crash' },
+  { href: '/originals/oasis-plinko',           label: 'Plinko' },
+  { href: '/originals/dune-mines',             label: 'Mines' },
+  { href: '/originals/golden-dice',            label: 'Dice' },
+  { href: '/originals/sandstorm-limbo',        label: 'Limbo' },
+  { href: '/originals/emerald-wheel',          label: 'Wheel' },
+  { href: '/originals/caravan-keno',           label: 'Keno' },
+  { href: '/originals/night-bazaar-blackjack', label: 'Blackjack' },
+  { href: '/originals/oasis-hi-lo',            label: 'Hi-Lo' },
+  { href: '/originals/desert-roulette',        label: 'Roulette' },
+  { href: '/originals/pharaoh-towers',         label: 'Towers' },
+  { href: '/originals/scorpion-cases',         label: 'Cases' },
+];
 
 interface NavItem {
   href?: string;
@@ -51,23 +70,18 @@ export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
   const { openAuthModal, openPromotionsDrawer, openBuyCoins } = useUIStore();
+  const [originalsOpen, setOriginalsOpen] = useState(
+    pathname === '/originals' || pathname.startsWith('/originals/')
+  );
 
   const NAV_SECTIONS: NavSection[] = [
     {
-      label: 'PLAY',
-      items: [
-        { href: '/casino',     label: 'Casino',        icon: Dice5 },
-        { href: '/sportsbook', label: 'Sports',         icon: BarChart3, badge: 'BETA' },
-        { href: '/originals',  label: 'Originals',      icon: Zap,       badge: 'HOT' },
-      ],
-    },
-    {
       label: 'REWARDS',
       items: [
-        { href: '/daily-bonus',  label: 'Daily Bonus',    icon: Gift },
-        { href: '/vip',          label: 'VIP Club',        icon: Crown },
-        { href: '/missions',     label: 'Missions',        icon: Target },
-        { href: '/leaderboards', label: 'Leaderboards',    icon: Trophy },
+        { href: '/daily-bonus',  label: 'Daily Bonus',  icon: Gift },
+        { href: '/vip',          label: 'VIP Club',     icon: Crown },
+        { href: '/missions',     label: 'Missions',     icon: Target },
+        { href: '/leaderboards', label: 'Leaderboards', icon: Trophy },
         { action: openPromotionsDrawer, label: 'Promotions', icon: Gem, badge: '8' },
       ],
     },
@@ -88,6 +102,16 @@ export function Sidebar() {
       ],
     },
   ];
+
+  const sharedCls = (isActive: boolean) =>
+    cn(
+      'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-left',
+      isActive
+        ? 'nav-item-active font-semibold'
+        : 'text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5'
+    );
+
+  const isOriginalsActive = pathname === '/originals' || pathname.startsWith('/originals/');
 
   return (
     <aside
@@ -155,6 +179,82 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-3 px-2 space-y-4">
+
+        {/* ── PLAY section: Casino + Sports + Originals (expandable) ── */}
+        <div>
+          <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
+            PLAY
+          </p>
+          <div className="space-y-0.5">
+
+            {/* Casino */}
+            <Link href="/casino" className={sharedCls(pathname === '/casino' || (pathname.startsWith('/casino') && pathname.length > 7))}>
+              <Dice5 className="w-4 h-4 flex-shrink-0" />
+              <span className="flex-1">Casino</span>
+            </Link>
+
+            {/* Sports */}
+            <Link href="/sportsbook" className={sharedCls(pathname === '/sportsbook')}>
+              <BarChart3 className="w-4 h-4 flex-shrink-0" />
+              <span className="flex-1">Sports</span>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-blue-500/20 text-blue-400">
+                BETA
+              </span>
+            </Link>
+
+            {/* Originals toggle */}
+            <button
+              onClick={() => setOriginalsOpen((o) => !o)}
+              className={sharedCls(isOriginalsActive)}
+            >
+              <Zap className="w-4 h-4 flex-shrink-0" />
+              <span className="flex-1">Originals</span>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-red-500/20 text-red-400 mr-0.5">
+                HOT
+              </span>
+              <ChevronDown
+                className={cn('w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200', originalsOpen && 'rotate-180')}
+                style={{ color: '#4A6A55' }}
+              />
+            </button>
+
+            {/* Originals sub-list */}
+            <AnimatePresence initial={false}>
+              {originalsOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  className="overflow-hidden"
+                >
+                  <div className="ml-4 pl-2.5 py-1 space-y-0.5 border-l" style={{ borderColor: '#1A2E22' }}>
+                    {ORIGINALS_GAMES.map((game) => {
+                      const active = pathname === game.href;
+                      return (
+                        <Link
+                          key={game.href}
+                          href={game.href}
+                          className={cn(
+                            'flex items-center px-2.5 py-1.5 rounded-lg text-xs transition-all',
+                            active
+                              ? 'font-semibold nav-item-active'
+                              : 'hover:text-[#F5E8C8] hover:bg-white/5'
+                          )}
+                          style={{ color: active ? undefined : '#6B8F7B' }}
+                        >
+                          {game.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Remaining sections */}
         {NAV_SECTIONS.map((section) => (
           <div key={section.label}>
             <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
@@ -166,14 +266,7 @@ export function Sidebar() {
                 const isActive = item.href
                   ? pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                   : false;
-
-                const sharedClass = cn(
-                  'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-left',
-                  isActive
-                    ? 'nav-item-active font-semibold'
-                    : 'text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5'
-                );
-
+                const cls = sharedCls(isActive);
                 const inner = (
                   <>
                     <Icon className="w-4 h-4 flex-shrink-0" />
@@ -193,11 +286,10 @@ export function Sidebar() {
                     )}
                   </>
                 );
-
                 return item.action ? (
-                  <button key={item.label} onClick={item.action} className={sharedClass}>{inner}</button>
+                  <button key={item.label} onClick={item.action} className={cls}>{inner}</button>
                 ) : (
-                  <Link key={item.href} href={item.href!} className={sharedClass}>{inner}</Link>
+                  <Link key={item.href} href={item.href!} className={cls}>{inner}</Link>
                 );
               })}
             </div>

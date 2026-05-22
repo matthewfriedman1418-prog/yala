@@ -286,40 +286,117 @@ export default function AffiliatePage() {
   ];
 
   return (
-    <div className="space-y-8 max-w-4xl">
+    <div className="space-y-8 max-w-5xl">
 
-      {/* ── HERO ── */}
-      <div
-        className="relative rounded-2xl overflow-hidden p-7"
-        style={{
-          background: 'radial-gradient(ellipse at 20% 50%, rgba(45,201,122,0.1) 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, rgba(240,178,50,0.08) 0%, transparent 55%), #080F0A',
-          border: '1px solid #1A2E22',
-        }}
-      >
-        <div className="flex items-center gap-2 mb-3">
-          <Layers className="w-4 h-4" style={{ color: '#2DC97A' }} />
-          <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Affiliate Program</span>
+      {/* ── PAGE TITLE (minimal) ── */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-2xl font-bold" style={{ color: '#F5E8C8' }}>Affiliate Program</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#8FA899' }}>
+            Share your code · earn coins every time a friend plays
+          </p>
         </div>
-        <h1 className="font-display text-3xl font-bold mb-2" style={{ color: '#F5E8C8' }}>Grow with Yala</h1>
-        <p className="text-sm max-w-lg" style={{ color: '#8FA899' }}>
-          Share your link. Earn Gold Coins every time a friend signs up and plays. The more friends you bring, the more you earn.
-        </p>
-
         {!isLoggedIn && (
           <button
             onClick={() => openAuthModal('register')}
-            className="mt-5 flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110"
             style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#060E0A' }}
           >
             <Zap className="w-4 h-4" />
-            Join & Start Earning
+            Join Free
           </button>
         )}
       </div>
 
       {isLoggedIn ? (
         <>
-          {/* ── STATS GRID ── */}
+          {/* ── HERO: Card (left) + Code Picker (right) ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 items-start">
+
+            {/* LEFT: Sharing Card */}
+            <div className="space-y-3 lg:w-[340px] flex-shrink-0">
+              <div ref={cardRef}>
+                <SharingCard
+                  code={referralCode}
+                  url={referralUrl}
+                  earned={totalEarned}
+                  refs={activeRefs.length}
+                />
+              </div>
+              {/* Share buttons */}
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => copyText(referralUrl, 'link')}
+                  className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:brightness-110 active:scale-95"
+                  style={{
+                    background: copiedField === 'link' ? 'rgba(45,201,122,0.15)' : 'linear-gradient(135deg, #10B981, #2DC97A)',
+                    color: copiedField === 'link' ? '#2DC97A' : '#060E0A',
+                    border: copiedField === 'link' ? '1px solid rgba(45,201,122,0.4)' : 'none',
+                  }}
+                >
+                  {copiedField === 'link' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <LinkIcon className="w-3.5 h-3.5" />}
+                  {copiedField === 'link' ? 'Copied!' : 'Copy Link'}
+                </button>
+                <button
+                  onClick={() => copyText(referralCode, 'code')}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:brightness-110 active:scale-95"
+                  style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.25)' }}
+                >
+                  {copiedField === 'code' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedField === 'code' ? 'Copied!' : 'Copy Code'}
+                </button>
+                <button
+                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:bg-white/5"
+                  style={{ background: 'rgba(255,255,255,0.04)', color: '#8FA899', border: '1px solid #1A2E22' }}
+                >
+                  <Download className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* RIGHT: Code picker + how it works */}
+            <div className="space-y-4">
+
+              {/* Code picker — prominent */}
+              <div
+                className="rounded-2xl p-6"
+                style={{
+                  background: 'radial-gradient(ellipse at 80% 20%, rgba(240,178,50,0.06) 0%, transparent 55%), #0F1A14',
+                  border: '1px solid rgba(240,178,50,0.18)',
+                }}
+              >
+                <p className="font-bold text-sm mb-1" style={{ color: '#F5E8C8' }}>Your Referral Link</p>
+                <p className="text-xs mb-5" style={{ color: '#6B8F7B' }}>
+                  Claim a custom name — your friends see it in the URL when they sign up.
+                </p>
+                <CodePicker currentCode={referralCode} onCodeSet={setReferralCode} />
+              </div>
+
+              {/* How it works */}
+              <div
+                className="rounded-2xl p-5"
+                style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
+              >
+                <p className="text-[10px] font-bold uppercase tracking-widest mb-4" style={{ color: '#4A6A55' }}>How it works</p>
+                <div className="space-y-3">
+                  {[
+                    { step: '01', text: 'Share your link or code on social, Discord, or anywhere', color: '#2DC97A' },
+                    { step: '02', text: 'Friend signs up using your link',                         color: '#F0B232' },
+                    { step: '03', text: 'They get 250K GC free · you earn 5,000 GC instantly',   color: '#A78BFA' },
+                    { step: '04', text: 'Keep earning as they wager — no cap',                    color: '#60A5FA' },
+                  ].map((s) => (
+                    <div key={s.step} className="flex items-center gap-3">
+                      <span className="font-mono text-[11px] font-bold flex-shrink-0 w-6 text-right" style={{ color: s.color }}>{s.step}</span>
+                      <div className="w-px h-3 flex-shrink-0" style={{ background: '#1A2E22' }} />
+                      <p className="text-xs" style={{ color: '#8FA899' }}>{s.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── STATS GRID (below hero) ── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {STATS.map((stat, i) => {
               const Icon = stat.icon;
@@ -332,116 +409,17 @@ export default function AffiliatePage() {
                   className="rounded-xl p-4"
                   style={{ background: '#0F1A14', border: `1px solid ${stat.color}18` }}
                 >
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${stat.color}12` }}>
                       <Icon className="w-3.5 h-3.5" style={{ color: stat.color }} />
                     </div>
                     <p className="text-[10px] font-medium" style={{ color: '#6B8F7B' }}>{stat.label}</p>
                   </div>
-                  <p className="font-black text-xl number-display" style={{ color: stat.color }}>{stat.value}</p>
+                  <p className="font-black text-2xl number-display" style={{ color: stat.color }}>{stat.value}</p>
                   <p className="text-[9px] mt-0.5" style={{ color: '#4A6A55' }}>{stat.sub}</p>
                 </motion.div>
               );
             })}
-          </div>
-
-          {/* ── MAIN CONTENT: Sharing + Code Picker ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-
-            {/* LEFT: Sharing Graphic */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Share2 className="w-4 h-4" style={{ color: '#F0B232' }} />
-                <h2 className="font-bold text-sm" style={{ color: '#F5E8C8' }}>Your Invite Card</h2>
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase" style={{ background: 'rgba(240,178,50,0.12)', color: '#F0B232' }}>
-                  Share This
-                </span>
-              </div>
-
-              {/* The card */}
-              <div ref={cardRef}>
-                <SharingCard
-                  code={referralCode}
-                  url={referralUrl}
-                  earned={totalEarned}
-                  refs={activeRefs.length}
-                />
-              </div>
-
-              {/* Share action buttons */}
-              <div className="flex gap-2 flex-wrap">
-                <button
-                  onClick={() => copyText(referralUrl, 'link')}
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:brightness-110 active:scale-95"
-                  style={{
-                    background: copiedField === 'link' ? 'rgba(45,201,122,0.2)' : 'linear-gradient(135deg, #10B981, #2DC97A)',
-                    color: copiedField === 'link' ? '#2DC97A' : '#060E0A',
-                    border: copiedField === 'link' ? '1px solid rgba(45,201,122,0.4)' : 'none',
-                  }}
-                >
-                  {copiedField === 'link' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <LinkIcon className="w-3.5 h-3.5" />}
-                  {copiedField === 'link' ? 'Copied!' : 'Copy Link'}
-                </button>
-
-                <button
-                  onClick={() => copyText(referralCode, 'code')}
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:brightness-110 active:scale-95"
-                  style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.25)' }}
-                >
-                  {copiedField === 'code' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  {copiedField === 'code' ? 'Copied!' : 'Copy Code'}
-                </button>
-
-                <button
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all hover:bg-white/5"
-                  style={{ background: 'rgba(255,255,255,0.04)', color: '#8FA899', border: '1px solid #1A2E22' }}
-                  title="Screenshot this card to share on social"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  Screenshot
-                </button>
-              </div>
-
-              <p className="text-[10px]" style={{ color: '#4A6A55' }}>
-                Tip: screenshot the invite card above and post it on social media or Discord with your code.
-              </p>
-            </div>
-
-            {/* RIGHT: Code picker + How it works */}
-            <div className="space-y-5">
-
-              {/* Custom code picker */}
-              <div
-                className="rounded-2xl p-5"
-                style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
-              >
-                <CodePicker currentCode={referralCode} onCodeSet={setReferralCode} />
-              </div>
-
-              {/* How it works */}
-              <div
-                className="rounded-2xl p-5 space-y-3"
-                style={{ background: 'rgba(240,178,50,0.04)', border: '1px solid rgba(240,178,50,0.15)' }}
-              >
-                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>How it works</p>
-                {[
-                  { n: 1, text: 'Share your code or link anywhere',               color: '#2DC97A' },
-                  { n: 2, text: 'Friend signs up using your code',                color: '#F0B232' },
-                  { n: 3, text: 'They get 250K GC free — you get 5,000 GC',      color: '#A78BFA' },
-                  { n: 4, text: 'Earn more as they keep playing',                 color: '#60A5FA' },
-                ].map((step) => (
-                  <div key={step.n} className="flex items-start gap-3">
-                    <div
-                      className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black text-black flex-shrink-0 mt-0.5"
-                      style={{ background: step.color }}
-                    >
-                      {step.n}
-                    </div>
-                    <p className="text-xs" style={{ color: '#8FA899' }}>{step.text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* ── COMMISSION TIERS ── */}

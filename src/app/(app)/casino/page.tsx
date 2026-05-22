@@ -268,20 +268,12 @@ export default function CasinoPage() {
 
           {/* LEFT: Copy + CTAs */}
           <div className="flex-1 px-8 py-8 flex flex-col justify-between">
-            {/* Top row: live badge + quick stats */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.25)' }}>
-                <span className="live-dot" />
-                <span className="text-xs font-semibold" style={{ color: '#2DC97A' }}>{LIVE_PLAYERS.toLocaleString()} playing</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.18)' }}>
-                <Sparkles className="w-3 h-3" style={{ color: '#F0B232' }} />
-                <span className="text-xs font-semibold" style={{ color: '#F0B232' }}>{ALL_GAMES.length + YALA_ORIGINALS.length}+ Games</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
-                <Users className="w-3 h-3" style={{ color: '#8FA899' }} />
-                <span className="text-xs font-semibold" style={{ color: '#8FA899' }}>{ALL_PROVIDERS.length} Providers</span>
-              </div>
+            {/* Live indicator */}
+            <div className="flex items-center gap-2">
+              <span className="live-dot" />
+              <span className="text-xs font-semibold" style={{ color: '#2DC97A' }}>
+                {LIVE_PLAYERS.toLocaleString()} playing now
+              </span>
             </div>
 
             {/* Main heading */}

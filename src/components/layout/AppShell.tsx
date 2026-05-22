@@ -1,6 +1,5 @@
 'use client';
 import { useWalletStore } from '@/lib/store/wallet';
-import { useUIStore } from '@/lib/store/ui';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -14,7 +13,6 @@ import { OnboardingModal } from '../modals/OnboardingModal';
 import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
 import { LiveWinFeed } from '../ui/LiveWinFeed';
-import { TopSectionNav } from './TopSectionNav';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -35,19 +33,15 @@ export function AppShell({ children }: AppShellProps) {
         {/* Header */}
         <Header />
 
-        {/* Section tabs: Casino | Sports | Originals | Live | Promotions */}
-        <TopSectionNav />
-
-        {/* Live Win Feed — sits between header and content, scrolls with layout */}
-        <LiveWinFeed />
-
         {/* Scrollable page content */}
         <main className="flex-1 overflow-y-auto">
-          {/* pb-16 on mobile for bottom nav; pb-6 on desktop */}
           <div className="max-w-screen-2xl mx-auto px-4 py-6 pb-20 lg:pb-10">
             {children}
           </div>
         </main>
+
+        {/* Live Win Feed — pinned to bottom of content column */}
+        <LiveWinFeed />
       </div>
 
       {/* Side panels */}
