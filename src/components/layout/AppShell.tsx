@@ -14,6 +14,7 @@ import { OnboardingModal } from '../modals/OnboardingModal';
 import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
 import { LiveWinFeed } from '../ui/LiveWinFeed';
+import { TopSectionNav } from './TopSectionNav';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -33,6 +34,9 @@ export function AppShell({ children }: AppShellProps) {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         {/* Header */}
         <Header />
+
+        {/* Section tabs: Casino | Sports | Originals | Live | Promotions */}
+        <TopSectionNav />
 
         {/* Live Win Feed — sits between header and content, scrolls with layout */}
         <LiveWinFeed />

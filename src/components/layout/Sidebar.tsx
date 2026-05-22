@@ -6,9 +6,8 @@ import { useAuthStore } from '@/lib/store/auth';
 import { cn } from '@/lib/utils';
 import type { ComponentType } from 'react';
 import {
-  Dice5, Zap, Trophy, Star, Gift, Target,
-  Users, Wallet, Shield, HelpCircle,
-  BarChart3, Layers, Clock, Gem, Paintbrush
+  Dice5, Zap, Trophy, Gift, Target,
+  Wallet, HelpCircle, BarChart3, Clock, Gem, Paintbrush, Plus, User, Star
 } from 'lucide-react';
 
 interface NavItem {
@@ -32,7 +31,6 @@ function Crown({ className }: { className?: string }) {
   );
 }
 
-/** Yala pyramid icon — solid triangle clipped into 4 horizontal color bands (logo #16) */
 function YalaPyramid({ size = 32 }: { size?: number }) {
   return (
     <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
@@ -41,13 +39,9 @@ function YalaPyramid({ size = 32 }: { size?: number }) {
           <polygon points="20,0 40,34 0,34" />
         </clipPath>
       </defs>
-      {/* gold top */}
       <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-sb)" />
-      {/* lime */}
       <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-sb)" />
-      {/* teal */}
       <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-sb)" />
-      {/* ocean blue base */}
       <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-sb)" />
     </svg>
   );
@@ -56,90 +50,116 @@ function YalaPyramid({ size = 32 }: { size?: number }) {
 export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
-  const { openAuthModal, openPromotionsDrawer } = useUIStore();
+  const { openAuthModal, openPromotionsDrawer, openBuyCoins } = useUIStore();
 
   const NAV_SECTIONS: NavSection[] = [
     {
       label: 'PLAY',
       items: [
-        { href: '/casino', label: 'Casino', icon: Dice5 },
-        { href: '/originals', label: 'Yala Originals', icon: Zap, badge: 'HOT' },
-        { href: '/sportsbook', label: 'Sportsbook', icon: BarChart3, badge: 'BETA' },
+        { href: '/casino',     label: 'Casino',        icon: Dice5 },
+        { href: '/sportsbook', label: 'Sports',         icon: BarChart3, badge: 'BETA' },
+        { href: '/originals',  label: 'Originals',      icon: Zap,       badge: 'HOT' },
       ],
     },
     {
       label: 'REWARDS',
       items: [
-        { href: '/vip', label: 'VIP Club', icon: Crown },
-        { href: '/rewards', label: 'Rewards Hub', icon: Star },
-        { href: '/daily-bonus', label: 'Daily Bonus', icon: Gift },
-        { href: '/missions', label: 'Missions', icon: Target },
-        { href: '/leaderboards', label: 'Leaderboards', icon: Trophy },
+        { href: '/daily-bonus',  label: 'Daily Bonus',    icon: Gift },
+        { href: '/vip',          label: 'VIP Club',        icon: Crown },
+        { href: '/missions',     label: 'Missions',        icon: Target },
+        { href: '/leaderboards', label: 'Leaderboards',    icon: Trophy },
         { action: openPromotionsDrawer, label: 'Promotions', icon: Gem, badge: '8' },
-      ],
-    },
-    {
-      label: 'SOCIAL',
-      items: [
-        { href: '/rooms', label: 'Rooms', icon: Users },
-        { href: '/affiliate', label: 'Affiliate', icon: Layers },
       ],
     },
     {
       label: 'ACCOUNT',
       items: [
-        { href: '/wallet', label: 'Wallet', icon: Wallet },
-        { href: '/vault', label: 'Vault', icon: Shield },
-        { href: '/profile/transactions', label: 'History', icon: Clock },
+        { href: '/wallet',               label: 'Wallet',    icon: Wallet },
+        { href: '/profile/transactions', label: 'History',   icon: Clock },
+        { href: '/affiliate',            label: 'Affiliate', icon: Star },
+        { href: '/profile',              label: 'Profile',   icon: User },
       ],
     },
     {
-      label: 'INFO',
+      label: 'MORE',
       items: [
-        { href: '/responsible-gaming', label: 'Responsible Gaming', icon: Shield },
-        { href: '/support', label: 'Help & Support', icon: HelpCircle },
-        { href: '/providers', label: 'Providers', icon: Layers },
-        { href: '/design-lab', label: 'Design Lab', icon: Paintbrush, badge: 'DEV' },
+        { href: '/support',    label: 'Help & Support', icon: HelpCircle },
+        { href: '/design-lab', label: 'Design Lab',     icon: Paintbrush, badge: 'DEV' },
       ],
     },
   ];
 
   return (
-    <aside className="w-60 h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar" style={{ backgroundColor: '#0C1812' }}>
+    <aside
+      className="w-56 h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar"
+      style={{ backgroundColor: '#0C1812' }}
+    >
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2.5 px-4 py-4 border-b border-[#1A2E22] flex-shrink-0">
-        <YalaPyramid size={30} />
+        <YalaPyramid size={28} />
         <div>
-          <span className="font-display text-xl font-black tracking-wider" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>YALA</span>
-          <span className="text-[10px] block -mt-0.5 tracking-widest uppercase" style={{ color: '#8FA899' }}>Desert Casino</span>
+          <span
+            className="font-display text-xl font-black tracking-wider"
+            style={{
+              background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            YALA
+          </span>
+          <span className="text-[9px] block -mt-0.5 tracking-widest uppercase font-semibold" style={{ color: '#4A6A55' }}>
+            Social Casino
+          </span>
         </div>
       </Link>
 
-      {/* Auth buttons (logged out) */}
+      {/* Auth buttons — logged out */}
       {!isLoggedIn && (
-        <div className="px-4 py-4 border-b border-[#1A2E22] space-y-2 flex-shrink-0">
+        <div className="px-3 py-3 border-b border-[#1A2E22] space-y-2 flex-shrink-0">
           <button
             onClick={() => openAuthModal('register')}
-            className="w-full py-2 px-4 rounded-lg text-sm font-semibold text-black transition-all"
-            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
+            className="w-full py-2.5 px-4 rounded-xl text-sm font-black text-black transition-all hover:brightness-110 active:scale-95"
+            style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', boxShadow: '0 2px 16px rgba(16,185,129,0.3)' }}
           >
-            Sign Up
+            Play Free Now
           </button>
           <button
             onClick={() => openAuthModal('login')}
-            className="w-full py-2 px-4 rounded-lg text-sm font-semibold border transition-all"
+            className="w-full py-2 px-4 rounded-xl text-sm font-semibold border transition-all hover:bg-white/5"
             style={{ borderColor: 'rgba(45,201,122,0.3)', color: '#2DC97A' }}
           >
-            Login
+            Sign In
           </button>
         </div>
       )}
 
-      {/* Nav sections */}
-      <nav className="flex-1 py-3 px-3 space-y-5">
+      {/* Buy Coins CTA — logged in */}
+      {isLoggedIn && (
+        <div className="px-3 py-3 border-b border-[#1A2E22] flex-shrink-0">
+          <button
+            onClick={openBuyCoins}
+            className="w-full py-2.5 rounded-xl text-sm font-black flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95"
+            style={{
+              background: 'linear-gradient(135deg, #10B981, #2DC97A)',
+              color: '#060E0A',
+              boxShadow: '0 2px 14px rgba(16,185,129,0.3)',
+            }}
+          >
+            <Plus className="w-4 h-4" />
+            Buy Coins
+          </button>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <nav className="flex-1 py-3 px-2 space-y-4">
         {NAV_SECTIONS.map((section) => (
           <div key={section.label}>
-            <p className="text-[10px] font-semibold text-[#9CA3AF] tracking-widest uppercase px-2 mb-1">{section.label}</p>
+            <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
+              {section.label}
+            </p>
             <div className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon;
@@ -150,8 +170,8 @@ export function Sidebar() {
                 const sharedClass = cn(
                   'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-left',
                   isActive
-                    ? 'nav-item-active font-medium'
-                    : 'text-[#9CA3AF] hover:text-[#F5E8C8] hover:bg-white/5'
+                    ? 'nav-item-active font-semibold'
+                    : 'text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5'
                 );
 
                 const inner = (
@@ -159,12 +179,15 @@ export function Sidebar() {
                     <Icon className="w-4 h-4 flex-shrink-0" />
                     <span className="flex-1">{item.label}</span>
                     {item.badge && (
-                      <span className={cn(
-                        'text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide',
-                        item.badge === 'HOT' ? 'bg-red-500/20 text-red-400' :
-                        item.badge === 'BETA' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-[#D6A84F]/20 text-[#D6A84F]'
-                      )}>
+                      <span
+                        className={cn(
+                          'text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide',
+                          item.badge === 'HOT'  ? 'bg-red-500/20 text-red-400' :
+                          item.badge === 'BETA' ? 'bg-blue-500/20 text-blue-400' :
+                          item.badge === 'DEV'  ? 'bg-purple-500/20 text-purple-400' :
+                          'bg-[#D6A84F]/20 text-[#D6A84F]'
+                        )}
+                      >
                         {item.badge}
                       </span>
                     )}
@@ -172,13 +195,9 @@ export function Sidebar() {
                 );
 
                 return item.action ? (
-                  <button key={item.label} onClick={item.action} className={sharedClass}>
-                    {inner}
-                  </button>
+                  <button key={item.label} onClick={item.action} className={sharedClass}>{inner}</button>
                 ) : (
-                  <Link key={item.href} href={item.href!} className={sharedClass}>
-                    {inner}
-                  </Link>
+                  <Link key={item.href} href={item.href!} className={sharedClass}>{inner}</Link>
                 );
               })}
             </div>
@@ -186,11 +205,11 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Legal strip */}
+      {/* Legal */}
       <div className="px-3 pb-4 flex-shrink-0">
         <div className="text-center">
-          <p className="text-[9px] text-[#9CA3AF]/60 leading-tight">18+ | No Real Money Gambling</p>
-          <p className="text-[9px] text-[#9CA3AF]/60 leading-tight">Void Where Prohibited</p>
+          <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>18+ · Free to Play · No Real Money</p>
+          <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>Void Where Prohibited</p>
         </div>
       </div>
     </aside>

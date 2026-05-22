@@ -287,12 +287,12 @@ export default function CasinoPage() {
             {/* Main heading */}
             <div className="my-4">
               <h1 className="font-display font-black leading-none mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#F5E8C8', letterSpacing: '-0.02em' }}>
-                YALA<br />
-                <span className="gold-shimmer">DESERT</span>{' '}
-                <span style={{ color: '#2DC97A' }}>CASINO</span>
+                <span className="gold-shimmer">YALA</span><br />
+                <span style={{ color: '#2DC97A' }}>SOCIAL</span>{' '}
+                <span style={{ color: '#F5E8C8' }}>CASINO</span>
               </h1>
               <p className="text-sm mt-3 max-w-xs" style={{ color: '#6B8F7B', lineHeight: 1.6 }}>
-                Premium sweepstakes social casino. Dual-currency play with provably fair originals. No deposit required.
+                Premium sweepstakes casino. Dual-currency play, provably fair originals, and real prizes. No deposit required.
               </p>
             </div>
 

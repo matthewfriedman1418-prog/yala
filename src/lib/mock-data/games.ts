@@ -46,8 +46,8 @@ export interface Original {
 export const YALA_ORIGINALS: Original[] = [
   {
     slug: 'mirage-crash',
-    name: 'Mirage Crash',
-    tagline: 'Watch the multiplier rise. cash out before the mirage vanishes',
+    name: 'Yala Crash',
+    tagline: 'Watch the multiplier soar. Cash out before it crashes.',
     type: 'Crash',
     rtp: 99.0,
     maxWin: '∞',
@@ -68,8 +68,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'oasis-plinko',
-    name: 'Oasis Plinko',
-    tagline: 'Drop your coin into the oasis and watch fortune flow',
+    name: 'Neon Plinko',
+    tagline: 'Drop your coin. Watch fortune flow.',
     type: 'Plinko',
     rtp: 99.0,
     maxWin: '1000×',
@@ -90,8 +90,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'dune-mines',
-    name: 'Dune Mines',
-    tagline: 'Navigate the dunes. avoid the scorpions, claim the gold',
+    name: 'Gold Mines',
+    tagline: 'Navigate the grid. Avoid mines, claim the gold.',
     type: 'Mines',
     rtp: 99.0,
     maxWin: '2000×',
@@ -134,8 +134,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'sandstorm-limbo',
-    name: 'Sandstorm Limbo',
-    tagline: 'Set your multiplier. Survive the storm.',
+    name: 'Hyper Limbo',
+    tagline: 'Set your multiplier. Beat the odds.',
     type: 'Limbo',
     rtp: 99.0,
     maxWin: '1,000,000×',
@@ -157,7 +157,7 @@ export const YALA_ORIGINALS: Original[] = [
   {
     slug: 'emerald-wheel',
     name: 'Emerald Wheel',
-    tagline: 'Spin the jewel of the desert. one wheel, infinite fortunes',
+    tagline: 'Spin the jewel. One wheel, infinite fortunes.',
     type: 'Wheel',
     rtp: 99.0,
     maxWin: '49.5×',
@@ -178,8 +178,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'caravan-keno',
-    name: 'Caravan Keno',
-    tagline: 'Pick your path across the desert trade routes',
+    name: 'Royal Keno',
+    tagline: 'Pick your numbers. Chart your path to fortune.',
     type: 'Keno',
     rtp: 96.0,
     maxWin: '10,000×',
@@ -200,8 +200,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'night-bazaar-blackjack',
-    name: 'Night Bazaar Blackjack',
-    tagline: 'Outsmart the dealer under the midnight market lights',
+    name: 'Midnight Blackjack',
+    tagline: 'Outsmart the dealer. Hit 21 or bust.',
     type: 'Blackjack',
     rtp: 99.5,
     maxWin: '3×',
@@ -223,8 +223,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'pharaoh-towers',
-    name: "Pharaoh's Towers",
-    tagline: "Climb the pyramid. each level reveals a greater reward",
+    name: 'Tower Rush',
+    tagline: 'Climb higher. Each level reveals a greater reward.',
     type: 'Tower',
     rtp: 99.0,
     maxWin: '2000×',
@@ -245,8 +245,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'oasis-hi-lo',
-    name: 'Oasis Hi-Lo',
-    tagline: 'Higher or lower? Read the sands and trust your instinct.',
+    name: 'Hi-Lo Pro',
+    tagline: 'Higher or lower? Read the cards and trust your instinct.',
     type: 'Hi-Lo',
     rtp: 99.0,
     maxWin: '12×',
@@ -267,8 +267,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'desert-roulette',
-    name: 'Desert Roulette',
-    tagline: 'The wheel turns. The sand settles. Your number awaits.',
+    name: 'Yala Roulette',
+    tagline: 'The wheel turns. Fortune favors the bold.',
     type: 'Roulette',
     rtp: 97.3,
     maxWin: '35×',
@@ -289,8 +289,8 @@ export const YALA_ORIGINALS: Original[] = [
   },
   {
     slug: 'scorpion-cases',
-    name: 'Scorpion Cases',
-    tagline: 'Choose your case. Unbox the desert treasure.',
+    name: 'Lucky Cases',
+    tagline: 'Choose your case. Unbox the treasure.',
     type: 'Cases',
     rtp: 90.0,
     maxWin: '5000×',
@@ -315,19 +315,19 @@ const SS = 'https://cdn.softswiss.net/i/s4';
 
 const SLOT_GAMES: Game[] = [
   { id: 'g1', slug: 'golden-scarab', name: 'Golden Scarab Megaways', provider: 'Hacksaw Gaming', category: 'megaways', rtp: 96.36, isOriginal: false, isNew: true, isHot: true, maxWin: '50,000×', tags: ['megaways', 'bonus buy', 'high volatility'], imageUrl: `${SS}/playngo/book_dead.webp`, gradient: 'from-amber-700 to-yellow-900' },
-  { id: 'g2', slug: 'desert-storm-deluxe', name: 'Desert Storm Deluxe', provider: 'NoLimit City', category: 'slots', rtp: 96.06, isOriginal: false, isNew: false, isHot: true, maxWin: '45,000×', tags: ['high volatility', 'xways'], imageUrl: `${SS}/nolimitcity/deadwood.webp`, gradient: 'from-orange-800 to-amber-950' },
+  { id: 'g2', slug: 'desert-storm-deluxe', name: 'Storm Surge Deluxe', provider: 'NoLimit City', category: 'slots', rtp: 96.06, isOriginal: false, isNew: false, isHot: true, maxWin: '45,000×', tags: ['high volatility', 'xways'], imageUrl: `${SS}/nolimitcity/deadwood.webp`, gradient: 'from-orange-800 to-amber-950' },
   { id: 'g3', slug: 'nile-cash', name: 'Nile Cash', provider: 'Push Gaming', category: 'slots', rtp: 96.5, isOriginal: false, isNew: false, isHot: false, maxWin: '30,000×', tags: ['cluster pays'], imageUrl: `${SS}/pushgaming/jammin_jars.webp`, gradient: 'from-blue-900 to-teal-950' },
-  { id: 'g4', slug: 'camel-rush-hold', name: 'Camel Rush Hold & Win', provider: 'Pragmatic Play', category: 'slots', rtp: 96.47, isOriginal: false, isNew: true, isHot: false, maxWin: '25,000×', tags: ['hold and win', 'respins'], imageUrl: `${SS}/pragmaticplay/vs20trsbox.webp`, gradient: 'from-yellow-800 to-orange-900' },
-  { id: 'g5', slug: 'midnight-oasis', name: 'Midnight Oasis', provider: 'Relax Gaming', category: 'slots', rtp: 96.1, isOriginal: false, isNew: false, isHot: true, maxWin: '20,000×', tags: ['expanding wilds', 'free spins'], imageUrl: `${SS}/netent/starburst.webp`, gradient: 'from-indigo-900 to-blue-950' },
+  { id: 'g4', slug: 'camel-rush-hold', name: 'Wild Rush Hold & Win', provider: 'Pragmatic Play', category: 'slots', rtp: 96.47, isOriginal: false, isNew: true, isHot: false, maxWin: '25,000×', tags: ['hold and win', 'respins'], imageUrl: `${SS}/pragmaticplay/vs20trsbox.webp`, gradient: 'from-yellow-800 to-orange-900' },
+  { id: 'g5', slug: 'midnight-oasis', name: 'Midnight Glow', provider: 'Relax Gaming', category: 'slots', rtp: 96.1, isOriginal: false, isNew: false, isHot: true, maxWin: '20,000×', tags: ['expanding wilds', 'free spins'], imageUrl: `${SS}/netent/starburst.webp`, gradient: 'from-indigo-900 to-blue-950' },
   { id: 'g6', slug: 'pharaoh-fortune', name: "Pharaoh's Fortune", provider: 'NetEnt', category: 'slots', rtp: 96.5, isOriginal: false, isNew: false, isHot: false, maxWin: '10,000×', tags: ['classic', 'wilds'], imageUrl: `${SS}/pragmaticplay/vs10bookoftut.webp`, gradient: 'from-yellow-700 to-amber-900' },
   { id: 'g7', slug: 'fire-of-egypt', name: 'Fire of Egypt', provider: 'Push Gaming', category: 'slots', rtp: 96.5, isOriginal: false, isNew: false, isHot: true, maxWin: '150,000×', tags: ['hold & spin', 'hot shot'], imageUrl: `${SS}/playngo/fire_joker.webp`, gradient: 'from-red-800 to-orange-950' },
-  { id: 'g8', slug: 'sand-princess', name: 'Sand Princess', provider: 'Red Tiger', category: 'slots', rtp: 96.05, isOriginal: false, isNew: true, isHot: false, maxWin: '5,000×', tags: ['princess', 'free spins'], imageUrl: `${SS}/pragmaticplay/vs20starlight.webp`, gradient: 'from-pink-800 to-rose-950' },
-  { id: 'g9', slug: 'dunes-of-gold', name: 'Dunes of Gold Megaways', provider: 'Big Time Gaming', category: 'megaways', rtp: 96.4, isOriginal: false, isNew: false, isHot: true, maxWin: '30,000×', tags: ['megaways', 'cascades'], imageUrl: `${SS}/bigtimegaming/bonanza_megaways.webp`, gradient: 'from-amber-600 to-yellow-800' },
+  { id: 'g8', slug: 'sand-princess', name: 'Crystal Princess', provider: 'Red Tiger', category: 'slots', rtp: 96.05, isOriginal: false, isNew: true, isHot: false, maxWin: '5,000×', tags: ['princess', 'free spins'], imageUrl: `${SS}/pragmaticplay/vs20starlight.webp`, gradient: 'from-pink-800 to-rose-950' },
+  { id: 'g9', slug: 'dunes-of-gold', name: 'Peaks of Gold Megaways', provider: 'Big Time Gaming', category: 'megaways', rtp: 96.4, isOriginal: false, isNew: false, isHot: true, maxWin: '30,000×', tags: ['megaways', 'cascades'], imageUrl: `${SS}/bigtimegaming/bonanza_megaways.webp`, gradient: 'from-amber-600 to-yellow-800' },
   { id: 'g10', slug: 'arabian-nights-deluxe', name: 'Arabian Nights Deluxe', provider: 'Thunderkick', category: 'slots', rtp: 96.6, isOriginal: false, isNew: false, isHot: false, maxWin: '8,000×', tags: ['wilds', 'respins'], imageUrl: `${SS}/thunderkick/1429_uncharted_seas.webp`, gradient: 'from-purple-900 to-indigo-950' },
   { id: 'g11', slug: 'sultan-riches', name: 'Sultan Riches', provider: 'Pragmatic Play', category: 'slots', rtp: 96.47, isOriginal: false, isNew: true, isHot: true, maxWin: '25,000×', tags: ['tumbling', 'multipliers'], imageUrl: `${SS}/pragmaticplay/vs20olympgate.webp`, gradient: 'from-emerald-800 to-green-950' },
   { id: 'g12', slug: 'bazaar-bonanza', name: 'Bazaar Bonanza', provider: 'NoLimit City', category: 'slots', rtp: 96.06, isOriginal: false, isNew: false, isHot: false, maxWin: '60,000×', tags: ['xpays', 'bonus spins'], imageUrl: `${SS}/pragmaticplay/vs20midas.webp`, gradient: 'from-teal-800 to-cyan-950' },
   { id: 'g13', slug: 'lost-city-riches', name: 'Lost City Riches', provider: 'Hacksaw Gaming', category: 'slots', rtp: 96.36, isOriginal: false, isNew: true, isHot: false, maxWin: '20,000×', tags: ['feature drop', 'multipliers'], imageUrl: `${SS}/hacksawgaming/wanted_dead_or_a_wild.webp`, gradient: 'from-stone-700 to-amber-900' },
-  { id: 'g14', slug: 'camel-quest', name: 'Camel Quest Megaways', provider: 'Relax Gaming', category: 'megaways', rtp: 96.2, isOriginal: false, isNew: false, isHot: true, maxWin: '40,000×', tags: ['megaways', 'bonus'], imageUrl: `${SS}/relaxgaming/temple_tumble_megaways.webp`, gradient: 'from-orange-700 to-red-900' },
+  { id: 'g14', slug: 'camel-quest', name: 'Quest for Gold Megaways', provider: 'Relax Gaming', category: 'megaways', rtp: 96.2, isOriginal: false, isNew: false, isHot: true, maxWin: '40,000×', tags: ['megaways', 'bonus'], imageUrl: `${SS}/relaxgaming/temple_tumble_megaways.webp`, gradient: 'from-orange-700 to-red-900' },
   { id: 'g15', slug: 'jewels-of-cairo', name: 'Jewels of Cairo', provider: 'Push Gaming', category: 'slots', rtp: 96.8, isOriginal: false, isNew: false, isHot: false, maxWin: '15,000×', tags: ['grid slot', 'jewels'], imageUrl: `${SS}/pushgaming/jammin_jars_2.webp`, gradient: 'from-blue-800 to-purple-950' },
   { id: 'g16', slug: 'falcon-fury', name: 'Falcon Fury', provider: 'Big Time Gaming', category: 'megaways', rtp: 96.4, isOriginal: false, isNew: true, isHot: true, maxWin: '50,000×', tags: ['megaways', 'reactions'], imageUrl: `${SS}/bigtimegaming/white_rabbit_megaways.webp`, gradient: 'from-sky-800 to-blue-950' },
 ];
@@ -336,34 +336,34 @@ const TABLE_GAMES: Game[] = [
   { id: 'tg1', slug: 'royal-baccarat', name: 'Royal Baccarat', provider: 'Yala Studios', category: 'table', rtp: 98.94, isOriginal: false, isNew: false, isHot: true, maxWin: '8×', tags: ['baccarat', 'classic'], imageUrl: `${SS}/evolution/BaccaratA.webp`, gradient: 'from-green-900 to-emerald-950' },
   { id: 'tg2', slug: 'desert-baccarat', name: 'Desert Point Baccarat', provider: 'Yala Studios', category: 'table', rtp: 98.76, isOriginal: false, isNew: false, isHot: false, maxWin: '11×', tags: ['baccarat', 'side bets'], imageUrl: `${SS}/evolution/BaccaratNoCommission.webp`, gradient: 'from-amber-900 to-green-950' },
   { id: 'tg3', slug: 'oasis-poker', name: 'Oasis Poker', provider: 'Yala Studios', category: 'table', rtp: 99.0, isOriginal: false, isNew: true, isHot: false, maxWin: '100×', tags: ['poker', 'caribbean'], imageUrl: `${SS}/evolution/CasinoHoldem.webp`, gradient: 'from-teal-900 to-emerald-950' },
-  { id: 'tg4', slug: 'sand-dune-craps', name: 'Sand Dune Craps', provider: 'Yala Studios', category: 'table', rtp: 98.6, isOriginal: false, isNew: false, isHot: false, maxWin: '30×', tags: ['craps', 'dice'], imageUrl: `${SS}/evolution/Craps.webp`, gradient: 'from-stone-800 to-amber-950' },
+  { id: 'tg4', slug: 'sand-dune-craps', name: 'Classic Craps', provider: 'Yala Studios', category: 'table', rtp: 98.6, isOriginal: false, isNew: false, isHot: false, maxWin: '30×', tags: ['craps', 'dice'], imageUrl: `${SS}/evolution/Craps.webp`, gradient: 'from-stone-800 to-amber-950' },
 ];
 
 const LIVE_GAMES: Game[] = [
-  { id: 'lg1', slug: 'live-roulette-vip', name: 'VIP Desert Roulette Live', provider: 'Evolution', category: 'live', rtp: 97.3, isOriginal: false, isNew: false, isHot: true, maxWin: '35×', tags: ['live', 'roulette', 'vip'], imageUrl: `${SS}/evolution/Roulette.webp`, gradient: 'from-red-900 to-rose-950' },
+  { id: 'lg1', slug: 'live-roulette-vip', name: 'VIP Roulette Live', provider: 'Evolution', category: 'live', rtp: 97.3, isOriginal: false, isNew: false, isHot: true, maxWin: '35×', tags: ['live', 'roulette', 'vip'], imageUrl: `${SS}/evolution/Roulette.webp`, gradient: 'from-red-900 to-rose-950' },
   { id: 'lg2', slug: 'live-blackjack-private', name: 'Private Suite Blackjack', provider: 'Evolution', category: 'live', rtp: 99.5, isOriginal: false, isNew: false, isHot: true, maxWin: '3×', tags: ['live', 'blackjack', 'exclusive'], imageUrl: `${SS}/evolution/BlackjackVIP_A.webp`, gradient: 'from-slate-800 to-indigo-950' },
   { id: 'lg3', slug: 'live-baccarat-gold', name: 'Gold Salon Baccarat', provider: 'Evolution', category: 'live', rtp: 98.94, isOriginal: false, isNew: true, isHot: false, maxWin: '8×', tags: ['live', 'baccarat'], imageUrl: `${SS}/evolution/GoldenWealthBaccarat.webp`, gradient: 'from-yellow-900 to-amber-950' },
-  { id: 'lg4', slug: 'live-crazy-time', name: 'Dune Fortune Live', provider: 'Evolution', category: 'live', rtp: 96.08, isOriginal: false, isNew: false, isHot: true, maxWin: '20,000×', tags: ['live', 'game show'], imageUrl: `${SS}/evolution/CrazyTime.webp`, gradient: 'from-purple-800 to-pink-950' },
+  { id: 'lg4', slug: 'live-crazy-time', name: 'Fortune Wheel Live', provider: 'Evolution', category: 'live', rtp: 96.08, isOriginal: false, isNew: false, isHot: true, maxWin: '20,000×', tags: ['live', 'game show'], imageUrl: `${SS}/evolution/CrazyTime.webp`, gradient: 'from-purple-800 to-pink-950' },
 ];
 
 const GAMESHOW_GAMES: Game[] = [
   { id: 'gs1', slug: 'wheel-of-gold', name: 'Wheel of Gold Live', provider: 'Evolution', category: 'gameshows', rtp: 96.5, isOriginal: false, isNew: false, isHot: true, maxWin: '500×', tags: ['game show', 'wheel'], imageUrl: `${SS}/evolution/DreamCatcher.webp`, gradient: 'from-yellow-700 to-orange-900' },
   { id: 'gs2', slug: 'lightning-storm', name: 'Lightning Storm Roulette', provider: 'Evolution', category: 'gameshows', rtp: 97.1, isOriginal: false, isNew: true, isHot: true, maxWin: '500×', tags: ['game show', 'lightning'], imageUrl: `${SS}/evolution/LightningRoulette.webp`, gradient: 'from-blue-700 to-purple-900' },
-  { id: 'gs3', slug: 'sahara-deal', name: 'Sahara Deal or No Deal', provider: 'Evolution', category: 'gameshows', rtp: 95.5, isOriginal: false, isNew: false, isHot: false, maxWin: '500,000×', tags: ['game show', 'deal'], imageUrl: `${SS}/evolution/DealOrNoDeal.webp`, gradient: 'from-green-800 to-teal-950' },
+  { id: 'gs3', slug: 'sahara-deal', name: 'Deal or No Deal Live', provider: 'Evolution', category: 'gameshows', rtp: 95.5, isOriginal: false, isNew: false, isHot: false, maxWin: '500,000×', tags: ['game show', 'deal'], imageUrl: `${SS}/evolution/DealOrNoDeal.webp`, gradient: 'from-green-800 to-teal-950' },
 ];
 
 const SCRATCH_GAMES: Game[] = [
-  { id: 'sc1', slug: 'golden-sands-scratch', name: 'Golden Sands Scratch', provider: 'Hacksaw Gaming', category: 'scratch', rtp: 95.0, isOriginal: false, isNew: false, isHot: false, maxWin: '1,000×', tags: ['scratch', 'instant win'], imageUrl: `${SS}/hacksawgaming/chaos_crew_2.webp`, gradient: 'from-yellow-600 to-amber-800' },
+  { id: 'sc1', slug: 'golden-sands-scratch', name: 'Gold Rush Scratch', provider: 'Hacksaw Gaming', category: 'scratch', rtp: 95.0, isOriginal: false, isNew: false, isHot: false, maxWin: '1,000×', tags: ['scratch', 'instant win'], imageUrl: `${SS}/hacksawgaming/chaos_crew_2.webp`, gradient: 'from-yellow-600 to-amber-800' },
   { id: 'sc2', slug: 'oasis-treasures', name: 'Oasis Treasures Scratch', provider: 'Relax Gaming', category: 'scratch', rtp: 96.0, isOriginal: false, isNew: true, isHot: false, maxWin: '500×', tags: ['scratch', 'instant'], imageUrl: `${SS}/relaxgaming/money_train_2.webp`, gradient: 'from-green-700 to-emerald-900' },
 ];
 
 const FISH_GAMES: Game[] = [
-  { id: 'fg1', slug: 'desert-hunter', name: 'Desert Hunter', provider: 'Pragmatic Play', category: 'fish', rtp: 96.0, isOriginal: false, isNew: false, isHot: true, maxWin: '1,000×', tags: ['fish', 'shooting', 'arcade'], imageUrl: `${SS}/pragmaticplay/vs15godsofwar.webp`, gradient: 'from-blue-800 to-teal-900' },
+  { id: 'fg1', slug: 'desert-hunter', name: "Hunter's Gold", provider: 'Pragmatic Play', category: 'fish', rtp: 96.0, isOriginal: false, isNew: false, isHot: true, maxWin: '1,000×', tags: ['fish', 'shooting', 'arcade'], imageUrl: `${SS}/pragmaticplay/vs15godsofwar.webp`, gradient: 'from-blue-800 to-teal-900' },
   { id: 'fg2', slug: 'nile-fishing', name: 'Nile Fishing Frenzy', provider: 'Red Tiger', category: 'fish', rtp: 96.5, isOriginal: false, isNew: true, isHot: false, maxWin: '800×', tags: ['fish', 'casual', 'arcade'], imageUrl: `${SS}/pragmaticplay/vs20rhinoluxe.webp`, gradient: 'from-cyan-800 to-blue-950' },
 ];
 
 const CASUAL_GAMES: Game[] = [
-  { id: 'cg1', slug: 'sand-road', name: 'Sand Road Crash Aviator', provider: 'Yala Studios', category: 'casual', rtp: 97.0, isOriginal: false, isNew: false, isHot: true, maxWin: '∞', tags: ['casual', 'crash'], imageUrl: `${SS}/spribe/aviator.webp`, gradient: 'from-orange-700 to-red-900' },
+  { id: 'cg1', slug: 'sand-road', name: 'Sky Crash Aviator', provider: 'Yala Studios', category: 'casual', rtp: 97.0, isOriginal: false, isNew: false, isHot: true, maxWin: '∞', tags: ['casual', 'crash'], imageUrl: `${SS}/spribe/aviator.webp`, gradient: 'from-orange-700 to-red-900' },
   { id: 'cg2', slug: 'caravan-joust', name: 'Caravan Joust', provider: 'Hacksaw Gaming', category: 'casual', rtp: 96.0, isOriginal: false, isNew: true, isHot: false, maxWin: '2,000×', tags: ['casual', 'grid'], imageUrl: `${SS}/hacksawgaming/chaos_crew.webp`, gradient: 'from-amber-700 to-stone-900' },
 ];
 
