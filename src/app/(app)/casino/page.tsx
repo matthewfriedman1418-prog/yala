@@ -267,13 +267,17 @@ function LiveBetsFeed() {
 
   return (
     <>
-      {/* Scoped keyframe — no globals.css needed */}
+      {/* Scoped 3-D tumble keyframe — perspective() inline keeps overflow:hidden compatible */}
       <style>{`
-        @keyframes _bet-in {
-          0%   { background-color: rgba(45,201,122,0.10); }
-          100% { background-color: transparent; }
+        @keyframes _bet-tumble {
+          0%   { opacity: 0;   transform: perspective(500px) rotateX(-80deg) scaleY(0.8); }
+          55%  { opacity: 1; }
+          100% { opacity: 1;   transform: perspective(500px) rotateX(0deg)   scaleY(1);   }
         }
-        ._bet-new { animation: _bet-in 0.7s ease-out forwards; }
+        ._bet-tumble {
+          animation: _bet-tumble 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+          transform-origin: top center;
+        }
       `}</style>
 
       <div className="rounded-2xl overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
@@ -302,14 +306,14 @@ function LiveBetsFeed() {
           <span className="text-right">Profit</span>
         </div>
 
-        {/* Fixed-height rows — layout never shifts */}
+        {/* Fixed-height container — layout never shifts, 3-D tumble on newest row */}
         <div style={{ height: VISIBLE_ROWS * ROW_H, overflow: 'hidden' }}>
           {feed.map((bet, i) => {
             const win = bet.profit > 0;
             return (
               <div
                 key={bet.id}
-                className={cn('grid px-5 items-center', i === 0 ? '_bet-new' : '')}
+                className={cn('grid px-5 items-center', i === 0 ? '_bet-tumble' : '')}
                 style={{
                   gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr',
                   height: ROW_H,
