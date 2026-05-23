@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useWalletStore } from '@/lib/store/wallet';
@@ -243,7 +243,9 @@ function OriginalCard({ orig }: { orig: typeof YALA_ORIGINALS[0] }) {
 }
 
 // ─── Live Bets Feed ───────────────────────────────────────────────────────────
+// Fixed row height + no layout animation = zero jitter
 const VISIBLE_ROWS = 8;
+const ROW_H = 46;
 
 function LiveBetsFeed() {
   const counterRef = useRef(VISIBLE_ROWS);
@@ -252,59 +254,65 @@ function LiveBetsFeed() {
   );
 
   useEffect(() => {
-    const id = setInterval(() => {
+    const timer = setInterval(() => {
       const next = BET_POOL[counterRef.current % BET_POOL.length];
       counterRef.current += 1;
       setFeed(prev => [
         { ...next, id: counterRef.current },
         ...prev.slice(0, VISIBLE_ROWS - 1),
       ]);
-    }, 1600);
-    return () => clearInterval(id);
+    }, 1800);
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: '1px solid #1A2E22' }}>
-        <div className="flex items-center gap-2.5">
-          <Activity className="w-4 h-4" style={{ color: '#2DC97A' }} />
-          <h2 className="font-bold text-sm" style={{ color: '#F5E8C8' }}>Live Bets</h2>
-          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full" style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)' }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block" />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">Live</span>
+    <>
+      {/* Scoped keyframe — no globals.css needed */}
+      <style>{`
+        @keyframes _bet-in {
+          0%   { background-color: rgba(45,201,122,0.10); }
+          100% { background-color: transparent; }
+        }
+        ._bet-new { animation: _bet-in 0.7s ease-out forwards; }
+      `}</style>
+
+      <div className="rounded-2xl overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: '1px solid #1A2E22' }}>
+          <div className="flex items-center gap-2.5">
+            <Activity className="w-4 h-4" style={{ color: '#2DC97A' }} />
+            <h2 className="font-bold text-sm" style={{ color: '#F5E8C8' }}>Live Bets</h2>
+            <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full" style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">Live</span>
+            </div>
           </div>
+          <span className="text-[11px]" style={{ color: '#4A6A55' }}>Updated in real time</span>
         </div>
-        <span className="text-[11px]" style={{ color: '#4A6A55' }}>Bets updating in real time</span>
-      </div>
 
-      {/* Column labels */}
-      <div
-        className="grid px-5 py-2 text-[10px] font-bold uppercase tracking-widest"
-        style={{ gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr', color: '#4A6A55', borderBottom: '1px solid rgba(26,46,34,0.5)' }}
-      >
-        <span>Game</span>
-        <span>Player</span>
-        <span>Bet</span>
-        <span>Multi</span>
-        <span className="text-right">Profit</span>
-      </div>
+        {/* Column labels */}
+        <div
+          className="grid px-5 py-2 text-[10px] font-bold uppercase tracking-widest"
+          style={{ gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr', color: '#4A6A55', borderBottom: '1px solid rgba(26,46,34,0.5)' }}
+        >
+          <span>Game</span>
+          <span>Player</span>
+          <span>Bet</span>
+          <span>Multi</span>
+          <span className="text-right">Profit</span>
+        </div>
 
-      {/* Animated rows */}
-      <div className="overflow-hidden">
-        <AnimatePresence mode="popLayout" initial={false}>
-          {feed.map((bet) => {
+        {/* Fixed-height rows — layout never shifts */}
+        <div style={{ height: VISIBLE_ROWS * ROW_H, overflow: 'hidden' }}>
+          {feed.map((bet, i) => {
             const win = bet.profit > 0;
             return (
-              <motion.div
+              <div
                 key={bet.id}
-                initial={{ opacity: 0, y: -40 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.28, ease: 'easeOut' }}
-                className="grid px-5 py-2.5 items-center hover:bg-white/[0.025] transition-colors"
+                className={cn('grid px-5 items-center', i === 0 ? '_bet-new' : '')}
                 style={{
                   gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr',
+                  height: ROW_H,
                   borderBottom: '1px solid rgba(26,46,34,0.35)',
                 }}
               >
@@ -318,36 +326,26 @@ function LiveBetsFeed() {
                   </div>
                   <span className="text-xs font-medium truncate" style={{ color: '#F5E8C8' }}>{bet.game}</span>
                 </div>
-
                 {/* Player */}
                 <span className="text-xs font-mono" style={{ color: '#8FA899' }}>{bet.user}</span>
-
                 {/* Bet */}
                 <span className="text-xs number-display" style={{ color: '#6B8F7B' }}>
-                  {bet.currency === 'GC'
-                    ? `${bet.bet.toLocaleString()} GC`
-                    : `${bet.bet} SC`}
+                  {bet.currency === 'GC' ? `${bet.bet.toLocaleString()} GC` : `${bet.bet} SC`}
                 </span>
-
                 {/* Multi */}
                 <span className="text-xs font-semibold number-display" style={{ color: win ? '#F0B232' : '#4A6A55' }}>
                   {win ? `${bet.multiplier}x` : '—'}
                 </span>
-
                 {/* Profit */}
                 <span className="text-xs font-bold text-right number-display" style={{ color: win ? '#2DC97A' : '#EF4444' }}>
-                  {win ? '+' : ''}
-                  {bet.currency === 'GC'
-                    ? bet.profit.toLocaleString()
-                    : bet.profit}
-                  {' '}{bet.currency}
+                  {win ? '+' : ''}{bet.currency === 'GC' ? bet.profit.toLocaleString() : bet.profit} {bet.currency}
                 </span>
-              </motion.div>
+              </div>
             );
           })}
-        </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
