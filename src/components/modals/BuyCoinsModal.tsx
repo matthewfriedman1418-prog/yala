@@ -152,7 +152,7 @@ export function BuyCoinsModal() {
                         <p className="text-xl font-bold number-display" style={{ color: '#D6A84F' }}>${p.price}</p>
                         <div className="mt-2 space-y-0.5">
                           <p className="text-xs text-[#9CA3AF] flex items-center gap-1"><GoldCoinIcon size={12} /> {formatGC(p.gc)} Gold Coins</p>
-                          <p className="text-xs text-emerald-400 flex items-center gap-1"><YalaIcon name="chip-green" size={12} /> {p.sc.toFixed(2)} Sweep Coins</p>
+                          <p className="text-xs text-emerald-400 flex items-center gap-1"><YalaIcon name="cash-bill" size={14} /> {p.sc.toFixed(2)} Sweep Coins</p>
                           {p.bonus > 0 && <p className="text-xs text-amber-400">⊕ {formatGC(p.bonus)} Bonus</p>}
                         </div>
                       </button>

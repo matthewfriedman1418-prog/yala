@@ -83,7 +83,7 @@ export function Header() {
               <span className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7">
                 {isGC
                   ? <GoldCoinIcon size={26} />
-                  : <YalaIcon name="chip-green" size={26} />
+                  : <YalaIcon name="cash-bill" size={28} />
                 }
               </span>
               <div className="min-w-0 leading-none">

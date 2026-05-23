@@ -11,6 +11,8 @@ export type YalaIconName =
   | 'y-coin' | 'y-tile' | 'pyramid' | 'pyramid-ring' | 'wordmark'
   // Currency
   | 'coin' | 'coin-stack' | 'chip-green' | 'chip-gold' | 'diamond' | 'wallet-icon'
+  // Sweeps (new — green sweepstakes currency, cash-bill style)
+  | 'sweeps-coin' | 'sweeps-stack' | 'cash-bill' | 'cash-wad'
   // Game symbols
   | 'star' | 'sparkle' | 'lightning' | 'dice' | 'slot-reels' | 'crown' | 'clover' | 'wish'
   | 'sports-ball'
@@ -43,6 +45,17 @@ const DEFS = `<defs>
     <stop offset="0%" stop-color="#B0F7D0"/>
     <stop offset="55%" stop-color="#2DC97A"/>
     <stop offset="100%" stop-color="#0d4a2a"/>
+  </radialGradient>
+  <radialGradient id="yi-sweeps" cx="0.35" cy="0.28" r="0.88">
+    <stop offset="0%" stop-color="#D6FFE7"/>
+    <stop offset="22%" stop-color="#8AF0B6"/>
+    <stop offset="55%" stop-color="#2DC97A"/>
+    <stop offset="100%" stop-color="#0a3a22"/>
+  </radialGradient>
+  <radialGradient id="yi-sweepsFlat" cx="0.5" cy="0.3" r="0.9">
+    <stop offset="0%" stop-color="#8AF0B6"/>
+    <stop offset="55%" stop-color="#2DC97A"/>
+    <stop offset="100%" stop-color="#0a3a22"/>
   </radialGradient>
 </defs>`;
 
@@ -112,6 +125,42 @@ const PATHS: Record<YalaIconName, string> = {
   'wallet-icon': `<rect x="14" y="28" width="72" height="52" rx="8" fill="none" stroke="#F0B232" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M14 40 H 86" stroke="#F0B232" stroke-width="3" fill="none"/>
     <circle cx="72" cy="56" r="4" fill="#F0B232"/>`,
+
+  // ── Sweeps currency (green sweepstakes coins + cash bills) ────────────────
+  'sweeps-coin': `<circle cx="50" cy="50" r="42" fill="url(#yi-sweeps)" stroke="#0a3a22" stroke-width="3"/>
+    <circle cx="50" cy="50" r="34" fill="none" stroke="#0a3a22" stroke-width="1.2"/>
+    <text x="50" y="68" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="44" fill="#0a3a22">$</text>`,
+
+  'sweeps-stack': `<ellipse cx="50" cy="78" rx="38" ry="10" fill="url(#yi-sweepsFlat)" stroke="#0a3a22" stroke-width="2"/>
+    <ellipse cx="50" cy="62" rx="38" ry="10" fill="url(#yi-sweepsFlat)" stroke="#0a3a22" stroke-width="2"/>
+    <ellipse cx="50" cy="46" rx="38" ry="10" fill="url(#yi-sweepsFlat)" stroke="#0a3a22" stroke-width="2"/>
+    <ellipse cx="50" cy="30" rx="38" ry="10" fill="url(#yi-sweeps)" stroke="#0a3a22" stroke-width="2"/>
+    <text x="50" y="35.5" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="12" fill="#0a3a22">$</text>`,
+
+  'cash-bill': `<g transform="translate(-5 7) rotate(-10 50 50)">
+      <rect x="8" y="28" width="84" height="44" rx="4" fill="#1e6b46" stroke="#0a3a22" stroke-width="2.5"/>
+    </g>
+    <g transform="translate(2 -2) rotate(6 50 50)">
+      <rect x="8" y="28" width="84" height="44" rx="4" fill="#3fa86a" stroke="#0a3a22" stroke-width="2.5"/>
+    </g>
+    <g transform="rotate(-3 50 50)">
+      <rect x="8" y="28" width="84" height="44" rx="4" fill="#5ed68c" stroke="#0a3a22" stroke-width="3"/>
+      <rect x="12" y="32" width="76" height="36" rx="2" fill="none" stroke="#0a3a22" stroke-width="1.2"/>
+      <circle cx="50" cy="50" r="13" fill="#a8f0c2" stroke="#0a3a22" stroke-width="2"/>
+      <text x="50" y="58" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="18" fill="#0a3a22">Y</text>
+      <text x="19" y="44" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="10" fill="#0a3a22">Y</text>
+      <text x="81" y="62" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="10" fill="#0a3a22">Y</text>
+    </g>`,
+
+  'cash-wad': `<rect x="10" y="28" width="80" height="46" rx="3" fill="#1e6b46" stroke="#0a3a22" stroke-width="2.5"/>
+    <rect x="10" y="28" width="80" height="40" rx="3" fill="#3fa86a" stroke="#0a3a22" stroke-width="2.5"/>
+    <rect x="10" y="28" width="80" height="34" rx="3" fill="#5ed68c" stroke="#0a3a22" stroke-width="3"/>
+    <rect x="14" y="32" width="72" height="26" rx="2" fill="none" stroke="#0a3a22" stroke-width="1"/>
+    <text x="50" y="54" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="18" fill="#0a3a22">Y</text>
+    <rect x="40" y="22" width="20" height="58" fill="#F0B232" stroke="#6B4910" stroke-width="2.5"/>
+    <line x1="40" y1="28" x2="60" y2="28" stroke="#6B4910" stroke-width="1"/>
+    <line x1="40" y1="74" x2="60" y2="74" stroke="#6B4910" stroke-width="1"/>
+    <text x="50" y="55" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="12" fill="#6B4910" transform="rotate(-90 50 51)">100</text>`,
 
   // ── Game symbols ──────────────────────────────────────────────────────────
   'star': `<polygon points="50,6 59.9,36.4 91.8,36.4 66,55.2 75.9,85.6 50,66.8 24.1,85.6 34,55.2 8.2,36.4 40.1,36.4" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2.5"/>`,
@@ -245,7 +294,8 @@ export function GoldCoinIcon({ size = 20, className }: { size?: number; classNam
   return <YalaIcon name="coin" size={size} className={className} />;
 }
 export function SweepCoinIcon({ size = 20, className }: { size?: number; className?: string }) {
-  return <YalaIcon name="chip-green" size={size} className={className} />;
+  // Sweeps now uses the cartoon cash bill from the YALA Asset Pack v2
+  return <YalaIcon name="cash-bill" size={size} className={className} />;
 }
 export function CrownIcon({ size = 20, className }: { size?: number; className?: string }) {
   return <YalaIcon name="crown" size={size} className={className} />;

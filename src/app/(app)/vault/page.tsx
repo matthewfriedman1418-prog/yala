@@ -244,7 +244,7 @@ export default function VaultPage() {
               {
                 title: 'Sweep Coins only',
                 desc: 'The Vault holds Sweep Coins only — your prize-eligible currency. Gold Coins stay in your main balance.',
-                yala: 'diamond' as const,
+                yala: 'cash-bill' as const,
                 color: ACCENT,
               },
             ].map((item) => (
