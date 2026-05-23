@@ -440,7 +440,7 @@ export default function AffiliatePage() {
                 }}
               >
                 <p className="font-bold text-sm mb-1" style={{ color: '#F5E8C8' }}>Your Referral Link</p>
-                <p className="text-xs mb-5" style={{ color: '#6B8F7B' }}>
+                <p className="text-xs mb-5" style={{ color: '#8FA899' }}>
                   Claim a custom name — your friends see it in the URL when they sign up.
                 </p>
                 <CodePicker currentCode={referralCode} onCodeSet={setReferralCode} />
@@ -487,7 +487,7 @@ export default function AffiliatePage() {
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${stat.color}12` }}>
                       <Icon className="w-3.5 h-3.5" style={{ color: stat.color }} />
                     </div>
-                    <p className="text-[10px] font-medium" style={{ color: '#6B8F7B' }}>{stat.label}</p>
+                    <p className="text-[10px] font-medium" style={{ color: '#8FA899' }}>{stat.label}</p>
                   </div>
                   <p className="font-black text-2xl number-display" style={{ color: stat.color }}>{stat.value}</p>
                   <p className="text-[9px] mt-0.5" style={{ color: '#4A6A55' }}>{stat.sub}</p>
@@ -516,7 +516,7 @@ export default function AffiliatePage() {
                   }}
                 >
                   <p className="font-black text-sm mb-1" style={{ color: tier.color }}>{tier.tier}</p>
-                  <p className="text-[10px] mb-2" style={{ color: '#6B8F7B' }}>{tier.refs} referrals</p>
+                  <p className="text-[10px] mb-2" style={{ color: '#8FA899' }}>{tier.refs} referrals</p>
                   <p className="text-[11px] font-semibold mb-1" style={{ color: '#F5E8C8' }}>{tier.rate}</p>
                   {tier.bonus && (
                     <p className="text-[9px] font-bold px-1.5 py-0.5 rounded inline-block" style={{ background: `${tier.color}15`, color: tier.color }}>

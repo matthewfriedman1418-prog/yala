@@ -9,6 +9,7 @@ import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star }
 import { useState } from 'react';
 import Link from 'next/link';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
+import { toast } from 'sonner';
 
 export default function ProfilePage() {
   const { isLoggedIn, user } = useAuthStore();
@@ -42,6 +43,7 @@ export default function ProfilePage() {
   const handleCopy = () => {
     navigator.clipboard.writeText(user?.referralCode || '').catch(() => {});
     setCopied(true);
+    toast.success('Referral code copied', { description: `Share ${user?.referralCode} and earn 5,000 GC per signup.` });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -71,9 +73,12 @@ export default function ProfilePage() {
             <div className="flex items-start justify-between gap-3 flex-wrap">
               <div>
                 <h1 className="font-display text-2xl font-bold mb-0.5" style={{ color: '#F5E8C8' }}>{user?.username}</h1>
-                <p className="text-sm mb-1" style={{ color: '#6B8F7B' }}>{user?.email}</p>
+                <p className="text-sm mb-1" style={{ color: '#8FA899' }}>{user?.email}</p>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-bold" style={{ color: tierColor }}>{currentTier.icon} {tierName}</span>
+                  <span className="text-sm font-bold flex items-center gap-1.5" style={{ color: tierColor }}>
+                    <YalaIcon name={currentTier.icon} size={14} />
+                    {tierName}
+                  </span>
                   {user?.isVerified && (
                     <div className="flex items-center gap-1 text-xs" style={{ color: '#2DC97A' }}>
                       <CheckCircle2 className="w-3.5 h-3.5" /> KYC Verified
@@ -149,7 +154,7 @@ export default function ProfilePage() {
             const Icon = item.icon;
             return (
               <div key={item.label} className="flex items-center justify-between py-1">
-                <div className="flex items-center gap-2 text-sm" style={{ color: '#6B8F7B' }}>
+                <div className="flex items-center gap-2 text-sm" style={{ color: '#8FA899' }}>
                   <Icon className="w-3.5 h-3.5 flex-shrink-0" />
                   {item.label}
                 </div>

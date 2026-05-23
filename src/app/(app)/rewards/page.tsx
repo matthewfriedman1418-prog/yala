@@ -104,10 +104,10 @@ export default function RewardsPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div className="flex items-center gap-4">
               <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+                className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
                 style={{ background: `${tierColor}18`, border: `1px solid ${tierColor}35` }}
               >
-                {currentTier.icon}
+                <YalaIcon name={currentTier.icon} size={24} />
               </div>
               <div>
                 <p className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>VIP Status</p>

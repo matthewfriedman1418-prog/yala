@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { cn, formatGC, formatSC } from '@/lib/utils';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 // ─── Category chips ───────────────────────────────────────────────────────────
 const CATEGORIES: { id: GameCategory | 'all'; label: string; icon: string }[] = [
@@ -144,8 +145,13 @@ function GameScrollRow({ games }: { games: typeof ALL_GAMES }) {
           </motion.div>
         ))}
         {games.length === 0 && (
-          <div className="flex items-center justify-center w-full py-10" style={{ color: '#4A6A55' }}>
-            No games match your filters
+          <div className="w-full">
+            <EmptyState
+              icon="dice"
+              title="No games match your filters"
+              body="Try clearing search or picking a different category or provider."
+              size="sm"
+            />
           </div>
         )}
       </div>
@@ -334,7 +340,7 @@ function LiveBetsFeed() {
                 {/* Player */}
                 <span className="text-xs font-mono" style={{ color: '#8FA899' }}>{bet.user}</span>
                 {/* Bet */}
-                <span className="text-xs number-display" style={{ color: '#6B8F7B' }}>
+                <span className="text-xs number-display" style={{ color: '#8FA899' }}>
                   {bet.currency === 'GC' ? `${bet.bet.toLocaleString()} GC` : `${bet.bet} SC`}
                 </span>
                 {/* Multi */}
@@ -406,7 +412,7 @@ export default function CasinoPage() {
                 <span style={{ color: '#2DC97A' }}>LET&apos;S</span>{' '}
                 <span style={{ color: '#F5E8C8' }}>PLAY</span>
               </h1>
-              <p className="text-sm mt-3 max-w-xs" style={{ color: '#6B8F7B', lineHeight: 1.6 }}>
+              <p className="text-sm mt-3 max-w-xs" style={{ color: '#8FA899', lineHeight: 1.6 }}>
                 Premium sweepstakes casino. Dual-currency play, provably fair originals, and real prizes. No deposit required.
               </p>
             </div>
@@ -416,7 +422,7 @@ export default function CasinoPage() {
                   <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl" style={{ background: `${accent}10`, border: `1px solid ${accent}22` }}>
                     {isGC ? <GoldCoinIcon size={22} /> : <SweepCoinIcon size={22} />}
                     <div>
-                      <p className="text-[10px] uppercase tracking-widest" style={{ color: '#6B8F7B' }}>Balance</p>
+                      <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Balance</p>
                       <p className="font-black number-display text-lg leading-none" style={{ color: '#F5E8C8' }}>
                         {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}&nbsp;{activeCurrency}
                       </p>

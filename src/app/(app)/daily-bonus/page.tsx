@@ -139,7 +139,7 @@ export default function DailyBonusPage() {
                   <p className="text-[8px] font-semibold" style={{ color: current ? '#F0B232' : '#4A6A55' }}>
                     {r.special ? '🔥' : `D${r.day}`}
                   </p>
-                  <p className="text-[8px] number-display" style={{ color: '#6B8F7B' }}>
+                  <p className="text-[8px] number-display" style={{ color: '#8FA899' }}>
                     {r.gc >= 1000 ? `${r.gc / 1000}K` : r.gc}
                   </p>
                 </div>
@@ -202,7 +202,7 @@ export default function DailyBonusPage() {
                   <Icon className="w-5 h-5" style={{ color: opt.color }} />
                 </div>
                 <p className="font-semibold text-sm mb-1 group-hover:opacity-80 transition-opacity" style={{ color: '#F5E8C8' }}>{opt.title}</p>
-                <p className="text-xs leading-relaxed flex-1" style={{ color: '#6B8F7B' }}>{opt.desc}</p>
+                <p className="text-xs leading-relaxed flex-1" style={{ color: '#8FA899' }}>{opt.desc}</p>
                 {opt.cta && (
                   <p className="text-xs font-semibold mt-3 flex items-center gap-1" style={{ color: opt.color }}>
                     <Zap className="w-3 h-3" /> {opt.cta}

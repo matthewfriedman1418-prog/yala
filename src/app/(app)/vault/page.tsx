@@ -250,7 +250,7 @@ export default function VaultPage() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold mb-0.5" style={{ color: '#F5E8C8' }}>{item.title}</p>
-                  <p className="text-xs leading-relaxed" style={{ color: '#6B8F7B' }}>{item.desc}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: '#8FA899' }}>{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -262,7 +262,7 @@ export default function VaultPage() {
             style={{ background: ACCENT_BG, border: `1px solid ${ACCENT_BORDER}` }}
           >
             <p className="text-xs font-semibold mb-1" style={{ color: ACCENT }}>💡 Tip</p>
-            <p className="text-xs" style={{ color: '#6B8F7B' }}>
+            <p className="text-xs" style={{ color: '#8FA899' }}>
               Lock away SC after a winning session so you can&apos;t accidentally wager it back. Sweep Coins are the only currency redeemable for prizes.
             </p>
           </div>

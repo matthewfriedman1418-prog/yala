@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import type { ComponentType } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Paintbrush, Plus, ChevronDown } from 'lucide-react';
+import { Paintbrush, Plus, ChevronDown, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ── Originals sub-menu ────────────────────────────────────────────────────────
@@ -104,10 +104,11 @@ interface NavSection { label: string; items: NavItem[]; }
 export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
-  const { openAuthModal, openPromotionsDrawer, openBuyCoins } = useUIStore();
+  const { openAuthModal, openPromotionsDrawer, openBuyCoins, sidebarCollapsed, toggleSidebar } = useUIStore();
   const [originalsOpen, setOriginalsOpen] = useState(
     pathname === '/originals' || pathname.startsWith('/originals/')
   );
+  const collapsed = sidebarCollapsed;
 
   const NAV_SECTIONS: NavSection[] = [
     {
@@ -142,7 +143,8 @@ export function Sidebar() {
 
   const sharedCls = (isActive: boolean) =>
     cn(
-      'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-left',
+      'w-full flex items-center rounded-lg text-sm transition-all text-left',
+      collapsed ? 'justify-center px-2 py-2.5' : 'gap-3 px-3 py-2',
       isActive
         ? 'nav-item-active font-semibold'
         : 'text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5'
@@ -152,21 +154,32 @@ export function Sidebar() {
 
   return (
     <aside
-      className="w-56 h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar"
+      className={cn(
+        'h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar transition-[width] duration-200 ease-out',
+        collapsed ? 'w-[68px]' : 'w-56'
+      )}
       style={{ backgroundColor: '#0C1812' }}
     >
       {/* ── Logo: pyramid + gradient wordmark ── */}
-      <Link href="/" className="flex items-center gap-3 px-4 py-5 border-b border-[#1A2E22] flex-shrink-0 group">
-        <YalaPyramid size={30} />
-        <div className="flex flex-col items-center gap-0 leading-none">
-          <YalaWordmark width={82} height={30} />
-          <span
-            className="text-[8px] tracking-[0.22em] uppercase font-bold font-mono mt-1.5 text-center"
-            style={{ color: '#8FA899' }}
-          >
-            Social Casino
-          </span>
-        </div>
+      <Link
+        href="/"
+        className={cn(
+          'flex items-center border-b border-[#1A2E22] flex-shrink-0 group',
+          collapsed ? 'justify-center px-2 py-4' : 'gap-3 px-4 py-5'
+        )}
+      >
+        <YalaPyramid size={collapsed ? 26 : 30} />
+        {!collapsed && (
+          <div className="flex flex-col items-center gap-0 leading-none">
+            <YalaWordmark width={82} height={30} />
+            <span
+              className="text-[8px] tracking-[0.22em] uppercase font-bold font-mono mt-1.5 text-center"
+              style={{ color: '#8FA899' }}
+            >
+              Social Casino
+            </span>
+          </div>
+        )}
       </Link>
 
       {/* Auth buttons — logged out */}
@@ -191,10 +204,14 @@ export function Sidebar() {
 
       {/* Buy Coins CTA — logged in */}
       {isLoggedIn && (
-        <div className="px-3 py-3 border-b border-[#1A2E22] flex-shrink-0">
+        <div className={cn('border-b border-[#1A2E22] flex-shrink-0', collapsed ? 'px-2 py-3' : 'px-3 py-3')}>
           <button
             onClick={openBuyCoins}
-            className="w-full py-2.5 rounded-xl text-sm font-black flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95"
+            aria-label="Buy coins"
+            className={cn(
+              'w-full rounded-xl text-sm font-black flex items-center justify-center transition-all hover:brightness-110 active:scale-95',
+              collapsed ? 'py-2.5' : 'py-2.5 gap-2'
+            )}
             style={{
               background: 'linear-gradient(135deg, #10B981, #2DC97A)',
               color: '#060E0A',
@@ -202,7 +219,7 @@ export function Sidebar() {
             }}
           >
             <Plus className="w-4 h-4" />
-            Buy Coins
+            {!collapsed && 'Buy Coins'}
           </button>
         </div>
       )}
@@ -212,45 +229,64 @@ export function Sidebar() {
 
         {/* ── PLAY section ── */}
         <div>
-          <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
-            PLAY
-          </p>
+          {!collapsed && (
+            <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
+              PLAY
+            </p>
+          )}
           <div className="space-y-0.5">
 
             {/* Casino */}
-            <Link href="/casino" className={sharedCls(pathname === '/casino' || (pathname.startsWith('/casino') && pathname.length > 7))}>
+            <Link
+              href="/casino"
+              title={collapsed ? 'Casino' : undefined}
+              className={sharedCls(pathname === '/casino' || (pathname.startsWith('/casino') && pathname.length > 7))}
+            >
               <YalaIcon name="slot-reels" size={16} className="flex-shrink-0" />
-              <span className="flex-1">Casino</span>
+              {!collapsed && <span className="flex-1">Casino</span>}
             </Link>
 
             {/* Sports */}
-            <Link href="/sportsbook" className={sharedCls(pathname === '/sportsbook')}>
+            <Link
+              href="/sportsbook"
+              title={collapsed ? 'Sports' : undefined}
+              className={sharedCls(pathname === '/sportsbook')}
+            >
               <YalaIcon name="sports-ball" size={16} className="flex-shrink-0" />
-              <span className="flex-1">Sports</span>
-              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-blue-500/20 text-blue-400">
-                BETA
-              </span>
+              {!collapsed && (
+                <>
+                  <span className="flex-1">Sports</span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-blue-500/20 text-blue-400">
+                    BETA
+                  </span>
+                </>
+              )}
             </Link>
 
             {/* Originals toggle */}
             <button
               onClick={() => setOriginalsOpen((o) => !o)}
+              title={collapsed ? 'Originals' : undefined}
               className={sharedCls(isOriginalsActive)}
             >
               <YalaIcon name="lightning" size={16} className="flex-shrink-0" />
-              <span className="flex-1">Originals</span>
-              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-red-500/20 text-red-400 mr-0.5">
-                HOT
-              </span>
-              <ChevronDown
-                className={cn('w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200', originalsOpen && 'rotate-180')}
-                style={{ color: '#4A6A55' }}
-              />
+              {!collapsed && (
+                <>
+                  <span className="flex-1">Originals</span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-red-500/20 text-red-400 mr-0.5">
+                    HOT
+                  </span>
+                  <ChevronDown
+                    className={cn('w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200', originalsOpen && 'rotate-180')}
+                    style={{ color: '#4A6A55' }}
+                  />
+                </>
+              )}
             </button>
 
-            {/* Originals sub-list */}
+            {/* Originals sub-list (hidden when sidebar collapsed — too cramped) */}
             <AnimatePresence initial={false}>
-              {originalsOpen && (
+              {originalsOpen && !collapsed && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
@@ -271,7 +307,7 @@ export function Sidebar() {
                               ? 'font-semibold nav-item-active'
                               : 'hover:text-[#F5E8C8] hover:bg-white/5'
                           )}
-                          style={{ color: active ? undefined : '#6B8F7B' }}
+                          style={{ color: active ? undefined : '#8FA899' }}
                         >
                           {game.label}
                         </Link>
@@ -287,9 +323,11 @@ export function Sidebar() {
         {/* Remaining sections */}
         {NAV_SECTIONS.map((section) => (
           <div key={section.label}>
-            <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
-              {section.label}
-            </p>
+            {!collapsed && (
+              <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
+                {section.label}
+              </p>
+            )}
             <div className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon;
@@ -300,26 +338,34 @@ export function Sidebar() {
                 const inner = (
                   <>
                     <Icon className="w-4 h-4 flex-shrink-0" />
-                    <span className="flex-1">{item.label}</span>
-                    {item.badge && (
-                      <span
-                        className={cn(
-                          'text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide',
-                          item.badge === 'HOT'  ? 'bg-red-500/20 text-red-400' :
-                          item.badge === 'BETA' ? 'bg-blue-500/20 text-blue-400' :
-                          item.badge === 'DEV'  ? 'bg-purple-500/20 text-purple-400' :
-                          'bg-[#D6A84F]/20 text-[#D6A84F]'
+                    {!collapsed && (
+                      <>
+                        <span className="flex-1">{item.label}</span>
+                        {item.badge && (
+                          <span
+                            className={cn(
+                              'text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide',
+                              item.badge === 'HOT'  ? 'bg-red-500/20 text-red-400' :
+                              item.badge === 'BETA' ? 'bg-blue-500/20 text-blue-400' :
+                              item.badge === 'DEV'  ? 'bg-purple-500/20 text-purple-400' :
+                              'bg-[#D6A84F]/20 text-[#D6A84F]'
+                            )}
+                          >
+                            {item.badge}
+                          </span>
                         )}
-                      >
-                        {item.badge}
-                      </span>
+                      </>
                     )}
                   </>
                 );
                 return item.action ? (
-                  <button key={item.label} onClick={item.action} className={cls}>{inner}</button>
+                  <button key={item.label} onClick={item.action} className={cls} title={collapsed ? item.label : undefined} aria-label={item.label}>
+                    {inner}
+                  </button>
                 ) : (
-                  <Link key={item.href} href={item.href!} className={cls}>{inner}</Link>
+                  <Link key={item.href} href={item.href!} className={cls} title={collapsed ? item.label : undefined} aria-label={item.label}>
+                    {inner}
+                  </Link>
                 );
               })}
             </div>
@@ -327,13 +373,33 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Legal */}
-      <div className="px-3 pb-4 flex-shrink-0">
-        <div className="text-center">
-          <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>18+ · Free to Play · No Real Money</p>
-          <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>Void Where Prohibited</p>
-        </div>
+      {/* Collapse toggle */}
+      <div className={cn('flex-shrink-0', collapsed ? 'px-2 py-2' : 'px-3 py-2')}>
+        <button
+          onClick={toggleSidebar}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className={cn(
+            'w-full flex items-center rounded-lg text-xs font-semibold transition-all hover:bg-white/5 text-[#8FA899] hover:text-[#F5E8C8]',
+            collapsed ? 'justify-center py-2' : 'gap-2 px-2 py-2'
+          )}
+        >
+          {collapsed
+            ? <ChevronsRight className="w-4 h-4" />
+            : <><ChevronsLeft className="w-4 h-4" />Collapse</>
+          }
+        </button>
       </div>
+
+      {/* Legal */}
+      {!collapsed && (
+        <div className="px-3 pb-4 flex-shrink-0">
+          <div className="text-center">
+            <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>18+ · Free to Play · No Real Money</p>
+            <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>Void Where Prohibited</p>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

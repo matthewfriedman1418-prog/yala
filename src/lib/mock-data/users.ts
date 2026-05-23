@@ -8,13 +8,21 @@ export interface LeaderboardUser {
   isYou?: boolean;
 }
 
-export const VIP_TIERS = [
-  { tier: 1, name: 'Scout',      color: '#CD7F32', xpRequired: 0,       xpToNext: 10000,   rakeback: 5,  icon: '🔰' },
-  { tier: 2, name: 'Contender', color: '#C0C0C0', xpRequired: 10000,   xpToNext: 50000,   rakeback: 8,  icon: '⚡' },
-  { tier: 3, name: 'High Roller',color: '#D6A84F', xpRequired: 50000,   xpToNext: 200000,  rakeback: 12, icon: '⭐' },
-  { tier: 4, name: 'Champion',   color: '#E5E4E2', xpRequired: 200000,  xpToNext: 750000,  rakeback: 16, icon: '🏆' },
-  { tier: 5, name: 'Legend',     color: '#10B981', xpRequired: 750000,  xpToNext: 2000000, rakeback: 20, icon: '💎' },
-  { tier: 6, name: 'Icon',       color: '#D6A84F', xpRequired: 2000000, xpToNext: null,    rakeback: 25, icon: '♾️' },
+import type { YalaIconName } from '@/components/ui/YalaIcon';
+
+// `icon` is the YalaIcon name to render. Emoji fallback kept on each tier
+// as a last-resort glyph (used only by old code paths not yet migrated).
+export const VIP_TIERS: {
+  tier: number; name: string; color: string;
+  xpRequired: number; xpToNext: number | null; rakeback: number;
+  icon: YalaIconName; emoji: string;
+}[] = [
+  { tier: 1, name: 'Scout',      color: '#CD7F32', xpRequired: 0,       xpToNext: 10000,   rakeback: 5,  icon: 'shield',     emoji: '🔰' },
+  { tier: 2, name: 'Contender',  color: '#C0C0C0', xpRequired: 10000,   xpToNext: 50000,   rakeback: 8,  icon: 'lightning',  emoji: '⚡' },
+  { tier: 3, name: 'High Roller',color: '#D6A84F', xpRequired: 50000,   xpToNext: 200000,  rakeback: 12, icon: 'star',       emoji: '⭐' },
+  { tier: 4, name: 'Champion',   color: '#E5E4E2', xpRequired: 200000,  xpToNext: 750000,  rakeback: 16, icon: 'trophy',     emoji: '🏆' },
+  { tier: 5, name: 'Legend',     color: '#10B981', xpRequired: 750000,  xpToNext: 2000000, rakeback: 20, icon: 'diamond',    emoji: '💎' },
+  { tier: 6, name: 'Icon',       color: '#D6A84F', xpRequired: 2000000, xpToNext: null,    rakeback: 25, icon: 'crown',      emoji: '♾️' },
 ];
 
 export const WEEKLY_LEADERBOARD: LeaderboardUser[] = [

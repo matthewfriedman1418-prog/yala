@@ -8,6 +8,7 @@ import { useUIStore } from '@/lib/store/ui';
 import { TrendingUp, ChevronRight, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { YalaIcon } from '@/components/ui/YalaIcon';
 
 function CrownIcon({ className }: { className?: string }) {
   return (
@@ -103,14 +104,14 @@ export default function VIPPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mb-5">
             <div className="flex items-center gap-4">
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+                className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
                 style={{
                   background: `linear-gradient(135deg, ${tierColor}25, ${tierColor}08)`,
                   border: `1px solid ${tierColor}40`,
                   boxShadow: `0 0 20px ${tierColor}15`,
                 }}
               >
-                {currentTier.icon}
+                <YalaIcon name={currentTier.icon} size={28} />
               </div>
               <div>
                 <p className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>Current Tier</p>
@@ -210,14 +211,14 @@ export default function VIPPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
+                      className="w-11 h-11 rounded-xl flex items-center justify-center"
                       style={{
                         background: `${tier.color}18`,
                         border: `1px solid ${tier.color}35`,
                         boxShadow: isCurrentTier ? `0 0 16px ${tier.color}20` : undefined,
                       }}
                     >
-                      {tier.icon}
+                      <YalaIcon name={tier.icon} size={22} />
                     </div>
                     <div>
                       <p className="font-display font-bold text-base" style={{ color: tier.color }}>{tier.name}</p>

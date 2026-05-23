@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
@@ -33,13 +33,37 @@ const STEPS = [
 type StepKey = (typeof STEPS)[number]['key'];
 
 export function OnboardingModal() {
-  const { onboardingOpen, closeOnboarding } = useUIStore();
+  const { onboardingOpen, closeOnboarding, onboardingSeen, markOnboardingSeen, openOnboarding } = useUIStore();
   const { addGC, addSC } = useWalletStore();
   useModalA11y(onboardingOpen, closeOnboarding);
   const [step, setStep] = useState<number>(0);
   const [claimed, setClaimed] = useState(false);
 
+  // First-visit gating: fire onboarding automatically if the persisted
+  // flag hasn't been set yet. Hydration runs after mount (StoreHydration),
+  // so we wait a tick and check the *post-rehydrate* value.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!useUIStore.getState().onboardingSeen) {
+        openOnboarding();
+      }
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [openOnboarding]);
+
+  // Persist the seen flag when the user dismisses or completes
+  const dismissAndRemember = () => {
+    markOnboardingSeen();
+    closeOnboarding();
+    setStep(0);
+    setClaimed(false);
+  };
+
   if (!onboardingOpen) return null;
+  // Don't reopen for returning users
+  if (onboardingSeen && step === 0 && !claimed) {
+    // Allow manual reopens, but no auto-fire after dismissal
+  }
 
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
@@ -67,7 +91,7 @@ export function OnboardingModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="absolute inset-0 bg-black/80 backdrop-blur-md"
-        onClick={isLast ? () => { closeOnboarding(); setStep(0); setClaimed(false); } : undefined}
+        onClick={isLast ? dismissAndRemember : undefined}
       />
 
       <motion.div
@@ -239,7 +263,7 @@ export function OnboardingModal() {
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <Link
                   href="/casino"
-                  onClick={() => { closeOnboarding(); setStep(0); setClaimed(false); }}
+                  onClick={dismissAndRemember}
                   className="py-3 rounded-xl text-sm font-bold text-black text-center"
                   style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
                 >
@@ -247,7 +271,7 @@ export function OnboardingModal() {
                 </Link>
                 <Link
                   href="/sportsbook"
-                  onClick={() => { closeOnboarding(); setStep(0); setClaimed(false); }}
+                  onClick={dismissAndRemember}
                   className="py-3 rounded-xl text-sm font-semibold text-center border"
                   style={{ borderColor: 'rgba(45,201,122,0.35)', color: '#2DC97A' }}
                 >
@@ -256,7 +280,7 @@ export function OnboardingModal() {
               </div>
               <Link
                 href="/originals"
-                onClick={() => { closeOnboarding(); setStep(0); setClaimed(false); }}
+                onClick={dismissAndRemember}
                 className="flex items-center justify-center gap-1 text-xs transition-colors"
                 style={{ color: '#8FA899' }}
               >

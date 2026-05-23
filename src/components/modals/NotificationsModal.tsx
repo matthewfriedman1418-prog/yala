@@ -7,6 +7,7 @@ import { useWalletStore } from '@/lib/store/wallet';
 import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { formatGC } from '@/lib/utils';
 import { X, CheckCircle2, TrendingUp, Trophy, Bell, CloudRain } from 'lucide-react';
+import { toast } from 'sonner';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 
 /**
@@ -56,8 +57,12 @@ export function NotificationsModal() {
 
   const handleClaim = () => {
     if (rakebackBalance <= 0) return;
+    const amount = rakebackBalance;
     claimRakeback();
     setClaimed(true);
+    toast.success('Rakeback claimed', {
+      description: `${amount.toLocaleString()} GC added to your wallet.`,
+    });
     setTimeout(() => setClaimed(false), 2500);
   };
 
@@ -182,7 +187,11 @@ export function NotificationsModal() {
 
             {/* Footer */}
             <div className="px-4 py-2.5 flex items-center justify-between" style={{ background: '#0A1410', borderTop: '1px solid #1A2E22' }}>
-              <button className="text-[11px] font-semibold transition-colors hover:text-[#F5E8C8]" style={{ color: '#8FA899' }}>
+              <button
+                className="text-[11px] font-semibold transition-colors hover:text-[#F5E8C8]"
+                style={{ color: '#8FA899' }}
+                onClick={() => toast('All notifications marked as read')}
+              >
                 Mark all as read
               </button>
               <Link

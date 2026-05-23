@@ -6,6 +6,7 @@ import { MOCK_TRANSACTIONS, type Transaction } from '@/lib/mock-data/transaction
 import { formatGC, formatSC, formatTime } from '@/lib/utils';
 import { ArrowUpRight, ArrowDownLeft, Filter, TrendingUp, TrendingDown } from 'lucide-react';
 import { YalaIcon, GoldCoinIcon, SweepCoinIcon } from '@/components/ui/YalaIcon';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { cn } from '@/lib/utils';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -322,6 +323,17 @@ export default function TransactionsPage() {
 
           {/* Table */}
           <div className="glass-card overflow-hidden">
+            {filteredTx.length === 0 ? (
+              <EmptyState
+                icon="activity"
+                title={txFilter === 'all' ? 'No transactions yet' : `No ${txFilter} transactions`}
+                body={txFilter === 'all'
+                  ? "Your transaction history will show up here once you've made a deposit, bet, or claim."
+                  : 'Try a different filter to see more of your activity.'}
+                ctaLabel={txFilter === 'all' ? 'Buy your first coins' : undefined}
+                ctaHref={txFilter === 'all' ? '/wallet' : undefined}
+              />
+            ) : (
             <div className="divide-y divide-[#1E1E1E]">
               {filteredTx.map((tx) => {
                 const isCredit = CREDIT_TYPES.includes(tx.type) || tx.type === 'vault_withdraw';
@@ -357,6 +369,7 @@ export default function TransactionsPage() {
                 );
               })}
             </div>
+            )}
           </div>
 
           <div className="border-t pt-4 text-center" style={{ borderColor: '#1E1E1E' }}>

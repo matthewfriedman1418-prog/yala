@@ -110,7 +110,10 @@ export const useUIStore = create<UIState>()(
       name: 'yala-ui',
       storage: createJSONStorage(() => localStorage),
       // Only persist preferences, NOT ephemeral modal/drawer state
-      partialize: (s) => ({ onboardingSeen: s.onboardingSeen }),
+      partialize: (s) => ({
+        onboardingSeen: s.onboardingSeen,
+        sidebarCollapsed: s.sidebarCollapsed,
+      }),
     },
   ),
 );
