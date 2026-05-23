@@ -2,10 +2,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import type { LucideIcon } from 'lucide-react';
 import {
   Heart, Eye, X, Check, ChevronRight, Flame, Zap, Trophy,
-  Users, Star, TrendingUp, Sparkles, MessageSquare, Copy
+  Users, Star, TrendingUp, Sparkles, MessageSquare, Copy,
+  Clock, Crown, Lock, Gift, Diamond, Wallet, Award, Shield, Plus, ArrowRight, Activity,
 } from 'lucide-react';
+import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ── Mock preview data ─────────────────────────────────────────────────────────
 const GAME = {
@@ -31,6 +34,57 @@ const SECTIONS = [
   { id: 'hero', label: 'Hero Banners', emoji: '🏆', count: 10 },
   { id: 'sportscard', label: 'Sports Cards', emoji: '🏈', count: 10 },
   { id: 'wallet', label: 'Wallet Widget', emoji: '💰', count: 8 },
+  { id: 'icons', label: 'Icon Library', emoji: '✦', count: 33 },
+];
+
+// ── Icon picker data ──────────────────────────────────────────────────────────
+const ICON_CATEGORIES: {
+  id: string; label: string;
+  icons: { name: YalaIconName; label: string; lucide: LucideIcon | null; lucideName: string | null }[];
+}[] = [
+  { id: 'brand', label: 'Brand & Logo', icons: [
+    { name: 'y-coin',       label: 'Y Coin',       lucide: null,       lucideName: null },
+    { name: 'y-tile',       label: 'Y Tile',        lucide: null,       lucideName: null },
+    { name: 'pyramid',      label: 'Pyramid',       lucide: null,       lucideName: null },
+    { name: 'pyramid-ring', label: 'Pyramid Ring',  lucide: null,       lucideName: null },
+    { name: 'wordmark',     label: 'Wordmark',      lucide: null,       lucideName: null },
+  ]},
+  { id: 'currency', label: 'Currency', icons: [
+    { name: 'coin',         label: 'Gold Coin',     lucide: null,       lucideName: null },
+    { name: 'coin-stack',   label: 'Coin Stack',    lucide: null,       lucideName: null },
+    { name: 'chip-green',   label: 'SC Chip',       lucide: null,       lucideName: null },
+    { name: 'chip-gold',    label: 'GC Chip',       lucide: null,       lucideName: null },
+    { name: 'diamond',      label: 'Diamond (SC)',  lucide: Diamond,    lucideName: 'Diamond' },
+    { name: 'wallet-icon',  label: 'Wallet',        lucide: Wallet,     lucideName: 'Wallet' },
+  ]},
+  { id: 'game', label: 'Game Symbols', icons: [
+    { name: 'star',         label: 'Star',          lucide: Star,       lucideName: 'Star' },
+    { name: 'sparkle',      label: 'Sparkle',       lucide: Sparkles,   lucideName: 'Sparkles' },
+    { name: 'lightning',    label: 'Lightning',     lucide: Zap,        lucideName: 'Zap' },
+    { name: 'dice',         label: 'Dice',          lucide: null,       lucideName: null },
+    { name: 'slot-reels',   label: 'Slot Reels',    lucide: null,       lucideName: null },
+    { name: 'crown',        label: 'Crown',         lucide: Crown,      lucideName: 'Crown' },
+    { name: 'clover',       label: 'Clover',        lucide: null,       lucideName: null },
+    { name: 'wish',         label: 'Wishing Star',  lucide: null,       lucideName: null },
+  ]},
+  { id: 'rewards', label: 'Rewards & Luck', icons: [
+    { name: 'gift',         label: 'Gift',          lucide: Gift,       lucideName: 'Gift' },
+    { name: 'trophy',       label: 'Trophy',        lucide: Trophy,     lucideName: 'Trophy' },
+    { name: 'badge-star',   label: 'Badge Star',    lucide: Award,      lucideName: 'Award' },
+    { name: 'ticket',       label: 'Ticket',        lucide: null,       lucideName: null },
+    { name: 'daily-star',   label: 'Daily Star',    lucide: null,       lucideName: null },
+    { name: 'jackpot',      label: 'Jackpot 7',     lucide: null,       lucideName: null },
+  ]},
+  { id: 'ui', label: 'UI & Status', icons: [
+    { name: 'lock',         label: 'Lock',          lucide: Lock,       lucideName: 'Lock' },
+    { name: 'clock-icon',   label: 'Clock',         lucide: Clock,      lucideName: 'Clock' },
+    { name: 'plus-icon',    label: 'Plus',          lucide: Plus,       lucideName: 'Plus' },
+    { name: 'arrow',        label: 'Arrow Right',   lucide: ArrowRight, lucideName: 'ArrowRight' },
+    { name: 'check',        label: 'Checkmark',     lucide: Check,      lucideName: 'Check' },
+    { name: 'x-mark',       label: 'X / Close',     lucide: X,          lucideName: 'X' },
+    { name: 'activity',     label: 'Activity',      lucide: Activity,   lucideName: 'Activity' },
+    { name: 'shield',       label: 'Shield',        lucide: Shield,     lucideName: 'Shield' },
+  ]},
 ];
 
 function fmtOdds(n: number) { return n > 0 ? `+${n}` : `${n}`; }
@@ -860,6 +914,18 @@ export default function DesignLabPage() {
   const [liked, setLiked] = useState<Record<string, number[]>>({});
   const [preview, setPreview] = useState<{ section: string; id: number } | null>(null);
   const [copied, setCopied] = useState<number | null>(null);
+  const [selectedIcons, setSelectedIcons] = useState<YalaIconName[]>([]);
+  const [copiedIcons, setCopiedIcons] = useState(false);
+
+  const toggleIcon = (name: YalaIconName) => {
+    setSelectedIcons(prev => prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]);
+  };
+  const copyIconNames = () => {
+    const txt = selectedIcons.map(n => `<YalaIcon name="${n}" size={24} />`).join('\n');
+    navigator.clipboard.writeText(txt).catch(() => {});
+    setCopiedIcons(true);
+    setTimeout(() => setCopiedIcons(false), 2000);
+  };
 
   const toggleLike = (section: string, id: number) => {
     setLiked(prev => {
@@ -881,9 +947,10 @@ export default function DesignLabPage() {
   };
 
   const variants =
-    activeSection === 'gamecard' ? GC_VARIANTS :
-    activeSection === 'hero' ? HERO_VARIANTS :
-    activeSection === 'sportscard' ? SC_VARIANTS : GC_VARIANTS;
+    activeSection === 'gamecard'  ? GC_VARIANTS :
+    activeSection === 'hero'      ? HERO_VARIANTS :
+    activeSection === 'sportscard'? SC_VARIANTS :
+    activeSection === 'icons'     ? [] : GC_VARIANTS;
 
   const likedIds = liked[activeSection] || [];
   const likedVariants = variants.filter(v => likedIds.includes(v.id));
@@ -906,7 +973,13 @@ export default function DesignLabPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {likedIds.length > 0 && (
+          {activeSection === 'icons' && selectedIcons.length > 0 && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}>
+              <Check className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />
+              <span className="text-xs font-bold" style={{ color: '#2DC97A' }}>{selectedIcons.length} selected</span>
+            </div>
+          )}
+          {activeSection !== 'icons' && likedIds.length > 0 && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
               <Heart className="w-3.5 h-3.5" style={{ color: '#F0B232' }} fill="#F0B232" />
               <span className="text-xs font-bold" style={{ color: '#F0B232' }}>{likedIds.length} liked</span>
@@ -933,13 +1006,84 @@ export default function DesignLabPage() {
       {/* ── How to use ──────────────────────────────────────────── */}
       <div className="mx-6 mt-4 mb-0 px-4 py-2.5 rounded-xl flex items-center gap-3" style={{ background: 'rgba(45,201,122,0.06)', border: '1px solid rgba(45,201,122,0.15)' }}>
         <Sparkles className="w-4 h-4 flex-shrink-0" style={{ color: '#2DC97A' }} />
-        <p className="text-xs" style={{ color: '#8FA899' }}>
-          <span style={{ color: '#F5E8C8' }}>How to use:</span> Click ❤️ to like variants you love. Click 📋 to copy the apply command, then paste it in Claude to ship it.
-        </p>
+        {activeSection === 'icons' ? (
+          <p className="text-xs" style={{ color: '#8FA899' }}>
+            <span style={{ color: '#F5E8C8' }}>Icon picker:</span> Click to select icons. Where a Lucide equivalent exists it&apos;s shown for comparison. Copy the JSX snippets and tell Claude which swaps to make.
+          </p>
+        ) : (
+          <p className="text-xs" style={{ color: '#8FA899' }}>
+            <span style={{ color: '#F5E8C8' }}>How to use:</span> Click ❤️ to like variants you love. Click 📋 to copy the apply command, then paste it in Claude to ship it.
+          </p>
+        )}
       </div>
 
+      {/* ── Icon picker ─────────────────────────────────────────── */}
+      {activeSection === 'icons' && (
+        <div className="p-6 space-y-8">
+          {ICON_CATEGORIES.map(cat => (
+            <div key={cat.id}>
+              <div className="flex items-center gap-3 mb-4">
+                <h3 className="text-sm font-black uppercase tracking-wider" style={{ color: '#F5E8C8' }}>{cat.label}</h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold" style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}>{cat.icons.length}</span>
+                <div className="flex-1 h-px" style={{ background: '#1A2E22' }} />
+              </div>
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 xl:grid-cols-8 gap-3">
+                {cat.icons.map(icon => {
+                  const sel = selectedIcons.includes(icon.name);
+                  const LIcon = icon.lucide;
+                  return (
+                    <button
+                      key={icon.name}
+                      onClick={() => toggleIcon(icon.name)}
+                      className="group flex flex-col items-center gap-2 p-3 rounded-xl transition-all"
+                      style={{
+                        background: sel ? 'rgba(240,178,50,0.08)' : '#0C1812',
+                        border: `1px solid ${sel ? 'rgba(240,178,50,0.5)' : '#1A2E22'}`,
+                        boxShadow: sel ? '0 0 12px rgba(240,178,50,0.12)' : 'none',
+                      }}
+                    >
+                      {/* Yala icon */}
+                      <div className="relative">
+                        <YalaIcon name={icon.name} size={52} />
+                        {/* Selected check */}
+                        {sel && (
+                          <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center"
+                            style={{ background: '#F0B232' }}>
+                            <Check className="w-2.5 h-2.5 text-black" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Lucide comparison */}
+                      {LIcon ? (
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg w-full justify-center"
+                          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                          <LIcon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#8FA899' }} />
+                          <span className="text-[8px] font-mono leading-none" style={{ color: '#8FA899' }}>{icon.lucideName}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-lg w-full justify-center"
+                          style={{ background: 'rgba(45,201,122,0.05)', border: '1px solid rgba(45,201,122,0.1)' }}>
+                          <span className="text-[8px] font-bold" style={{ color: '#2DC97A' }}>Brand Only</span>
+                        </div>
+                      )}
+
+                      {/* Name */}
+                      <div className="w-full text-center">
+                        <p className="text-[10px] font-semibold leading-tight" style={{ color: sel ? '#F0B232' : '#F5E8C8' }}>{icon.label}</p>
+                        <p className="text-[8px] font-mono mt-0.5 truncate w-full" style={{ color: '#4A6A55' }}>{icon.name}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ── Variant grid ────────────────────────────────────────── */}
-      <div className={`grid ${cols} gap-4 p-6`}>
+      {activeSection !== 'icons' && <div className={`grid ${cols} gap-4 p-6`}>
         {variants.map(({ id, name, desc, component: VariantComponent }) => {
           const liked_ = isLiked(id);
           return (
@@ -1002,11 +1146,58 @@ export default function DesignLabPage() {
             </motion.div>
           );
         })}
-      </div>
+      </div>}
+
+      {/* ── Icon selection bottom bar ────────────────────────────── */}
+      <AnimatePresence>
+        {activeSection === 'icons' && selectedIcons.length > 0 && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 z-50 px-6 py-4"
+            style={{ background: 'linear-gradient(0deg, #060E0A 0%, rgba(6,14,10,0.95) 100%)', borderTop: '1px solid #1A2E22', backdropFilter: 'blur(16px)' }}
+          >
+            <div className="max-w-screen-xl mx-auto flex items-center gap-4">
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <Check className="w-4 h-4" style={{ color: '#2DC97A' }} />
+                <span className="text-xs font-bold" style={{ color: '#2DC97A' }}>{selectedIcons.length} selected</span>
+              </div>
+              <div className="flex gap-2 flex-1 flex-wrap overflow-hidden" style={{ maxHeight: 48 }}>
+                {selectedIcons.map(name => (
+                  <div key={name} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full flex-shrink-0" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.25)' }}>
+                    <YalaIcon name={name} size={14} />
+                    <span className="text-[9px] font-mono" style={{ color: '#2DC97A' }}>{name}</span>
+                    <button onClick={() => toggleIcon(name)}>
+                      <X className="w-2.5 h-2.5" style={{ color: '#4A6A55' }} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => setSelectedIcons([])}
+                  className="px-3 py-2 rounded-xl text-xs font-bold transition-all"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #1A2E22', color: '#8FA899' }}
+                >
+                  Clear
+                </button>
+                <button
+                  onClick={copyIconNames}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-black flex-shrink-0 transition-all hover:opacity-90"
+                  style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
+                >
+                  {copiedIcons ? <><Check className="w-3.5 h-3.5" /> Copied JSX!</> : <><Copy className="w-3.5 h-3.5" /> Copy JSX Snippets</>}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Liked summary panel ─────────────────────────────────── */}
       <AnimatePresence>
-        {likedVariants.length > 0 && (
+        {activeSection !== 'icons' && likedVariants.length > 0 && (
           <motion.div
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
