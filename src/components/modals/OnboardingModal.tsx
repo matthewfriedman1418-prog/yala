@@ -6,6 +6,7 @@ import { useWalletStore } from '@/lib/store/wallet';
 import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { GoldCoinIcon, SweepCoinIcon } from '@/components/ui/YalaIcon';
 
 const STEPS = [
   {
@@ -178,7 +179,7 @@ export function OnboardingModal() {
               </div>
               <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.2)' }}>
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">◈</span>
+                  <GoldCoinIcon size={32} />
                   <div>
                     <p className="font-bold text-sm" style={{ color: '#F0B232' }}>Gold Coins</p>
                     <p className="text-xs" style={{ color: '#8FA899' }}>Play for fun. Earn through missions, bonuses, and daily rewards. Zero cash value.</p>
@@ -187,7 +188,7 @@ export function OnboardingModal() {
               </div>
               <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">◇</span>
+                  <SweepCoinIcon size={36} />
                   <div>
                     <p className="font-bold text-sm" style={{ color: '#10B981' }}>Sweep Coins</p>
                     <p className="text-xs" style={{ color: '#8FA899' }}>Play the sweepstakes mode. Eligible for redemption under sweepstakes rules. No purchase necessary to enter or win.</p>
@@ -208,15 +209,15 @@ export function OnboardingModal() {
 
               <div className="space-y-3">
                 <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.25)' }}>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">◈</span>
+                  <div className="flex items-center gap-2.5">
+                    <GoldCoinIcon size={26} />
                     <span className="font-bold" style={{ color: '#F0B232' }}>250,000 Gold Coins</span>
                   </div>
                   <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.2)', color: '#F0B232' }}>Free</span>
                 </div>
                 <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)' }}>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">◇</span>
+                  <div className="flex items-center gap-2.5">
+                    <SweepCoinIcon size={30} />
                     <span className="font-bold" style={{ color: '#10B981' }}>5.00 Sweep Coins</span>
                   </div>
                   <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.2)', color: '#10B981' }}>Free</span>
