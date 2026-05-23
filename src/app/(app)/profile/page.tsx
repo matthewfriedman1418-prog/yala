@@ -8,10 +8,11 @@ import { motion } from 'framer-motion';
 import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 
 export default function ProfilePage() {
   const { isLoggedIn, user } = useAuthStore();
-  const { goldCoins, sweepCoins, xp, vaultBalance } = useWalletStore();
+  const { goldCoins, sweepCoins, xp } = useWalletStore();
   const { openAuthModal } = useUIStore();
   const [copied, setCopied] = useState(false);
 
@@ -65,13 +66,15 @@ export default function ProfilePage() {
             {user?.avatar}
           </div>
 
-          {/* Name + tier + progress */}
+          {/* Name + tier + compact XP bar */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3 flex-wrap">
-              <div>
+              <div className="min-w-0">
                 <h1 className="font-display text-2xl font-bold mb-0.5" style={{ color: '#F5E8C8' }}>{user?.username}</h1>
-                <p className="text-sm mb-1" style={{ color: '#6B8F7B' }}>{user?.email}</p>
-                <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-sm mb-1.5" style={{ color: '#6B8F7B' }}>{user?.email}</p>
+
+                {/* Tier + KYC chip */}
+                <div className="flex items-center gap-2 flex-wrap mb-2">
                   <span className="text-sm font-bold" style={{ color: tierColor }}>{currentTier.icon} {tierName}</span>
                   {user?.isVerified && (
                     <div className="flex items-center gap-1 text-xs" style={{ color: '#2DC97A' }}>
@@ -79,55 +82,58 @@ export default function ProfilePage() {
                     </div>
                   )}
                 </div>
+
+                {/* Compact XP bar — sits right under the tier name */}
+                <div className="max-w-[280px]">
+                  <div className="flex justify-between text-[10px] mb-1 font-mono">
+                    <span style={{ color: tierColor }}>{formatXP(xp)} XP</span>
+                    {nextTier && (
+                      <span style={{ color: '#4A6A55' }}>
+                        {(nextTier.xpRequired - xp).toLocaleString()} to {nextTier.name}
+                      </span>
+                    )}
+                  </div>
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progress}%` }}
+                      transition={{ duration: 1, ease: 'easeOut' }}
+                      className="h-full rounded-full"
+                      style={{ background: `linear-gradient(90deg, ${tierColor}, ${nextTier ? getVIPColor(nextTier.tier) : tierColor})` }}
+                    />
+                  </div>
+                </div>
               </div>
+
               <Link
                 href="/kyc"
-                className="flex items-center gap-1.5 text-xs border px-3 py-1.5 rounded-lg transition-colors hover:border-[#2DC97A]/40"
+                className="flex items-center gap-1.5 text-xs border px-3 py-1.5 rounded-lg transition-colors hover:border-[#2DC97A]/40 flex-shrink-0"
                 style={{ borderColor: '#1A2E22', color: '#8FA899' }}
               >
                 <Shield className="w-3 h-3" />
                 {user?.isVerified ? 'Verified' : 'Get Verified'}
               </Link>
             </div>
-
-            {/* XP bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-xs mb-1.5">
-                <span style={{ color: '#8FA899' }}>{formatXP(xp)} XP</span>
-                {nextTier && (
-                  <span style={{ color: '#4A6A55' }}>
-                    {(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}
-                  </span>
-                )}
-              </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 1, ease: 'easeOut' }}
-                  className="h-full rounded-full"
-                  style={{ background: `linear-gradient(90deg, ${tierColor}, ${nextTier ? getVIPColor(nextTier.tier) : tierColor})` }}
-                />
-              </div>
-              <p className="text-[10px] text-right mt-1" style={{ color: '#4A6A55' }}>{progress.toFixed(1)}%</p>
-            </div>
           </div>
         </div>
 
-        {/* Coin balances inline */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-5" style={{ borderTop: '1px solid #1A2E22' }}>
-          {[
-            { label: 'Gold Coins',    value: formatGC(goldCoins),          color: '#F0B232', icon: '◈' },
-            { label: 'Sweep Coins',   value: `${sweepCoins.toFixed(2)} SC`, color: '#2DC97A', icon: '◇' },
-            { label: 'Vault',         value: formatGC(vaultBalance),        color: '#60A5FA', icon: '🔒' },
-            { label: 'Total Wagered', value: formatGC(user?.totalWagered || 0), color: '#A78BFA', icon: '↩' },
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-lg mb-0.5">{s.icon}</p>
-              <p className="font-black text-lg number-display" style={{ color: s.color }}>{s.value}</p>
-              <p className="text-[10px]" style={{ color: '#4A6A55' }}>{s.label}</p>
-            </div>
-          ))}
+        {/* Coin balances inline — Vault removed, real YalaIcons replacing the ◈/◇ glyphs */}
+        <div className="grid grid-cols-3 gap-3 mt-5 pt-5" style={{ borderTop: '1px solid #1A2E22' }}>
+          <div className="text-center">
+            <div className="flex justify-center mb-1.5"><GoldCoinIcon size={22} /></div>
+            <p className="font-black text-lg number-display" style={{ color: '#F0B232' }}>{formatGC(goldCoins)}</p>
+            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Gold Coins</p>
+          </div>
+          <div className="text-center">
+            <div className="flex justify-center mb-1.5"><SweepCoinIcon size={24} /></div>
+            <p className="font-black text-lg number-display" style={{ color: '#2DC97A' }}>{sweepCoins.toFixed(2)} SC</p>
+            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Sweep Coins</p>
+          </div>
+          <div className="text-center">
+            <div className="flex justify-center mb-1.5"><YalaIcon name="activity" size={22} /></div>
+            <p className="font-black text-lg number-display" style={{ color: '#A78BFA' }}>{formatGC(user?.totalWagered || 0)}</p>
+            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Total Wagered</p>
+          </div>
         </div>
       </div>
 

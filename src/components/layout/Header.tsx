@@ -40,7 +40,7 @@ function YalaWordmarkMini() {
 export function Header() {
   const { goldCoins, sweepCoins, activeCurrency } = useWalletStore();
   const { isLoggedIn, user, logout } = useAuthStore();
-  const { openAuthModal, openBuyCoins, toggleChat, chatOpen } = useUIStore();
+  const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications } = useUIStore();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
@@ -141,7 +141,11 @@ export function Header() {
         {isLoggedIn && (
           <>
             {/* Notifications */}
-            <button className="relative p-2 rounded-lg hover:bg-white/5 transition-colors">
+            <button
+              onClick={openNotifications}
+              className="relative p-2 rounded-lg hover:bg-white/5 transition-colors"
+              aria-label="Open notifications"
+            >
               <Bell className="w-4 h-4" style={{ color: '#8FA899' }} />
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-red-500" />
             </button>

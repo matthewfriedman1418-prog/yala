@@ -12,6 +12,7 @@ import { ComingSoonModal } from '../modals/ComingSoonModal';
 import { BuyCoinsModal } from '../modals/BuyCoinsModal';
 import { RedeemModal } from '../modals/RedeemModal';
 import { OnboardingModal } from '../modals/OnboardingModal';
+import { NotificationsModal } from '../modals/NotificationsModal';
 import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
 
@@ -66,6 +67,7 @@ export function AppShell({ children }: AppShellProps) {
       <BuyCoinsModal />
       <RedeemModal />
       <OnboardingModal />
+      <NotificationsModal />
       <RainBanner />
     </div>
   );

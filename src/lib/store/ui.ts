@@ -43,6 +43,10 @@ interface UIState {
   onboardingOpen: boolean;
   openOnboarding: () => void;
   closeOnboarding: () => void;
+
+  notificationsOpen: boolean;
+  openNotifications: () => void;
+  closeNotifications: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -87,4 +91,8 @@ export const useUIStore = create<UIState>((set) => ({
   onboardingOpen: false,
   openOnboarding: () => set({ onboardingOpen: true }),
   closeOnboarding: () => set({ onboardingOpen: false }),
+
+  notificationsOpen: false,
+  openNotifications: () => set({ notificationsOpen: true }),
+  closeNotifications: () => set({ notificationsOpen: false }),
 }));
