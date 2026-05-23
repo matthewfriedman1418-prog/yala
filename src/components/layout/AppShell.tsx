@@ -12,7 +12,6 @@ import { RedeemModal } from '../modals/RedeemModal';
 import { OnboardingModal } from '../modals/OnboardingModal';
 import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
-import { LiveWinFeed } from '../ui/LiveWinFeed';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -40,8 +39,6 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         </main>
 
-        {/* Live Win Feed — pinned to bottom of content column */}
-        <LiveWinFeed />
       </div>
 
       {/* Side panels */}
