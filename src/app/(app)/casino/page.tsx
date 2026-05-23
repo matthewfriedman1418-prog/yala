@@ -403,8 +403,8 @@ export default function CasinoPage() {
             <div>
               <h1 className="font-display font-black leading-none mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#F5E8C8', letterSpacing: '-0.02em' }}>
                 <span className="gold-shimmer">YALA</span><br />
-                <span style={{ color: '#2DC97A' }}>SOCIAL</span>{' '}
-                <span style={{ color: '#F5E8C8' }}>CASINO</span>
+                <span style={{ color: '#2DC97A' }}>LET&apos;S</span>{' '}
+                <span style={{ color: '#F5E8C8' }}>PLAY</span>
               </h1>
               <p className="text-sm mt-3 max-w-xs" style={{ color: '#6B8F7B', lineHeight: 1.6 }}>
                 Premium sweepstakes casino. Dual-currency play, provably fair originals, and real prizes. No deposit required.
