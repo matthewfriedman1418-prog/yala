@@ -1,11 +1,13 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { X, Construction, Bell } from 'lucide-react';
 import { useState } from 'react';
 
 export function ComingSoonModal() {
   const { comingSoonOpen, comingSoonGame, closeComingSoon } = useUIStore();
+  useModalA11y(comingSoonOpen, closeComingSoon);
   const [email, setEmail] = useState('');
   const [notified, setNotified] = useState(false);
 

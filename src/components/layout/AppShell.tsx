@@ -13,6 +13,8 @@ import { BuyCoinsModal } from '../modals/BuyCoinsModal';
 import { RedeemModal } from '../modals/RedeemModal';
 import { OnboardingModal } from '../modals/OnboardingModal';
 import { NotificationsModal } from '../modals/NotificationsModal';
+import { StoreHydration } from '../system/StoreHydration';
+import { Toaster } from 'sonner';
 import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
 
@@ -69,6 +71,23 @@ export function AppShell({ children }: AppShellProps) {
       <OnboardingModal />
       <NotificationsModal />
       <RainBanner />
+
+      {/* Persisted Zustand stores rehydrate after mount (skipHydration: true) */}
+      <StoreHydration />
+
+      {/* Global toast outlet — replaces ad-hoc `msg`/`copied` state on individual pages */}
+      <Toaster
+        position="bottom-right"
+        theme="dark"
+        toastOptions={{
+          style: {
+            background: '#0C1812',
+            border: '1px solid #1A2E22',
+            color: '#F5E8C8',
+            fontFamily: 'Manrope, system-ui, sans-serif',
+          },
+        }}
+      />
     </div>
   );
 }

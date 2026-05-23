@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -34,6 +35,7 @@ type StepKey = (typeof STEPS)[number]['key'];
 export function OnboardingModal() {
   const { onboardingOpen, closeOnboarding } = useUIStore();
   const { addGC, addSC } = useWalletStore();
+  useModalA11y(onboardingOpen, closeOnboarding);
   const [step, setStep] = useState<number>(0);
   const [claimed, setClaimed] = useState(false);
 

@@ -166,7 +166,8 @@ export function Header() {
               onClick={toggleChat}
               className="hidden lg:flex relative p-2 rounded-lg hover:bg-white/5 transition-colors items-center justify-center"
               style={{ color: chatOpen ? '#2DC97A' : '#8FA899' }}
-              aria-label="Toggle live chat"
+              aria-label={chatOpen ? 'Close live chat' : 'Open live chat'}
+              aria-pressed={chatOpen}
             >
               <MessageCircle className="w-4 h-4" />
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
@@ -177,6 +178,9 @@ export function Header() {
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
                 className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl hover:bg-white/5 transition-colors"
+                aria-label="Open profile menu"
+                aria-haspopup="menu"
+                aria-expanded={profileOpen}
               >
                 <YalaAvatar
                   initials={user?.username?.slice(0, 2) || user?.avatar || 'U'}

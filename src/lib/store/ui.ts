@@ -1,5 +1,6 @@
 'use client';
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UIState {
   chatOpen: boolean;
@@ -47,9 +48,15 @@ interface UIState {
   notificationsOpen: boolean;
   openNotifications: () => void;
   closeNotifications: () => void;
+
+  // Persisted preferences
+  onboardingSeen: boolean;
+  markOnboardingSeen: () => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
+export const useUIStore = create<UIState>()(
+  persist(
+    (set) => ({
   chatOpen: false,
   toggleChat: () => set((s) => ({ chatOpen: !s.chatOpen })),
   closeChat: () => set({ chatOpen: false }),
@@ -95,4 +102,15 @@ export const useUIStore = create<UIState>((set) => ({
   notificationsOpen: false,
   openNotifications: () => set({ notificationsOpen: true }),
   closeNotifications: () => set({ notificationsOpen: false }),
-}));
+
+  onboardingSeen: false,
+  markOnboardingSeen: () => set({ onboardingSeen: true }),
+    }),
+    {
+      name: 'yala-ui',
+      storage: createJSONStorage(() => localStorage),
+      // Only persist preferences, NOT ephemeral modal/drawer state
+      partialize: (s) => ({ onboardingSeen: s.onboardingSeen }),
+    },
+  ),
+);

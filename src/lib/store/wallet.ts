@@ -1,5 +1,6 @@
 'use client';
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 type Currency = 'GC' | 'SC';
 
@@ -24,7 +25,9 @@ interface WalletState {
   buyCoins: (gcAmount: number, scAmount: number) => void;
 }
 
-export const useWalletStore = create<WalletState>((set) => ({
+export const useWalletStore = create<WalletState>()(
+  persist(
+    (set) => ({
   goldCoins: 125_000,
   sweepCoins: 48.5,
   bonusBalance: 2_500,
@@ -67,4 +70,20 @@ export const useWalletStore = create<WalletState>((set) => ({
       goldCoins: s.goldCoins + gcAmount,
       sweepCoins: s.sweepCoins + scAmount,
     })),
-}));
+    }),
+    {
+      name: 'yala-wallet',
+      storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
+      partialize: (s) => ({
+        goldCoins: s.goldCoins,
+        sweepCoins: s.sweepCoins,
+        bonusBalance: s.bonusBalance,
+        rakebackBalance: s.rakebackBalance,
+        xp: s.xp,
+        vaultBalance: s.vaultBalance,
+        activeCurrency: s.activeCurrency,
+      }),
+    },
+  ),
+);

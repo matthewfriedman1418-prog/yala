@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { X, CreditCard, Bitcoin, CheckCircle2, Copy, Check } from 'lucide-react';
 import { formatGC } from '@/lib/utils';
 import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
@@ -34,6 +35,7 @@ function formatExpiry(val: string) {
 
 export function BuyCoinsModal() {
   const { buyCoinsOpen, closeBuyCoins } = useUIStore();
+  useModalA11y(buyCoinsOpen, closeBuyCoins);
   const { buyCoins, addBonus } = useWalletStore();
 
   const [selected, setSelected] = useState('caravan');

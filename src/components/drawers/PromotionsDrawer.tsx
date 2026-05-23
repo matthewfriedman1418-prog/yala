@@ -2,12 +2,14 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { PROMOTIONS } from '@/lib/mock-data/promotions';
 import { formatGC } from '@/lib/utils';
 import { X, Gift, Clock, ChevronRight } from 'lucide-react';
 
 export function PromotionsDrawer() {
   const { promotionsDrawerOpen, closePromotionsDrawer, openAuthModal, openBuyCoins } = useUIStore();
+  useModalA11y(promotionsDrawerOpen, closePromotionsDrawer);
   const { isLoggedIn } = useAuthStore();
 
   const handleCta = (promo: typeof PROMOTIONS[0]) => {

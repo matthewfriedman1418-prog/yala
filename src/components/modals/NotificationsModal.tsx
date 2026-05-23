@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { formatGC } from '@/lib/utils';
 import { X, CheckCircle2, TrendingUp, Trophy, Bell, CloudRain } from 'lucide-react';
 import { YalaIcon } from '@/components/ui/YalaIcon';
@@ -51,6 +52,7 @@ export function NotificationsModal() {
   const { notificationsOpen, closeNotifications } = useUIStore();
   const { rakebackBalance, claimRakeback } = useWalletStore();
   const [claimed, setClaimed] = useState(false);
+  useModalA11y(notificationsOpen, closeNotifications);
 
   const handleClaim = () => {
     if (rakebackBalance <= 0) return;

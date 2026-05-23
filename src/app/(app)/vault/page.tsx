@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { formatSC } from '@/lib/utils';
 import { Lock, Unlock, Info } from 'lucide-react';
+import { toast } from 'sonner';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 
 const ACCENT      = '#2DC97A';
@@ -21,7 +21,6 @@ export default function VaultPage() {
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [activeAction, setActiveAction] = useState<'deposit' | 'withdraw'>('deposit');
-  const [msg, setMsg] = useState('');
 
   const totalCoins = sweepCoins + vaultBalance;
   const vaultPct = totalCoins > 0 ? Math.round((vaultBalance / totalCoins) * 100) : 0;
@@ -30,20 +29,24 @@ export default function VaultPage() {
 
   const handleDeposit = () => {
     const amt = parseAmount(depositAmount);
-    if (!amt || amt > sweepCoins || amt <= 0) return;
+    if (!amt || amt > sweepCoins || amt <= 0) {
+      toast.error('Invalid amount', { description: `You only have ${formatSC(sweepCoins)} SC in your wallet.` });
+      return;
+    }
     depositVault(amt);
-    setMsg(`✓ ${formatSC(amt)} SC moved to Vault`);
+    toast.success(`${formatSC(amt)} SC moved to Vault`, { description: 'Your prize-eligible balance is protected.' });
     setDepositAmount('');
-    setTimeout(() => setMsg(''), 3000);
   };
 
   const handleWithdraw = () => {
     const amt = parseAmount(withdrawAmount);
-    if (!amt || amt > vaultBalance || amt <= 0) return;
+    if (!amt || amt > vaultBalance || amt <= 0) {
+      toast.error('Invalid amount', { description: `You only have ${formatSC(vaultBalance)} SC in your vault.` });
+      return;
+    }
     withdrawVault(amt);
-    setMsg(`✓ ${formatSC(amt)} SC returned to wallet`);
+    toast.success(`${formatSC(amt)} SC returned to wallet`);
     setWithdrawAmount('');
-    setTimeout(() => setMsg(''), 3000);
   };
 
   return (
@@ -206,16 +209,6 @@ export default function VaultPage() {
             </div>
           )}
 
-          {msg && (
-            <motion.div
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-3 px-4 py-2.5 rounded-xl text-sm"
-              style={{ background: ACCENT_BG, border: `1px solid ${ACCENT_BORDER}`, color: ACCENT }}
-            >
-              {msg}
-            </motion.div>
-          )}
         </div>
 
         {/* Info panel */}

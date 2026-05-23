@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { X, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 export function AuthModal() {
   const { authModalOpen, authModalTab, closeAuthModal, openAuthModal, openOnboarding } = useUIStore();
   const { login, register } = useAuthStore();
+  useModalA11y(authModalOpen, closeAuthModal);
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');

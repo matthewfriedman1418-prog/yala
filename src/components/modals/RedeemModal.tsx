@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
+import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { formatSC } from '@/lib/utils';
 import { X, Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
 
@@ -15,6 +16,7 @@ const REDEMPTION_METHODS = [
 
 export function RedeemModal() {
   const { redeemModalOpen, closeRedeemModal } = useUIStore();
+  useModalA11y(redeemModalOpen, closeRedeemModal);
   const { sweepCoins } = useWalletStore();
   const { user } = useAuthStore();
 
