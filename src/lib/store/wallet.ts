@@ -30,7 +30,7 @@ export const useWalletStore = create<WalletState>((set) => ({
   bonusBalance: 2_500,
   rakebackBalance: 1_840,
   xp: 312_450,
-  vaultBalance: 50_000,
+  vaultBalance: 25.50, // Vault now holds Sweep Coins
   vaultInterestRate: 0.05,
   activeCurrency: 'GC',
 
@@ -52,14 +52,14 @@ export const useWalletStore = create<WalletState>((set) => ({
 
   depositVault: (n) =>
     set((s) => ({
-      goldCoins: Math.max(0, s.goldCoins - n),
+      sweepCoins: Math.max(0, s.sweepCoins - n),
       vaultBalance: s.vaultBalance + n,
     })),
 
   withdrawVault: (n) =>
     set((s) => ({
       vaultBalance: Math.max(0, s.vaultBalance - n),
-      goldCoins: s.goldCoins + n,
+      sweepCoins: s.sweepCoins + n,
     })),
 
   buyCoins: (gcAmount, scAmount) =>

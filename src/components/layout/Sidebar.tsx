@@ -113,12 +113,12 @@ export function Sidebar() {
     {
       label: 'REWARDS',
       items: [
-        { href: '/rewards',      label: 'Rewards Hub',  icon: yalaNavIcon('badge-star') },
+        { href: '/rewards',      label: 'Rewards Hub',  icon: yalaNavIcon('gift') },
         { href: '/daily-bonus',  label: 'Free Play',    icon: yalaNavIcon('chip-gold') },
         { href: '/vip',          label: 'VIP Club',     icon: yalaNavIcon('ticket') },
         { href: '/missions',     label: 'Missions',     icon: yalaNavIcon('crown') },
         { href: '/leaderboards', label: 'Leaderboards', icon: yalaNavIcon('trophy') },
-        { action: openPromotionsDrawer, label: 'Promotions', icon: yalaNavIcon('gift'), badge: '8' },
+        { action: openPromotionsDrawer, label: 'Promotions', icon: yalaNavIcon('badge-star'), badge: '8' },
       ],
     },
     {
@@ -158,14 +158,14 @@ export function Sidebar() {
       {/* ── Logo: pyramid + gradient wordmark ── */}
       <Link href="/" className="flex items-center gap-3 px-4 py-5 border-b border-[#1A2E22] flex-shrink-0 group">
         <YalaPyramid size={30} />
-        <div className="flex flex-col gap-0 leading-none">
+        <div className="flex flex-col items-center gap-0 leading-none">
           <YalaWordmark width={82} height={30} />
-          <div className="flex items-center gap-1.5 mt-1">
-            <span className="h-px flex-1" style={{ background: 'linear-gradient(90deg, rgba(240,178,50,0.4), transparent)' }} />
-            <span className="text-[8px] tracking-[0.22em] uppercase font-bold font-mono" style={{ color: '#8FA899' }}>
-              Social Casino
-            </span>
-          </div>
+          <span
+            className="text-[8px] tracking-[0.22em] uppercase font-bold font-mono mt-1.5 text-center"
+            style={{ color: '#8FA899' }}
+          >
+            Social Casino
+          </span>
         </div>
       </Link>
 

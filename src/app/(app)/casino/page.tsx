@@ -13,7 +13,7 @@ import {
   ChevronLeft, Gift, Trophy, Play, Star, Activity,
 } from 'lucide-react';
 import { cn, formatGC, formatSC } from '@/lib/utils';
-import { GoldCoinIcon, SweepCoinIcon } from '@/components/ui/YalaIcon';
+import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 
 // ─── Category chips ───────────────────────────────────────────────────────────
 const CATEGORIES: { id: GameCategory | 'all'; label: string; icon: string }[] = [
@@ -427,7 +427,7 @@ export default function CasinoPage() {
                     className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
                     style={{ background: `linear-gradient(135deg, ${accent}, ${accentLight})`, color: '#060E0A', boxShadow: `0 4px 24px ${accent}40` }}
                   >
-                    <Sparkles className="w-4 h-4" />
+                    <YalaIcon name="diamond" size={16} />
                     Get Coins
                   </button>
                 </div>

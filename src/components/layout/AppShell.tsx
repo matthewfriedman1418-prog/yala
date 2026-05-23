@@ -1,5 +1,7 @@
 'use client';
 import { useWalletStore } from '@/lib/store/wallet';
+import { useUIStore } from '@/lib/store/ui';
+import { cn } from '@/lib/utils';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -19,6 +21,7 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const { activeCurrency } = useWalletStore();
+  const { chatOpen } = useUIStore();
 
   return (
     <div data-currency={activeCurrency} className="flex h-screen overflow-hidden" style={{ backgroundColor: '#060E0A' }}>
@@ -27,8 +30,14 @@ export function AppShell({ children }: AppShellProps) {
         <Sidebar />
       </div>
 
-      {/* Main content column */}
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      {/* Main content column — shrinks on desktop when chat is open so content
+          isn't hidden behind the side panel */}
+      <div
+        className={cn(
+          'flex flex-col flex-1 min-w-0 overflow-hidden transition-[margin] duration-300 ease-out',
+          chatOpen && 'lg:mr-80'
+        )}
+      >
         {/* Header */}
         <Header />
 

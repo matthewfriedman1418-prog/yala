@@ -74,21 +74,23 @@ export function Header() {
 
             {/* Balance display */}
             <div
-              className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl"
+              className="hidden sm:flex items-center gap-3 pl-2.5 pr-4 py-2 rounded-xl"
               style={{
                 background: `linear-gradient(135deg, ${accent}14, ${accent}08)`,
                 border: `1px solid ${accent}30`,
               }}
             >
-              {isGC
-                ? <GoldCoinIcon size={20} />
-                : <YalaIcon name="chip-green" size={20} />
-              }
-              <div>
-                <p className="text-[9px] uppercase tracking-widest leading-none mb-0.5" style={{ color: `${accent}80` }}>
+              <span className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7">
+                {isGC
+                  ? <GoldCoinIcon size={26} />
+                  : <YalaIcon name="chip-green" size={26} />
+                }
+              </span>
+              <div className="min-w-0 leading-none">
+                <p className="text-[9px] uppercase tracking-widest leading-none mb-1 font-semibold" style={{ color: `${accent}99` }}>
                   {isGC ? 'Gold Coins' : 'Sweep Coins'}
                 </p>
-                <p className="text-sm font-black number-display leading-none" style={{ color: '#F5E8C8' }}>
+                <p className="text-sm font-black number-display leading-none whitespace-nowrap" style={{ color: '#F5E8C8' }}>
                   {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}
                 </p>
               </div>
