@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
+import { useAuthStore } from '@/lib/store/auth';
 import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -34,23 +35,35 @@ const STEPS = [
 type StepKey = (typeof STEPS)[number]['key'];
 
 export function OnboardingModal() {
-  const { onboardingOpen, closeOnboarding, onboardingSeen, markOnboardingSeen, openOnboarding } = useUIStore();
+  const { onboardingOpen, closeOnboarding, markOnboardingSeen, openOnboarding } = useUIStore();
   const { addGC, addSC } = useWalletStore();
+  const { isLoggedIn } = useAuthStore();
   useModalA11y(onboardingOpen, closeOnboarding);
   const [step, setStep] = useState<number>(0);
   const [claimed, setClaimed] = useState(false);
 
-  // First-visit gating: fire onboarding automatically if the persisted
-  // flag hasn't been set yet. Hydration runs after mount (StoreHydration),
-  // so we wait a tick and check the *post-rehydrate* value.
+  /**
+   * Auto-fire trigger:
+   *   - User must be signed in (no point granting a starter pack to nobody)
+   *   - Must not have completed onboarding yet (persisted flag)
+   *   - Wait a tick after mount/login so Zustand persist has rehydrated
+   *
+   * Effect re-runs when isLoggedIn flips (so registering or logging in fires
+   * onboarding for a fresh user without a full page reload).
+   *
+   * Note: the AuthModal calls `resetOnboardingSeen()` on successful register
+   * so newly-created accounts always see the welcome flow even if the device
+   * has been used by a different account before.
+   */
   useEffect(() => {
+    if (!isLoggedIn) return;
     const timer = setTimeout(() => {
       if (!useUIStore.getState().onboardingSeen) {
         openOnboarding();
       }
-    }, 600);
+    }, 500);
     return () => clearTimeout(timer);
-  }, [openOnboarding]);
+  }, [isLoggedIn, openOnboarding]);
 
   // Persist the seen flag when the user dismisses or completes
   const dismissAndRemember = () => {
@@ -61,10 +74,6 @@ export function OnboardingModal() {
   };
 
   if (!onboardingOpen) return null;
-  // Don't reopen for returning users
-  if (onboardingSeen && step === 0 && !claimed) {
-    // Allow manual reopens, but no auto-fire after dismissal
-  }
 
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;

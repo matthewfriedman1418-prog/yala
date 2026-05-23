@@ -52,6 +52,7 @@ interface UIState {
   // Persisted preferences
   onboardingSeen: boolean;
   markOnboardingSeen: () => void;
+  resetOnboardingSeen: () => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -105,6 +106,7 @@ export const useUIStore = create<UIState>()(
 
   onboardingSeen: false,
   markOnboardingSeen: () => set({ onboardingSeen: true }),
+  resetOnboardingSeen: () => set({ onboardingSeen: false }),
     }),
     {
       name: 'yala-ui',

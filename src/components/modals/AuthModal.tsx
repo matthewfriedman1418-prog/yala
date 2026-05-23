@@ -7,7 +7,7 @@ import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { X, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 export function AuthModal() {
-  const { authModalOpen, authModalTab, closeAuthModal, openAuthModal, openOnboarding } = useUIStore();
+  const { authModalOpen, authModalTab, closeAuthModal, openAuthModal, openOnboarding, resetOnboardingSeen } = useUIStore();
   const { login, register } = useAuthStore();
   useModalA11y(authModalOpen, closeAuthModal);
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,9 @@ export function AuthModal() {
       } else {
         await register({ username: form.username, email: form.email, password: form.password });
         closeAuthModal();
+        // New account: force the welcome flow regardless of whether THIS device
+        // has seen onboarding before (a different account may have used it).
+        resetOnboardingSeen();
         openOnboarding();
       }
     } catch {
