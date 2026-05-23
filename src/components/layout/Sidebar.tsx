@@ -7,11 +7,8 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import type { ComponentType } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Dice5, Zap, Trophy, Gift, Target,
-  Wallet, HelpCircle, BarChart3, Clock, Gem, Paintbrush, Plus, User, Star,
-  ChevronDown,
-} from 'lucide-react';
+import { HelpCircle, Paintbrush, Plus, User, ChevronDown, BarChart3 } from 'lucide-react';
+import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ── Originals sub-menu ────────────────────────────────────────────────────────
 const ORIGINALS_GAMES = [
@@ -29,6 +26,53 @@ const ORIGINALS_GAMES = [
   { href: '/originals/scorpion-cases',         label: 'Cases' },
 ];
 
+// Creates a nav-compatible icon wrapper from a YalaIconName
+function yalaNavIcon(name: YalaIconName, sz = 16): ComponentType<{ className?: string }> {
+  function NavIcon({ className }: { className?: string }) {
+    return <YalaIcon name={name} size={sz} className={className} />;
+  }
+  NavIcon.displayName = `YalaNav_${name}`;
+  return NavIcon;
+}
+
+// ── Sidebar logo: combined pyramid + gradient wordmark ────────────────────────
+function YalaPyramid({ size = 32 }: { size?: number }) {
+  return (
+    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
+      <defs><clipPath id="pyr-sb"><polygon points="20,0 40,34 0,34" /></clipPath></defs>
+      <rect x="0" y="0"    width="40" height="8.5"  fill="#F0B232" clipPath="url(#pyr-sb)" />
+      <rect x="0" y="8.5"  width="40" height="8.5"  fill="#84CC16" clipPath="url(#pyr-sb)" />
+      <rect x="0" y="17"   width="40" height="8.5"  fill="#2DC97A" clipPath="url(#pyr-sb)" />
+      <rect x="0" y="25.5" width="40" height="8.5"  fill="#1A5C8A" clipPath="url(#pyr-sb)" />
+    </svg>
+  );
+}
+
+function YalaWordmark({ width = 72, height = 26 }: { width?: number; height?: number }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 130 50" aria-label="YALA">
+      <defs>
+        <radialGradient id="wm-sb" cx="0.35" cy="0.3" r="0.85">
+          <stop offset="0%"   stopColor="#FFF4D0" />
+          <stop offset="35%"  stopColor="#FFE08A" />
+          <stop offset="68%"  stopColor="#F0B232" />
+          <stop offset="100%" stopColor="#8a5a14" />
+        </radialGradient>
+      </defs>
+      <text
+        x="65" y="43"
+        textAnchor="middle"
+        fontFamily="Archivo Black,sans-serif"
+        fontSize="46"
+        fill="url(#wm-sb)"
+        letterSpacing="5"
+      >
+        YALA
+      </text>
+    </svg>
+  );
+}
+
 interface NavItem {
   href?: string;
   action?: () => void;
@@ -36,35 +80,7 @@ interface NavItem {
   icon: ComponentType<{ className?: string }>;
   badge?: string;
 }
-
-interface NavSection {
-  label: string;
-  items: NavItem[];
-}
-
-function Crown({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M2 20h20M4 20l2-8 6 4 4-8 4 8 2-8" />
-    </svg>
-  );
-}
-
-function YalaPyramid({ size = 32 }: { size?: number }) {
-  return (
-    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
-      <defs>
-        <clipPath id="pyr-sb">
-          <polygon points="20,0 40,34 0,34" />
-        </clipPath>
-      </defs>
-      <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-sb)" />
-      <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-sb)" />
-      <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-sb)" />
-      <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-sb)" />
-    </svg>
-  );
-}
+interface NavSection { label: string; items: NavItem[]; }
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -78,20 +94,21 @@ export function Sidebar() {
     {
       label: 'REWARDS',
       items: [
-        { href: '/rewards',      label: 'Rewards Hub',  icon: Trophy },
-        { href: '/daily-bonus',  label: 'Free Play',    icon: Gift },
-        { href: '/vip',          label: 'VIP Club',     icon: Crown },
-        { href: '/missions',     label: 'Missions',     icon: Target },
-        { href: '/leaderboards', label: 'Leaderboards', icon: BarChart3 },
-        { action: openPromotionsDrawer, label: 'Promotions', icon: Gem, badge: '8' },
+        { href: '/rewards',      label: 'Rewards Hub',  icon: yalaNavIcon('badge-star') },
+        { href: '/daily-bonus',  label: 'Free Play',    icon: yalaNavIcon('chip-green') },
+        { href: '/vip',          label: 'VIP Club',     icon: yalaNavIcon('ticket') },
+        { href: '/missions',     label: 'Missions',     icon: yalaNavIcon('crown') },
+        { href: '/leaderboards', label: 'Leaderboards', icon: yalaNavIcon('trophy') },
+        { action: openPromotionsDrawer, label: 'Promotions', icon: yalaNavIcon('gift'), badge: '8' },
       ],
     },
     {
       label: 'ACCOUNT',
       items: [
-        { href: '/wallet',               label: 'Wallet',    icon: Wallet },
-        { href: '/profile/transactions', label: 'History',   icon: Clock },
-        { href: '/affiliate',            label: 'Affiliate', icon: Star },
+        { href: '/wallet',               label: 'Wallet',    icon: yalaNavIcon('wallet-icon') },
+        { href: '/profile/transactions', label: 'History',   icon: yalaNavIcon('activity') },
+        { href: '/vault',                label: 'Vault',     icon: yalaNavIcon('lock') },
+        { href: '/affiliate',            label: 'Affiliate', icon: yalaNavIcon('star') },
         { href: '/profile',              label: 'Profile',   icon: User },
       ],
     },
@@ -119,21 +136,11 @@ export function Sidebar() {
       className="w-56 h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar"
       style={{ backgroundColor: '#0C1812' }}
     >
-      {/* Logo */}
+      {/* ── Logo: pyramid + gradient wordmark ── */}
       <Link href="/" className="flex items-center gap-2.5 px-4 py-4 border-b border-[#1A2E22] flex-shrink-0">
-        <YalaPyramid size={28} />
+        <YalaPyramid size={26} />
         <div>
-          <span
-            className="font-display text-xl font-black tracking-wider"
-            style={{
-              background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            YALA
-          </span>
+          <YalaWordmark width={72} height={26} />
           <span className="text-[9px] block -mt-0.5 tracking-widest uppercase font-semibold" style={{ color: '#4A6A55' }}>
             Social Casino
           </span>
@@ -181,7 +188,7 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 py-3 px-2 space-y-4">
 
-        {/* ── PLAY section: Casino + Sports + Originals (expandable) ── */}
+        {/* ── PLAY section ── */}
         <div>
           <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
             PLAY
@@ -190,7 +197,7 @@ export function Sidebar() {
 
             {/* Casino */}
             <Link href="/casino" className={sharedCls(pathname === '/casino' || (pathname.startsWith('/casino') && pathname.length > 7))}>
-              <Dice5 className="w-4 h-4 flex-shrink-0" />
+              <YalaIcon name="slot-reels" size={16} className="flex-shrink-0" />
               <span className="flex-1">Casino</span>
             </Link>
 
@@ -208,7 +215,7 @@ export function Sidebar() {
               onClick={() => setOriginalsOpen((o) => !o)}
               className={sharedCls(isOriginalsActive)}
             >
-              <Zap className="w-4 h-4 flex-shrink-0" />
+              <YalaIcon name="lightning" size={16} className="flex-shrink-0" />
               <span className="flex-1">Originals</span>
               <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-red-500/20 text-red-400 mr-0.5">
                 HOT

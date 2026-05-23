@@ -1,6 +1,7 @@
 'use client';
 import { useWalletStore } from '@/lib/store/wallet';
 import { motion } from 'framer-motion';
+import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 
 export function WalletToggle() {
   const { activeCurrency, toggleCurrency } = useWalletStore();
@@ -28,7 +29,7 @@ export function WalletToggle() {
         className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-black shadow-lg"
         style={{ background: isGC ? 'linear-gradient(135deg, #D6A84F, #F0C97A)' : 'linear-gradient(135deg, #10B981, #34D399)' }}
       >
-        {isGC ? '◈' : '◇'}
+        {isGC ? <GoldCoinIcon size={14} /> : <YalaIcon name="chip-green" size={14} />}
       </motion.div>
     </button>
   );

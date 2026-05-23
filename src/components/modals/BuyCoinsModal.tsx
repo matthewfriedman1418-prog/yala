@@ -5,6 +5,7 @@ import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
 import { X, CreditCard, Bitcoin, CheckCircle2, Copy, Check } from 'lucide-react';
 import { formatGC } from '@/lib/utils';
+import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 
 const PACKAGES = [
   { id: 'starter', name: 'Dune Starter', price: 4.99, gc: 10_000, sc: 1, bonus: 0, popular: false },
@@ -150,8 +151,8 @@ export function BuyCoinsModal() {
                         <p className="font-semibold text-sm text-[#F5E8C8] mb-1.5">{p.name}</p>
                         <p className="text-xl font-bold number-display" style={{ color: '#D6A84F' }}>${p.price}</p>
                         <div className="mt-2 space-y-0.5">
-                          <p className="text-xs text-[#9CA3AF]">◈ {formatGC(p.gc)} Gold Coins</p>
-                          <p className="text-xs text-emerald-400">◇ {p.sc.toFixed(2)} Sweep Coins</p>
+                          <p className="text-xs text-[#9CA3AF] flex items-center gap-1"><GoldCoinIcon size={12} /> {formatGC(p.gc)} Gold Coins</p>
+                          <p className="text-xs text-emerald-400 flex items-center gap-1"><YalaIcon name="chip-green" size={12} /> {p.sc.toFixed(2)} Sweep Coins</p>
                           {p.bonus > 0 && <p className="text-xs text-amber-400">⊕ {formatGC(p.bonus)} Bonus</p>}
                         </div>
                       </button>

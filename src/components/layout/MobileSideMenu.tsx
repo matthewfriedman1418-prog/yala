@@ -6,38 +6,44 @@ import { useAuthStore } from '@/lib/store/auth';
 import { useWalletStore } from '@/lib/store/wallet';
 import { formatGC, formatSC, getVIPColor, getVIPName } from '@/lib/utils';
 import {
-  X, Trophy, Star, Gift, Target, Users, Wallet, Shield,
-  HelpCircle, Layers, Gem, LogOut, Clock, BarChart3, Zap
+  X, Users, HelpCircle, LogOut, BarChart3, Zap
 } from 'lucide-react';
+import { YalaIcon } from '@/components/ui/YalaIcon';
+
+// Icon wrapper for YalaIcon in mobile menu lists
+function YI({ name, ...rest }: { name: Parameters<typeof YalaIcon>[0]['name']; className?: string }) {
+  return <YalaIcon name={name} size={16} {...rest} />;
+}
 
 const MENU_SECTIONS = [
   {
     label: 'Rewards',
     items: [
-      { href: '/vip', label: 'VIP Club', icon: Trophy, badge: '' },
-      { href: '/rewards', label: 'Rewards Hub', icon: Star, badge: '' },
-      { href: '/daily-bonus', label: 'Daily Bonus', icon: Gift, badge: 'NEW' },
-      { href: '/missions', label: 'Missions', icon: Target, badge: '' },
-      { href: '/leaderboards', label: 'Leaderboards', icon: Trophy, badge: '' },
+      { href: '/vip',          label: 'VIP Club',     renderIcon: () => <YI name="ticket"    /> },
+      { href: '/rewards',      label: 'Rewards Hub',  renderIcon: () => <YI name="badge-star"/> },
+      { href: '/daily-bonus',  label: 'Free Play',    renderIcon: () => <YI name="chip-green"/>, badge: 'NEW' },
+      { href: '/missions',     label: 'Missions',     renderIcon: () => <YI name="crown"     /> },
+      { href: '/leaderboards', label: 'Leaderboards', renderIcon: () => <YI name="trophy"    /> },
     ],
   },
   {
     label: 'Social',
     items: [
-      { href: '/rooms', label: 'Rooms', icon: Users, badge: '' },
-      { href: '/affiliate', label: 'Affiliate', icon: Layers, badge: '' },
+      { href: '/rooms',     label: 'Rooms',     renderIcon: () => <Users    className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
+      { href: '/affiliate', label: 'Affiliate', renderIcon: () => <YI name="star" /> },
     ],
   },
   {
     label: 'Account',
     items: [
-      { href: '/vault', label: 'Vault', icon: Shield, badge: '' },
-      { href: '/profile/transactions', label: 'History', icon: Clock, badge: '' },
-      { href: '/providers', label: 'Providers', icon: Layers, badge: '' },
-      { href: '/support', label: 'Help', icon: HelpCircle, badge: '' },
+      { href: '/vault',                label: 'Vault',     renderIcon: () => <YI name="lock"     /> },
+      { href: '/wallet',               label: 'Wallet',    renderIcon: () => <YI name="wallet-icon" /> },
+      { href: '/profile/transactions', label: 'History',   renderIcon: () => <YI name="activity" /> },
+      { href: '/providers',            label: 'Providers', renderIcon: () => <BarChart3 className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
+      { href: '/support',              label: 'Help',      renderIcon: () => <HelpCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
     ],
   },
-];
+] as const;
 
 export function MobileSideMenu() {
   const { mobileMenuOpen, closeMobileMenu, openPromotionsDrawer, openAuthModal, openBuyCoins } = useUIStore();
@@ -131,18 +137,17 @@ export function MobileSideMenu() {
               {/* Quick actions */}
               <div className="grid grid-cols-3 gap-2 px-4 mt-4">
                 {[
-                  { label: 'Promotions', icon: Gem, color: '#F0B232', action: () => { openPromotionsDrawer(); handleClose(); } },
-                  { label: 'Sportsbook', icon: BarChart3, color: '#2DC97A', href: '/sportsbook' },
-                  { label: 'Originals', icon: Zap, color: '#84CC16', href: '/originals' },
+                  { label: 'Promotions', color: '#F0B232', action: () => { openPromotionsDrawer(); handleClose(); }, iconEl: <YalaIcon name="gift" size={22} /> },
+                  { label: 'Sportsbook', color: '#2DC97A', href: '/sportsbook', iconEl: <BarChart3 className="w-5 h-5" style={{ color: '#2DC97A' }} /> },
+                  { label: 'Originals',  color: '#84CC16', href: '/originals',  iconEl: <YalaIcon name="lightning" size={22} /> },
                 ].map((item) => {
-                  const Icon = item.icon;
                   const content = (
                     <>
                       <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center mb-1.5"
                         style={{ background: `${item.color}18`, border: `1px solid ${item.color}30` }}
                       >
-                        <Icon className="w-5 h-5" style={{ color: item.color }} />
+                        {item.iconEl}
                       </div>
                       <span className="text-[11px] font-medium" style={{ color: '#8FA899' }}>{item.label}</span>
                     </>
@@ -176,25 +181,24 @@ export function MobileSideMenu() {
                       {section.label}
                     </p>
                     <div className="space-y-0.5">
-                      {section.items.map((item) => {
-                        const Icon = item.icon;
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={handleClose}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors"
-                          >
-                            <Icon className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />
-                            <span className="text-sm flex-1" style={{ color: '#F5E8C8' }}>{item.label}</span>
-                            {item.badge && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-amber-500/20 text-amber-400">
-                                {item.badge}
-                              </span>
-                            )}
-                          </Link>
-                        );
-                      })}
+                      {section.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={handleClose}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors"
+                        >
+                          <span className="flex-shrink-0" style={{ color: '#8FA899' }}>
+                            {item.renderIcon()}
+                          </span>
+                          <span className="text-sm flex-1" style={{ color: '#F5E8C8' }}>{item.label}</span>
+                          {'badge' in item && item.badge && (
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-amber-500/20 text-amber-400">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 ))}

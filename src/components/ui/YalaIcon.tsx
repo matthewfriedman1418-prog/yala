@@ -237,7 +237,7 @@ export function GoldCoinIcon({ size = 20, className }: { size?: number; classNam
   return <YalaIcon name="coin" size={size} className={className} />;
 }
 export function SweepCoinIcon({ size = 20, className }: { size?: number; className?: string }) {
-  return <YalaIcon name="diamond" size={size} className={className} />;
+  return <YalaIcon name="chip-green" size={size} className={className} />;
 }
 export function CrownIcon({ size = 20, className }: { size?: number; className?: string }) {
   return <YalaIcon name="crown" size={size} className={className} />;

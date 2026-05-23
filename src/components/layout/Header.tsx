@@ -4,18 +4,35 @@ import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { formatGC, formatSC, getVIPColor, getVIPName } from '@/lib/utils';
-import { Bell, ChevronDown, LogOut, User, Wallet, Plus, MessageCircle, Zap } from 'lucide-react';
+import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { WalletToggle } from '../wallet/WalletToggle';
+import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 
 function YalaPyramidMini() {
   return (
-    <svg width="22" height="19" viewBox="0 0 40 34" fill="none">
+    <svg width="20" height="17" viewBox="0 0 40 34" fill="none">
       <defs><clipPath id="pyr-hd"><polygon points="20,0 40,34 0,34" /></clipPath></defs>
-      <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-hd)" />
-      <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-hd)" />
-      <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-hd)" />
-      <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="0"    width="40" height="8.5"  fill="#F0B232" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="8.5"  width="40" height="8.5"  fill="#84CC16" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="17"   width="40" height="8.5"  fill="#2DC97A" clipPath="url(#pyr-hd)" />
+      <rect x="0" y="25.5" width="40" height="8.5"  fill="#1A5C8A" clipPath="url(#pyr-hd)" />
+    </svg>
+  );
+}
+
+function YalaWordmarkMini() {
+  return (
+    <svg width="56" height="20" viewBox="0 0 130 50" aria-label="YALA">
+      <defs>
+        <radialGradient id="wm-hd" cx="0.35" cy="0.3" r="0.85">
+          <stop offset="0%"   stopColor="#FFF4D0" />
+          <stop offset="40%"  stopColor="#FFE08A" />
+          <stop offset="75%"  stopColor="#F0B232" />
+          <stop offset="100%" stopColor="#8a5a14" />
+        </radialGradient>
+      </defs>
+      <text x="65" y="43" textAnchor="middle" fontFamily="Archivo Black,sans-serif" fontSize="46" fill="url(#wm-hd)" letterSpacing="5">YALA</text>
     </svg>
   );
 }
@@ -43,12 +60,7 @@ export function Header() {
         <div className="lg:hidden">
           <Link href="/" className="flex items-center gap-2">
             <YalaPyramidMini />
-            <span
-              className="font-display font-black text-base tracking-wider"
-              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
-            >
-              YALA
-            </span>
+            <YalaWordmarkMini />
           </Link>
         </div>
       </div>
@@ -68,7 +80,10 @@ export function Header() {
                 border: `1px solid ${accent}30`,
               }}
             >
-              <span className="text-sm font-bold" style={{ color: accent }}>{isGC ? '◈' : '◇'}</span>
+              {isGC
+                ? <GoldCoinIcon size={20} />
+                : <YalaIcon name="chip-green" size={20} />
+              }
               <div>
                 <p className="text-[9px] uppercase tracking-widest leading-none mb-0.5" style={{ color: `${accent}80` }}>
                   {isGC ? 'Gold Coins' : 'Sweep Coins'}
@@ -178,7 +193,7 @@ export function Header() {
                       <User className="w-4 h-4" />Profile
                     </Link>
                     <Link href="/wallet" className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/5 transition-colors" style={{ color: '#8FA899' }} onClick={() => setProfileOpen(false)}>
-                      <Wallet className="w-4 h-4" />Wallet
+                      <YalaIcon name="wallet-icon" size={16} />Wallet
                     </Link>
                     <button
                       onClick={() => { logout(); setProfileOpen(false); }}
