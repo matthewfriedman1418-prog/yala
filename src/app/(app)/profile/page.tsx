@@ -66,15 +66,13 @@ export default function ProfilePage() {
             {user?.avatar}
           </div>
 
-          {/* Name + tier + compact XP bar */}
+          {/* Name + tier + progress */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3 flex-wrap">
-              <div className="min-w-0">
+              <div>
                 <h1 className="font-display text-2xl font-bold mb-0.5" style={{ color: '#F5E8C8' }}>{user?.username}</h1>
-                <p className="text-sm mb-1.5" style={{ color: '#6B8F7B' }}>{user?.email}</p>
-
-                {/* Tier + KYC chip */}
-                <div className="flex items-center gap-2 flex-wrap mb-2">
+                <p className="text-sm mb-1" style={{ color: '#6B8F7B' }}>{user?.email}</p>
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-bold" style={{ color: tierColor }}>{currentTier.icon} {tierName}</span>
                   {user?.isVerified && (
                     <div className="flex items-center gap-1 text-xs" style={{ color: '#2DC97A' }}>
@@ -82,37 +80,37 @@ export default function ProfilePage() {
                     </div>
                   )}
                 </div>
-
-                {/* Compact XP bar — sits right under the tier name */}
-                <div className="max-w-[280px]">
-                  <div className="flex justify-between text-[10px] mb-1 font-mono">
-                    <span style={{ color: tierColor }}>{formatXP(xp)} XP</span>
-                    {nextTier && (
-                      <span style={{ color: '#4A6A55' }}>
-                        {(nextTier.xpRequired - xp).toLocaleString()} to {nextTier.name}
-                      </span>
-                    )}
-                  </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${progress}%` }}
-                      transition={{ duration: 1, ease: 'easeOut' }}
-                      className="h-full rounded-full"
-                      style={{ background: `linear-gradient(90deg, ${tierColor}, ${nextTier ? getVIPColor(nextTier.tier) : tierColor})` }}
-                    />
-                  </div>
-                </div>
               </div>
-
               <Link
                 href="/kyc"
-                className="flex items-center gap-1.5 text-xs border px-3 py-1.5 rounded-lg transition-colors hover:border-[#2DC97A]/40 flex-shrink-0"
+                className="flex items-center gap-1.5 text-xs border px-3 py-1.5 rounded-lg transition-colors hover:border-[#2DC97A]/40"
                 style={{ borderColor: '#1A2E22', color: '#8FA899' }}
               >
                 <Shield className="w-3 h-3" />
                 {user?.isVerified ? 'Verified' : 'Get Verified'}
               </Link>
+            </div>
+
+            {/* XP bar */}
+            <div className="mt-4">
+              <div className="flex justify-between text-xs mb-1.5">
+                <span style={{ color: '#8FA899' }}>{formatXP(xp)} XP</span>
+                {nextTier && (
+                  <span style={{ color: '#4A6A55' }}>
+                    {(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}
+                  </span>
+                )}
+              </div>
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 1, ease: 'easeOut' }}
+                  className="h-full rounded-full"
+                  style={{ background: `linear-gradient(90deg, ${tierColor}, ${nextTier ? getVIPColor(nextTier.tier) : tierColor})` }}
+                />
+              </div>
+              <p className="text-[10px] text-right mt-1" style={{ color: '#4A6A55' }}>{progress.toFixed(1)}%</p>
             </div>
           </div>
         </div>

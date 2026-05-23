@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
-import { formatGC, formatSC, getVIPColor, getVIPName } from '@/lib/utils';
+import { formatGC, formatSC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { WalletToggle } from '../wallet/WalletToggle';
 import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 import { YalaAvatar } from '@/components/ui/YalaAvatar';
+import { VIP_TIERS } from '@/lib/mock-data/users';
 
 function YalaPyramidMini() {
   return (
@@ -38,13 +40,22 @@ function YalaWordmarkMini() {
 }
 
 export function Header() {
-  const { goldCoins, sweepCoins, activeCurrency } = useWalletStore();
+  const { goldCoins, sweepCoins, activeCurrency, xp } = useWalletStore();
   const { isLoggedIn, user, logout } = useAuthStore();
   const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications } = useUIStore();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
   const accent = isGC ? '#F0B232' : '#10B981';
+
+  // VIP / XP progress for the profile dropdown's compact XP bar
+  const vipTier     = user?.vipTier || 1;
+  const currentTier = VIP_TIERS.find(t => t.tier === vipTier) || VIP_TIERS[0];
+  const nextTier    = VIP_TIERS.find(t => t.tier === vipTier + 1);
+  const tierColor   = getVIPColor(vipTier);
+  const xpProgress  = nextTier
+    ? Math.max(0, Math.min(100, ((xp - currentTier.xpRequired) / (nextTier.xpRequired - currentTier.xpRequired)) * 100))
+    : 100;
 
   return (
     <header
@@ -196,15 +207,36 @@ export function Header() {
                   >
                     <YalaAvatar
                       initials={user?.username?.slice(0, 2) || user?.avatar || 'U'}
-                      tier={user?.vipTier || 1}
+                      tier={vipTier}
                       size={48}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold truncate" style={{ color: '#F5E8C8' }}>{user?.username}</p>
                       <p className="text-[10px] truncate" style={{ color: '#8FA899' }}>{user?.email}</p>
-                      <p className="text-[10px] mt-1 font-bold tracking-wider uppercase" style={{ color: getVIPColor(user?.vipTier || 1) }}>
-                        {getVIPName(user?.vipTier || 1)} · Tier {user?.vipTier || 1}
+                      <p className="text-[10px] mt-1 font-bold tracking-wider uppercase" style={{ color: tierColor }}>
+                        {getVIPName(vipTier)} · Tier {vipTier}
                       </p>
+
+                      {/* Compact XP bar — directly under the tier name */}
+                      <div className="mt-2">
+                        <div className="flex justify-between text-[9px] mb-1 font-mono">
+                          <span style={{ color: tierColor }}>{formatXP(xp)} XP</span>
+                          {nextTier && (
+                            <span style={{ color: '#4A6A55' }}>
+                              {(nextTier.xpRequired - xp).toLocaleString()} to {nextTier.name}
+                            </span>
+                          )}
+                        </div>
+                        <div className="h-[3px] rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${xpProgress}%` }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            className="h-full rounded-full"
+                            style={{ background: `linear-gradient(90deg, ${tierColor}, ${nextTier ? getVIPColor(nextTier.tier) : tierColor})` }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
