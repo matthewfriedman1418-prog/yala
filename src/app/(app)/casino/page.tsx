@@ -13,6 +13,7 @@ import {
   ChevronLeft, Gift, Trophy, Play, Star, Activity,
 } from 'lucide-react';
 import { cn, formatGC, formatSC } from '@/lib/utils';
+import { GoldCoinIcon, SweepCoinIcon } from '@/components/ui/YalaIcon';
 
 // ─── Category chips ───────────────────────────────────────────────────────────
 const CATEGORIES: { id: GameCategory | 'all'; label: string; icon: string }[] = [
@@ -413,7 +414,7 @@ export default function CasinoPage() {
               {isLoggedIn ? (
                 <div className="flex items-center gap-3 flex-wrap">
                   <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl" style={{ background: `${accent}10`, border: `1px solid ${accent}22` }}>
-                    <span className="text-base font-bold" style={{ color: accent }}>{isGC ? '◈' : '◇'}</span>
+                    {isGC ? <GoldCoinIcon size={22} /> : <SweepCoinIcon size={22} />}
                     <div>
                       <p className="text-[10px] uppercase tracking-widest" style={{ color: '#6B8F7B' }}>Balance</p>
                       <p className="font-black number-display text-lg leading-none" style={{ color: '#F5E8C8' }}>

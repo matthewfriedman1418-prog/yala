@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Geist+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -26,10 +26,10 @@
   --color-border-emerald: rgba(16,185,129,0.3);
   --color-border-teal: rgba(45,201,122,0.25);
 
-  /* Fonts */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  /* Fonts — from YALA Asset Pack design system */
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-display: 'Archivo Black', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
 
   /* Shadows */
   --shadow-gold: 0 0 20px rgba(240,178,50,0.2), 0 0 40px rgba(240,178,50,0.08);
@@ -135,7 +135,7 @@ html {
 body {
   background-color: #060E0A;
   color: #F5E8C8;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Manrope', system-ui, sans-serif;
   min-height: 100vh;
 }
 
@@ -269,12 +269,12 @@ body {
 .rank-3 { color: #CD7F32; }
 
 .number-display {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', 'JetBrains Mono', monospace;
   font-variant-numeric: tabular-nums;
 }
 
 .font-display {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Archivo Black', system-ui, sans-serif;
 }
 
 /* Category chip */

@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import type { ComponentType } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/auth';
@@ -10,10 +9,10 @@ import { formatGC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { VIP_TIERS } from '@/lib/mock-data/users';
 import { PROMOTIONS } from '@/lib/mock-data/promotions';
 import {
-  Gift, TrendingUp, ChevronRight, Star,
-  Target, Trophy, Vault, Calendar, CheckCircle2,
-  Zap, Crown, Medal, Users, Flame,
+  TrendingUp, ChevronRight,
+  CheckCircle2, Zap, Medal, Users, Flame,
 } from 'lucide-react';
+import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ─── Daily Race Data ──────────────────────────────────────────────────────────
 const RACE_PRIZE_POOL = 500_000;
@@ -57,19 +56,22 @@ function TimerUnit({ value, label }: { value: number; label: string }) {
 }
 
 function RankMedal({ rank }: { rank: number }) {
-  if (rank === 1) return <Crown className="w-4 h-4 text-[#F0B232]" />;
+  if (rank === 1) return <YalaIcon name="crown" size={16} />;
   if (rank === 2) return <Medal className="w-4 h-4 text-[#9CA3AF]" />;
   if (rank === 3) return <Medal className="w-4 h-4 text-[#CD7F32]" />;
   return <span className="text-xs font-bold tabular-nums w-4 text-center" style={{ color: '#8FA899' }}>#{rank}</span>;
 }
 
-const REWARD_HUBS = [
+const REWARD_HUBS: {
+  id: string; title: string; subtitle: string; description: string;
+  icon: YalaIconName; color: string; href: string; cta: string; badge: string;
+}[] = [
   {
     id: 'daily-bonus',
     title: 'Daily Login Bonus',
     subtitle: 'Day 4 of 7 streak',
     description: 'Claim your daily GC reward and keep your streak alive.',
-    icon: Calendar,
+    icon: 'daily-star',
     color: '#F0B232',
     href: '/daily-bonus',
     cta: 'Claim Now',
@@ -80,7 +82,7 @@ const REWARD_HUBS = [
     title: 'Missions',
     subtitle: '3 dailies available',
     description: 'Complete missions to earn bonus GC, SC and XP.',
-    icon: Target,
+    icon: 'badge-star',
     color: '#8B5CF6',
     href: '/missions',
     cta: 'View Missions',
@@ -91,7 +93,7 @@ const REWARD_HUBS = [
     title: 'Leaderboards',
     subtitle: 'Weekly race ends in 3d 14h',
     description: 'Compete for a share of the 100,000 GC weekly prize pool.',
-    icon: Trophy,
+    icon: 'trophy',
     color: '#F59E0B',
     href: '/leaderboards',
     cta: 'See Rankings',
@@ -102,7 +104,7 @@ const REWARD_HUBS = [
     title: 'Vault',
     subtitle: 'Protect your coins',
     description: "Lock Gold Coins you don't want to spend. They won't be used while playing.",
-    icon: Vault,
+    icon: 'lock',
     color: '#06B6D4',
     href: '/vault',
     cta: 'Open Vault',
@@ -113,7 +115,7 @@ const REWARD_HUBS = [
     title: 'Promotions',
     subtitle: '8 active offers',
     description: 'Browse all current bonuses, reload offers and limited deals.',
-    icon: Gift,
+    icon: 'gift',
     color: '#EC4899',
     href: '/promotions',
     cta: 'View Offers',
@@ -154,7 +156,7 @@ export default function RewardsPage() {
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
             style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}
           >
-            <Gift className="w-3.5 h-3.5 text-[#F0B232]" />
+            <YalaIcon name="gift" size={14} />
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0B232]">Rewards</span>
           </div>
         </div>
@@ -349,9 +351,8 @@ export default function RewardsPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {REWARD_HUBS.map((hub, i) => {
-            const Icon = hub.icon;
             const isPromos = hub.id === 'promotions';
-            const inner = <HubCardContent hub={hub} Icon={Icon} />;
+            const inner = <HubCardContent hub={hub} />;
             const cardStyle = {
               background: 'rgba(16,28,22,0.9)',
               border: '1px solid #1A2E22',
@@ -452,7 +453,7 @@ export default function RewardsPage() {
             className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center mb-3"
             style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}
           >
-            <Star className="w-6 h-6 text-[#F0B232]" />
+            <YalaIcon name="star" size={24} />
           </div>
           <p className="font-semibold mb-1" style={{ color: '#F5E8C8' }}>Sign in to track your rewards</p>
           <p className="text-sm mb-4" style={{ color: '#8FA899' }}>Earn XP, climb VIP tiers, and unlock exclusive benefits.</p>
@@ -555,7 +556,7 @@ export default function RewardsPage() {
                 className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center"
                 style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}
               >
-                <Gift className="w-5 h-5 text-[#F0B232]" />
+                <YalaIcon name="gift" size={26} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm truncate" style={{ color: '#F5E8C8' }}>{promo.title}</p>
@@ -589,10 +590,8 @@ export default function RewardsPage() {
 
 function HubCardContent({
   hub,
-  Icon,
 }: {
-  hub: { color: string; badge: string; title: string; subtitle: string; description: string; cta: string };
-  Icon: ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  hub: { icon: YalaIconName; color: string; badge: string; title: string; subtitle: string; description: string; cta: string };
 }) {
   return (
     <>
@@ -601,7 +600,7 @@ function HubCardContent({
           className="w-10 h-10 rounded-xl flex items-center justify-center"
           style={{ background: `${hub.color}15`, border: `1px solid ${hub.color}28` }}
         >
-          <Icon className="w-5 h-5" style={{ color: hub.color }} />
+          <YalaIcon name={hub.icon} size={26} />
         </div>
         <span
           className="text-[10px] font-bold px-2 py-0.5 rounded-full"
