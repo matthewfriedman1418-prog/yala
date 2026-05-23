@@ -8,6 +8,7 @@ import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucid
 import { useState } from 'react';
 import { WalletToggle } from '../wallet/WalletToggle';
 import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
+import { YalaAvatar } from '@/components/ui/YalaAvatar';
 
 function YalaPyramidMini() {
   return (
@@ -23,16 +24,15 @@ function YalaPyramidMini() {
 
 function YalaWordmarkMini() {
   return (
-    <svg width="56" height="20" viewBox="0 0 130 50" aria-label="YALA">
+    <svg width="64" height="22" viewBox="0 0 140 56" aria-label="YALA" overflow="visible">
       <defs>
-        <radialGradient id="wm-hd" cx="0.35" cy="0.3" r="0.85">
-          <stop offset="0%"   stopColor="#FFF4D0" />
-          <stop offset="40%"  stopColor="#FFE08A" />
-          <stop offset="75%"  stopColor="#F0B232" />
-          <stop offset="100%" stopColor="#8a5a14" />
-        </radialGradient>
+        <linearGradient id="wm-hd-g" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"   stopColor="#FFE9A8" />
+          <stop offset="50%"  stopColor="#F0B232" />
+          <stop offset="100%" stopColor="#B8801E" />
+        </linearGradient>
       </defs>
-      <text x="65" y="43" textAnchor="middle" fontFamily="Archivo Black,sans-serif" fontSize="46" fill="url(#wm-hd)" letterSpacing="5">YALA</text>
+      <text x="70" y="44" textAnchor="middle" fontFamily="Archivo Black,sans-serif" fontSize="46" fill="url(#wm-hd-g)" letterSpacing="6">YALA</text>
     </svg>
   );
 }
@@ -159,20 +159,16 @@ export function Header() {
             <div className="relative">
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-xl hover:bg-white/5 transition-colors"
               >
-                <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{
-                    background: `linear-gradient(135deg, ${getVIPColor(user?.vipTier || 1)}, ${accent})`,
-                    color: '#060E0A',
-                  }}
-                >
-                  {user?.avatar || 'U'}
-                </div>
+                <YalaAvatar
+                  initials={user?.username?.slice(0, 2) || user?.avatar || 'U'}
+                  tier={user?.vipTier || 1}
+                  size={32}
+                />
                 <div className="hidden md:block text-left">
-                  <p className="text-xs font-semibold leading-none" style={{ color: '#F5E8C8' }}>{user?.username}</p>
-                  <p className="text-[10px] leading-none mt-0.5" style={{ color: getVIPColor(user?.vipTier || 1) }}>
+                  <p className="text-xs font-bold leading-none" style={{ color: '#F5E8C8' }}>{user?.username}</p>
+                  <p className="text-[10px] leading-none mt-1 font-semibold" style={{ color: getVIPColor(user?.vipTier || 1) }}>
                     {getVIPName(user?.vipTier || 1)}
                   </p>
                 </div>
@@ -181,23 +177,44 @@ export function Header() {
 
               {profileOpen && (
                 <div
-                  className="absolute right-0 top-full mt-2 w-48 rounded-xl overflow-hidden shadow-2xl z-50"
-                  style={{ backgroundColor: '#101C16', border: '1px solid #1A2E22' }}
+                  className="absolute right-0 top-full mt-2 w-64 rounded-2xl overflow-hidden shadow-2xl z-50"
+                  style={{ backgroundColor: '#101C16', border: '1px solid #1A2E22', boxShadow: '0 16px 48px rgba(0,0,0,0.6)' }}
                 >
-                  <div className="px-4 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
-                    <p className="text-xs font-semibold" style={{ color: '#F5E8C8' }}>{user?.username}</p>
-                    <p className="text-[10px]" style={{ color: '#8FA899' }}>{user?.email}</p>
+                  {/* Big avatar header */}
+                  <div
+                    className="px-4 py-4 flex items-center gap-3"
+                    style={{
+                      borderBottom: '1px solid #1A2E22',
+                      background: 'linear-gradient(180deg, rgba(240,178,50,0.06) 0%, transparent 100%)',
+                    }}
+                  >
+                    <YalaAvatar
+                      initials={user?.username?.slice(0, 2) || user?.avatar || 'U'}
+                      tier={user?.vipTier || 1}
+                      size={48}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-bold truncate" style={{ color: '#F5E8C8' }}>{user?.username}</p>
+                      <p className="text-[10px] truncate" style={{ color: '#8FA899' }}>{user?.email}</p>
+                      <p className="text-[10px] mt-1 font-bold tracking-wider uppercase" style={{ color: getVIPColor(user?.vipTier || 1) }}>
+                        {getVIPName(user?.vipTier || 1)} · Tier {user?.vipTier || 1}
+                      </p>
+                    </div>
                   </div>
+
                   <div className="py-1">
-                    <Link href="/profile" className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/5 transition-colors" style={{ color: '#8FA899' }} onClick={() => setProfileOpen(false)}>
-                      <User className="w-4 h-4" />Profile
+                    <Link href="/profile" className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-white/5 transition-colors" style={{ color: '#F5E8C8' }} onClick={() => setProfileOpen(false)}>
+                      <User className="w-4 h-4" style={{ color: '#F0B232' }} />Profile
                     </Link>
-                    <Link href="/wallet" className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-white/5 transition-colors" style={{ color: '#8FA899' }} onClick={() => setProfileOpen(false)}>
+                    <Link href="/wallet" className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-white/5 transition-colors" style={{ color: '#F5E8C8' }} onClick={() => setProfileOpen(false)}>
                       <YalaIcon name="wallet-icon" size={16} />Wallet
+                    </Link>
+                    <Link href="/profile/transactions" className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-white/5 transition-colors" style={{ color: '#F5E8C8' }} onClick={() => setProfileOpen(false)}>
+                      <YalaIcon name="activity" size={16} />History
                     </Link>
                     <button
                       onClick={() => { logout(); setProfileOpen(false); }}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />Sign Out
                     </button>

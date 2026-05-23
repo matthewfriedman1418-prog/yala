@@ -13,6 +13,7 @@ export type YalaIconName =
   | 'coin' | 'coin-stack' | 'chip-green' | 'chip-gold' | 'diamond' | 'wallet-icon'
   // Game symbols
   | 'star' | 'sparkle' | 'lightning' | 'dice' | 'slot-reels' | 'crown' | 'clover' | 'wish'
+  | 'sports-ball'
   // Rewards & luck
   | 'gift' | 'trophy' | 'badge-star' | 'ticket' | 'daily-star' | 'jackpot'
   // UI & status
@@ -113,7 +114,7 @@ const PATHS: Record<YalaIconName, string> = {
     <circle cx="72" cy="56" r="4" fill="#F0B232"/>`,
 
   // ── Game symbols ──────────────────────────────────────────────────────────
-  'star': `<polygon points="50,8 62,38 94,42 70,62 78,94 50,76 22,94 30,62 6,42 38,38" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2.5"/>`,
+  'star': `<polygon points="50,6 59.9,36.4 91.8,36.4 66,55.2 75.9,85.6 50,66.8 24.1,85.6 34,55.2 8.2,36.4 40.1,36.4" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2.5"/>`,
 
   'sparkle': `<polygon points="50,6 56,44 94,50 56,56 50,94 44,56 6,50 44,44" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2"/>`,
 
@@ -146,11 +147,18 @@ const PATHS: Record<YalaIconName, string> = {
     <rect x="48" y="50" width="4" height="36" fill="#0a3a22"/>`,
 
   'wish': `<circle cx="50" cy="50" r="30" fill="none" stroke="#F0B232" stroke-width="3"/>
-    <polygon points="50,30 56,46 72,46 60,56 64,72 50,62 36,72 40,56 28,46 44,46" fill="#F0B232"/>
+    <polygon points="50,30 54.5,43.9 69,43.8 57.2,52.4 61.8,66.2 50,57.6 38.2,66.2 42.8,52.4 31,43.8 45.5,43.9" fill="#F0B232"/>
     <circle cx="20" cy="22" r="3" fill="#F0B232"/>
     <circle cx="82" cy="28" r="2.5" fill="#F0B232"/>
     <circle cx="14" cy="64" r="2" fill="#F0B232"/>
     <circle cx="86" cy="74" r="3" fill="#F0B232"/>`,
+
+  // ── Sports ────────────────────────────────────────────────────────────────
+  'sports-ball': `<circle cx="50" cy="50" r="42" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="3"/>
+    <line x1="8" y1="50" x2="92" y2="50" stroke="#6B4910" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="50" y1="8" x2="50" y2="92" stroke="#6B4910" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 17 21 Q 50 50 17 79" fill="none" stroke="#6B4910" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 83 21 Q 50 50 83 79" fill="none" stroke="#6B4910" stroke-width="2.5" stroke-linecap="round"/>`,
 
   // ── Rewards & luck ────────────────────────────────────────────────────────
   'gift': `<rect x="14" y="38" width="72" height="50" rx="4" fill="url(#yi-goldFlat)" stroke="#6B4910" stroke-width="2.5"/>
@@ -168,7 +176,7 @@ const PATHS: Record<YalaIconName, string> = {
     <text x="50" y="42" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="22" fill="#6B4910">Y</text>`,
 
   'badge-star': `<circle cx="50" cy="50" r="40" fill="none" stroke="#F0B232" stroke-width="3"/>
-    <polygon points="50,28 58,46 76,46 62,56 68,74 50,64 32,74 38,56 24,46 42,46" fill="#F0B232"/>`,
+    <polygon points="50,28 54.9,40.2 70.9,40.2 58,49.6 62.9,64.8 50,55.4 37.1,64.8 42,49.6 29.1,40.2 45.1,40.2" fill="#F0B232"/>`,
 
   'ticket': `<defs><clipPath id="yi-tc"><rect x="10" y="22" width="80" height="56" rx="8"/></clipPath></defs>
     <g clip-path="url(#yi-tc)">
@@ -182,7 +190,7 @@ const PATHS: Record<YalaIconName, string> = {
     <text x="70" y="56" text-anchor="middle" font-family="Geist Mono,monospace" font-size="11" fill="#6B4910" letter-spacing="2">001</text>`,
 
   'daily-star': `<circle cx="50" cy="50" r="44" fill="none" stroke="#F0B232" stroke-width="3" stroke-dasharray="4 4"/>
-    <polygon points="50,22 56,44 78,44 60,58 66,82 50,68 34,82 40,58 22,44 44,44" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2"/>`,
+    <polygon points="50,22 56.3,41.3 76.6,41.3 60.2,53.3 66.5,72.7 50,60.7 33.5,72.7 39.8,53.3 23.4,41.3 43.7,41.3" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2"/>`,
 
   'jackpot': `<circle cx="50" cy="50" r="42" fill="url(#yi-gold)" stroke="#6B4910" stroke-width="2.5"/>
     <text x="50" y="64" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="34" fill="#6B4910">7</text>

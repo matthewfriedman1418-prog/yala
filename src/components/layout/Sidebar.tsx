@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import type { ComponentType } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { HelpCircle, Paintbrush, Plus, User, ChevronDown, BarChart3 } from 'lucide-react';
+import { Paintbrush, Plus, ChevronDown } from 'lucide-react';
 import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ── Originals sub-menu ────────────────────────────────────────────────────────
@@ -35,10 +35,28 @@ function yalaNavIcon(name: YalaIconName, sz = 16): ComponentType<{ className?: s
   return NavIcon;
 }
 
-// ── Sidebar logo: combined pyramid + gradient wordmark ────────────────────────
-function YalaPyramid({ size = 32 }: { size?: number }) {
+// Outline-style nav icons (Profile / Help) — gold tinted to match brand
+function ProfileOutlineIcon({ className }: { className?: string }) {
   return (
-    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none">
+    <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="#F0B232" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
+    </svg>
+  );
+}
+function HelpOutlineIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="#F0B232" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.1 9.5c.4-1.4 1.8-2.5 3.3-2.3 1.6 0 2.9 1.2 2.9 2.7 0 2-2.6 2.2-3.2 4M12 17h.01" />
+    </svg>
+  );
+}
+
+// ── Sidebar logo: refined pyramid + gradient wordmark ────────────────────────
+function YalaPyramid({ size = 30 }: { size?: number }) {
+  return (
+    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 40 34" fill="none" style={{ filter: 'drop-shadow(0 2px 6px rgba(240,178,50,0.18))' }}>
       <defs><clipPath id="pyr-sb"><polygon points="20,0 40,34 0,34" /></clipPath></defs>
       <rect x="0" y="0"    width="40" height="8.5"  fill="#F0B232" clipPath="url(#pyr-sb)" />
       <rect x="0" y="8.5"  width="40" height="8.5"  fill="#84CC16" clipPath="url(#pyr-sb)" />
@@ -48,24 +66,25 @@ function YalaPyramid({ size = 32 }: { size?: number }) {
   );
 }
 
-function YalaWordmark({ width = 72, height = 26 }: { width?: number; height?: number }) {
+// Wordmark with breathing room — wider viewBox so Archivo Black caps don't clip
+function YalaWordmark({ width = 84, height = 30 }: { width?: number; height?: number }) {
   return (
-    <svg width={width} height={height} viewBox="0 0 130 50" aria-label="YALA">
+    <svg width={width} height={height} viewBox="0 0 140 56" aria-label="YALA" overflow="visible">
       <defs>
-        <radialGradient id="wm-sb" cx="0.35" cy="0.3" r="0.85">
-          <stop offset="0%"   stopColor="#FFF4D0" />
-          <stop offset="35%"  stopColor="#FFE08A" />
-          <stop offset="68%"  stopColor="#F0B232" />
-          <stop offset="100%" stopColor="#8a5a14" />
-        </radialGradient>
+        <linearGradient id="wm-sb-g" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"   stopColor="#FFE9A8" />
+          <stop offset="50%"  stopColor="#F0B232" />
+          <stop offset="100%" stopColor="#B8801E" />
+        </linearGradient>
       </defs>
       <text
-        x="65" y="43"
+        x="70" y="44"
         textAnchor="middle"
         fontFamily="Archivo Black,sans-serif"
         fontSize="46"
-        fill="url(#wm-sb)"
-        letterSpacing="5"
+        fontWeight="900"
+        fill="url(#wm-sb-g)"
+        letterSpacing="6"
       >
         YALA
       </text>
@@ -95,7 +114,7 @@ export function Sidebar() {
       label: 'REWARDS',
       items: [
         { href: '/rewards',      label: 'Rewards Hub',  icon: yalaNavIcon('badge-star') },
-        { href: '/daily-bonus',  label: 'Free Play',    icon: yalaNavIcon('chip-green') },
+        { href: '/daily-bonus',  label: 'Free Play',    icon: yalaNavIcon('chip-gold') },
         { href: '/vip',          label: 'VIP Club',     icon: yalaNavIcon('ticket') },
         { href: '/missions',     label: 'Missions',     icon: yalaNavIcon('crown') },
         { href: '/leaderboards', label: 'Leaderboards', icon: yalaNavIcon('trophy') },
@@ -109,13 +128,13 @@ export function Sidebar() {
         { href: '/profile/transactions', label: 'History',   icon: yalaNavIcon('activity') },
         { href: '/vault',                label: 'Vault',     icon: yalaNavIcon('lock') },
         { href: '/affiliate',            label: 'Affiliate', icon: yalaNavIcon('star') },
-        { href: '/profile',              label: 'Profile',   icon: User },
+        { href: '/profile',              label: 'Profile',   icon: ProfileOutlineIcon },
       ],
     },
     {
       label: 'MORE',
       items: [
-        { href: '/support',    label: 'Help & Support', icon: HelpCircle },
+        { href: '/support',    label: 'Help & Support', icon: HelpOutlineIcon },
         { href: '/design-lab', label: 'Design Lab',     icon: Paintbrush, badge: 'DEV' },
       ],
     },
@@ -137,13 +156,16 @@ export function Sidebar() {
       style={{ backgroundColor: '#0C1812' }}
     >
       {/* ── Logo: pyramid + gradient wordmark ── */}
-      <Link href="/" className="flex items-center gap-2.5 px-4 py-4 border-b border-[#1A2E22] flex-shrink-0">
-        <YalaPyramid size={26} />
-        <div>
-          <YalaWordmark width={72} height={26} />
-          <span className="text-[9px] block -mt-0.5 tracking-widest uppercase font-semibold" style={{ color: '#4A6A55' }}>
-            Social Casino
-          </span>
+      <Link href="/" className="flex items-center gap-3 px-4 py-5 border-b border-[#1A2E22] flex-shrink-0 group">
+        <YalaPyramid size={30} />
+        <div className="flex flex-col gap-0 leading-none">
+          <YalaWordmark width={82} height={30} />
+          <div className="flex items-center gap-1.5 mt-1">
+            <span className="h-px flex-1" style={{ background: 'linear-gradient(90deg, rgba(240,178,50,0.4), transparent)' }} />
+            <span className="text-[8px] tracking-[0.22em] uppercase font-bold font-mono" style={{ color: '#8FA899' }}>
+              Social Casino
+            </span>
+          </div>
         </div>
       </Link>
 
@@ -203,7 +225,7 @@ export function Sidebar() {
 
             {/* Sports */}
             <Link href="/sportsbook" className={sharedCls(pathname === '/sportsbook')}>
-              <BarChart3 className="w-4 h-4 flex-shrink-0" />
+              <YalaIcon name="sports-ball" size={16} className="flex-shrink-0" />
               <span className="flex-1">Sports</span>
               <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wide bg-blue-500/20 text-blue-400">
                 BETA

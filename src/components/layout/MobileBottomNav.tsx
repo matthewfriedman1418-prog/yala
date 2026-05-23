@@ -1,13 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, MessageCircle, Menu } from 'lucide-react';
+import { MessageCircle, Menu } from 'lucide-react';
 import { useUIStore } from '@/lib/store/ui';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 
 const NAV_ITEMS = [
-  { href: '/casino',     label: 'Casino',    icon: 'slot-reels' as const },
-  { href: '/originals',  label: 'Originals', icon: 'lightning'  as const },
+  { href: '/casino',     label: 'Casino',    icon: 'slot-reels'  as const },
+  { href: '/originals',  label: 'Originals', icon: 'lightning'   as const },
+  { href: '/sportsbook', label: 'Sports',    icon: 'sports-ball' as const },
 ];
 
 export function MobileBottomNav() {
@@ -43,19 +44,6 @@ export function MobileBottomNav() {
           </Link>
         );
       })}
-
-      {/* Sports */}
-      <Link
-        href="/sportsbook"
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 relative transition-colors"
-        style={{ color: pathname === '/sportsbook' ? '#F0B232' : '#8FA899' }}
-      >
-        <BarChart3 className="w-5 h-5" />
-        <span className="text-[10px] font-medium">Sports</span>
-        {pathname === '/sportsbook' && (
-          <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full" style={{ background: '#F0B232', boxShadow: '0 0 6px rgba(240,178,50,0.8)' }} />
-        )}
-      </Link>
 
       {/* Chat toggle */}
       <button

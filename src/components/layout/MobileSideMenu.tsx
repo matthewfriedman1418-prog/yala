@@ -6,9 +6,10 @@ import { useAuthStore } from '@/lib/store/auth';
 import { useWalletStore } from '@/lib/store/wallet';
 import { formatGC, formatSC, getVIPColor, getVIPName } from '@/lib/utils';
 import {
-  X, Users, HelpCircle, LogOut, BarChart3, Zap
+  X, Users, HelpCircle, LogOut
 } from 'lucide-react';
 import { YalaIcon } from '@/components/ui/YalaIcon';
+import { YalaAvatar } from '@/components/ui/YalaAvatar';
 
 // Icon wrapper for YalaIcon in mobile menu lists
 function YI({ name, ...rest }: { name: Parameters<typeof YalaIcon>[0]['name']; className?: string }) {
@@ -21,7 +22,7 @@ const MENU_SECTIONS = [
     items: [
       { href: '/vip',          label: 'VIP Club',     renderIcon: () => <YI name="ticket"    /> },
       { href: '/rewards',      label: 'Rewards Hub',  renderIcon: () => <YI name="badge-star"/> },
-      { href: '/daily-bonus',  label: 'Free Play',    renderIcon: () => <YI name="chip-green"/>, badge: 'NEW' },
+      { href: '/daily-bonus',  label: 'Free Play',    renderIcon: () => <YI name="chip-gold"/>, badge: 'NEW' },
       { href: '/missions',     label: 'Missions',     renderIcon: () => <YI name="crown"     /> },
       { href: '/leaderboards', label: 'Leaderboards', renderIcon: () => <YI name="trophy"    /> },
     ],
@@ -39,7 +40,7 @@ const MENU_SECTIONS = [
       { href: '/vault',                label: 'Vault',     renderIcon: () => <YI name="lock"     /> },
       { href: '/wallet',               label: 'Wallet',    renderIcon: () => <YI name="wallet-icon" /> },
       { href: '/profile/transactions', label: 'History',   renderIcon: () => <YI name="activity" /> },
-      { href: '/providers',            label: 'Providers', renderIcon: () => <BarChart3 className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
+      { href: '/providers',            label: 'Providers', renderIcon: () => <YI name="slot-reels" /> },
       { href: '/support',              label: 'Help',      renderIcon: () => <HelpCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
     ],
   },
@@ -88,16 +89,15 @@ export function MobileSideMenu() {
               <div className="flex items-center gap-2.5">
                 {isLoggedIn && user ? (
                   <>
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-black"
-                      style={{ background: `linear-gradient(135deg, ${getVIPColor(user.vipTier || 1)}, #F0B232)` }}
-                    >
-                      {user.avatar || 'U'}
-                    </div>
+                    <YalaAvatar
+                      initials={user.username?.slice(0, 2) || user.avatar || 'U'}
+                      tier={user.vipTier || 1}
+                      size={40}
+                    />
                     <div>
-                      <p className="text-sm font-semibold" style={{ color: '#F5E8C8' }}>{user.username}</p>
-                      <p className="text-[10px]" style={{ color: getVIPColor(user.vipTier || 1) }}>
-                        {getVIPName(user.vipTier || 1)}
+                      <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>{user.username}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: getVIPColor(user.vipTier || 1) }}>
+                        {getVIPName(user.vipTier || 1)} · Tier {user.vipTier || 1}
                       </p>
                     </div>
                   </>
@@ -138,7 +138,7 @@ export function MobileSideMenu() {
               <div className="grid grid-cols-3 gap-2 px-4 mt-4">
                 {[
                   { label: 'Promotions', color: '#F0B232', action: () => { openPromotionsDrawer(); handleClose(); }, iconEl: <YalaIcon name="gift" size={22} /> },
-                  { label: 'Sportsbook', color: '#2DC97A', href: '/sportsbook', iconEl: <BarChart3 className="w-5 h-5" style={{ color: '#2DC97A' }} /> },
+                  { label: 'Sportsbook', color: '#2DC97A', href: '/sportsbook', iconEl: <YalaIcon name="sports-ball" size={22} /> },
                   { label: 'Originals',  color: '#84CC16', href: '/originals',  iconEl: <YalaIcon name="lightning" size={22} /> },
                 ].map((item) => {
                   const content = (
