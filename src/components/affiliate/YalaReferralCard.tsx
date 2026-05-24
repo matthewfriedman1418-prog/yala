@@ -124,9 +124,15 @@ function CodePill({ code, gold = true, accent = '#F0B232' }: { code: string; gol
 // CARD 01 — Chip Fan
 // ════════════════════════════════════════════════════════════════════════════
 function PokerChip({ color, accent }: { color: string; accent: string }) {
+  // containerType: inline-size makes `cqi` inside this chip resolve to the
+  // CHIP's width, not the whole card. Without it, fontSize: 50cqi was
+  // sizing the "Y" against the 720px card — hence the massive letters.
   return (
-    <div style={{ position: 'relative', width: '100%', aspectRatio: '1', borderRadius: '50%',
-      filter: 'drop-shadow(0 18px 24px rgba(0,0,0,0.5))' }}>
+    <div style={{
+      position: 'relative', width: '100%', aspectRatio: '1', borderRadius: '50%',
+      filter: 'drop-shadow(0 18px 24px rgba(0,0,0,0.5))',
+      containerType: 'inline-size',
+    }}>
       <div style={{
         position: 'absolute', inset: 0, borderRadius: '50%',
         background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 50%), ${color}`,
@@ -145,7 +151,8 @@ function PokerChip({ color, accent }: { color: string; accent: string }) {
         boxShadow: 'inset 0 0 0 3px rgba(140,110,60,0.4)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontFamily: 'Archivo Black, sans-serif', color: '#6B4910',
-        fontSize: '50cqi', /* scales with chip */
+        fontSize: '38cqi', // now scales with the chip itself (~38% of chip width)
+        lineHeight: 1,
       }}>Y</div>
     </div>
   );
@@ -347,16 +354,21 @@ function Card5({ code }: { code: string }) {
         }} />
       ))}
       <div style={goldFrame} />
-      <div style={{ position: 'absolute', top: '11cqi', left: 0, right: 0, textAlign: 'center', zIndex: 5 }}>
+      <div style={{ position: 'absolute', top: '11cqi', left: 0, right: 0, textAlign: 'center', zIndex: 5, padding: '0 6cqi' }}>
         <Eyebrow />
-        <h1 style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '5cqi', letterSpacing: '-0.01em', margin: '2.5cqi 0 1.5cqi', color: '#F5F7F2' }}>
+        <h1 style={{ fontFamily: 'Manrope, sans-serif', fontWeight: 800, fontSize: '3.5cqi', letterSpacing: '-0.01em', margin: '2.5cqi 0 1.2cqi', color: '#F5F7F2' }}>
           Get free coins. No catch.
         </h1>
-        <p style={{ fontSize: '1.9cqi', color: 'rgba(200,215,205,0.62)', margin: '0 auto', maxWidth: '50cqi' }}>{COPY.subhead}</p>
+        <p style={{ fontSize: '1.8cqi', color: 'rgba(200,215,205,0.62)', margin: '0 auto', maxWidth: '60cqi' }}>{COPY.subhead}</p>
       </div>
-      <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+      <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', padding: '0 4cqi', width: '100%' }}>
         <div style={{ fontFamily: 'Geist Mono, monospace', fontSize: '1.8cqi', letterSpacing: '0.42em', color: 'rgba(180,195,188,0.65)', textTransform: 'uppercase', marginBottom: '2cqi' }}>USE CODE</div>
-        <div style={{ fontFamily: 'Archivo Black, sans-serif', fontSize: '18cqi', letterSpacing: '0.06em', lineHeight: 1, ...GOLD_TEXT }}>{code}</div>
+        {/* clamp scales the hero code down on longer referral strings so it doesn't blow past the card edges */}
+        <div style={{
+          fontFamily: 'Archivo Black, sans-serif',
+          fontSize: `clamp(6cqi, calc(72cqi / ${Math.max(code.length, 4)}), 14cqi)`,
+          letterSpacing: '0.04em', lineHeight: 1, ...GOLD_TEXT,
+        }}>{code}</div>
         <div style={{ width: '12cqi', height: '0.4cqi', margin: '3cqi auto 0', background: 'linear-gradient(90deg, transparent, #2DC97A, transparent)', boxShadow: '0 0 14px #2DC97A' }} />
       </div>
       <div style={{ position: 'absolute', bottom: '9cqi', left: 0, right: 0, textAlign: 'center' }}>
