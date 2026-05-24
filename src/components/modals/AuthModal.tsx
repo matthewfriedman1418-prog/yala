@@ -21,10 +21,10 @@ export function AuthModal() {
     username: '', email: '', password: '', referral: '', agreed: false, remember: true,
   });
 
-  if (!authModalOpen) return null;
-  const isLogin = authModalTab === 'login';
-
   // Password strength: 0–4 (none → weak → fair → strong → great)
+  // IMPORTANT: every hook (including useMemo) MUST run before any early return,
+  // otherwise React throws 'rendered more hooks than during the previous render'
+  // when the modal toggles open. Don't move this below the `if (!authModalOpen)`.
   const strength = useMemo(() => {
     const p = form.password;
     if (!p) return 0;
@@ -35,6 +35,9 @@ export function AuthModal() {
     if (/[^A-Za-z0-9]/.test(p)) s++;
     return Math.min(s, 4);
   }, [form.password]);
+
+  if (!authModalOpen) return null;
+  const isLogin = authModalTab === 'login';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
