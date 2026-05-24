@@ -430,23 +430,25 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
   }, []);
 
   return (
-    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 px-6 py-8 lg:px-10 lg:py-9 lg:items-center">
-      {/* LEFT COLUMN — welcome / tagline / CTAs */}
-      <div className="flex flex-col gap-4">
-        <p className="text-xs font-semibold" style={{ color: '#8FA899' }}>
-          Welcome back, <span className="font-bold" style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
-        </p>
-        <h1
-          className="font-display font-black leading-[0.9]"
-          style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', letterSpacing: '-0.025em' }}
-        >
-          <span className="gold-shimmer">{tagline.line1}</span><br />
-          <span style={{ color: '#F5E8C8' }}>{tagline.line2}</span>
-        </h1>
-        <div className="flex items-center gap-3 flex-wrap pt-1">
+    <div className="relative z-10 flex flex-col gap-6 px-6 py-8 lg:px-10 lg:py-9">
+      {/* TOP ROW — welcome/tagline on the left, primary CTAs on the right */}
+      <div className="flex items-end justify-between gap-6 flex-wrap">
+        <div className="flex flex-col gap-3 max-w-2xl">
+          <p className="text-xs font-semibold" style={{ color: '#8FA899' }}>
+            Welcome back, <span className="font-bold" style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
+          </p>
+          <h1
+            className="font-display font-black leading-[0.9]"
+            style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', letterSpacing: '-0.025em' }}
+          >
+            <span className="gold-shimmer">{tagline.line1}</span><br />
+            <span style={{ color: '#F5E8C8' }}>{tagline.line2}</span>
+          </h1>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
           <Link
             href="#browse"
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
             style={{
               background: 'linear-gradient(135deg, #10B981, #2DC97A)',
               color: '#060E0A',
@@ -458,7 +460,7 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
           </Link>
           <button
             onClick={openBuyCoins}
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all hover:bg-white/5"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:bg-white/5"
             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
           >
             <Plus className="w-4 h-4" strokeWidth={2.5} />
@@ -467,8 +469,8 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
         </div>
       </div>
 
-      {/* RIGHT COLUMN: 3 mini promo cards stacked */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 lg:w-[280px]">
+      {/* BOTTOM ROW — 3 promo cards in equal columns spanning full hero width */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <PromoStripCard variant="streak" />
         <PromoStripCard variant="race" />
         <PromoStripCard variant="reload" />
@@ -477,31 +479,45 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
   );
 }
 
-// Compact promo card — fits in the right column of the signed-in hero.
+// Hero promo card — sized for full-width 3-column hero row. Now horizontal
+// with icon block on the left and primary content + CTA stacked on the right.
 function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) {
   if (variant === 'streak') {
     return (
       <Link
         href="/daily-bonus"
-        className="group relative rounded-xl p-3.5 overflow-hidden transition-all hover:-translate-y-0.5 flex flex-col"
+        className="group relative rounded-2xl p-4 overflow-hidden transition-all hover:-translate-y-0.5 flex items-center gap-4"
         style={{
           background: 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(240,178,50,0.02))',
           border: '1px solid rgba(240,178,50,0.28)',
         }}
       >
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Daily Streak</span>
-          <span className="text-base" aria-hidden>🔥</span>
+        <div
+          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+          style={{ background: 'rgba(240,178,50,0.12)', border: '1px solid rgba(240,178,50,0.28)' }}
+          aria-hidden
+        >
+          🔥
         </div>
-        <p className="font-display text-lg font-black leading-none" style={{ color: '#F5E8C8' }}>Day 4 of 7</p>
-        <div className="flex gap-0.5 mt-2 mb-2">
-          {[1,2,3,4,5,6,7].map((d) => (
-            <div key={d} className="flex-1 h-1 rounded-full" style={{ background: d <= 4 ? '#F0B232' : '#1A2E22' }} />
-          ))}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline justify-between gap-2 mb-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Daily Streak</span>
+            <span className="text-[10px] font-mono font-bold" style={{ color: '#8FA899' }}>Day 4 / 7</span>
+          </div>
+          <div className="flex gap-0.5 mb-2">
+            {[1,2,3,4,5,6,7].map((d) => (
+              <div key={d} className="flex-1 h-1 rounded-full" style={{ background: d <= 4 ? '#F0B232' : '#1A2E22' }} />
+            ))}
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-[11px]" style={{ color: '#F5E8C8' }}>
+              Today: <span className="font-bold" style={{ color: '#F0B232' }}>2,500 GC</span>
+            </p>
+            <span className="text-[11px] font-bold flex items-center gap-0.5 transition-transform group-hover:translate-x-0.5" style={{ color: '#F0B232' }}>
+              Claim <ChevronRight className="w-3 h-3" />
+            </span>
+          </div>
         </div>
-        <p className="text-[10px] font-semibold" style={{ color: '#F0B232' }}>
-          Claim 2,500 GC →
-        </p>
       </Link>
     );
   }
@@ -509,27 +525,38 @@ function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) 
     return (
       <Link
         href="/leaderboards"
-        className="group relative rounded-xl p-3.5 overflow-hidden transition-all hover:-translate-y-0.5 flex flex-col"
+        className="group relative rounded-2xl p-4 overflow-hidden transition-all hover:-translate-y-0.5 flex items-center gap-4"
         style={{
-          background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(45,201,122,0.02))',
+          background: 'linear-gradient(135deg, rgba(45,201,122,0.14), rgba(45,201,122,0.02))',
           border: '1px solid rgba(45,201,122,0.32)',
         }}
       >
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-1">
-            <span className="live-dot" style={{ width: 5, height: 5 }} />
-            <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Daily Race</span>
+        <div
+          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+          style={{ background: 'rgba(45,201,122,0.14)', border: '1px solid rgba(45,201,122,0.3)' }}
+        >
+          <YalaIcon name="trophy" size={26} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between mb-1.5">
+            <div className="flex items-center gap-1.5">
+              <span className="live-dot" style={{ width: 6, height: 6 }} />
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Daily Race</span>
+            </div>
+            <span className="text-[10px] font-mono font-bold" style={{ color: '#8FA899' }}>14h 32m</span>
+          </div>
+          <p className="font-display text-base font-black number-display leading-none" style={{ color: '#F5E8C8' }}>
+            500,000 <span className="text-[11px] font-normal" style={{ color: '#8FA899' }}>GC pool</span>
+          </p>
+          <div className="flex items-center justify-between mt-1.5">
+            <p className="text-[11px]" style={{ color: '#8FA899' }}>
+              You: <span className="font-bold" style={{ color: '#F5E8C8' }}>#47</span>
+            </p>
+            <span className="text-[11px] font-bold flex items-center gap-0.5 transition-transform group-hover:translate-x-0.5" style={{ color: '#2DC97A' }}>
+              Race <ChevronRight className="w-3 h-3" />
+            </span>
           </div>
         </div>
-        <p className="font-display text-lg font-black number-display leading-none" style={{ color: '#F5E8C8' }}>
-          500K <span className="text-[10px] font-normal" style={{ color: '#8FA899' }}>GC pool</span>
-        </p>
-        <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>
-          You: <span className="font-bold" style={{ color: '#F5E8C8' }}>#47</span> · ends <span className="font-mono" style={{ color: '#F5E8C8' }}>14h 32m</span>
-        </p>
-        <p className="text-[10px] font-semibold mt-2" style={{ color: '#2DC97A' }}>
-          Race now →
-        </p>
       </Link>
     );
   }
@@ -537,23 +564,33 @@ function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) 
   return (
     <Link
       href="/wallet"
-      className="group relative rounded-xl p-3.5 overflow-hidden transition-all hover:-translate-y-0.5 flex flex-col"
+      className="group relative rounded-2xl p-4 overflow-hidden transition-all hover:-translate-y-0.5 flex items-center gap-4"
       style={{
         background: 'linear-gradient(135deg, rgba(96,165,250,0.10), rgba(96,165,250,0.02))',
         border: '1px solid rgba(96,165,250,0.28)',
       }}
     >
-      <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#60A5FA' }}>Weekend Reload</span>
-        <span className="text-[8px] font-mono font-bold px-1 py-0.5 rounded" style={{ background: 'rgba(96,165,250,0.18)', color: '#60A5FA' }}>FRI–SUN</span>
+      <div
+        className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+        style={{ background: 'rgba(96,165,250,0.14)', border: '1px solid rgba(96,165,250,0.3)' }}
+      >
+        <YalaIcon name="gift" size={26} />
       </div>
-      <p className="font-display text-lg font-black leading-none" style={{ color: '#F5E8C8' }}>+20% bonus</p>
-      <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>
-        on every coin purchase this weekend
-      </p>
-      <p className="text-[10px] font-semibold mt-2" style={{ color: '#60A5FA' }}>
-        Top up wallet →
-      </p>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#60A5FA' }}>Weekend Reload</span>
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(96,165,250,0.18)', color: '#60A5FA' }}>FRI–SUN</span>
+        </div>
+        <p className="font-display text-base font-black leading-none" style={{ color: '#F5E8C8' }}>+20% bonus</p>
+        <div className="flex items-center justify-between mt-1.5">
+          <p className="text-[11px]" style={{ color: '#8FA899' }}>
+            every coin purchase
+          </p>
+          <span className="text-[11px] font-bold flex items-center gap-0.5 transition-transform group-hover:translate-x-0.5" style={{ color: '#60A5FA' }}>
+            Top up <ChevronRight className="w-3 h-3" />
+          </span>
+        </div>
+      </div>
     </Link>
   );
 }
