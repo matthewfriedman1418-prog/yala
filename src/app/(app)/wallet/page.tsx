@@ -10,16 +10,39 @@ import { formatGC, formatSC, formatTime } from '@/lib/utils';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 import {
   ArrowUpRight, ArrowDownLeft, Shield, Plus, ChevronRight,
-  CheckCircle2, AlertCircle,
+  CheckCircle2, AlertCircle, Sparkles,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
+// Subset of packages mirrored from BuyCoinsModal.tsx — kept short for the
+// preview row. Modal owns the full list.
+const POPULAR_PACKAGES = [
+  { id: 'oasis',   name: 'Oasis Pack',     price:  9.99, gc:  25_000, sc:  2.5, bonus:  2_500, badge: null as string | null },
+  { id: 'caravan', name: 'Caravan Bundle', price: 19.99, gc:  60_000, sc:    6, bonus: 10_000, badge: 'POPULAR' },
+  { id: 'palace',  name: 'Palace Reserve', price: 49.99, gc: 175_000, sc: 17.5, bonus: 30_000, badge: 'BEST VALUE' },
+];
+
+// Wallet always shows SC as the hero balance — SC is the redeemable currency,
+// so it's the one users care about managing on this page. GC is shown in the
+// breakdown row below for reference.
 export default function WalletPage() {
-  const { goldCoins, sweepCoins, vaultBalance, activeCurrency, toggleCurrency } = useWalletStore();
+  const { goldCoins, sweepCoins, vaultBalance, buyCoins, addBonus } = useWalletStore();
   const { isLoggedIn, user } = useAuthStore();
   const { openAuthModal, openBuyCoins, openRedeemModal } = useUIStore();
-  const isGC = activeCurrency === 'GC';
 
   const [txFilter, setTxFilter] = useState<'all' | 'in' | 'out' | 'bonus'>('all');
+  const [buying, setBuying]     = useState<string | null>(null);
+
+  // One-tap quick-buy for the package preview row. Real flow uses the modal
+  // (with payment selection); this is the inline shortcut for repeat buyers.
+  const quickBuy = async (pkg: typeof POPULAR_PACKAGES[number]) => {
+    setBuying(pkg.id);
+    await new Promise((r) => setTimeout(r, 900));
+    buyCoins(pkg.gc, pkg.sc);
+    if (pkg.bonus) addBonus(pkg.bonus);
+    setBuying(null);
+    toast.success(`${pkg.name} unlocked`, { description: `${pkg.gc.toLocaleString()} GC + ${pkg.sc} SC credited.` });
+  };
 
   // Logged-out shell
   if (!isLoggedIn) {
@@ -107,53 +130,33 @@ export default function WalletPage() {
         </Link>
       </div>
 
-      {/* ── BALANCE HERO — big active-currency display ──────── */}
+      {/* ── BALANCE HERO — SC always (redeemable currency lives here) ── */}
       <div
         className="relative rounded-2xl overflow-hidden p-6"
         style={{
-          background: isGC
-            ? 'radial-gradient(ellipse at 15% 80%, rgba(240,178,50,0.14) 0%, transparent 55%), linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)'
-            : 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.16) 0%, transparent 55%), linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)',
-          border: `1px solid ${isGC ? 'rgba(240,178,50,0.22)' : 'rgba(45,201,122,0.22)'}`,
+          background: 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.16) 0%, transparent 55%), linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)',
+          border: '1px solid rgba(45,201,122,0.22)',
         }}
       >
-        {/* Currency toggle (top right) */}
-        <button
-          onClick={toggleCurrency}
-          className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold transition-all hover:bg-white/5"
-          style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid #1A2E22',
-            color: '#8FA899',
-          }}
-        >
-          View {isGC ? 'SC' : 'GC'}
-          <ChevronRight className="w-3 h-3" />
-        </button>
-
         <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6 flex-wrap">
           <div className="flex items-center gap-4">
             <div className="flex-shrink-0">
-              {isGC ? <GoldCoinIcon size={56} /> : <SweepCoinIcon size={60} />}
+              <SweepCoinIcon size={60} />
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>
-                {isGC ? 'Gold Coins balance' : 'Sweep Coins balance'}
+                Sweep Coins balance
               </p>
               <p
                 className="font-display font-black number-display leading-none mt-1"
                 style={{ color: '#F5E8C8', fontSize: 'clamp(2.25rem, 4.5vw, 3.25rem)' }}
               >
-                {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}
-                <span className="ml-2" style={{ fontSize: '0.45em', color: isGC ? '#F0B232' : '#2DC97A' }}>
-                  {activeCurrency}
-                </span>
+                {formatSC(sweepCoins)}
+                <span className="ml-2" style={{ fontSize: '0.45em', color: '#2DC97A' }}>SC</span>
               </p>
-              {!isGC && (
-                <p className="text-xs mt-1.5 number-display" style={{ color: '#8FA899' }}>
-                  ≈ <span style={{ color: '#F5E8C8' }}>${sweepCoins.toFixed(2)}</span> USD at redemption
-                </p>
-              )}
+              <p className="text-xs mt-1.5 number-display" style={{ color: '#8FA899' }}>
+                ≈ <span style={{ color: '#F5E8C8' }}>${sweepCoins.toFixed(2)}</span> USD at redemption
+              </p>
             </div>
           </div>
 
@@ -170,31 +173,30 @@ export default function WalletPage() {
             >
               <Plus className="w-4 h-4" strokeWidth={3} /> Buy Coins
             </button>
-            {!isGC && (
-              <button
-                onClick={openRedeemModal}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all hover:brightness-110 active:scale-95"
-                style={{
-                  background: 'linear-gradient(135deg, #2DC97A, #10B981)',
-                  color: '#060E0A',
-                  boxShadow: '0 4px 18px rgba(45,201,122,0.35)',
-                }}
-              >
-                <ArrowUpRight className="w-4 h-4" strokeWidth={3} /> Redeem
-              </button>
-            )}
+            <button
+              onClick={openRedeemModal}
+              disabled={sweepCoins < 25}
+              className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                background: 'linear-gradient(135deg, #2DC97A, #10B981)',
+                color: '#060E0A',
+                boxShadow: sweepCoins >= 25 ? '0 4px 18px rgba(45,201,122,0.35)' : 'none',
+              }}
+            >
+              <ArrowUpRight className="w-4 h-4" strokeWidth={3} /> Redeem
+            </button>
           </div>
         </div>
       </div>
 
-      {/* ── BALANCE BREAKDOWN — 3 cards (the other currency + vault + lifetime) ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      {/* ── BALANCE BREAKDOWN — 2 cards: GC + Vault (Total Wagered moved to /profile) ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <BalanceCard
-          label={isGC ? 'Sweep Coins' : 'Gold Coins'}
-          value={isGC ? `${sweepCoins.toFixed(2)} SC` : formatGC(goldCoins)}
-          accent={isGC ? '#2DC97A' : '#F0B232'}
-          icon={isGC ? <SweepCoinIcon size={26} /> : <GoldCoinIcon size={24} />}
-          action={{ label: isGC ? 'Switch to SC' : 'Switch to GC', onClick: toggleCurrency }}
+          label="Gold Coins"
+          value={formatGC(goldCoins)}
+          accent="#F0B232"
+          icon={<GoldCoinIcon size={24} />}
+          note="Free-to-play currency"
         />
         <BalanceCard
           label="Vault (locked)"
@@ -204,14 +206,93 @@ export default function WalletPage() {
           action={{ label: 'Manage', href: '/vault' }}
           note="Protected from play"
         />
-        <BalanceCard
-          label="Total wagered"
-          value={formatGC(user?.totalWagered || 0)}
-          accent="#A78BFA"
-          icon={<YalaIcon name="activity" size={22} />}
-          action={{ label: 'See stats', href: '/profile' }}
-          note="All-time across all coins"
-        />
+      </div>
+
+      {/* ── POPULAR PACKAGES — buying coins front and center ── */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: 'radial-gradient(ellipse at 90% 0%, rgba(240,178,50,0.08) 0%, transparent 50%), #0F1A14',
+          border: '1px solid rgba(240,178,50,0.22)',
+        }}
+      >
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A2E22' }}>
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4" style={{ color: '#F0B232' }} />
+            <h3 className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Top up your wallet</h3>
+            <span className="text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded" style={{ background: 'rgba(240,178,50,0.15)', color: '#F0B232' }}>
+              +20% weekend bonus
+            </span>
+          </div>
+          <button
+            onClick={openBuyCoins}
+            className="text-[11px] font-bold flex items-center gap-1 transition-colors hover:opacity-80"
+            style={{ color: '#F0B232' }}
+          >
+            All packages <ChevronRight className="w-3 h-3" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-5">
+          {POPULAR_PACKAGES.map((pkg) => {
+            const popular = pkg.badge === 'POPULAR';
+            return (
+              <div
+                key={pkg.id}
+                className="relative rounded-xl p-4 flex flex-col"
+                style={{
+                  background: popular
+                    ? 'linear-gradient(180deg, rgba(240,178,50,0.10), rgba(240,178,50,0.02))'
+                    : 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${popular ? 'rgba(240,178,50,0.4)' : '#1A2E22'}`,
+                }}
+              >
+                {pkg.badge && (
+                  <span
+                    className="absolute -top-2 left-4 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded"
+                    style={{
+                      background: popular ? '#F0B232' : '#2DC97A',
+                      color: '#060E0A',
+                    }}
+                  >
+                    {pkg.badge}
+                  </span>
+                )}
+                <div className="flex items-center gap-2 mb-3">
+                  <GoldCoinIcon size={22} />
+                  <span className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>{pkg.name}</span>
+                </div>
+                <p className="font-display text-2xl font-black number-display" style={{ color: '#F0B232' }}>
+                  ${pkg.price}
+                </p>
+                <div className="space-y-1 mt-3 mb-4 text-xs">
+                  <p className="flex items-center gap-1.5" style={{ color: '#F5E8C8' }}>
+                    <GoldCoinIcon size={12} /> <span className="font-bold number-display">{pkg.gc.toLocaleString()}</span> GC
+                  </p>
+                  <p className="flex items-center gap-1.5" style={{ color: '#2DC97A' }}>
+                    <SweepCoinIcon size={14} /> <span className="font-bold number-display">{pkg.sc}</span> SC
+                  </p>
+                  {pkg.bonus > 0 && (
+                    <p className="flex items-center gap-1.5" style={{ color: '#F0B232' }}>
+                      <span className="text-base">+</span> <span className="font-bold number-display">{pkg.bonus.toLocaleString()}</span> bonus GC
+                    </p>
+                  )}
+                </div>
+                <button
+                  onClick={() => quickBuy(pkg)}
+                  disabled={buying !== null}
+                  className="mt-auto w-full py-2.5 rounded-xl text-xs font-black transition-all hover:brightness-110 active:scale-95 disabled:opacity-60"
+                  style={popular
+                    ? { background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A', boxShadow: '0 2px 12px rgba(240,178,50,0.3)' }
+                    : { background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.3)', color: '#F0B232' }
+                  }
+                >
+                  {buying === pkg.id ? 'Processing…' : `Buy for $${pkg.price}`}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── QUICK ACTIONS ───────────────────────────────────── */}
