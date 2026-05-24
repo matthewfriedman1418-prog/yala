@@ -1,7 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
@@ -10,7 +9,7 @@ import { GameCard } from '@/components/casino/GameCard';
 import { ALL_GAMES, YALA_ORIGINALS, type GameCategory } from '@/lib/mock-data/games';
 import {
   Search, Zap, TrendingUp, Sparkles, Clock, Users, ChevronRight,
-  ChevronLeft, Gift, Trophy, Play, Star, Activity,
+  ChevronLeft, Gift, Trophy, Play, Star, Activity, Plus, Check,
 } from 'lucide-react';
 import { cn, formatGC, formatSC } from '@/lib/utils';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
@@ -28,9 +27,6 @@ const CATEGORIES: { id: GameCategory | 'all'; label: string; icon: string }[] = 
   { id: 'fish',      label: 'Fish',     icon: '🐠' },
   { id: 'casual',    label: 'Casual',   icon: '🎲' },
 ];
-
-// ─── Featured game ────────────────────────────────────────────────────────────
-const FEATURED_GAME = ALL_GAMES.find(g => g.slug === 'sultan-riches')!;
 
 // ─── Promo cards ─────────────────────────────────────────────────────────────
 const PROMO_CARDS = [
@@ -360,15 +356,287 @@ function LiveBetsFeed() {
   );
 }
 
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+// Branches hard on auth state. Signed-out → trust pitch + Play Free CTA.
+// Signed-in → balance front and center, daily-race side panel, streak chip.
+// Top ticker = live player count + scrolling recent wins (kept short).
+const HERO_WINS = [
+  { who: 'PyramidKing',  amount: '320,000 GC', game: 'Gates of Olympus' },
+  { who: 'NightHunter',  amount: '$1,820',     game: 'Crash' },
+  { who: 'EmeraldWave',  amount: '125,000 GC', game: 'Mirage Crash' },
+  { who: 'SaharaFox',    amount: '$640',       game: 'Plinko' },
+  { who: 'GoldRushKing', amount: '480,000 GC', game: 'Sweet Bonanza' },
+];
+
+function HeroLiveTicker() {
+  return (
+    <div
+      className="relative overflow-hidden border-b"
+      style={{
+        background: 'rgba(0,0,0,0.25)',
+        borderColor: 'rgba(45,201,122,0.18)',
+      }}
+    >
+      <div className="flex items-center justify-between px-4 py-2">
+        {/* Left: live players */}
+        <div className="flex items-center gap-2 flex-shrink-0 z-10">
+          <span className="live-dot" />
+          <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>
+            2,847 playing now
+          </span>
+        </div>
+        {/* Right: scrolling wins (hidden on small screens to avoid layout pain) */}
+        <div className="hidden md:flex flex-1 overflow-hidden ml-6">
+          <div className="marquee-track flex gap-8 whitespace-nowrap">
+            {[...HERO_WINS, ...HERO_WINS].map((w, i) => (
+              <span key={i} className="text-[11px] flex-shrink-0 inline-flex items-center gap-2" style={{ color: '#8FA899' }}>
+                <span style={{ color: '#F0B232' }}>🔥</span>
+                <span className="font-semibold" style={{ color: '#F5E8C8' }}>{w.who}</span>
+                <span>won</span>
+                <span className="font-bold number-display" style={{ color: '#F0B232' }}>{w.amount}</span>
+                <span>on</span>
+                <span className="font-semibold" style={{ color: '#8FA899' }}>{w.game}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HeroDailyRaceCard() {
+  // Tiny countdown — independent of the leaderboards page's timer.
+  // No need for state subscription; this just shows a static-ish demo.
+  return (
+    <div
+      className="relative rounded-2xl p-5 flex flex-col gap-3 overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, rgba(45,201,122,0.08), rgba(240,178,50,0.05))',
+        border: '1px solid rgba(45,201,122,0.28)',
+        minWidth: 240,
+      }}
+    >
+      <div
+        className="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(45,201,122,0.25), transparent 60%)', filter: 'blur(20px)' }}
+      />
+      <div className="relative">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="live-dot" />
+          <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Daily Race · Live</span>
+        </div>
+        <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Prize pool</p>
+        <p className="font-display text-2xl font-black number-display" style={{ color: '#F0B232' }}>
+          500,000 <span className="text-sm">GC</span>
+        </p>
+      </div>
+      <div className="relative">
+        <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Ends in</p>
+        <p className="font-mono text-base font-bold" style={{ color: '#F5E8C8' }}>14h 32m 09s</p>
+      </div>
+      <div className="relative flex items-center justify-between pt-3 mt-1" style={{ borderTop: '1px solid rgba(45,201,122,0.15)' }}>
+        <div>
+          <p className="text-[10px]" style={{ color: '#8FA899' }}>Your rank</p>
+          <p className="text-sm font-bold number-display" style={{ color: '#F5E8C8' }}>#47</p>
+        </div>
+        <Link
+          href="/leaderboards"
+          className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:opacity-90 active:scale-95"
+          style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#060E0A' }}
+        >
+          Race
+          <ChevronRight className="w-3 h-3" />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function HeroTrustChips() {
+  const items = [
+    { label: 'No purchase necessary' },
+    { label: 'Provably fair' },
+    { label: 'Real cash prizes' },
+    { label: '200+ games' },
+  ];
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      {items.map((it) => (
+        <span
+          key={it.label}
+          className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full"
+          style={{ background: 'rgba(45,201,122,0.08)', color: '#8FA899', border: '1px solid rgba(45,201,122,0.18)' }}
+        >
+          <Check className="w-3 h-3" style={{ color: '#2DC97A' }} strokeWidth={3} />
+          {it.label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+interface CasinoHeroProps {
+  isLoggedIn: boolean;
+  userName?: string;
+  isGC: boolean;
+  goldCoins: number;
+  sweepCoins: number;
+  activeCurrency: string;
+  accent: string;
+  accentLight: string;
+  openBuyCoins: () => void;
+  openAuthModal: (tab?: 'login' | 'register') => void;
+}
+
+function CasinoHero({
+  isLoggedIn, userName, isGC, goldCoins, sweepCoins, activeCurrency,
+  accent, accentLight, openBuyCoins, openAuthModal,
+}: CasinoHeroProps) {
+  return (
+    <section
+      className="relative rounded-2xl overflow-hidden"
+      style={{
+        background: 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.16) 0%, transparent 55%), radial-gradient(ellipse at 90% 10%, rgba(240,178,50,0.12) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(26,92,138,0.10) 0%, transparent 60%), linear-gradient(180deg, #0A1410 0%, #060E0A 100%)',
+        border: '1px solid #1A2E22',
+      }}
+    >
+      {/* faint grid overlay */}
+      <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 39px,#2DC97A 39px,#2DC97A 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#2DC97A 39px,#2DC97A 40px)' }} />
+
+      <HeroLiveTicker />
+
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 lg:gap-10 px-6 py-8 lg:px-10 lg:py-10">
+        {/* LEFT */}
+        {isLoggedIn ? (
+          <div className="flex flex-col justify-center gap-5">
+            <div>
+              <p className="text-xs uppercase tracking-widest mb-2 font-semibold" style={{ color: '#8FA899' }}>
+                Welcome back, <span style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
+              </p>
+              <h1
+                className="font-display font-black leading-[0.92]"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', letterSpacing: '-0.02em' }}
+              >
+                <span style={{ color: '#F5E8C8' }}>Ready when</span><br />
+                <span className="gold-shimmer">you are.</span>
+              </h1>
+            </div>
+
+            {/* Balance — big, central, primary action attached */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div
+                className="flex items-center gap-3.5 pl-3 pr-5 py-3 rounded-2xl"
+                style={{ background: `${accent}10`, border: `1px solid ${accent}28` }}
+              >
+                <span className="flex-shrink-0">
+                  {isGC ? <GoldCoinIcon size={34} /> : <SweepCoinIcon size={36} />}
+                </span>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: `${accent}cc` }}>
+                    {isGC ? 'Gold Coins' : 'Sweep Coins'}
+                  </p>
+                  <p className="font-display font-black number-display leading-none mt-0.5" style={{ color: '#F5E8C8', fontSize: '1.75rem' }}>
+                    {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}
+                    <span className="text-sm ml-1.5" style={{ color: '#8FA899' }}>{activeCurrency}</span>
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={openBuyCoins}
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
+                style={{
+                  background: `linear-gradient(135deg, ${accent}, ${accentLight})`,
+                  color: '#060E0A',
+                  boxShadow: `0 4px 24px ${accent}55, inset 0 1px 0 rgba(255,255,255,0.2)`,
+                }}
+              >
+                <Plus className="w-4 h-4" strokeWidth={3} />
+                Get Coins
+              </button>
+            </div>
+
+            {/* Streak / claim row */}
+            <Link
+              href="/daily-bonus"
+              className="inline-flex items-center gap-3 px-4 py-3 rounded-xl group transition-all hover:bg-white/5 w-fit"
+              style={{ background: 'rgba(240,178,50,0.06)', border: '1px solid rgba(240,178,50,0.25)' }}
+            >
+              <span className="text-2xl">🔥</span>
+              <div>
+                <p className="text-xs font-bold" style={{ color: '#F0B232' }}>Daily streak · Day 4 of 7</p>
+                <p className="text-[10px]" style={{ color: '#8FA899' }}>Claim 2,500 GC + free spin</p>
+              </div>
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: '#F0B232' }} />
+            </Link>
+          </div>
+        ) : (
+          // Signed-out: trust pitch
+          <div className="flex flex-col justify-center gap-5">
+            <div className="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded-full"
+              style={{ background: 'rgba(45,201,122,0.08)', border: '1px solid rgba(45,201,122,0.25)' }}
+            >
+              <Star className="w-3 h-3" fill="#F0B232" style={{ color: '#F0B232' }} />
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>YALA Social Casino</span>
+            </div>
+            <h1
+              className="font-display font-black leading-[0.92]"
+              style={{ fontSize: 'clamp(2.25rem, 5vw, 4rem)', letterSpacing: '-0.025em' }}
+            >
+              <span style={{ color: '#F5E8C8' }}>Real prizes.</span><br />
+              <span className="gold-shimmer">No deposit.</span>
+            </h1>
+            <p className="text-sm max-w-md" style={{ color: '#8FA899', lineHeight: 1.6 }}>
+              Play 200+ games with Gold Coins, win Sweep Coins redeemable for cash prizes. Free to start, no purchase necessary.
+            </p>
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                onClick={() => openAuthModal('register')}
+                className="flex items-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
+                style={{
+                  background: 'linear-gradient(135deg, #10B981, #2DC97A)',
+                  color: '#060E0A',
+                  boxShadow: '0 4px 28px rgba(45,201,122,0.45), inset 0 1px 0 rgba(255,255,255,0.2)',
+                }}
+              >
+                <Zap className="w-4 h-4 flex-shrink-0" strokeWidth={2.5} />
+                Play Free — Get 250K GC
+              </button>
+              <button
+                onClick={() => openAuthModal('login')}
+                className="px-5 py-3.5 rounded-2xl text-sm font-semibold transition-all hover:bg-white/5"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+              >
+                Sign In
+              </button>
+            </div>
+            <HeroTrustChips />
+            <p className="text-[10px]" style={{ color: '#4A6A55' }}>
+              18+ · Free to play · No real money gambling · Void where prohibited
+            </p>
+          </div>
+        )}
+
+        {/* RIGHT */}
+        <div className="lg:w-[260px] flex flex-col gap-3">
+          <HeroDailyRaceCard />
+        </div>
+      </div>
+
+      {/* Bottom gradient rule */}
+      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(45,201,122,0.3), rgba(240,178,50,0.3), transparent)' }} />
+    </section>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function CasinoPage() {
   const { activeCurrency, goldCoins, sweepCoins } = useWalletStore();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn, user } = useAuthStore();
   const { openAuthModal, openBuyCoins } = useUIStore();
   const [activeCategory, setActiveCategory] = useState<GameCategory | 'all'>('all');
   const [activeProvider, setActiveProvider] = useState<string>('all');
   const [search, setSearch] = useState('');
-  const [featuredImgError, setFeaturedImgError] = useState(false);
 
   const isGC = activeCurrency === 'GC';
   const accent = isGC ? '#F0B232' : '#10B981';
@@ -393,116 +661,18 @@ export default function CasinoPage() {
     <div className="space-y-10">
 
       {/* ── 1. HERO ───────────────────────────────────────────── */}
-      <section
-        className="relative rounded-2xl overflow-hidden"
-        style={{
-          background: 'radial-gradient(ellipse at 20% 80%, rgba(45,201,122,0.12) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(240,178,50,0.10) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(26,92,138,0.12) 0%, transparent 70%), #080F0A',
-          border: '1px solid #1A2E22',
-          minHeight: '300px',
-        }}
-      >
-        <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 39px,#2DC97A 39px,#2DC97A 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#2DC97A 39px,#2DC97A 40px)' }} />
-
-        <div className="relative z-10 flex items-stretch gap-0 min-h-[300px]">
-          {/* Left copy */}
-          <div className="flex-1 px-8 py-8 flex flex-col justify-center gap-6">
-            <div>
-              <h1 className="font-display font-black leading-none mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#F5E8C8', letterSpacing: '-0.02em' }}>
-                <span className="gold-shimmer">YALA</span><br />
-                <span style={{ color: '#2DC97A' }}>LET&apos;S</span>{' '}
-                <span style={{ color: '#F5E8C8' }}>PLAY</span>
-              </h1>
-              <p className="text-sm mt-3 max-w-xs" style={{ color: '#8FA899', lineHeight: 1.6 }}>
-                Premium sweepstakes casino. Dual-currency play, provably fair originals, and real prizes. No deposit required.
-              </p>
-            </div>
-            <div className="pt-2">
-              {isLoggedIn ? (
-                <div className="flex items-center gap-3 flex-wrap">
-                  <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl" style={{ background: `${accent}10`, border: `1px solid ${accent}22` }}>
-                    {isGC ? <GoldCoinIcon size={22} /> : <SweepCoinIcon size={22} />}
-                    <div>
-                      <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Balance</p>
-                      <p className="font-black number-display text-lg leading-none" style={{ color: '#F5E8C8' }}>
-                        {isGC ? formatGC(goldCoins) : formatSC(sweepCoins)}&nbsp;{activeCurrency}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={openBuyCoins}
-                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-                    style={{ background: `linear-gradient(135deg, ${accent}, ${accentLight})`, color: '#060E0A', boxShadow: `0 4px 24px ${accent}40` }}
-                  >
-                    <YalaIcon name="diamond" size={16} />
-                    Get Coins
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => openAuthModal('register')}
-                    className="flex items-center gap-2 px-7 py-3 rounded-xl text-sm font-black transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
-                    style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A', boxShadow: '0 4px 28px rgba(45,201,122,0.35)' }}
-                  >
-                    <Zap className="w-4 h-4 flex-shrink-0" />
-                    Play Free: No Deposit
-                  </button>
-                  <button
-                    onClick={() => openAuthModal('login')}
-                    className="px-5 py-3 rounded-xl text-sm font-semibold transition-all"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
-                  >
-                    Sign In
-                  </button>
-                </div>
-              )}
-              <p className="text-[10px] mt-3" style={{ color: '#4A6A55' }}>
-                18+ · Free to play · No real money gambling · Void where prohibited
-              </p>
-            </div>
-          </div>
-
-          {/* Right: featured game */}
-          <div className="flex-shrink-0 w-56 relative flex flex-col items-center justify-center p-6 gap-4">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-40 h-56 rounded-2xl" style={{ background: 'radial-gradient(ellipse, rgba(240,178,50,0.15) 0%, transparent 70%)', filter: 'blur(20px)' }} />
-            </div>
-            <div className="relative z-10 flex items-center gap-1.5 px-3 py-1 rounded-full" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
-              <Star className="w-3 h-3" style={{ color: '#F0B232' }} fill="#F0B232" />
-              <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#F0B232' }}>Featured</span>
-            </div>
-            <div
-              className="relative z-10 w-36 rounded-2xl overflow-hidden cursor-pointer group"
-              style={{
-                aspectRatio: '2/3',
-                background: FEATURED_GAME?.imageUrl ? '#0C1812' : 'linear-gradient(160deg, #065f46, #022c22)',
-                boxShadow: '0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(240,178,50,0.15)',
-              }}
-            >
-              {FEATURED_GAME?.imageUrl && !featuredImgError && (
-                <Image src={FEATURED_GAME.imageUrl} alt={FEATURED_GAME.name} fill sizes="144px" className="object-cover transition-transform duration-700 group-hover:scale-110" unoptimized onError={() => setFeaturedImgError(true)} />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-              <div className="absolute top-2 left-2 right-2">
-                <div className="px-2 py-1 rounded-lg text-center" style={{ background: 'rgba(240,178,50,0.85)', backdropFilter: 'blur(4px)' }}>
-                  <p className="text-[8px] font-black uppercase tracking-widest text-black">Max Win</p>
-                  <p className="text-[11px] font-black text-black leading-none">{FEATURED_GAME?.maxWin}</p>
-                </div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'rgba(240,178,50,0.9)', boxShadow: '0 0 24px rgba(240,178,50,0.6)' }}>
-                  <Play className="w-5 h-5 text-black ml-0.5" fill="black" />
-                </div>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-2.5">
-                <p className="text-[11px] font-bold text-white truncate">{FEATURED_GAME?.name}</p>
-                <p className="text-[9px]" style={{ color: '#F0B232' }}>{FEATURED_GAME?.provider}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(45,201,122,0.3), rgba(240,178,50,0.3), transparent)' }} />
-      </section>
+      <CasinoHero
+        isLoggedIn={isLoggedIn}
+        userName={user?.displayName || user?.username}
+        isGC={isGC}
+        goldCoins={goldCoins}
+        sweepCoins={sweepCoins}
+        activeCurrency={activeCurrency}
+        accent={accent}
+        accentLight={accentLight}
+        openBuyCoins={openBuyCoins}
+        openAuthModal={openAuthModal}
+      />
 
       {/* ── 2. PROMO CARDS ────────────────────────────────────── */}
       <section className="grid grid-cols-3 gap-4">
