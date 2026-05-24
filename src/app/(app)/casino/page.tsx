@@ -9,7 +9,7 @@ import { GameCard } from '@/components/casino/GameCard';
 import { ALL_GAMES, YALA_ORIGINALS, type GameCategory } from '@/lib/mock-data/games';
 import {
   Search, Zap, TrendingUp, Sparkles, Clock, Users, ChevronRight,
-  ChevronLeft, Gift, Trophy, Play, Star, Activity, Plus, Check,
+  ChevronLeft, Play, Activity, Plus,
 } from 'lucide-react';
 import { cn, formatGC, formatSC } from '@/lib/utils';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
@@ -26,49 +26,6 @@ const CATEGORIES: { id: GameCategory | 'all'; label: string; icon: string }[] = 
   { id: 'scratch',   label: 'Scratch',  icon: '🎟' },
   { id: 'fish',      label: 'Fish',     icon: '🐠' },
   { id: 'casual',    label: 'Casual',   icon: '🎲' },
-];
-
-// ─── Promo cards ─────────────────────────────────────────────────────────────
-const PROMO_CARDS = [
-  {
-    id: 'daily',
-    title: 'Daily Bonus',
-    subtitle: 'Login & claim up to',
-    highlight: '250K GC',
-    badge: 'EVERY DAY',
-    href: '/daily-bonus',
-    gradientFrom: '#D6A84F',
-    gradientTo: '#7C4F0E',
-    glowColor: 'rgba(240,178,50,0.25)',
-    icon: Gift,
-    accent: '#F0B232',
-  },
-  {
-    id: 'vip',
-    title: 'VIP Club',
-    subtitle: 'Unlock exclusive perks at',
-    highlight: 'Diamond Tier',
-    badge: 'INVITE ONLY',
-    href: '/vip',
-    gradientFrom: '#7C3AED',
-    gradientTo: '#1E1040',
-    glowColor: 'rgba(124,58,237,0.25)',
-    icon: Trophy,
-    accent: '#A78BFA',
-  },
-  {
-    id: 'missions',
-    title: 'Active Missions',
-    subtitle: '3 missions ready · earn',
-    highlight: '15K GC',
-    badge: '3 ACTIVE',
-    href: '/missions',
-    gradientFrom: '#059669',
-    gradientTo: '#064E3B',
-    glowColor: 'rgba(45,201,122,0.25)',
-    icon: Star,
-    accent: '#2DC97A',
-  },
 ];
 
 // ─── Live bet feed data ───────────────────────────────────────────────────────
@@ -446,158 +403,154 @@ function HeroStat({ value, label, live }: { value: string; label: string; live?:
   );
 }
 
-// ─── Signed-IN hero — 3-card promo strip ─────────────────────────────────────
+// ─── Signed-IN hero — welcome + marketing tagline + 3-card promo strip ────
+// Tagline rotates each page load (random pick from RETURN_TAGLINES).
+// Promo cards can be swapped seasonally by editing the strip below.
+const RETURN_TAGLINES = [
+  { line1: 'YALA',          line2: "LET'S PLAY"        },
+  { line1: 'Ready when',    line2: 'you are.'          },
+  { line1: 'Back for',      line2: 'more.'             },
+  { line1: 'The desert',    line2: 'awaits.'           },
+  { line1: 'Your seat is',  line2: 'still warm.'       },
+  { line1: 'Tonight is',    line2: 'your night.'       },
+  { line1: 'Pick a game.',  line2: "Let's go."         },
+  { line1: 'Luck does',     line2: "n't sleep."        },
+  { line1: 'Spin, win,',    line2: 'repeat.'           },
+];
+
 function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCoins: () => void }) {
+  const [tagline, setTagline] = useState(RETURN_TAGLINES[0]);
+  // Pick a new tagline on each mount (i.e. every fresh page load). Avoids
+  // SSR hydration mismatch by setting AFTER mount.
+  useEffect(() => {
+    setTagline(RETURN_TAGLINES[Math.floor(Math.random() * RETURN_TAGLINES.length)]);
+  }, []);
+
   return (
-    <div className="relative z-10 px-6 py-7 lg:px-10 lg:py-8">
-      {/* Tiny welcome line */}
-      <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-10 px-6 py-8 lg:px-10 lg:py-10">
+      {/* LEFT: welcome + headline + CTA */}
+      <div className="flex flex-col justify-center gap-5">
         <p className="text-xs font-semibold" style={{ color: '#8FA899' }}>
           Welcome back, <span className="font-bold" style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
-          <span className="mx-2" style={{ color: '#4A6A55' }}>·</span>
-          <span style={{ color: '#8FA899' }}>Pick up where you left off</span>
         </p>
-        <button
-          onClick={openBuyCoins}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-110"
-          style={{
-            background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-            color: '#060E0A',
-            boxShadow: '0 2px 12px rgba(45,201,122,0.3)',
-          }}
+        <h1
+          className="font-display font-black leading-[0.9]"
+          style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', letterSpacing: '-0.025em' }}
         >
-          <Plus className="w-3 h-3" strokeWidth={3} />
-          Get Coins
-        </button>
+          <span className="gold-shimmer">{tagline.line1}</span><br />
+          <span style={{ color: '#F5E8C8' }}>{tagline.line2}</span>
+        </h1>
+        <div className="flex items-center gap-3 flex-wrap">
+          <Link
+            href="/casino"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
+            style={{
+              background: 'linear-gradient(135deg, #10B981, #2DC97A)',
+              color: '#060E0A',
+              boxShadow: '0 4px 22px rgba(45,201,122,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+            }}
+          >
+            <Play className="w-4 h-4 flex-shrink-0" fill="#060E0A" />
+            Browse games
+          </Link>
+          <button
+            onClick={openBuyCoins}
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all hover:bg-white/5"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+          >
+            <Plus className="w-4 h-4" strokeWidth={2.5} />
+            Get coins
+          </button>
+        </div>
       </div>
 
-      {/* 3-card promo strip */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StreakCard />
-        <DailyRaceCardWide />
-        <ReloadPromoCard />
+      {/* RIGHT: 3 mini promo cards stacked on desktop, wrap on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 lg:w-[260px]">
+        <PromoStripCard variant="streak" />
+        <PromoStripCard variant="race" />
+        <PromoStripCard variant="reload" />
       </div>
     </div>
   );
 }
 
-function StreakCard() {
-  return (
-    <Link
-      href="/daily-bonus"
-      className="group relative rounded-2xl p-5 overflow-hidden transition-all hover:-translate-y-0.5"
-      style={{
-        background: 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(240,178,50,0.02))',
-        border: '1px solid rgba(240,178,50,0.28)',
-      }}
-    >
-      <div
-        className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(240,178,50,0.25), transparent 60%)', filter: 'blur(20px)' }}
-      />
-      <div className="relative flex items-center justify-between mb-3">
-        <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>
-          Daily Streak
-        </span>
-        <span className="text-2xl" aria-hidden>🔥</span>
-      </div>
-      <p className="relative font-display text-2xl font-black" style={{ color: '#F5E8C8' }}>
-        Day 4 of 7
-      </p>
-      <div className="relative flex gap-1 mt-2.5 mb-3">
-        {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-          <div
-            key={d}
-            className="flex-1 h-1.5 rounded-full"
-            style={{ background: d <= 4 ? '#F0B232' : '#1A2E22' }}
-          />
-        ))}
-      </div>
-      <p className="relative text-xs mb-4" style={{ color: '#8FA899' }}>
-        Today: <span className="font-bold" style={{ color: '#F0B232' }}>2,500 GC</span> + free spin
-      </p>
-      <div className="relative flex items-center gap-1 text-xs font-bold transition-colors group-hover:opacity-80" style={{ color: '#F0B232' }}>
-        Claim today
-        <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-      </div>
-    </Link>
-  );
-}
-
-function DailyRaceCardWide() {
-  return (
-    <Link
-      href="/leaderboards"
-      className="group relative rounded-2xl p-5 overflow-hidden transition-all hover:-translate-y-0.5"
-      style={{
-        background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(45,201,122,0.02))',
-        border: '1px solid rgba(45,201,122,0.32)',
-      }}
-    >
-      <div
-        className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(45,201,122,0.3), transparent 60%)', filter: 'blur(20px)' }}
-      />
-      <div className="relative flex items-center justify-between mb-3">
-        <div className="flex items-center gap-1.5">
-          <span className="live-dot" />
-          <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>
-            Daily Race · Live
-          </span>
+// Compact promo card — fits in the right column of the signed-in hero.
+function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) {
+  if (variant === 'streak') {
+    return (
+      <Link
+        href="/daily-bonus"
+        className="group relative rounded-xl p-3.5 overflow-hidden transition-all hover:-translate-y-0.5 flex flex-col"
+        style={{
+          background: 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(240,178,50,0.02))',
+          border: '1px solid rgba(240,178,50,0.28)',
+        }}
+      >
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Daily Streak</span>
+          <span className="text-base" aria-hidden>🔥</span>
         </div>
-      </div>
-      <p className="relative font-display text-2xl font-black number-display" style={{ color: '#F5E8C8' }}>
-        500,000 <span className="text-sm" style={{ color: '#8FA899' }}>GC</span>
-      </p>
-      <p className="relative text-xs mt-1.5" style={{ color: '#8FA899' }}>
-        Ends in <span className="font-mono font-bold" style={{ color: '#F5E8C8' }}>14h 32m</span>
-      </p>
-      <div className="relative flex items-center justify-between mt-4 pt-3" style={{ borderTop: '1px solid rgba(45,201,122,0.18)' }}>
-        <div>
-          <p className="text-[10px]" style={{ color: '#8FA899' }}>Your rank</p>
-          <p className="text-sm font-bold number-display" style={{ color: '#F5E8C8' }}>#47</p>
+        <p className="font-display text-lg font-black leading-none" style={{ color: '#F5E8C8' }}>Day 4 of 7</p>
+        <div className="flex gap-0.5 mt-2 mb-2">
+          {[1,2,3,4,5,6,7].map((d) => (
+            <div key={d} className="flex-1 h-1 rounded-full" style={{ background: d <= 4 ? '#F0B232' : '#1A2E22' }} />
+          ))}
         </div>
-        <div className="flex items-center gap-1 text-xs font-bold transition-colors group-hover:opacity-80" style={{ color: '#2DC97A' }}>
-          Race
-          <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+        <p className="text-[10px] font-semibold" style={{ color: '#F0B232' }}>
+          Claim 2,500 GC →
+        </p>
+      </Link>
+    );
+  }
+  if (variant === 'race') {
+    return (
+      <Link
+        href="/leaderboards"
+        className="group relative rounded-xl p-3.5 overflow-hidden transition-all hover:-translate-y-0.5 flex flex-col"
+        style={{
+          background: 'linear-gradient(135deg, rgba(45,201,122,0.12), rgba(45,201,122,0.02))',
+          border: '1px solid rgba(45,201,122,0.32)',
+        }}
+      >
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="flex items-center gap-1">
+            <span className="live-dot" style={{ width: 5, height: 5 }} />
+            <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Daily Race</span>
+          </div>
         </div>
-      </div>
-    </Link>
-  );
-}
-
-function ReloadPromoCard() {
+        <p className="font-display text-lg font-black number-display leading-none" style={{ color: '#F5E8C8' }}>
+          500K <span className="text-[10px] font-normal" style={{ color: '#8FA899' }}>GC pool</span>
+        </p>
+        <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>
+          You: <span className="font-bold" style={{ color: '#F5E8C8' }}>#47</span> · ends <span className="font-mono" style={{ color: '#F5E8C8' }}>14h 32m</span>
+        </p>
+        <p className="text-[10px] font-semibold mt-2" style={{ color: '#2DC97A' }}>
+          Race now →
+        </p>
+      </Link>
+    );
+  }
+  // reload
   return (
     <Link
       href="/wallet"
-      className="group relative rounded-2xl p-5 overflow-hidden transition-all hover:-translate-y-0.5"
+      className="group relative rounded-xl p-3.5 overflow-hidden transition-all hover:-translate-y-0.5 flex flex-col"
       style={{
         background: 'linear-gradient(135deg, rgba(96,165,250,0.10), rgba(96,165,250,0.02))',
         border: '1px solid rgba(96,165,250,0.28)',
       }}
     >
-      <div
-        className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(96,165,250,0.25), transparent 60%)', filter: 'blur(20px)' }}
-      />
-      <div className="relative flex items-center justify-between mb-3">
-        <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#60A5FA' }}>
-          Weekend Reload
-        </span>
-        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(96,165,250,0.15)', color: '#60A5FA' }}>
-          FRI–SUN
-        </span>
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#60A5FA' }}>Weekend Reload</span>
+        <span className="text-[8px] font-mono font-bold px-1 py-0.5 rounded" style={{ background: 'rgba(96,165,250,0.18)', color: '#60A5FA' }}>FRI–SUN</span>
       </div>
-      <p className="relative font-display text-2xl font-black" style={{ color: '#F5E8C8' }}>
-        +20% bonus
-      </p>
-      <p className="relative text-xs mt-1.5" style={{ color: '#8FA899' }}>
+      <p className="font-display text-lg font-black leading-none" style={{ color: '#F5E8C8' }}>+20% bonus</p>
+      <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>
         on every coin purchase this weekend
       </p>
-      <div className="relative flex items-center gap-1 text-xs font-bold mt-4 transition-colors group-hover:opacity-80" style={{ color: '#60A5FA' }}>
-        Top up wallet
-        <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-      </div>
+      <p className="text-[10px] font-semibold mt-2" style={{ color: '#60A5FA' }}>
+        Top up wallet →
+      </p>
     </Link>
   );
 }
@@ -718,41 +671,7 @@ export default function CasinoPage() {
         openAuthModal={openAuthModal}
       />
 
-      {/* ── 2. PROMO CARDS ────────────────────────────────────── */}
-      <section className="grid grid-cols-3 gap-4">
-        {PROMO_CARDS.map((promo, i) => {
-          const Icon = promo.icon;
-          return (
-            <motion.div key={promo.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
-              <Link href={promo.href}>
-                <div
-                  className="relative rounded-xl overflow-hidden cursor-pointer group transition-transform hover:-translate-y-0.5"
-                  style={{ background: `linear-gradient(135deg, ${promo.gradientFrom}22, ${promo.gradientTo}88)`, border: `1px solid ${promo.accent}22`, padding: '16px 20px', boxShadow: `0 4px 24px ${promo.glowColor}` }}
-                >
-                  <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full opacity-30" style={{ background: promo.accent, filter: 'blur(24px)' }} />
-                  <div className="relative z-10 flex items-start justify-between">
-                    <div className="flex-1">
-                      <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: promo.accent }}>{promo.badge}</p>
-                      <p className="font-bold text-sm text-[#F5E8C8]">{promo.title}</p>
-                      <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>{promo.subtitle}</p>
-                      <p className="font-black text-base mt-1" style={{ color: promo.accent }}>{promo.highlight}</p>
-                    </div>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ml-3" style={{ background: `${promo.accent}18`, border: `1px solid ${promo.accent}30` }}>
-                      <Icon className="w-5 h-5" style={{ color: promo.accent }} />
-                    </div>
-                  </div>
-                  <div className="relative z-10 flex items-center gap-1 mt-3">
-                    <span className="text-[10px] font-semibold" style={{ color: promo.accent }}>Claim now</span>
-                    <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" style={{ color: promo.accent }} />
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          );
-        })}
-      </section>
-
-      {/* ── 3. BROWSE GAMES ───────────────────────────────────── */}
+      {/* ── 2. BROWSE GAMES ───────────────────────────────────── */}
       <section>
         {/* Search */}
         <div className="relative mb-4">

@@ -26,11 +26,11 @@ const POPULAR_PACKAGES = [
 // so it's the one users care about managing on this page. GC is shown in the
 // breakdown row below for reference.
 export default function WalletPage() {
-  const { goldCoins, sweepCoins, vaultBalance, buyCoins, addBonus } = useWalletStore();
+  const { sweepCoins, vaultBalance, buyCoins, addBonus } = useWalletStore();
   const { isLoggedIn, user } = useAuthStore();
   const { openAuthModal, openBuyCoins, openRedeemModal } = useUIStore();
 
-  const [txFilter, setTxFilter] = useState<'all' | 'in' | 'out' | 'bonus'>('all');
+  const [txFilter, setTxFilter] = useState<'all' | 'purchases' | 'redemptions'>('all');
   const [buying, setBuying]     = useState<string | null>(null);
 
   // One-tap quick-buy for the package preview row. Real flow uses the modal
@@ -83,13 +83,14 @@ export default function WalletPage() {
     );
   }
 
-  // Recent activity, filtered
+  // Money-in / money-out activity only on the wallet page.
+  // Bonus + bet activity lives in notifications and /profile/transactions.
+  const MONEY_TYPES = ['buy', 'redeem'] as const;
   const recentTxns = MOCK_TRANSACTIONS
     .filter((t) => {
-      if (txFilter === 'all') return true;
-      if (txFilter === 'in')   return ['buy', 'daily_bonus', 'bonus', 'rakeback', 'rain', 'tip', 'vault_withdraw'].includes(t.type);
-      if (txFilter === 'out')  return ['redeem', 'vault_deposit'].includes(t.type);
-      if (txFilter === 'bonus')return ['bonus', 'rakeback', 'daily_bonus', 'rain'].includes(t.type);
+      if (!MONEY_TYPES.includes(t.type as typeof MONEY_TYPES[number])) return false;
+      if (txFilter === 'purchases')   return t.type === 'buy';
+      if (txFilter === 'redemptions') return t.type === 'redeem';
       return true;
     })
     .slice(0, 8);
@@ -113,21 +114,32 @@ export default function WalletPage() {
           <p className="text-sm mt-0.5" style={{ color: '#8FA899' }}>Deposit, redeem, and manage your coins.</p>
         </div>
 
-        {/* KYC chip */}
-        <Link
-          href="/kyc"
-          className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:bg-white/5"
-          style={{
-            background: user?.isVerified ? 'rgba(45,201,122,0.08)' : 'rgba(245,158,11,0.08)',
-            border: `1px solid ${user?.isVerified ? 'rgba(45,201,122,0.25)' : 'rgba(245,158,11,0.3)'}`,
-            color: user?.isVerified ? '#2DC97A' : '#F59E0B',
-          }}
-        >
-          {user?.isVerified
-            ? <><CheckCircle2 className="w-3.5 h-3.5" /> KYC Verified</>
-            : <><Shield className="w-3.5 h-3.5" /> Verify Identity</>
-          }
-        </Link>
+        <div className="flex flex-col items-end gap-1.5">
+          {/* KYC chip */}
+          <Link
+            href="/kyc"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:bg-white/5"
+            style={{
+              background: user?.isVerified ? 'rgba(45,201,122,0.08)' : 'rgba(245,158,11,0.08)',
+              border: `1px solid ${user?.isVerified ? 'rgba(45,201,122,0.25)' : 'rgba(245,158,11,0.3)'}`,
+              color: user?.isVerified ? '#2DC97A' : '#F59E0B',
+            }}
+          >
+            {user?.isVerified
+              ? <><CheckCircle2 className="w-3.5 h-3.5" /> KYC Verified</>
+              : <><Shield className="w-3.5 h-3.5" /> Verify Identity</>
+            }
+          </Link>
+          {/* Tiny vault link under KYC */}
+          <Link
+            href="/vault"
+            className="flex items-center gap-1.5 text-[10px] font-bold transition-colors hover:opacity-80"
+            style={{ color: '#8FA899' }}
+          >
+            <YalaIcon name="lock" size={11} />
+            Vault · {vaultBalance.toFixed(2)} SC locked
+          </Link>
+        </div>
       </div>
 
       {/* ── BALANCE HERO — SC always (redeemable currency lives here) ── */}
@@ -189,26 +201,7 @@ export default function WalletPage() {
         </div>
       </div>
 
-      {/* ── BALANCE BREAKDOWN — 2 cards: GC + Vault (Total Wagered moved to /profile) ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <BalanceCard
-          label="Gold Coins"
-          value={formatGC(goldCoins)}
-          accent="#F0B232"
-          icon={<GoldCoinIcon size={24} />}
-          note="Free-to-play currency"
-        />
-        <BalanceCard
-          label="Vault (locked)"
-          value={`${vaultBalance.toFixed(2)} SC`}
-          accent="#2DC97A"
-          icon={<YalaIcon name="lock" size={22} />}
-          action={{ label: 'Manage', href: '/vault' }}
-          note="Protected from play"
-        />
-      </div>
-
-      {/* ── POPULAR PACKAGES — buying coins front and center ── */}
+      {/* ── POPULAR PACKAGES — directly under SC hero, primary focus ── */}
       <div
         className="rounded-2xl overflow-hidden"
         style={{
@@ -353,13 +346,12 @@ export default function WalletPage() {
           </Link>
         </div>
 
-        {/* Filter chips */}
+        {/* Filter chips — money in/out only */}
         <div className="flex gap-1.5 px-5 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
           {([
-            { id: 'all',   label: 'All' },
-            { id: 'in',    label: 'In' },
-            { id: 'out',   label: 'Out' },
-            { id: 'bonus', label: 'Bonuses' },
+            { id: 'all',         label: 'All' },
+            { id: 'purchases',   label: 'Purchases' },
+            { id: 'redemptions', label: 'Redemptions' },
           ] as const).map((f) => (
             <button
               key={f.id}
@@ -401,43 +393,6 @@ export default function WalletPage() {
 }
 
 // ─── Subcomponents ───────────────────────────────────────────────────────────
-function BalanceCard({
-  label, value, accent, icon, action, note,
-}: {
-  label: string;
-  value: string;
-  accent: string;
-  icon: React.ReactNode;
-  action?: { label: string; onClick?: () => void; href?: string };
-  note?: string;
-}) {
-  const actionEl = action && (
-    action.href ? (
-      <Link href={action.href} className="text-[10px] font-bold transition-colors hover:opacity-80" style={{ color: accent }}>
-        {action.label} →
-      </Link>
-    ) : (
-      <button onClick={action.onClick} className="text-[10px] font-bold transition-colors hover:opacity-80" style={{ color: accent }}>
-        {action.label} →
-      </button>
-    )
-  );
-  return (
-    <div
-      className="rounded-xl p-4"
-      style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
-    >
-      <div className="flex items-center justify-between mb-2">
-        {icon}
-        {actionEl}
-      </div>
-      <p className="font-bold text-lg number-display leading-none" style={{ color: accent }}>{value}</p>
-      <p className="text-[10px] mt-1.5 uppercase tracking-widest font-semibold" style={{ color: '#8FA899' }}>{label}</p>
-      {note && <p className="text-[10px] mt-0.5" style={{ color: '#4A6A55' }}>{note}</p>}
-    </div>
-  );
-}
-
 function ActionTile({
   title, blurb, icon, accent, onClick, href, disabled, disabledHint,
 }: {

@@ -151,9 +151,68 @@ export function GlobalChat() {
                 </button>
               )}
             </div>
+
+            {/* Socials row */}
+            <div
+              className="flex-shrink-0 flex items-center justify-between px-3 py-2.5"
+              style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}
+            >
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
+                Join the community
+              </span>
+              <div className="flex items-center gap-1.5">
+                <SocialIcon network="discord"   href="https://discord.gg/yala" />
+                <SocialIcon network="x"         href="https://x.com/playyala" />
+                <SocialIcon network="instagram" href="https://instagram.com/playyala" />
+              </div>
+            </div>
           </motion.div>
         </>
       )}
     </AnimatePresence>
+  );
+}
+
+// Small square social link button at the bottom of the chat panel.
+function SocialIcon({ network, href }: { network: 'discord' | 'x' | 'instagram'; href: string }) {
+  const HOVER = '#F0B232';
+  const label =
+    network === 'discord'   ? 'Discord' :
+    network === 'x'         ? 'X (Twitter)' :
+    'Instagram';
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      title={label}
+      className="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
+      style={{
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid #1A2E22',
+        color: '#8FA899',
+      }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = HOVER; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8FA899'; }}
+    >
+      {network === 'discord' && (
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+          <path d="M20.32 4.37A19.79 19.79 0 0 0 16.56 3.2a.07.07 0 0 0-.08.04 13.6 13.6 0 0 0-.6 1.23 18.34 18.34 0 0 0-5.47 0 12.7 12.7 0 0 0-.61-1.23.08.08 0 0 0-.08-.04 19.74 19.74 0 0 0-3.77 1.17.07.07 0 0 0-.03.03C2.7 8.04 2.1 11.6 2.4 15.12a.09.09 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.02.08.08 0 0 0 .08-.03 14.2 14.2 0 0 0 1.22-1.99.08.08 0 0 0-.04-.1 13.13 13.13 0 0 1-1.87-.89.08.08 0 0 1 0-.13c.13-.1.25-.2.37-.3a.08.08 0 0 1 .08-.01c3.93 1.8 8.18 1.8 12.06 0a.08.08 0 0 1 .08.01c.12.1.24.2.37.3a.08.08 0 0 1 0 .13c-.6.35-1.22.65-1.87.89a.08.08 0 0 0-.04.1c.36.7.77 1.37 1.22 1.99a.08.08 0 0 0 .08.03 19.84 19.84 0 0 0 6-3.02.08.08 0 0 0 .03-.06c.36-4.05-.6-7.58-2.55-10.72a.06.06 0 0 0-.03-.03zM8.52 13.04c-1.18 0-2.16-1.08-2.16-2.4 0-1.34.96-2.42 2.16-2.42 1.21 0 2.18 1.09 2.16 2.42 0 1.32-.96 2.4-2.16 2.4zm6.99 0c-1.19 0-2.16-1.08-2.16-2.4 0-1.34.95-2.42 2.16-2.42 1.21 0 2.18 1.09 2.16 2.42 0 1.32-.95 2.4-2.16 2.4z"/>
+        </svg>
+      )}
+      {network === 'x' && (
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/>
+        </svg>
+      )}
+      {network === 'instagram' && (
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      )}
+    </a>
   );
 }
