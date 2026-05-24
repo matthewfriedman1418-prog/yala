@@ -33,19 +33,20 @@ export function AppShell({ children }: AppShellProps) {
         <Sidebar />
       </div>
 
-      {/* Main content column — shrinks on desktop when chat is open so content
-          isn't hidden behind the side panel */}
-      <div
-        className={cn(
-          'flex flex-col flex-1 min-w-0 overflow-hidden transition-[margin] duration-300 ease-out',
-          chatOpen && 'lg:mr-80'
-        )}
-      >
-        {/* Header */}
+      {/* Main content column — header stays full-width (chat starts BELOW the
+          h-14 header line, so the header doesn't need to make room), only the
+          scrolling content gets pushed when chat opens. */}
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        {/* Header — never shifts when chat opens */}
         <Header />
 
-        {/* Scrollable page content */}
-        <main className="flex-1 overflow-y-auto">
+        {/* Scrollable page content — this is what makes room for the chat panel */}
+        <main
+          className={cn(
+            'flex-1 overflow-y-auto transition-[margin] duration-300 ease-out',
+            chatOpen && 'lg:mr-80'
+          )}
+        >
           <div className="max-w-screen-2xl mx-auto px-4 py-6 pb-20 lg:pb-10">
             {children}
           </div>
