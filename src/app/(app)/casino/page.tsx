@@ -1,7 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
@@ -431,46 +430,41 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
   }, []);
 
   return (
-    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 px-6 py-8 lg:px-10 lg:py-9">
-      {/* LEFT COLUMN — welcome on top, featured game card below to fill space */}
-      <div className="flex flex-col justify-between gap-6 min-h-[320px]">
-        <div className="flex flex-col gap-4">
-          <p className="text-xs font-semibold" style={{ color: '#8FA899' }}>
-            Welcome back, <span className="font-bold" style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
-          </p>
-          <h1
-            className="font-display font-black leading-[0.9]"
-            style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', letterSpacing: '-0.025em' }}
+    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 px-6 py-8 lg:px-10 lg:py-9 lg:items-center">
+      {/* LEFT COLUMN — welcome / tagline / CTAs */}
+      <div className="flex flex-col gap-4">
+        <p className="text-xs font-semibold" style={{ color: '#8FA899' }}>
+          Welcome back, <span className="font-bold" style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
+        </p>
+        <h1
+          className="font-display font-black leading-[0.9]"
+          style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', letterSpacing: '-0.025em' }}
+        >
+          <span className="gold-shimmer">{tagline.line1}</span><br />
+          <span style={{ color: '#F5E8C8' }}>{tagline.line2}</span>
+        </h1>
+        <div className="flex items-center gap-3 flex-wrap pt-1">
+          <Link
+            href="#browse"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
+            style={{
+              background: 'linear-gradient(135deg, #10B981, #2DC97A)',
+              color: '#060E0A',
+              boxShadow: '0 4px 22px rgba(45,201,122,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+            }}
           >
-            <span className="gold-shimmer">{tagline.line1}</span><br />
-            <span style={{ color: '#F5E8C8' }}>{tagline.line2}</span>
-          </h1>
-          <div className="flex items-center gap-3 flex-wrap pt-1">
-            <Link
-              href="#browse"
-              className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
-              style={{
-                background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-                color: '#060E0A',
-                boxShadow: '0 4px 22px rgba(45,201,122,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
-              }}
-            >
-              <Play className="w-4 h-4 flex-shrink-0" fill="#060E0A" />
-              Browse games
-            </Link>
-            <button
-              onClick={openBuyCoins}
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
-            >
-              <Plus className="w-4 h-4" strokeWidth={2.5} />
-              Get coins
-            </button>
-          </div>
+            <Play className="w-4 h-4 flex-shrink-0" fill="#060E0A" />
+            Browse games
+          </Link>
+          <button
+            onClick={openBuyCoins}
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold transition-all hover:bg-white/5"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+          >
+            <Plus className="w-4 h-4" strokeWidth={2.5} />
+            Get coins
+          </button>
         </div>
-
-        {/* WIDE FEATURED-GAME CARD — fills the bottom-left empty space */}
-        <FeaturedPlayCard />
       </div>
 
       {/* RIGHT COLUMN: 3 mini promo cards stacked */}
@@ -480,56 +474,6 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
         <PromoStripCard variant="reload" />
       </div>
     </div>
-  );
-}
-
-// 4th hero card: highlights a featured game with art + Play CTA. Anchors the
-// bottom-left half of the hero so the layout doesn't go gappy.
-function FeaturedPlayCard() {
-  const game = ALL_GAMES.find((g) => g.slug === 'sultan-riches') ?? ALL_GAMES[0];
-  return (
-    <Link
-      href={`/casino/${game.slug}`}
-      className="group relative rounded-2xl overflow-hidden flex items-center gap-4 p-3 transition-all hover:-translate-y-0.5"
-      style={{
-        background: 'linear-gradient(120deg, rgba(167,139,250,0.10) 0%, rgba(45,201,122,0.06) 100%)',
-        border: '1px solid rgba(167,139,250,0.28)',
-      }}
-    >
-      {/* Game art tile */}
-      <div
-        className="relative flex-shrink-0 w-[88px] h-[110px] rounded-xl overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #4c1d95, #1e1040)' }}
-      >
-        {game.imageUrl && (
-          <Image
-            src={game.imageUrl}
-            alt={game.name}
-            fill
-            sizes="88px"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            unoptimized
-          />
-        )}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%)' }} />
-      </div>
-      {/* Meta */}
-      <div className="flex-1 min-w-0">
-        <p className="text-[9px] font-bold uppercase tracking-widest mb-1" style={{ color: '#A78BFA' }}>
-          Featured · Trending now
-        </p>
-        <p className="font-display text-lg font-black truncate" style={{ color: '#F5E8C8' }}>
-          {game.name}
-        </p>
-        <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>
-          {game.provider} · Max win <span className="font-bold" style={{ color: '#F0B232' }}>{game.maxWin}</span>
-        </p>
-        <div className="flex items-center gap-1 text-xs font-bold mt-2 transition-colors group-hover:opacity-80" style={{ color: '#A78BFA' }}>
-          Play now
-          <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-        </div>
-      </div>
-    </Link>
   );
 }
 
