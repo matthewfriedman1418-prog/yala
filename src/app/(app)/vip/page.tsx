@@ -1,30 +1,24 @@
 'use client';
 import { motion } from 'framer-motion';
-import { useAuthStore } from '@/lib/store/auth';
-import { useWalletStore } from '@/lib/store/wallet';
-import { VIP_TIERS } from '@/lib/mock-data/users';
-import { formatXP, getVIPColor } from '@/lib/utils';
-import { useUIStore } from '@/lib/store/ui';
-import { TrendingUp, ChevronRight, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/lib/store/auth';
+import { useWalletStore } from '@/lib/store/wallet';
+import { useUIStore } from '@/lib/store/ui';
+import { VIP_TIERS } from '@/lib/mock-data/users';
+import { formatXP, getVIPColor } from '@/lib/utils';
+import { TrendingUp, Check, Lock as LockIcon } from 'lucide-react';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 
-function CrownIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M2 20h20M4 20l2-8 6 4 4-8 4 8 2-8" />
-    </svg>
-  );
-}
-
+// Tier perks. 'Daily bonus' removed — that's available to everyone, not
+// a VIP exclusive. Each tier adds on top of the previous one.
 const TIER_BENEFITS: Record<number, string[]> = {
-  1: ['5% rakeback', 'Daily bonus', 'Standard support'],
-  2: ['8% rakeback', 'Daily bonus', 'Priority support', 'Weekly bonus'],
-  3: ['12% rakeback', 'Daily bonus', 'Priority support', 'Weekly bonus', 'Monthly drop'],
-  4: ['16% rakeback', 'Daily bonus', 'Priority VIP support', 'Weekly bonus', 'Monthly drop', 'Exclusive promotions'],
-  5: ['20% rakeback', 'Daily bonus', 'Dedicated VIP host', 'Weekly bonus', 'Monthly drop', 'Exclusive access', 'Custom offers'],
-  6: ['25% rakeback', 'Daily bonus', 'Personal VIP concierge', 'Weekly bonus', 'Monthly drop', 'Elite exclusives', 'Custom limits', 'Private events'],
+  1: ['5% rakeback',  'Standard support'],
+  2: ['8% rakeback',  'Priority chat',     'Birthday bonus'],
+  3: ['12% rakeback', 'Weekly bonus',      'Monthly cashback',     'Faster withdrawals'],
+  4: ['16% rakeback', 'Weekly bonus',      'Monthly cashback',     'Exclusive promotions', 'Higher daily limits'],
+  5: ['20% rakeback', 'Dedicated VIP host','Weekly bonus',         'Custom offers',         'Private tournaments'],
+  6: ['25% rakeback', 'Personal concierge','Custom withdrawal limits','Private events',     'Hall of fame'],
 };
 
 export default function VIPPage() {
@@ -33,72 +27,60 @@ export default function VIPPage() {
   const { openAuthModal } = useUIStore();
 
   const currentTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1)) || VIP_TIERS[0];
-  const nextTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1) + 1);
-  const progress = nextTier
+  const nextTier    = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1) + 1);
+  const progress    = nextTier
     ? Math.min(100, ((xp - currentTier.xpRequired) / (nextTier.xpRequired - currentTier.xpRequired)) * 100)
     : 100;
-  const tierColor = getVIPColor(user?.vipTier || 1);
+  const tierColor   = getVIPColor(user?.vipTier || 1);
 
   return (
-    <div className="space-y-8 animate-[fade-in_0.3s_ease-out]">
+    <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
+      {/* ── HERO ───────────────────────────────────────────── */}
       <div
-        className="relative rounded-2xl overflow-hidden p-6 sm:p-10"
+        className="relative rounded-2xl overflow-hidden p-6 sm:p-8"
         style={{
-          background: `radial-gradient(ellipse at 25% 55%, rgba(214,168,79,0.16) 0%, transparent 60%),
-                       radial-gradient(ellipse at 75% 20%, rgba(45,201,122,0.08) 0%, transparent 50%),
-                       #0C1812`,
-          border: '1px solid rgba(214,168,79,0.2)',
-          boxShadow: '0 0 40px rgba(214,168,79,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
+          background: 'radial-gradient(ellipse at 20% 70%, rgba(240,178,50,0.16) 0%, transparent 55%), radial-gradient(ellipse at 90% 0%, rgba(45,201,122,0.10) 0%, transparent 55%), linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)',
+          border: '1px solid rgba(240,178,50,0.22)',
         }}
       >
-        {/* Decorative crown watermark */}
-        <div className="absolute right-6 top-6 opacity-[0.05]">
-          <CrownIcon className="w-32 h-32 text-[#D6A84F]" />
+        {/* Decorative crown watermark, subtle */}
+        <div className="absolute right-6 top-6 opacity-[0.06] pointer-events-none">
+          <YalaIcon name="crown" size={140} />
         </div>
 
-        <div className="relative z-10">
+        <div className="relative z-10 max-w-2xl">
           <div className="flex items-center gap-2 mb-3">
             <div
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-              style={{ background: 'rgba(214,168,79,0.12)', border: '1px solid rgba(214,168,79,0.25)' }}
+              style={{ background: 'rgba(240,178,50,0.12)', border: '1px solid rgba(240,178,50,0.28)' }}
             >
-              <CrownIcon className="w-3.5 h-3.5 text-[#D6A84F]" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#D6A84F]">VIP Club</span>
+              <YalaIcon name="crown" size={14} />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0B232]">VIP Club</span>
             </div>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>
-            Desert Prestige
+            Six tiers. <span className="gold-shimmer">Real perks.</span>
           </h1>
-          <p className="text-sm max-w-lg mb-4" style={{ color: '#8FA899' }}>
-            Six tiers of exclusive benefits. Every GC wagered brings you closer to the Sheikh.
+          <p className="text-sm max-w-lg mb-5" style={{ color: '#8FA899' }}>
+            Every GC you wager earns XP toward the next tier. Higher tiers unlock bigger rakeback, faster cashouts, and custom offers.
           </p>
-          <div className="flex items-center gap-6 text-xs flex-wrap">
-            <div className="flex items-center gap-1.5" style={{ color: '#8FA899' }}>
-              <TrendingUp className="w-3.5 h-3.5 text-[#2DC97A]" />
-              Up to 25% rakeback
-            </div>
-            <div className="flex items-center gap-1.5" style={{ color: '#8FA899' }}>
-              <Zap className="w-3.5 h-3.5 text-[#F0B232]" />
-              Instant coin drops
-            </div>
-            <div className="flex items-center gap-1.5" style={{ color: '#8FA899' }}>
-              <CrownIcon className="w-3.5 h-3.5 text-[#D6A84F]" />
-              Personal VIP concierge
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
+            <HeroPerkStat icon="trending" value="25%" label="Max rakeback" />
+            <HeroPerkStat icon="trophy"   value="6"   label="Prestige tiers" />
+            <HeroPerkStat icon="crown"    value="VIP" label="Personal concierge" />
           </div>
         </div>
       </div>
 
-      {/* ── CURRENT STATUS ───────────────────────────────────── */}
+      {/* ── CURRENT STATUS ─────────────────────────────────── */}
       {isLoggedIn && (
         <div
           className="rounded-2xl p-5 sm:p-6"
           style={{
-            background: `rgba(12,24,18,0.9)`,
-            border: `1px solid ${tierColor}30`,
-            boxShadow: `0 0 24px ${tierColor}10`,
+            background: '#0F1A14',
+            border: `1px solid ${tierColor}38`,
+            boxShadow: `0 0 32px ${tierColor}12`,
           }}
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mb-5">
@@ -107,50 +89,48 @@ export default function VIPPage() {
                 className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
                 style={{
                   background: `linear-gradient(135deg, ${tierColor}25, ${tierColor}08)`,
-                  border: `1px solid ${tierColor}40`,
-                  boxShadow: `0 0 20px ${tierColor}15`,
+                  border: `1px solid ${tierColor}45`,
+                  boxShadow: `0 0 18px ${tierColor}18`,
                 }}
               >
                 <YalaIcon name={currentTier.icon} size={28} />
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>Current Tier</p>
+                <p className="text-[10px] uppercase tracking-widest font-bold mb-0.5" style={{ color: '#8FA899' }}>
+                  Your tier
+                </p>
                 <p className="font-display text-xl font-bold" style={{ color: tierColor }}>
                   {currentTier.name}
                 </p>
-                <p className="text-xs number-display" style={{ color: '#8FA899' }}>{formatXP(xp)} XP earned</p>
+                <p className="text-xs number-display mt-0.5" style={{ color: '#8FA899' }}>
+                  {formatXP(xp)} XP earned
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <div
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl"
-                style={{ background: 'rgba(45,201,122,0.08)', border: '1px solid rgba(45,201,122,0.2)' }}
-              >
-                <TrendingUp className="w-4 h-4 text-[#2DC97A]" />
-                <div>
-                  <p className="text-[10px] uppercase tracking-wide" style={{ color: '#8FA899' }}>Rakeback</p>
-                  <p className="text-base font-black number-display" style={{ color: '#2DC97A' }}>{currentTier.rakeback}%</p>
-                </div>
+
+            <div
+              className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl"
+              style={{ background: 'rgba(45,201,122,0.08)', border: '1px solid rgba(45,201,122,0.25)' }}
+            >
+              <TrendingUp className="w-4 h-4" style={{ color: '#2DC97A' }} />
+              <div>
+                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: '#8FA899' }}>Rakeback rate</p>
+                <p className="text-lg font-black number-display leading-none" style={{ color: '#2DC97A' }}>
+                  {currentTier.rakeback}%
+                </p>
               </div>
-              {nextTier && (
-                <Link
-                  href="/rakeback"
-                  className="flex items-center gap-1.5 text-xs font-semibold transition-opacity hover:opacity-80"
-                  style={{ color: '#D6A84F' }}
-                >
-                  Claim rakeback <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
-              )}
             </div>
           </div>
 
           {/* Progress bar */}
-          {nextTier && (
+          {nextTier ? (
             <div>
-              <div className="flex justify-between text-xs mb-2" style={{ color: '#8FA899' }}>
-                <span style={{ color: tierColor }}>{currentTier.name}</span>
-                <span style={{ color: getVIPColor(nextTier.tier) }}>
-                  {(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}
+              <div className="flex justify-between text-xs mb-2">
+                <span className="font-bold" style={{ color: tierColor }}>{currentTier.name}</span>
+                <span style={{ color: '#8FA899' }}>
+                  <span className="font-mono font-bold" style={{ color: '#F5E8C8' }}>
+                    {(nextTier.xpRequired - xp).toLocaleString()}
+                  </span> XP to <span className="font-bold" style={{ color: getVIPColor(nextTier.tier) }}>{nextTier.name}</span>
                 </span>
               </div>
               <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#1A2E22' }}>
@@ -162,7 +142,7 @@ export default function VIPPage() {
                   style={{ background: `linear-gradient(90deg, ${tierColor}, ${getVIPColor(nextTier.tier)})` }}
                 >
                   <div
-                    className="absolute right-0 top-0 bottom-0 w-4 opacity-60"
+                    className="absolute right-0 top-0 bottom-0 w-4 opacity-70"
                     style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4))' }}
                   />
                 </motion.div>
@@ -171,134 +151,178 @@ export default function VIPPage() {
                 {progress.toFixed(1)}% progress
               </p>
             </div>
+          ) : (
+            <div
+              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              style={{ background: 'rgba(240,178,50,0.06)', border: '1px solid rgba(240,178,50,0.22)' }}
+            >
+              <YalaIcon name="trophy" size={20} />
+              <p className="text-sm font-bold" style={{ color: '#F0B232' }}>
+                Max tier reached — welcome to the top.
+              </p>
+            </div>
           )}
         </div>
       )}
 
-      {/* ── ALL TIERS ────────────────────────────────────────── */}
+      {/* ── ALL TIERS ──────────────────────────────────────── */}
       <div className="space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #D6A84F, #2DC97A)' }} />
-          <h2 className="font-display text-2xl font-bold" style={{ color: '#F5E8C8' }}>All VIP Tiers</h2>
+          <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
+          <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>All VIP tiers</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {VIP_TIERS.map((tier, i) => {
-            const isCurrentTier = user?.vipTier === tier.tier;
-            const isUnlocked = (user?.vipTier || 1) >= tier.tier;
-            const benefits = TIER_BENEFITS[tier.tier];
+            const isCurrent  = user?.vipTier === tier.tier;
+            const isUnlocked = (user?.vipTier || 0) >= tier.tier;
+            const benefits   = TIER_BENEFITS[tier.tier];
             return (
               <motion.div
                 key={tier.tier}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.07 }}
-                className={cn('relative rounded-2xl p-5 transition-all', isCurrentTier ? 'shadow-lg' : '')}
+                transition={{ delay: i * 0.06 }}
+                className={cn('relative rounded-2xl p-5 transition-all', isCurrent ? '' : '')}
                 style={{
-                  background: isCurrentTier
-                    ? `linear-gradient(135deg, ${tier.color}12, rgba(12,24,18,0.95))`
-                    : 'rgba(16,28,22,0.7)',
-                  border: `1px solid ${isCurrentTier ? tier.color + '50' : tier.color + '20'}`,
-                  boxShadow: isCurrentTier ? `0 0 32px ${tier.color}18` : undefined,
+                  background: isCurrent
+                    ? `linear-gradient(135deg, ${tier.color}14, transparent)`
+                    : '#0F1A14',
+                  border: `1px solid ${isCurrent ? `${tier.color}55` : `${tier.color}22`}`,
+                  boxShadow: isCurrent ? `0 0 28px ${tier.color}1A` : undefined,
                 }}
               >
-                {isCurrentTier && (
-                  <div
-                    className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
-                    style={{ background: `linear-gradient(90deg, ${tier.color}, transparent)` }}
-                  />
-                )}
-
+                {/* Tier header */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div
                       className="w-11 h-11 rounded-xl flex items-center justify-center"
                       style={{
                         background: `${tier.color}18`,
-                        border: `1px solid ${tier.color}35`,
-                        boxShadow: isCurrentTier ? `0 0 16px ${tier.color}20` : undefined,
+                        border: `1px solid ${tier.color}38`,
+                        boxShadow: isCurrent ? `0 0 16px ${tier.color}25` : undefined,
                       }}
                     >
                       <YalaIcon name={tier.icon} size={22} />
                     </div>
                     <div>
-                      <p className="font-display font-bold text-base" style={{ color: tier.color }}>{tier.name}</p>
-                      <p className="text-[11px] number-display" style={{ color: '#8FA899' }}>
+                      <p className="font-display font-bold text-base leading-none" style={{ color: tier.color }}>
+                        {tier.name}
+                      </p>
+                      <p className="text-[11px] number-display mt-1" style={{ color: '#8FA899' }}>
                         {tier.xpRequired === 0 ? 'Starting tier' : `${tier.xpRequired.toLocaleString()} XP`}
                       </p>
                     </div>
                   </div>
-                  {isCurrentTier && (
-                    <span
-                      className="text-[10px] font-bold px-2.5 py-1 rounded-full"
-                      style={{ background: tier.color, color: '#060E0A' }}
-                    >
-                      Current
-                    </span>
-                  )}
+                  {isCurrent
+                    ? <span className="text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider" style={{ background: tier.color, color: '#060E0A' }}>
+                        Current
+                      </span>
+                    : isUnlocked
+                      ? <span className="text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1" style={{ background: 'rgba(45,201,122,0.12)', color: '#2DC97A' }}>
+                          <Check className="w-3 h-3" strokeWidth={3} /> Reached
+                        </span>
+                      : <span className="text-[10px] font-bold flex items-center gap-1" style={{ color: '#4A6A55' }}>
+                          <LockIcon className="w-3 h-3" /> Locked
+                        </span>
+                  }
                 </div>
 
+                {/* Rakeback strip */}
                 <div
-                  className="flex items-center gap-2 mb-4 px-3 py-2.5 rounded-xl"
-                  style={{ background: `${tier.color}10`, border: `1px solid ${tier.color}20` }}
+                  className="flex items-center gap-2 mb-4 px-3 py-2 rounded-xl"
+                  style={{ background: `${tier.color}10`, border: `1px solid ${tier.color}22` }}
                 >
-                  <TrendingUp className="w-4 h-4 flex-shrink-0" style={{ color: tier.color }} />
+                  <TrendingUp className="w-3.5 h-3.5 flex-shrink-0" style={{ color: tier.color }} />
                   <span className="text-sm font-bold" style={{ color: tier.color }}>
-                    {tier.rakeback}% Rakeback
+                    {tier.rakeback}% rakeback
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  {benefits.map((benefit, j) => (
-                    <div key={j} className="flex items-center gap-2 text-xs">
+                {/* Benefits list */}
+                <ul className="space-y-1.5">
+                  {benefits
+                    .filter((b) => !b.endsWith(' rakeback'))  // rakeback shown above as its own strip
+                    .map((benefit, j) => (
+                    <li key={j} className="flex items-start gap-2 text-xs">
                       <span
-                        className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black flex-shrink-0"
+                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-px"
                         style={{
-                          background: isUnlocked ? `${tier.color}25` : 'rgba(255,255,255,0.05)',
-                          color: isUnlocked ? tier.color : '#4A6A55',
+                          background: isUnlocked ? `${tier.color}22` : 'rgba(255,255,255,0.04)',
+                          border: isUnlocked ? `1px solid ${tier.color}40` : '1px solid #1A2E22',
                         }}
                       >
-                        ✓
+                        {isUnlocked
+                          ? <Check className="w-2.5 h-2.5" style={{ color: tier.color }} strokeWidth={3} />
+                          : <LockIcon className="w-2 h-2" style={{ color: '#4A6A55' }} strokeWidth={3} />
+                        }
                       </span>
-                      <span style={{ color: isUnlocked ? '#8FA899' : '#4A6A55' }}>{benefit}</span>
-                    </div>
+                      <span style={{ color: isUnlocked ? '#F5E8C8' : '#8FA899' }}>{benefit}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </motion.div>
             );
           })}
         </div>
       </div>
 
-      {/* ── CTA (logged out) ─────────────────────────────────── */}
+      {/* ── CTA (logged out only) ──────────────────────────── */}
       {!isLoggedIn && (
         <div
           className="text-center py-10 rounded-2xl"
-          style={{ background: 'rgba(12,24,18,0.9)', border: '1px solid rgba(214,168,79,0.2)' }}
+          style={{ background: '#0F1A14', border: '1px solid rgba(240,178,50,0.25)' }}
         >
           <div
             className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4"
-            style={{ background: 'rgba(214,168,79,0.12)', border: '1px solid rgba(214,168,79,0.25)' }}
+            style={{ background: 'rgba(240,178,50,0.12)', border: '1px solid rgba(240,178,50,0.28)' }}
           >
-            <CrownIcon className="w-7 h-7 text-[#D6A84F]" />
+            <YalaIcon name="crown" size={30} />
           </div>
           <p className="font-display font-bold text-lg mb-1" style={{ color: '#F5E8C8' }}>
-            Join to Start Earning VIP Status
+            Start earning VIP tier
           </p>
           <p className="text-sm mb-5" style={{ color: '#8FA899' }}>Every wager earns XP toward your next tier.</p>
           <button
             onClick={() => openAuthModal('register')}
-            className="px-7 py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #D6A84F, #F0B232)', color: '#060E0A' }}
+            className="px-7 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
+            style={{
+              background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
+              color: '#060E0A',
+              boxShadow: '0 4px 20px rgba(45,201,122,0.35)',
+            }}
           >
-            Create Free Account
+            Create free account
           </button>
         </div>
       )}
 
       <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
         <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
-          18+ · No Purchase Necessary · Void Where Prohibited
+          18+ · No Purchase Necessary · Void Where Prohibited · <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80">Sweepstakes Rules</Link>
         </p>
+      </div>
+    </div>
+  );
+}
+
+function HeroPerkStat({ icon, value, label }: { icon: 'trending' | 'trophy' | 'crown'; value: string; label: string }) {
+  return (
+    <div
+      className="rounded-xl px-3.5 py-2.5 flex items-center gap-3"
+      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}
+    >
+      <div
+        className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+        style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.22)' }}
+      >
+        {icon === 'trending'
+          ? <TrendingUp className="w-4 h-4" style={{ color: '#2DC97A' }} />
+          : <YalaIcon name={icon === 'trophy' ? 'trophy' : 'crown'} size={18} />
+        }
+      </div>
+      <div>
+        <p className="font-display text-base font-black leading-none" style={{ color: '#F5E8C8' }}>{value}</p>
+        <p className="text-[10px] uppercase tracking-widest mt-1" style={{ color: '#8FA899' }}>{label}</p>
       </div>
     </div>
   );
