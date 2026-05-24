@@ -51,15 +51,6 @@ const FREE_PLAY_OPTIONS: {
     color: '#A78BFA',
     cta: 'Get my code',
   },
-  {
-    id: 'amoe',
-    title: 'Mail-in Entry',
-    desc: 'No purchase ever required. Send a postcard for 1 free SC.',
-    href: '/sweepstakes-rules',
-    icon: 'shield',
-    color: '#60A5FA',
-    cta: 'How it works',
-  },
 ];
 
 export default function DailyBonusPage() {
@@ -80,7 +71,13 @@ export default function DailyBonusPage() {
       todayReward.gc ? `${formatGC(todayReward.gc)} GC` : '',
       todayReward.sc ? `${todayReward.sc} SC` : '',
     ].filter(Boolean).join(' + ');
-    toast.success(`Day ${currentStreak} claimed`, { description: `${reward} added to your wallet.` });
+    if (currentStreak === 7) {
+      toast.success('7-day streak complete! 🏆', {
+        description: `${reward} added · new cycle starts at midnight UTC.`,
+      });
+    } else {
+      toast.success(`Day ${currentStreak} claimed`, { description: `${reward} added to your wallet.` });
+    }
   };
 
   return (
@@ -149,13 +146,15 @@ export default function DailyBonusPage() {
           {/* Center: 7-day calendar */}
           <div className="flex gap-1.5 justify-center lg:justify-start">
             {STREAK_REWARDS.map((r) => {
-              const past    = r.day < currentStreak;
-              const current = r.day === currentStreak;
+              // 'past' now includes today's day IF the user has claimed it —
+              // so the tile flips from gift → green check the moment they claim.
+              const past    = r.day < currentStreak || (r.day === currentStreak && dailyClaimed);
+              const current = r.day === currentStreak && !dailyClaimed;
               const future  = r.day > currentStreak;
               return (
                 <div
                   key={r.day}
-                  className="flex flex-col items-center gap-1 px-1.5 py-2.5 rounded-xl text-center"
+                  className="flex flex-col items-center gap-1 px-1.5 py-2.5 rounded-xl text-center transition-all"
                   style={{
                     width: 44,
                     background: current
@@ -203,10 +202,31 @@ export default function DailyBonusPage() {
             })}
           </div>
 
-          {/* Right: claim button */}
+          {/* Right: claim button — separate UI for Day 7 cycle-complete moment */}
           <div className="flex-shrink-0 w-full lg:w-auto">
             <AnimatePresence mode="wait">
-              {dailyClaimed ? (
+              {dailyClaimed && currentStreak === 7 ? (
+                // Cycle complete state
+                <motion.div
+                  key="cycle-complete"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-3 px-5 py-3 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(240,178,50,0.12), rgba(45,201,122,0.10))',
+                    border: '1px solid rgba(240,178,50,0.35)',
+                  }}
+                >
+                  <YalaIcon name="trophy" size={24} />
+                  <div>
+                    <p className="text-sm font-black" style={{ color: '#F0B232' }}>Streak complete!</p>
+                    <p className="text-[10px]" style={{ color: '#8FA899' }}>
+                      New 7-day cycle starts at midnight UTC
+                    </p>
+                  </div>
+                </motion.div>
+              ) : dailyClaimed ? (
+                // Day 1–6 claimed state
                 <motion.div
                   key="claimed"
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -217,10 +237,13 @@ export default function DailyBonusPage() {
                   <CheckCircle2 className="w-5 h-5" style={{ color: '#2DC97A' }} />
                   <div>
                     <p className="text-sm font-bold" style={{ color: '#2DC97A' }}>Claimed</p>
-                    <p className="text-[10px]" style={{ color: '#8FA899' }}>Back tomorrow</p>
+                    <p className="text-[10px]" style={{ color: '#8FA899' }}>
+                      Day {currentStreak + 1} unlocks tomorrow
+                    </p>
                   </div>
                 </motion.div>
               ) : (
+                // Unclaimed
                 <motion.button
                   key="claim"
                   onClick={handleDailyClaim}
@@ -238,7 +261,9 @@ export default function DailyBonusPage() {
               )}
             </AnimatePresence>
             <p className="text-[10px] text-center mt-2" style={{ color: '#4A6A55' }}>
-              Resets midnight UTC · No purchase necessary
+              {dailyClaimed && currentStreak === 7
+                ? 'Streak resets to Day 1 tomorrow · keep showing up'
+                : 'Resets midnight UTC · No purchase necessary'}
             </p>
           </div>
         </div>
@@ -250,7 +275,7 @@ export default function DailyBonusPage() {
           <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #2DC97A, #F0B232)' }} />
           <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>More ways to earn free</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {FREE_PLAY_OPTIONS.map((opt, i) => (
             <motion.div
               key={opt.id}
@@ -284,23 +309,44 @@ export default function DailyBonusPage() {
         </div>
       </div>
 
-      {/* ── STREAK NUDGE ── */}
+      {/* ── STREAK NUDGE / CYCLE-COMPLETE BANNER ── */}
       <div
         className="rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-        style={{ background: 'rgba(240,178,50,0.05)', border: '1px solid rgba(240,178,50,0.18)' }}
+        style={{
+          background: dailyClaimed && currentStreak === 7
+            ? 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(45,201,122,0.08))'
+            : 'rgba(240,178,50,0.05)',
+          border: `1px solid ${dailyClaimed && currentStreak === 7 ? 'rgba(240,178,50,0.32)' : 'rgba(240,178,50,0.18)'}`,
+        }}
       >
         <div className="flex items-center gap-3">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(240,178,50,0.12)', border: '1px solid rgba(240,178,50,0.28)' }}
+            style={{
+              background: dailyClaimed && currentStreak === 7
+                ? 'rgba(240,178,50,0.18)'
+                : 'rgba(240,178,50,0.12)',
+              border: '1px solid rgba(240,178,50,0.28)',
+            }}
           >
-            <YalaIcon name="daily-star" size={20} />
+            <YalaIcon name={dailyClaimed && currentStreak === 7 ? 'trophy' : 'daily-star'} size={20} />
           </div>
           <div>
-            <p className="font-bold mb-0.5" style={{ color: '#F5E8C8' }}>Keep your streak alive</p>
-            <p className="text-sm" style={{ color: '#8FA899' }}>
-              Day 7 pays <span className="font-bold" style={{ color: '#F0B232' }}>5,000 GC + 1 SC</span> — your biggest daily haul. Don&apos;t break the chain.
-            </p>
+            {dailyClaimed && currentStreak === 7 ? (
+              <>
+                <p className="font-bold mb-0.5" style={{ color: '#F5E8C8' }}>You did it · 7-day streak unlocked</p>
+                <p className="text-sm" style={{ color: '#8FA899' }}>
+                  Cycle resets at midnight UTC. Show up tomorrow and start Day 1 — keep showing up and you&apos;ll unlock VIP streak rewards.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="font-bold mb-0.5" style={{ color: '#F5E8C8' }}>Keep your streak alive</p>
+                <p className="text-sm" style={{ color: '#8FA899' }}>
+                  Day 7 pays <span className="font-bold" style={{ color: '#F0B232' }}>5,000 GC + 1 SC</span> — your biggest daily haul. Don&apos;t break the chain.
+                </p>
+              </>
+            )}
           </div>
         </div>
         <Link
