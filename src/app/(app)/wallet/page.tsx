@@ -291,7 +291,7 @@ export default function WalletPage() {
       {/* ── QUICK ACTIONS ───────────────────────────────────── */}
       <div>
         <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#8FA899' }}>
-          Move money
+          Manage coins
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <ActionTile
