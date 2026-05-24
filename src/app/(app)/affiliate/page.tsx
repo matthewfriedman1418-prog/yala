@@ -9,6 +9,8 @@ import {
   MousePointer, ShoppingCart, Zap, Download,
   ChevronRight, Star, ExternalLink
 } from 'lucide-react';
+import { YalaReferralCard, CARD_OPTIONS } from '@/components/affiliate/YalaReferralCard';
+import type { CardVariant } from '@/lib/store/auth';
 
 // Pyramid SVG (for the sharing card)
 function CardPyramid({ size = 32 }: { size?: number }) {
@@ -294,9 +296,10 @@ function CodePicker({ currentCode, onCodeSet }: { currentCode: string; onCodeSet
 }
 
 export default function AffiliatePage() {
-  const { isLoggedIn, user } = useAuthStore();
+  const { isLoggedIn, user, setCardVariant } = useAuthStore();
   const { openAuthModal } = useUIStore();
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const cardVariant: CardVariant = user?.cardVariant ?? 8;
   const [referralCode, setReferralCode] = useState(user?.referralCode || 'JACKPOT');
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -393,7 +396,38 @@ export default function AffiliatePage() {
             {/* LEFT: Sharing Card */}
             <div className="space-y-3 lg:w-[340px] flex-shrink-0">
               <div ref={cardRef}>
-                <SharingCard code={referralCode} />
+                <YalaReferralCard
+                  code={referralCode}
+                  displayName={user?.displayName || user?.username}
+                  variant={cardVariant}
+                />
+              </div>
+
+              {/* Card style picker */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Card Style</p>
+                  <span className="text-[10px] font-mono" style={{ color: '#4A6A55' }}>
+                    {cardVariant === 'rotate' ? 'cycles every 4s' : `#${String(cardVariant).padStart(2, '0')}`}
+                  </span>
+                </div>
+                <select
+                  value={String(cardVariant)}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setCardVariant(v === 'rotate' ? 'rotate' : (Number(v) as CardVariant));
+                  }}
+                  className="w-full px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none transition-colors"
+                  style={{
+                    background: '#0F1A14',
+                    border: '1px solid #1A2E22',
+                    color: '#F5E8C8',
+                  }}
+                >
+                  {CARD_OPTIONS.map((o) => (
+                    <option key={String(o.id)} value={String(o.id)}>{o.label}</option>
+                  ))}
+                </select>
               </div>
               {/* Share buttons */}
               <div className="flex gap-2 flex-wrap">

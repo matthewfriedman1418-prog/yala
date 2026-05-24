@@ -5,17 +5,39 @@ import { useUIStore } from '@/lib/store/ui';
 import { VIP_TIERS } from '@/lib/mock-data/users';
 import { formatGC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star } from 'lucide-react';
+import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star, Pencil, Check, X } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
-  const { isLoggedIn, user } = useAuthStore();
+  const { isLoggedIn, user, updateDisplayName } = useAuthStore();
   const { goldCoins, sweepCoins, xp } = useWalletStore();
   const { openAuthModal } = useUIStore();
   const [copied, setCopied] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState('');
+
+  const handleSaveName = () => {
+    const trimmed = nameDraft.trim();
+    if (!trimmed) {
+      setEditingName(false);
+      return;
+    }
+    if (trimmed.length < 3 || trimmed.length > 24) {
+      toast.error('Name must be 3–24 characters');
+      return;
+    }
+    updateDisplayName(trimmed);
+    setEditingName(false);
+    toast.success('Display name updated', { description: 'Visible on your profile and referral card.' });
+  };
+
+  const startEditName = () => {
+    setNameDraft(user?.displayName || user?.username || '');
+    setEditingName(true);
+  };
 
   if (!isLoggedIn) {
     return (
@@ -71,8 +93,54 @@ export default function ProfilePage() {
           {/* Name + tier + progress */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3 flex-wrap">
-              <div>
-                <h1 className="font-display text-2xl font-bold mb-0.5" style={{ color: '#F5E8C8' }}>{user?.username}</h1>
+              <div className="min-w-0">
+                {editingName ? (
+                  <div className="flex items-center gap-2 mb-1">
+                    <input
+                      autoFocus
+                      value={nameDraft}
+                      onChange={(e) => setNameDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveName();
+                        if (e.key === 'Escape') setEditingName(false);
+                      }}
+                      maxLength={24}
+                      className="font-display text-2xl font-bold bg-transparent border-b focus:outline-none px-1"
+                      style={{ color: '#F5E8C8', borderColor: tierColor }}
+                    />
+                    <button
+                      onClick={handleSaveName}
+                      aria-label="Save name"
+                      className="p-1.5 rounded-lg transition-colors hover:bg-emerald-500/10"
+                      style={{ color: '#2DC97A' }}
+                    >
+                      <Check className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setEditingName(false)}
+                      aria-label="Cancel"
+                      className="p-1.5 rounded-lg transition-colors hover:bg-white/5"
+                      style={{ color: '#8FA899' }}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 mb-0.5 group">
+                    <h1 className="font-display text-2xl font-bold" style={{ color: '#F5E8C8' }}>
+                      {user?.displayName || user?.username}
+                    </h1>
+                    <button
+                      onClick={startEditName}
+                      aria-label="Edit display name"
+                      title="Edit display name"
+                      className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-white/5"
+                      style={{ color: '#8FA899' }}
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
                 <p className="text-sm mb-1" style={{ color: '#8FA899' }}>{user?.email}</p>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-bold flex items-center gap-1.5" style={{ color: tierColor }}>
@@ -138,6 +206,53 @@ export default function ProfilePage() {
             <p className="text-[10px]" style={{ color: '#4A6A55' }}>Total Wagered</p>
           </div>
         </div>
+      </div>
+
+      {/* ── ALL-TIME STATS ── */}
+      <div
+        className="rounded-2xl p-5"
+        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
+          <h3 className="font-display text-base font-bold" style={{ color: '#F5E8C8' }}>All-Time Stats</h3>
+          <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: '#4A6A55' }}>since {user?.joinDate}</span>
+        </div>
+        {(() => {
+          const wagered   = user?.totalWagered      || 0;
+          const deposited = user?.totalDeposited    || 0;
+          const withdrawn = user?.totalWithdrawn    || 0;
+          const bonus     = user?.totalBonusReceived || 0;
+          // Profit = (deposits - withdrawals) flipped + bonus → shown favorably
+          const netSpend = deposited - withdrawn;          // negative = net winnings
+          const adjustedProfit = -netSpend + bonus;        // higher = better
+          const profitColor = adjustedProfit >= 0 ? '#2DC97A' : '#EF4444';
+
+          const stats = [
+            { label: 'Amount Wagered',  value: formatGC(wagered),       sub: 'GC + SC combined',    icon: <YalaIcon name="activity" size={20} />, color: '#A78BFA' },
+            { label: 'Deposits',        value: `$${(deposited / 100).toFixed(2)}`, sub: 'lifetime',           icon: <YalaIcon name="wallet-icon" size={20} />, color: '#F0B232' },
+            { label: 'Bonus Received',  value: formatGC(bonus),         sub: 'free play + promos',   icon: <YalaIcon name="gift" size={20} />,     color: '#FFD166' },
+            { label: 'Profit',          value: `${adjustedProfit >= 0 ? '+' : ''}$${(adjustedProfit / 100).toFixed(2)}`, sub: 'incl. bonus value', icon: <TrendingUp className="w-5 h-5" style={{ color: profitColor }} />, color: profitColor },
+          ];
+          return (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-xl p-4"
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    {s.icon}
+                    <span className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>{s.label}</span>
+                  </div>
+                  <p className="font-display text-xl font-black number-display leading-none" style={{ color: s.color }}>{s.value}</p>
+                  <p className="text-[10px] mt-1" style={{ color: '#4A6A55' }}>{s.sub}</p>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </div>
 
       {/* ── MAIN GRID: account info + referral + quick links ── */}

@@ -21,81 +21,120 @@ export default function SupportPage() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="max-w-3xl space-y-8 animate-[fade-in_0.3s_ease-out]">
+    <div className="max-w-6xl space-y-6 animate-[fade-in_0.3s_ease-out]">
+      {/* Compact header */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <HelpCircle className="w-4 h-4" style={{ color: '#D6A84F' }} />
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#D6A84F' }}>Support</span>
+          <HelpCircle className="w-4 h-4" style={{ color: '#F0B232' }} />
+          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#F0B232' }}>Support</span>
         </div>
-        <h1 className="font-display text-3xl font-bold mb-2" style={{ color: '#F5E8C8' }}>Help Center</h1>
-        <p style={{ color: '#9CA3AF' }}>Find answers or get in touch with our support team.</p>
+        <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Help Center</h1>
+        <p style={{ color: '#8FA899' }}>Search the FAQ, hit live chat, or open a ticket.</p>
       </div>
 
-      {/* Contact options */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button className="glass-card p-5 text-left hover:border-[#D6A84F]/30 transition-all">
-          <MessageCircle className="w-6 h-6 mb-3" style={{ color: '#D6A84F' }} />
-          <p className="font-semibold mb-1" style={{ color: '#F5E8C8' }}>Live Chat</p>
-          <p className="text-sm" style={{ color: '#9CA3AF' }}>Chat with a support agent in real time.</p>
-          <div className="flex items-center gap-1 mt-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs text-emerald-400">Available 24/7</span>
-          </div>
-        </button>
-        <button className="glass-card p-5 text-left hover:border-[#D6A84F]/30 transition-all">
-          <Mail className="w-6 h-6 mb-3" style={{ color: '#D6A84F' }} />
-          <p className="font-semibold mb-1" style={{ color: '#F5E8C8' }}>Email Support</p>
-          <p className="text-sm" style={{ color: '#9CA3AF' }}>support@yala.com: typically reply within 24h.</p>
-          <span className="text-xs mt-2 block" style={{ color: '#9CA3AF' }}>Response time: &lt; 24 hours</span>
-        </button>
-      </div>
+      {/* Two-column layout: contact + FAQ on the left, ticket on the right */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
 
-      {/* FAQ */}
-      <div>
-        <h2 className="font-display text-xl font-bold mb-4" style={{ color: '#F5E8C8' }}>Frequently Asked Questions</h2>
-        <div className="space-y-2">
-          {FAQS.map((faq, i) => (
-            <div key={i} className="glass-card overflow-hidden">
-              <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left"
-              >
-                <p className="font-medium pr-4" style={{ color: '#F5E8C8' }}>{faq.q}</p>
-                {openFaq === i ? <ChevronUp className="w-4 h-4 flex-shrink-0" style={{ color: '#D6A84F' }} /> : <ChevronDown className="w-4 h-4 flex-shrink-0 text-[#9CA3AF]" />}
-              </button>
-              {openFaq === i && (
-                <div className="px-5 pb-4 border-t border-[#1E1E1E] pt-3">
-                  <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>{faq.a}</p>
+        {/* LEFT column: contact + FAQ */}
+        <div className="space-y-6">
+          {/* Contact options — compact row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
+              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
+                <MessageCircle className="w-5 h-5" style={{ color: '#F0B232' }} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-sm mb-0.5" style={{ color: '#F5E8C8' }}>Live Chat</p>
+                <p className="text-xs leading-snug" style={{ color: '#8FA899' }}>Real-time agent</p>
+                <div className="flex items-center gap-1 mt-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] text-emerald-400 font-semibold">24/7</span>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Submit ticket */}
-      <div className="glass-card p-6">
-        <h3 className="font-semibold mb-4" style={{ color: '#F5E8C8' }}>Submit a Support Ticket</h3>
-        {!submitted ? (
-          <div className="space-y-3">
-            <input type="email" value={ticketForm.email} onChange={(e) => setTicketForm({ ...ticketForm, email: e.target.value })} placeholder="Your email" className="w-full px-4 py-2.5 rounded-xl text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F]/50" style={{ background: 'rgba(255,255,255,0.05)', borderColor: '#2a2a2a' }} />
-            <input type="text" value={ticketForm.subject} onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })} placeholder="Subject" className="w-full px-4 py-2.5 rounded-xl text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F]/50" style={{ background: 'rgba(255,255,255,0.05)', borderColor: '#2a2a2a' }} />
-            <textarea value={ticketForm.message} onChange={(e) => setTicketForm({ ...ticketForm, message: e.target.value })} placeholder="Describe your issue..." rows={4} className="w-full px-4 py-2.5 rounded-xl text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#D6A84F]/50 resize-none" style={{ background: 'rgba(255,255,255,0.05)', borderColor: '#2a2a2a' }} />
-            <button onClick={() => { if (ticketForm.email && ticketForm.message) setSubmitted(true); }} className="w-full py-3 rounded-xl font-semibold text-sm text-black" style={{ background: 'linear-gradient(135deg, #D6A84F, #F0C97A)' }}>
-              Submit Ticket
+              </div>
+            </button>
+            <button className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
+              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
+                <Mail className="w-5 h-5" style={{ color: '#F0B232' }} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-sm mb-0.5" style={{ color: '#F5E8C8' }}>Email</p>
+                <p className="text-xs leading-snug truncate" style={{ color: '#8FA899' }}>support@yala.com</p>
+                <p className="text-[10px] mt-1.5 font-semibold" style={{ color: '#8FA899' }}>&lt; 24h response</p>
+              </div>
             </button>
           </div>
-        ) : (
-          <div className="text-center py-4">
-            <p className="text-emerald-400 font-semibold">✓ Ticket Submitted</p>
-            <p className="text-sm mt-1" style={{ color: '#9CA3AF' }}>We will respond to {ticketForm.email} within 24 hours.</p>
-          </div>
-        )}
-      </div>
 
-      <div className="border-t border-[#1E1E1E] pt-4 text-center">
-        <p className="text-xs" style={{ color: '#9CA3AF' }}>Problem Gambling Helpline: <strong>1-800-522-4700</strong> (24/7, free)</p>
+          {/* FAQ — tighter spacing */}
+          <div>
+            <h2 className="font-display text-lg font-bold mb-3" style={{ color: '#F5E8C8' }}>Frequently Asked Questions</h2>
+            <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+              {FAQS.map((faq, i) => (
+                <div key={i} className={i > 0 ? 'border-t' : ''} style={{ borderColor: '#1A2E22' }}>
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-white/5"
+                  >
+                    <p className="font-medium text-sm pr-4" style={{ color: '#F5E8C8' }}>{faq.q}</p>
+                    {openFaq === i
+                      ? <ChevronUp className="w-4 h-4 flex-shrink-0" style={{ color: '#F0B232' }} />
+                      : <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />}
+                  </button>
+                  {openFaq === i && (
+                    <div className="px-4 pb-4 -mt-1">
+                      <p className="text-xs leading-relaxed" style={{ color: '#8FA899' }}>{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT column: sticky ticket form */}
+        <div className="rounded-2xl p-5 lg:sticky lg:top-4" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+          <h3 className="font-semibold text-sm mb-3" style={{ color: '#F5E8C8' }}>Submit a Ticket</h3>
+          {!submitted ? (
+            <div className="space-y-2.5">
+              <input type="email" value={ticketForm.email} onChange={(e) => setTicketForm({ ...ticketForm, email: e.target.value })} placeholder="Your email" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
+              <input type="text" value={ticketForm.subject} onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })} placeholder="Subject" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
+              <textarea value={ticketForm.message} onChange={(e) => setTicketForm({ ...ticketForm, message: e.target.value })} placeholder="Describe your issue…" rows={5} className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50 resize-none" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
+              <button onClick={() => { if (ticketForm.email && ticketForm.message) setSubmitted(true); }} className="w-full py-2.5 rounded-xl font-bold text-sm text-black transition-all hover:opacity-90 active:scale-95" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}>
+                Submit Ticket
+              </button>
+              <p className="text-[10px] text-center pt-1" style={{ color: '#4A6A55' }}>
+                Average response time: under 24h
+              </p>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <CheckCircle2Icon />
+              <p className="text-emerald-400 font-semibold text-sm mt-2">Ticket Submitted</p>
+              <p className="text-xs mt-1" style={{ color: '#8FA899' }}>We will reply to {ticketForm.email} within 24h.</p>
+            </div>
+          )}
+
+          {/* RG helpline tucked in the same column */}
+          <div className="mt-5 pt-4" style={{ borderTop: '1px solid #1A2E22' }}>
+            <p className="text-[10px] uppercase tracking-widest font-semibold mb-1" style={{ color: '#8FA899' }}>Problem Gambling</p>
+            <p className="text-xs" style={{ color: '#F5E8C8' }}>
+              Helpline: <a href="tel:1-800-522-4700" className="font-bold" style={{ color: '#2DC97A' }}>1-800-522-4700</a>
+            </p>
+            <p className="text-[10px] mt-0.5" style={{ color: '#4A6A55' }}>24/7 · free · confidential</p>
+          </div>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function CheckCircle2Icon() {
+  return (
+    <div className="w-12 h-12 rounded-full mx-auto flex items-center justify-center" style={{ background: 'rgba(45,201,122,0.12)', border: '1px solid rgba(45,201,122,0.3)' }}>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="#2DC97A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
     </div>
   );
 }
