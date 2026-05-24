@@ -38,7 +38,9 @@ const MOCK_USER: User = {
   xp: 312_450,
   xpToNext: 750_000,
   joinDate: '2025-01-14',
-  isVerified: true,
+  // Default mock user is UNVERIFIED so KYC wizard is visible by default.
+  // Toggle from the KYC page demo switcher or set true here for verified state.
+  isVerified: false,
   country: 'US',
   referralCode: 'DESERT88',
   totalWagered: 4_280_000,
