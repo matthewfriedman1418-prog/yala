@@ -5,10 +5,12 @@ import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
 import { MOCK_CHAT } from '@/lib/mock-data/chat';
 import { formatTime, getVIPColor } from '@/lib/utils';
-import { X, Send, Pin, Smile } from 'lucide-react';
+import { X, Send, Pin, Smile, CloudRain } from 'lucide-react';
 import { YalaAvatar } from '@/components/ui/YalaAvatar';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 import { EmojiPicker, UserProfilePopover, type ChatUserStats } from './ChatPopovers';
+import { TipModal, RainModal } from './ChatActionModals';
+import { useChatStore } from '@/lib/store/chat';
 
 // Mock per-user stats lookup — in real life this comes from the user service.
 // One user ('OasisHunter') is intentionally marked private to demo that state.
@@ -41,13 +43,23 @@ export function GlobalChat() {
   const [messages, setMessages] = useState(MOCK_CHAT);
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [profilePopover, setProfilePopover] = useState<{ user: ChatUserStats; rect: { top: number; left: number } } | null>(null);
+  const [tipTarget, setTipTarget] = useState<ChatUserStats | null>(null);
+  const [rainOpen, setRainOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
+  const blocked   = useChatStore((s) => s.blocked);
 
   // VIP gating
   const userVipTier = user?.vipTier || 0;
   const canEnterVip = userVipTier >= 4;
+  const canRain     = userVipTier >= 4;
   const effectiveRoom = room === 'vip' && !canEnterVip ? 'public' : room;
+
+  // Hide messages from users the current user has blocked
+  const visibleMessages = useMemo(
+    () => messages.filter((m) => !blocked.includes(m.userId)),
+    [messages, blocked],
+  );
 
   useEffect(() => {
     if (chatOpen) {
@@ -174,9 +186,9 @@ export function GlobalChat() {
 
             {/* ── Messages ───────────────────────────────────── */}
             <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 no-scrollbar">
-              {messages.length === 0
-                ? <ChatEmpty />
-                : messages.map((msg) => (
+              {visibleMessages.length === 0
+                ? <ChatEmpty hasBlocked={blocked.length > 0 && messages.length > 0} />
+                : visibleMessages.map((msg) => (
                     <ChatRow
                       key={msg.id}
                       msg={msg}
@@ -264,6 +276,21 @@ export function GlobalChat() {
                       onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
                       maxLength={MAX_MSG}
                     />
+                    {/* Rain button — VIP4+ gated, visually disabled below */}
+                    <button
+                      type="button"
+                      onClick={() => setRainOpen(true)}
+                      aria-label={canRain ? 'Open Rain' : 'Rain requires VIP Tier 4+'}
+                      title={canRain ? 'Make it rain' : 'Rain requires VIP Tier 4+'}
+                      className="p-2 rounded-lg transition-colors hover:bg-white/5"
+                      style={{
+                        color: canRain ? '#60A5FA' : '#4A6A55',
+                        background: canRain ? 'rgba(96,165,250,0.08)' : 'transparent',
+                        cursor: canRain ? 'pointer' : 'not-allowed',
+                      }}
+                    >
+                      <CloudRain className="w-4 h-4" />
+                    </button>
                     <button
                       type="submit"
                       disabled={!message.trim()}
@@ -326,8 +353,60 @@ export function GlobalChat() {
               anchorRect={profilePopover.rect}
               open={true}
               onClose={() => setProfilePopover(null)}
+              onTip={(u) => { setTipTarget(u); setProfilePopover(null); }}
             />
           )}
+
+          {/* ── Tip modal */}
+          <TipModal
+            open={tipTarget !== null}
+            target={tipTarget ? { userId: tipTarget.id, username: tipTarget.username, avatar: tipTarget.avatar, vipTier: tipTarget.vipTier } : null}
+            onClose={() => setTipTarget(null)}
+            onSend={(amount, currency) => {
+              if (!tipTarget) return;
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `cm_tip_${Date.now()}`,
+                  userId: user?.id || 'u0',
+                  username: user?.displayName || user?.username || 'You',
+                  avatar: user?.avatar || 'U',
+                  vipTier: user?.vipTier || 1,
+                  message: '',
+                  timestamp: new Date().toISOString(),
+                  isTip: true,
+                  tipAmount: amount,
+                  tipTo: tipTarget.username,
+                  currency,
+                },
+              ]);
+              setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+            }}
+          />
+
+          {/* ── Rain modal */}
+          <RainModal
+            open={rainOpen}
+            onClose={() => setRainOpen(false)}
+            onSend={(amount, currency /* , count */) => {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `cm_rain_${Date.now()}`,
+                  userId: user?.id || 'u0',
+                  username: user?.displayName || user?.username || 'You',
+                  avatar: user?.avatar || 'U',
+                  vipTier: user?.vipTier || 1,
+                  message: '',
+                  timestamp: new Date().toISOString(),
+                  isRain: true,
+                  rainAmount: amount,
+                  currency,
+                },
+              ]);
+              setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+            }}
+          />
         </>
       )}
     </AnimatePresence>
@@ -443,7 +522,7 @@ function ChatRow({
   );
 }
 
-function ChatEmpty() {
+function ChatEmpty({ hasBlocked }: { hasBlocked?: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center px-4">
       <div
@@ -452,8 +531,14 @@ function ChatEmpty() {
       >
         <YalaIcon name="sparkle" size={22} />
       </div>
-      <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>It&apos;s quiet in here</p>
-      <p className="text-[11px]" style={{ color: '#8FA899' }}>Be the first to say something.</p>
+      <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>
+        {hasBlocked ? 'All visible messages are hidden' : "It's quiet in here"}
+      </p>
+      <p className="text-[11px]" style={{ color: '#8FA899' }}>
+        {hasBlocked
+          ? 'You\'ve blocked the active chatters. Manage from a user\'s profile.'
+          : 'Be the first to say something.'}
+      </p>
     </div>
   );
 }

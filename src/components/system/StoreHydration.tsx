@@ -4,6 +4,7 @@ import { useAuthStore } from '@/lib/store/auth';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useNotificationsStore } from '@/lib/store/notifications';
 import { useSettingsStore } from '@/lib/store/settings';
+import { useChatStore } from '@/lib/store/chat';
 
 /**
  * Mount-once component that triggers Zustand persist rehydration.
@@ -17,6 +18,7 @@ export function StoreHydration() {
     useWalletStore.persist.rehydrate();
     useNotificationsStore.persist.rehydrate();
     useSettingsStore.persist.rehydrate();
+    useChatStore.persist.rehydrate();
   }, []);
   return null;
 }

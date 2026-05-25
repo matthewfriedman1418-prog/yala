@@ -2,10 +2,12 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { YalaAvatar } from '@/components/ui/YalaAvatar';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 import { getVIPColor, getVIPName, formatGC } from '@/lib/utils';
-import { Lock } from 'lucide-react';
+import { Lock, UserX, UserCheck } from 'lucide-react';
+import { useChatStore } from '@/lib/store/chat';
 
 // ── EmojiPicker ─────────────────────────────────────────────────────────────
 const EMOJI_GROUPS: { label: string; chars: string[] }[] = [
@@ -100,9 +102,15 @@ interface UserProfilePopoverProps {
   onClose: () => void;
   /** Anchor position (the chat row that was clicked). Position is fixed in the document. */
   anchorRect: { top: number; left: number } | null;
+  /** Called when "Tip" is clicked — opens the tip modal in the parent. */
+  onTip?: (user: ChatUserStats) => void;
 }
 
-export function UserProfilePopover({ user, open, onClose, anchorRect }: UserProfilePopoverProps) {
+export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: UserProfilePopoverProps) {
+  const blocked   = useChatStore((s) => s.blocked);
+  const blockUser = useChatStore((s) => s.block);
+  const unblock   = useChatStore((s) => s.unblock);
+  const isBlocked = blocked.includes(user.id);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -218,14 +226,28 @@ export function UserProfilePopover({ user, open, onClose, anchorRect }: UserProf
         ) : (
           <>
             <button
-              onClick={onClose}
-              className="flex items-center justify-center gap-1 py-2 rounded-lg text-xs font-bold transition-all hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              onClick={() => {
+                if (isBlocked) {
+                  unblock(user.id);
+                  toast.success(`Unblocked ${user.username}`, { description: 'Their messages will show in chat again.' });
+                } else {
+                  blockUser(user.id);
+                  toast(`Blocked ${user.username}`, { description: 'Their messages are now hidden from your chat.' });
+                }
+                onClose();
+              }}
+              className="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all hover:bg-white/5"
+              style={{
+                background: isBlocked ? 'rgba(45,201,122,0.10)' : 'rgba(255,255,255,0.04)',
+                border:     `1px solid ${isBlocked ? 'rgba(45,201,122,0.30)' : '#1A2E22'}`,
+                color:      isBlocked ? '#2DC97A' : '#8FA899',
+              }}
             >
-              Block
+              {isBlocked ? <UserCheck className="w-3 h-3" /> : <UserX className="w-3 h-3" />}
+              {isBlocked ? 'Unblock' : 'Block'}
             </button>
             <button
-              onClick={onClose}
+              onClick={() => { onTip?.(user); onClose(); }}
               className="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110"
               style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
             >
