@@ -23,6 +23,15 @@ function GameTypeIcon({ type, color }: { type: string; color: string }) {
     </svg>
   );
   if (t.includes('mines')) return <Target className={cls} style={style} />;
+  if (t.includes('auction')) return (
+    <svg className={cls} style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="3" x2="12" y2="21" />
+      <rect x="4" y="14" width="16" height="3" rx="0.5" />
+      <line x1="4"  y1="9" x2="20" y2="9" />
+      <line x1="8"  y1="9" x2="6"  y2="14" />
+      <line x1="16" y1="9" x2="18" y2="14" />
+    </svg>
+  );
   if (t.includes('trail')) return (
     <svg className={cls} style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="4" cy="20" r="1.5" fill="currentColor" />
@@ -71,6 +80,8 @@ function GameTypeIcon({ type, color }: { type: string; color: string }) {
 
 const GRADIENT_COLORS: Record<string, string[]> = {
   'trail': ['#065f46', '#1c1917'],
+  'caravan-cross':  ['#92400e', '#7f1d1d'],
+  'mirage-auction': ['#4c1d95', '#92400e'],
   'mirage-crash': ['#92400e', '#78350f'],
   'oasis-plinko': ['#065f46', '#134e4a'],
   'dune-mines': ['#78350f', '#1c1917'],
@@ -87,6 +98,8 @@ const GRADIENT_COLORS: Record<string, string[]> = {
 
 const ACCENT_COLORS: Record<string, string> = {
   'trail': '#2DC97A',
+  'caravan-cross':  '#FB923C',
+  'mirage-auction': '#A78BFA',
   'mirage-crash': '#FB923C',
   'oasis-plinko': '#2DC97A',
   'dune-mines': '#F0B232',

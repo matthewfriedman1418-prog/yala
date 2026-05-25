@@ -13,6 +13,8 @@ import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ── Originals sub-menu ────────────────────────────────────────────────────────
 const ORIGINALS_GAMES = [
+  { href: '/originals/caravan-cross',          label: 'Caravan',   isNew: true },
+  { href: '/originals/mirage-auction',         label: 'Auction',   isNew: true },
   { href: '/originals/trail',                  label: 'Trail',     isNew: true },
   { href: '/originals/mirage-crash',           label: 'Crash' },
   { href: '/originals/oasis-plinko',           label: 'Plinko' },

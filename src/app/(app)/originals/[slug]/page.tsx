@@ -31,6 +31,8 @@ const LEADERBOARD = [
 
 const GRADIENT_COLORS: Record<string, string[]> = {
   'trail': ['#065f46', '#1c1917'],
+  'caravan-cross':  ['#92400e', '#7f1d1d'],
+  'mirage-auction': ['#4c1d95', '#92400e'],
   'mirage-crash': ['#92400e', '#78350f'],
   'oasis-plinko': ['#065f46', '#134e4a'],
   'dune-mines': ['#78350f', '#1c1917'],
