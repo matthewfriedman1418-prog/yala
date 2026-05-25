@@ -27,10 +27,15 @@ const DOC_OPTIONS: { id: DocType; label: string; sub: string }[] = [
 
 const COUNTRIES = ['United States', 'Canada', 'United Kingdom', 'Australia', 'New Zealand', 'Germany', 'Other'];
 
+// Demo-only: lets you preview the three KYC states without setting up
+// real flow data. Remove this block once the real KYC integration ships.
+type DemoState = 'wizard' | 'submitted' | 'verified';
+
 export default function KYCPage() {
   const { isLoggedIn, user } = useAuthStore();
   const { openAuthModal } = useUIStore();
 
+  const [demoState, setDemoState] = useState<DemoState>('wizard');
   const [currentStep, setCurrentStep] = useState(1);
   const [submitted, setSubmitted]     = useState(false);
   const [form, setForm] = useState({
@@ -57,10 +62,15 @@ export default function KYCPage() {
     );
   }
 
+  // Demo override: if user explicitly picks a demo state, honor it
+  const showVerified  = demoState === 'verified'  || (demoState === 'wizard' && user?.isVerified && false);
+  const showSubmitted = demoState === 'submitted' || submitted;
+
   // ── Already verified ──────────────────────────────────────────────────
-  if (user?.isVerified) {
+  if (showVerified) {
     return (
       <div className="max-w-2xl mx-auto space-y-5 animate-[fade-in_0.3s_ease-out]">
+        <DemoSwitcher state={demoState} onChange={setDemoState} />
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div
@@ -119,9 +129,10 @@ export default function KYCPage() {
   };
 
   // ── Submitted (under review) ──────────────────────────────────────────
-  if (submitted) {
+  if (showSubmitted) {
     return (
       <div className="max-w-2xl mx-auto space-y-5 animate-[fade-in_0.3s_ease-out]">
+        <DemoSwitcher state={demoState} onChange={setDemoState} />
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -214,6 +225,7 @@ export default function KYCPage() {
   // ── Wizard ────────────────────────────────────────────────────────────
   return (
     <div className="max-w-2xl mx-auto space-y-5 animate-[fade-in_0.3s_ease-out]">
+      <DemoSwitcher state={demoState} onChange={setDemoState} />
 
       {/* Header */}
       <div>
@@ -611,6 +623,48 @@ function ReviewRow({ label, value, hasFile }: { label: string; value: string; ha
         {hasFile && <CheckCircle2 className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />}
         {value}
       </span>
+    </div>
+  );
+}
+
+// Demo-only state switcher. Not for production — gates the 3 KYC screens
+// for design review. Hide with a feature flag once real KYC integration
+// ships.
+function DemoSwitcher({ state, onChange }: { state: DemoState; onChange: (s: DemoState) => void }) {
+  const STATES: { id: DemoState; label: string }[] = [
+    { id: 'wizard',    label: 'Wizard' },
+    { id: 'submitted', label: 'Submitted' },
+    { id: 'verified',  label: 'Verified' },
+  ];
+  return (
+    <div
+      className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl"
+      style={{
+        background: 'rgba(245,158,11,0.06)',
+        border: '1px solid rgba(245,158,11,0.25)',
+      }}
+    >
+      <div className="flex items-center gap-2 min-w-0">
+        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-widest flex-shrink-0" style={{ background: '#F59E0B', color: '#060E0A' }}>
+          Demo
+        </span>
+        <span className="text-[11px] truncate" style={{ color: '#8FA899' }}>Preview KYC states — not visible in production</span>
+      </div>
+      <div className="flex gap-1 p-0.5 rounded-lg flex-shrink-0" style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid #1A2E22' }}>
+        {STATES.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => onChange(s.id)}
+            className="px-2.5 py-1 rounded-md text-[10px] font-bold transition-all"
+            style={state === s.id
+              ? { background: 'rgba(240,178,50,0.18)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.35)' }
+              : { color: '#8FA899', border: '1px solid transparent' }
+            }
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

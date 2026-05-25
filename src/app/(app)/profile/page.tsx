@@ -5,14 +5,14 @@ import { useUIStore } from '@/lib/store/ui';
 import { VIP_TIERS } from '@/lib/mock-data/users';
 import { formatGC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star, Pencil, Check, X } from 'lucide-react';
+import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star, Pencil, Check, X, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
-  const { isLoggedIn, user, updateDisplayName } = useAuthStore();
+  const { isLoggedIn, user, updateDisplayName, setProfilePrivate } = useAuthStore();
   const { goldCoins, sweepCoins, xp } = useWalletStore();
   const { openAuthModal } = useUIStore();
   const [copied, setCopied] = useState(false);
@@ -277,6 +277,46 @@ export default function ProfilePage() {
               </div>
             );
           })}
+
+          {/* Privacy toggle — controls what other players see in the chat profile popover */}
+          <div className="pt-3" style={{ borderTop: '1px solid #1A2E22' }}>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2 min-w-0">
+                {user?.profilePrivate
+                  ? <EyeOff className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#F0B232' }} />
+                  : <Eye className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#8FA899' }} />
+                }
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold" style={{ color: '#F5E8C8' }}>Private profile</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: '#4A6A55' }}>
+                    Hide your stats from other players in chat. They&apos;ll still see your name and tier.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={!!user?.profilePrivate}
+                onClick={() => {
+                  const next = !user?.profilePrivate;
+                  setProfilePrivate(next);
+                  toast.success(next ? 'Profile set to private' : 'Profile set to public', {
+                    description: next ? 'Other players won’t see your stats.' : 'Your stats are now visible in chat.',
+                  });
+                }}
+                className="relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors mt-0.5"
+                style={{ background: user?.profilePrivate ? '#F0B232' : '#1A2E22' }}
+              >
+                <span
+                  className="inline-block h-5 w-5 rounded-full transform transition-transform"
+                  style={{
+                    background: user?.profilePrivate ? '#060E0A' : '#8FA899',
+                    transform: user?.profilePrivate ? 'translateX(22px)' : 'translateX(2px)',
+                  }}
+                />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Referral Code */}

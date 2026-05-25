@@ -25,6 +25,8 @@ export interface User {
   totalBonusReceived: number;
   /** User's chosen referral card style. 'rotate' cycles through all 10. Default = 8 (the Foil Card). */
   cardVariant: CardVariant;
+  /** When true, other users see only the username + tier on the chat profile popover. Stats blurred. */
+  profilePrivate: boolean;
 }
 
 const MOCK_USER: User = {
@@ -48,6 +50,7 @@ const MOCK_USER: User = {
   totalWithdrawn: 285_000,
   totalBonusReceived: 142_500,
   cardVariant: 8,
+  profilePrivate: false,
 };
 
 interface AuthState {
@@ -58,6 +61,7 @@ interface AuthState {
   register: (data: { username: string; email: string; password: string }) => Promise<void>;
   updateDisplayName: (name: string) => void;
   setCardVariant: (v: CardVariant) => void;
+  setProfilePrivate: (v: boolean) => void;
 }
 
 /**
@@ -90,6 +94,9 @@ export const useAuthStore = create<AuthState>()(
 
       setCardVariant: (v) =>
         set((s) => (s.user ? { user: { ...s.user, cardVariant: v } } : {})),
+
+      setProfilePrivate: (v) =>
+        set((s) => (s.user ? { user: { ...s.user, profilePrivate: v } } : {})),
     }),
     {
       name: 'yala-auth',

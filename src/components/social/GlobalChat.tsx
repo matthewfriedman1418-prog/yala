@@ -6,15 +6,24 @@ import { useAuthStore } from '@/lib/store/auth';
 import { MOCK_CHAT } from '@/lib/mock-data/chat';
 import { formatTime, getVIPColor } from '@/lib/utils';
 import { X, Send, Pin, Smile } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { YalaAvatar } from '@/components/ui/YalaAvatar';
 import { YalaIcon } from '@/components/ui/YalaIcon';
+import { EmojiPicker, UserProfilePopover, type ChatUserStats } from './ChatPopovers';
 
-type RoomId = 'public' | 'vip' | 'originals';
+// Mock per-user stats lookup — in real life this comes from the user service.
+// One user ('OasisHunter') is intentionally marked private to demo that state.
+const MOCK_USER_STATS: Record<string, Partial<ChatUserStats>> = {
+  u1: { joinDate: '2024-08-12', totalWagered: 4_280_000, totalSCWon: 312.5,  biggestWin: { game: 'Mirage Crash', multiplier: 184 } },
+  u2: { joinDate: '2024-11-03', totalWagered: 1_950_000, totalSCWon:  87.2,  biggestWin: { game: 'Sweet Bonanza', multiplier: 96  }, private: true },
+  u3: { joinDate: '2025-01-22', totalWagered:   620_000, totalSCWon:  41.0,  biggestWin: { game: 'Gates of Olympus', multiplier: 72 } },
+  u4: { joinDate: '2024-06-18', totalWagered: 8_140_000, totalSCWon: 612.4,  biggestWin: { game: 'Razor Shark', multiplier: 312 } },
+  u5: { joinDate: '2025-03-09', totalWagered:   150_000, totalSCWon:  12.3,  biggestWin: { game: 'Dune Mines', multiplier: 24  } },
+};
+
+type RoomId = 'public' | 'vip';
 const ROOMS: { id: RoomId; label: string; vipOnly?: boolean }[] = [
-  { id: 'public',    label: 'Public' },
-  { id: 'vip',       label: 'VIP',     vipOnly: true },
-  { id: 'originals', label: 'Originals' },
+  { id: 'public', label: 'Public' },
+  { id: 'vip',    label: 'VIP',   vipOnly: true },
 ];
 
 const PINNED = {
@@ -30,7 +39,10 @@ export function GlobalChat() {
   const [room,     setRoom]     = useState<RoomId>('public');
   const [message,  setMessage]  = useState('');
   const [messages, setMessages] = useState(MOCK_CHAT);
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  const [profilePopover, setProfilePopover] = useState<{ user: ChatUserStats; rect: { top: number; left: number } } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef  = useRef<HTMLInputElement>(null);
 
   // VIP gating
   const userVipTier = user?.vipTier || 0;
@@ -65,11 +77,10 @@ export function GlobalChat() {
   // Mock "people typing" — varies per room for personality
   const typing = useMemo(() => {
     if (effectiveRoom === 'vip') return ['Diamond_007'];
-    if (effectiveRoom === 'originals') return ['CrashKing', 'PlinkoPro'];
     return ['NightHunter', 'SaharaFox', 'GoldRushKing'];
   }, [effectiveRoom]);
 
-  const onlineCount = effectiveRoom === 'vip' ? 38 : effectiveRoom === 'originals' ? 412 : 2847;
+  const onlineCount = effectiveRoom === 'vip' ? 38 : 2847;
 
   return (
     <AnimatePresence>
@@ -165,7 +176,32 @@ export function GlobalChat() {
             <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 no-scrollbar">
               {messages.length === 0
                 ? <ChatEmpty />
-                : messages.map((msg) => <ChatRow key={msg.id} msg={msg} />)
+                : messages.map((msg) => (
+                    <ChatRow
+                      key={msg.id}
+                      msg={msg}
+                      onUserClick={(rect) => {
+                        // Build the stats object for the popover. "You" gets the live auth-store data.
+                        const isYou = msg.userId === user?.id;
+                        const stats = MOCK_USER_STATS[msg.userId] ?? {};
+                        setProfilePopover({
+                          rect,
+                          user: {
+                            id: msg.userId,
+                            username: msg.username,
+                            avatar: msg.avatar,
+                            vipTier: msg.vipTier,
+                            isYou,
+                            private: isYou ? user?.profilePrivate : stats.private,
+                            joinDate: isYou ? user?.joinDate : stats.joinDate,
+                            totalWagered: isYou ? user?.totalWagered : stats.totalWagered,
+                            totalSCWon: stats.totalSCWon,
+                            biggestWin: stats.biggestWin,
+                          },
+                        });
+                      }}
+                    />
+                  ))
               }
               <div ref={bottomRef} />
             </div>
@@ -192,16 +228,28 @@ export function GlobalChat() {
               {isLoggedIn ? (
                 <form onSubmit={handleSend} className="space-y-1.5">
                   <div className="relative flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      aria-label="Emoji"
-                      title="Emoji picker (coming soon)"
-                      className="p-2 rounded-lg transition-colors hover:bg-white/5"
-                      style={{ color: '#8FA899' }}
-                    >
-                      <Smile className="w-4 h-4" />
-                    </button>
+                    {/* Emoji picker — anchored above the smile button */}
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setEmojiOpen((o) => !o)}
+                        aria-label="Emoji picker"
+                        className="p-2 rounded-lg transition-colors hover:bg-white/5"
+                        style={{ color: emojiOpen ? '#F0B232' : '#8FA899', background: emojiOpen ? 'rgba(240,178,50,0.08)' : 'transparent' }}
+                      >
+                        <Smile className="w-4 h-4" />
+                      </button>
+                      <EmojiPicker
+                        open={emojiOpen}
+                        onClose={() => setEmojiOpen(false)}
+                        onPick={(e) => {
+                          setMessage((m) => (m + e).slice(0, MAX_MSG));
+                          inputRef.current?.focus();
+                        }}
+                      />
+                    </div>
                     <input
+                      ref={inputRef}
                       type="text"
                       value={message}
                       onChange={(e) => setMessage(e.target.value.slice(0, MAX_MSG))}
@@ -270,6 +318,16 @@ export function GlobalChat() {
               </div>
             </div>
           </motion.div>
+
+          {/* ── Profile popover (positioned fixed, rendered outside the panel) */}
+          {profilePopover && (
+            <UserProfilePopover
+              user={profilePopover.user}
+              anchorRect={profilePopover.rect}
+              open={true}
+              onClose={() => setProfilePopover(null)}
+            />
+          )}
         </>
       )}
     </AnimatePresence>
@@ -278,8 +336,20 @@ export function GlobalChat() {
 
 // ────────────────────────────────────────────────────────────────────────
 // Chat row — renders the 3 message kinds (rain / tip / regular)
-function ChatRow({ msg }: { msg: typeof MOCK_CHAT[number] }) {
+function ChatRow({
+  msg,
+  onUserClick,
+}: {
+  msg: typeof MOCK_CHAT[number];
+  onUserClick?: (rect: { top: number; left: number }) => void;
+}) {
   const tierColor = getVIPColor(msg.vipTier);
+
+  const triggerProfile = (e: React.MouseEvent<HTMLElement>) => {
+    if (!onUserClick) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    onUserClick({ top: r.top, left: r.left });
+  };
 
   if (msg.isRain) {
     return (
@@ -335,17 +405,29 @@ function ChatRow({ msg }: { msg: typeof MOCK_CHAT[number] }) {
   // Regular message
   return (
     <div className="group flex gap-2 px-2 py-1.5 rounded-lg transition-colors hover:bg-white/[0.025]">
-      <YalaAvatar
-        initials={msg.avatar}
-        tier={msg.vipTier}
-        size={28}
-        hideBadge
-      />
+      <button
+        type="button"
+        onClick={triggerProfile}
+        aria-label={`Open ${msg.username}'s profile`}
+        className="flex-shrink-0 rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+      >
+        <YalaAvatar
+          initials={msg.avatar}
+          tier={msg.vipTier}
+          size={28}
+          hideBadge
+        />
+      </button>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-1.5 mb-0.5">
-          <span className="font-bold text-[11px] truncate" style={{ color: tierColor }}>
+          <button
+            type="button"
+            onClick={triggerProfile}
+            className="font-bold text-[11px] truncate hover:underline focus:outline-none"
+            style={{ color: tierColor }}
+          >
             {msg.username}
-          </span>
+          </button>
           <span
             className="text-[9px] font-mono opacity-0 group-hover:opacity-100 transition-opacity"
             style={{ color: '#4A6A55' }}
