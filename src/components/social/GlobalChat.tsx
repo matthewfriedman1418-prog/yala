@@ -1,54 +1,84 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
 import { MOCK_CHAT } from '@/lib/mock-data/chat';
 import { formatTime, getVIPColor } from '@/lib/utils';
-import { X, Send, CloudRain, MessageCircle } from 'lucide-react';
+import { X, Send, Pin, Smile } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { YalaAvatar } from '@/components/ui/YalaAvatar';
+import { YalaIcon } from '@/components/ui/YalaIcon';
+
+type RoomId = 'public' | 'vip' | 'originals';
+const ROOMS: { id: RoomId; label: string; vipOnly?: boolean }[] = [
+  { id: 'public',    label: 'Public' },
+  { id: 'vip',       label: 'VIP',     vipOnly: true },
+  { id: 'originals', label: 'Originals' },
+];
+
+const PINNED = {
+  text: 'Welcome to Yala chat — be cool, no spam, no shilling. Have fun.',
+  by: 'Yala Team',
+};
+
+const MAX_MSG = 240;
 
 export function GlobalChat() {
-  const { chatOpen, closeChat } = useUIStore();
+  const { chatOpen, closeChat, openAuthModal } = useUIStore();
   const { isLoggedIn, user } = useAuthStore();
-  const { openAuthModal } = useUIStore();
-  const [message, setMessage] = useState('');
+  const [room,     setRoom]     = useState<RoomId>('public');
+  const [message,  setMessage]  = useState('');
   const [messages, setMessages] = useState(MOCK_CHAT);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // VIP gating
+  const userVipTier = user?.vipTier || 0;
+  const canEnterVip = userVipTier >= 4;
+  const effectiveRoom = room === 'vip' && !canEnterVip ? 'public' : room;
 
   useEffect(() => {
     if (chatOpen) {
       setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }
-  }, [chatOpen]);
+  }, [chatOpen, effectiveRoom]);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !isLoggedIn) return;
-    const newMsg = {
-      id: `cm_${Date.now()}`,
-      userId: user?.id || 'u0',
-      username: user?.username || 'You',
-      avatar: user?.avatar || 'U',
-      vipTier: user?.vipTier || 1,
-      message: message.trim(),
-      timestamp: new Date().toISOString(),
-    };
-    setMessages((prev) => [...prev, newMsg]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `cm_${Date.now()}`,
+        userId: user?.id || 'u0',
+        username: user?.displayName || user?.username || 'You',
+        avatar: user?.avatar || 'U',
+        vipTier: user?.vipTier || 1,
+        message: message.trim(),
+        timestamp: new Date().toISOString(),
+      },
+    ]);
     setMessage('');
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
   };
+
+  // Mock "people typing" — varies per room for personality
+  const typing = useMemo(() => {
+    if (effectiveRoom === 'vip') return ['Diamond_007'];
+    if (effectiveRoom === 'originals') return ['CrashKing', 'PlinkoPro'];
+    return ['NightHunter', 'SaharaFox', 'GoldRushKing'];
+  }, [effectiveRoom]);
+
+  const onlineCount = effectiveRoom === 'vip' ? 38 : effectiveRoom === 'originals' ? 412 : 2847;
 
   return (
     <AnimatePresence>
       {chatOpen && (
         <>
-          {/* Mobile overlay — starts below the h-14 header */}
+          {/* Mobile overlay */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 top-14 bg-black/50 z-39 lg:hidden"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 top-14 bg-black/55 z-39 lg:hidden"
             onClick={closeChat}
           />
 
@@ -56,103 +86,176 @@ export function GlobalChat() {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed right-0 top-14 bottom-0 w-80 z-40 flex flex-col"
+            transition={{ type: 'spring', damping: 26, stiffness: 320 }}
+            className="fixed right-0 top-14 bottom-0 w-[340px] z-40 flex flex-col"
             style={{ backgroundColor: '#0C1812', borderLeft: '1px solid #1A2E22' }}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-4 flex-shrink-0" style={{ borderBottom: '1px solid #1A2E22' }}>
+            {/* ── Header ─────────────────────────────────────── */}
+            <div
+              className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+              style={{ borderBottom: '1px solid #1A2E22' }}
+            >
               <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4" style={{ color: '#F0B232' }} />
-                <span className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Live Chat</span>
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)' }}>
+                <YalaIcon name="sparkle" size={16} />
+                <span className="font-display text-sm font-bold" style={{ color: '#F5E8C8' }}>Live Chat</span>
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}>
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] font-medium" style={{ color: '#2DC97A' }}>247 online</span>
+                  <span className="text-[10px] font-bold number-display" style={{ color: '#2DC97A' }}>
+                    {onlineCount.toLocaleString()}
+                  </span>
                 </div>
               </div>
-              <button onClick={closeChat} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+              <button
+                onClick={closeChat}
+                aria-label="Close chat"
+                className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              >
                 <X className="w-4 h-4" style={{ color: '#8FA899' }} />
               </button>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2 no-scrollbar">
-              {messages.map((msg) => (
-                <div key={msg.id} className={cn('text-xs leading-relaxed', msg.isRain && 'my-3')}>
-                  {msg.isRain ? (
-                    <div className="px-3 py-2.5 rounded-xl text-center" style={{ background: 'linear-gradient(135deg, rgba(214,168,79,0.1), rgba(214,168,79,0.05))', border: '1px solid rgba(214,168,79,0.2)' }}>
-                      <CloudRain className="w-4 h-4 mx-auto mb-1" style={{ color: '#D6A84F' }} />
-                      <p className="font-semibold" style={{ color: '#D6A84F' }}>
-                        <span style={{ color: getVIPColor(msg.vipTier) }}>{msg.username}</span>
-                        {' '}rained {msg.rainAmount?.toLocaleString()} {msg.currency}!
-                      </p>
-                      <p className="text-[#9CA3AF] mt-0.5">Lucky recipients shared the gold ✨</p>
-                    </div>
-                  ) : msg.isTip ? (
-                    <div className="px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                      <span style={{ color: getVIPColor(msg.vipTier) }}>{msg.username}</span>
-                      <span className="text-[#9CA3AF]"> tipped </span>
-                      <span className="text-[#D6A84F] font-semibold">{msg.tipAmount} GC</span>
-                      <span className="text-[#9CA3AF]"> to </span>
-                      <span style={{ color: '#D6A84F' }}>{msg.tipTo}</span>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-black mt-0.5"
-                        style={{ background: `linear-gradient(135deg, ${getVIPColor(msg.vipTier)}, rgba(0,0,0,0.3))` }}
+            {/* ── Room pills ─────────────────────────────────── */}
+            <div
+              className="flex gap-1 px-3 py-2 flex-shrink-0 overflow-x-auto no-scrollbar"
+              style={{ borderBottom: '1px solid #1A2E22' }}
+            >
+              {ROOMS.map((r) => {
+                const isActive = effectiveRoom === r.id;
+                const locked = r.vipOnly && !canEnterVip;
+                return (
+                  <button
+                    key={r.id}
+                    onClick={() => setRoom(r.id)}
+                    disabled={locked}
+                    title={locked ? 'VIP Tier 4+ required' : undefined}
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex-shrink-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={isActive
+                      ? { background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.28)' }
+                      : { color: '#8FA899', border: '1px solid transparent' }
+                    }
+                  >
+                    {locked && <YalaIcon name="lock" size={9} />}
+                    {r.label}
+                    {r.id === 'vip' && (
+                      <span
+                        className="text-[8px] font-mono font-bold"
+                        style={{ color: isActive ? '#F0B232' : '#4A6A55' }}
                       >
-                        {msg.avatar}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="font-semibold text-[11px]" style={{ color: getVIPColor(msg.vipTier) }}>
-                            {msg.username}
-                          </span>
-                          <span className="text-[9px] text-[#9CA3AF]/50">{formatTime(msg.timestamp)}</span>
-                        </div>
-                        <p className="text-[#9CA3AF] text-[12px] leading-relaxed">{msg.message}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                        T4+
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* ── Pinned announcement ────────────────────────── */}
+            <div
+              className="flex items-start gap-2 px-3 py-2.5 flex-shrink-0"
+              style={{ background: 'rgba(240,178,50,0.04)', borderBottom: '1px solid #1A2E22' }}
+            >
+              <Pin className="w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: '#F0B232' }} />
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] leading-relaxed" style={{ color: '#F5E8C8' }}>{PINNED.text}</p>
+                <p className="text-[9px] font-bold uppercase tracking-widest mt-0.5" style={{ color: '#F0B232' }}>— {PINNED.by}</p>
+              </div>
+            </div>
+
+            {/* ── Messages ───────────────────────────────────── */}
+            <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 no-scrollbar">
+              {messages.length === 0
+                ? <ChatEmpty />
+                : messages.map((msg) => <ChatRow key={msg.id} msg={msg} />)
+              }
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
+            {/* ── Typing indicator ───────────────────────────── */}
+            {typing.length > 0 && (
+              <div className="flex-shrink-0 px-3 py-1.5" style={{ borderTop: '1px solid #1A2E22' }}>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-0.5">
+                    <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#2DC97A', animationDelay: '0ms' }} />
+                    <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#2DC97A', animationDelay: '150ms' }} />
+                    <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#2DC97A', animationDelay: '300ms' }} />
+                  </div>
+                  <span className="text-[10px]" style={{ color: '#8FA899' }}>
+                    <span className="font-bold" style={{ color: '#F5E8C8' }}>{typing[0]}</span>
+                    {typing.length > 1 && ` + ${typing.length - 1} other${typing.length > 2 ? 's' : ''}`} typing…
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* ── Input ──────────────────────────────────────── */}
             <div className="flex-shrink-0 px-3 py-3" style={{ borderTop: '1px solid #1A2E22' }}>
               {isLoggedIn ? (
-                <form onSubmit={handleSend} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Say something..."
-                    className="flex-1 px-3 py-2 rounded-lg text-xs text-[#F5E8C8] focus:outline-none transition-colors"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
-                    maxLength={200}
-                  />
-                  <button
-                    type="submit"
-                    className="p-2 rounded-lg transition-all hover:opacity-80"
-                    style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
-                  >
-                    <Send className="w-3.5 h-3.5 text-black" />
-                  </button>
+                <form onSubmit={handleSend} className="space-y-1.5">
+                  <div className="relative flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      aria-label="Emoji"
+                      title="Emoji picker (coming soon)"
+                      className="p-2 rounded-lg transition-colors hover:bg-white/5"
+                      style={{ color: '#8FA899' }}
+                    >
+                      <Smile className="w-4 h-4" />
+                    </button>
+                    <input
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value.slice(0, MAX_MSG))}
+                      placeholder="Say something…"
+                      className="flex-1 px-3 py-2 rounded-lg text-xs focus:outline-none transition-colors"
+                      style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid #1A2E22',
+                        color: '#F5E8C8',
+                      }}
+                      onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(240,178,50,0.4)')}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                      maxLength={MAX_MSG}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!message.trim()}
+                      aria-label="Send"
+                      className="p-2 rounded-lg transition-all hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                      style={{
+                        background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
+                      }}
+                    >
+                      <Send className="w-3.5 h-3.5" style={{ color: '#060E0A' }} />
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between px-1">
+                    <p className="text-[9px]" style={{ color: '#4A6A55' }}>
+                      Enter to send · Be cool
+                    </p>
+                    <p
+                      className="text-[9px] font-mono font-bold"
+                      style={{ color: message.length > MAX_MSG - 30 ? '#F59E0B' : '#4A6A55' }}
+                    >
+                      {message.length}/{MAX_MSG}
+                    </p>
+                  </div>
                 </form>
               ) : (
                 <button
                   onClick={() => openAuthModal()}
-                  className="w-full py-2 rounded-lg text-xs font-bold text-black"
-                  style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
+                  className="w-full py-2.5 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-95"
+                  style={{
+                    background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
+                    color: '#060E0A',
+                    boxShadow: '0 2px 12px rgba(45,201,122,0.3)',
+                  }}
                 >
-                  Login to Chat
+                  Sign in to chat
                 </button>
               )}
             </div>
 
-            {/* Socials row */}
+            {/* ── Socials row ────────────────────────────────── */}
             <div
               className="flex-shrink-0 flex items-center justify-between px-3 py-2.5"
               style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}
@@ -173,7 +276,107 @@ export function GlobalChat() {
   );
 }
 
-// Small square social link button at the bottom of the chat panel.
+// ────────────────────────────────────────────────────────────────────────
+// Chat row — renders the 3 message kinds (rain / tip / regular)
+function ChatRow({ msg }: { msg: typeof MOCK_CHAT[number] }) {
+  const tierColor = getVIPColor(msg.vipTier);
+
+  if (msg.isRain) {
+    return (
+      <div
+        className="rounded-xl p-3 my-2 text-center"
+        style={{
+          background: 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(45,201,122,0.06))',
+          border: '1px solid rgba(240,178,50,0.28)',
+        }}
+      >
+        <div className="flex items-center justify-center gap-1.5 mb-1">
+          <YalaIcon name="sparkle" size={14} />
+          <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#F0B232' }}>
+            Rain
+          </span>
+        </div>
+        <p className="text-[12px] font-bold leading-snug" style={{ color: '#F5E8C8' }}>
+          <span style={{ color: tierColor }}>{msg.username}</span>{' '}
+          rained{' '}
+          <span className="number-display font-black" style={{ color: '#F0B232' }}>
+            {msg.rainAmount?.toLocaleString()}
+          </span>{' '}
+          <span className="text-[10px]" style={{ color: '#8FA899' }}>{msg.currency}</span>
+        </p>
+        <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>
+          Recipients picked at random from active chatters
+        </p>
+      </div>
+    );
+  }
+
+  if (msg.isTip) {
+    return (
+      <div
+        className="rounded-xl px-3 py-2 my-1.5"
+        style={{ background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.22)' }}
+      >
+        <div className="flex items-center justify-center gap-1.5 mb-0.5">
+          <YalaIcon name="gift" size={11} />
+          <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#A78BFA' }}>Tip</span>
+        </div>
+        <p className="text-[11px] text-center leading-snug" style={{ color: '#F5E8C8' }}>
+          <span style={{ color: tierColor }}>{msg.username}</span>{' '}
+          tipped{' '}
+          <span className="font-bold number-display" style={{ color: '#F0B232' }}>{msg.tipAmount} GC</span>{' '}
+          to{' '}
+          <span style={{ color: '#F0B232' }}>{msg.tipTo}</span>
+        </p>
+      </div>
+    );
+  }
+
+  // Regular message
+  return (
+    <div className="group flex gap-2 px-2 py-1.5 rounded-lg transition-colors hover:bg-white/[0.025]">
+      <YalaAvatar
+        initials={msg.avatar}
+        tier={msg.vipTier}
+        size={28}
+        hideBadge
+      />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-1.5 mb-0.5">
+          <span className="font-bold text-[11px] truncate" style={{ color: tierColor }}>
+            {msg.username}
+          </span>
+          <span
+            className="text-[9px] font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+            style={{ color: '#4A6A55' }}
+          >
+            {formatTime(msg.timestamp)}
+          </span>
+        </div>
+        <p className="text-[12px] leading-relaxed break-words" style={{ color: '#F5E8C8' }}>
+          {msg.message}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ChatEmpty() {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 text-center px-4">
+      <div
+        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-3"
+        style={{ background: 'rgba(240,178,50,0.06)', border: '1px solid rgba(240,178,50,0.18)' }}
+      >
+        <YalaIcon name="sparkle" size={22} />
+      </div>
+      <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>It&apos;s quiet in here</p>
+      <p className="text-[11px]" style={{ color: '#8FA899' }}>Be the first to say something.</p>
+    </div>
+  );
+}
+
+// Square social button at the bottom of the chat panel.
 function SocialIcon({ network, href }: { network: 'discord' | 'x' | 'instagram'; href: string }) {
   const HOVER = '#F0B232';
   const label =
