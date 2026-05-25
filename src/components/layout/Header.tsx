@@ -10,6 +10,7 @@ import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucid
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { WalletToggle } from '../wallet/WalletToggle';
+import { SectionSwitcher } from './SectionSwitcher';
 import { GoldCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 import { YalaAvatar } from '@/components/ui/YalaAvatar';
 import { VIP_TIERS } from '@/lib/mock-data/users';
@@ -70,13 +71,17 @@ export function Header() {
         boxShadow: '0 1px 0 rgba(45,201,122,0.06), 0 4px 16px rgba(0,0,0,0.3)',
       }}
     >
-      {/* ── LEFT: mobile logo only (desktop logo is in sidebar) ── */}
-      <div className="flex-1 flex items-center">
-        <div className="lg:hidden">
+      {/* ── LEFT: mobile logo + section switcher ── */}
+      <div className="flex-1 flex items-center gap-3 min-w-0">
+        <div className="lg:hidden flex-shrink-0">
           <Link href="/" className="flex items-center gap-2">
             <YalaPyramidMini />
             <YalaWordmarkMini />
           </Link>
+        </div>
+        {/* Casino / Originals / Sports switcher — desktop */}
+        <div className="hidden lg:block">
+          <SectionSwitcher />
         </div>
       </div>
 

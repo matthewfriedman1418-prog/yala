@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import {
   User, Bell, Volume2, Monitor, Shield, Smartphone, AlertTriangle,
   Pencil, Check, X, LogOut, RotateCcw, Eye, EyeOff, Globe, Trash2,
-  CheckCircle2,
+  CheckCircle2, ExternalLink, HeartHandshake,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
@@ -202,6 +202,17 @@ export default function SettingsPage() {
                   }}
                   icon={user?.profilePrivate ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                 />
+              </Row>
+              <Row label="Responsible Gaming" hint="Deposit / wager / session limits, cool-off, self-exclusion, and helpline resources.">
+                <Link
+                  href="/responsible-gaming"
+                  className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:brightness-110"
+                  style={{ background: 'rgba(45,201,122,0.10)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.30)' }}
+                >
+                  <HeartHandshake className="w-3.5 h-3.5" />
+                  Open tools
+                  <ExternalLink className="w-3 h-3 opacity-60" />
+                </Link>
               </Row>
             </Card>
           )}

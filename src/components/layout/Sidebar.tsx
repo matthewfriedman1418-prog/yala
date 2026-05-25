@@ -108,7 +108,7 @@ interface NavSection { label: string; items: NavItem[]; }
 export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
-  const { openAuthModal, openPromotionsDrawer, openBuyCoins, sidebarCollapsed, toggleSidebar } = useUIStore();
+  const { openAuthModal, openBuyCoins, sidebarCollapsed, toggleSidebar } = useUIStore();
   const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
   const [originalsOpen, setOriginalsOpen] = useState(
     pathname === '/originals' || pathname.startsWith('/originals/')
@@ -124,7 +124,6 @@ export function Sidebar() {
         { href: '/vip',          label: 'VIP Club',     icon: yalaNavIcon('ticket') },
         { href: '/missions',     label: 'Missions',     icon: yalaNavIcon('crown') },
         { href: '/leaderboards', label: 'Leaderboards', icon: yalaNavIcon('trophy') },
-        { action: openPromotionsDrawer, label: 'Promotions', icon: yalaNavIcon('badge-star'), badge: '8' },
       ],
     },
     {
@@ -142,8 +141,9 @@ export function Sidebar() {
     {
       label: 'MORE',
       items: [
-        { href: '/support',    label: 'Help & Support', icon: HelpOutlineIcon },
-        { href: '/design-lab', label: 'Design Lab',     icon: Paintbrush, badge: 'DEV' },
+        { href: '/support',             label: 'Help & Support',      icon: HelpOutlineIcon },
+        { href: '/responsible-gaming',  label: 'Responsible Gaming',  icon: yalaNavIcon('shield') },
+        { href: '/design-lab',          label: 'Design Lab',          icon: Paintbrush, badge: 'DEV' },
       ],
     },
   ];

@@ -6,6 +6,7 @@ import { useSettingsStore } from '@/lib/store/settings';
 import { cn } from '@/lib/utils';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { SectionSwitcher } from './SectionSwitcher';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileSideMenu } from './MobileSideMenu';
 import { GlobalChat } from '../social/GlobalChat';
@@ -46,6 +47,14 @@ export function AppShell({ children }: AppShellProps) {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         {/* Header — never shifts when chat opens */}
         <Header />
+
+        {/* Mobile section switcher — sits just below the header on small screens */}
+        <div
+          className="lg:hidden flex items-center px-3 py-2 flex-shrink-0 overflow-x-auto no-scrollbar"
+          style={{ background: '#0A1410', borderBottom: '1px solid #1A2E22' }}
+        >
+          <SectionSwitcher compact />
+        </div>
 
         {/* Scrollable page content — this is what makes room for the chat panel */}
         <main
