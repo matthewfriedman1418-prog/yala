@@ -52,6 +52,19 @@ export interface SecurityPrefs {
   trustedDevices:   boolean;
 }
 
+export interface ResponsibleLimits {
+  /** Daily deposit ceiling, GC equivalent. 0 = none. */
+  deposit: number;
+  /** Daily wager ceiling, GC equivalent. 0 = none. */
+  wager: number;
+  /** Max session duration in minutes. 0 = none. */
+  session: number;
+  /** Cool-off duration in days (24h = 1, 7d = 7, 30d = 30). 0 = not active. */
+  cooloff: number;
+  /** ISO timestamp of when an active cool-off ends. null = no active cool-off. */
+  cooloffUntil: string | null;
+}
+
 export interface Session {
   id: string;
   device: string;
@@ -66,11 +79,17 @@ interface SettingsState {
   display:       DisplayPrefs;
   security:      SecurityPrefs;
   sessions:      Session[];
+  limits:        ResponsibleLimits;
 
   setNotification: <K extends keyof NotificationPrefs>(key: K, v: NotificationPrefs[K]) => void;
   setSound:        <K extends keyof SoundPrefs>(key: K, v: SoundPrefs[K]) => void;
   setDisplay:      <K extends keyof DisplayPrefs>(key: K, v: DisplayPrefs[K]) => void;
   setSecurity:     <K extends keyof SecurityPrefs>(key: K, v: SecurityPrefs[K]) => void;
+  setLimit:        <K extends keyof ResponsibleLimits>(key: K, v: ResponsibleLimits[K]) => void;
+  /** Start a cool-off period of `days` days. */
+  startCooloff:    (days: number) => void;
+  /** End any active cool-off (real backend: requires support contact). */
+  clearCooloff:    () => void;
 
   endSession:      (id: string) => void;
   endAllOthers:    () => void;
@@ -113,6 +132,14 @@ const DEFAULT_SECURITY: SecurityPrefs = {
   trustedDevices:   true,
 };
 
+const DEFAULT_LIMITS: ResponsibleLimits = {
+  deposit:      0,
+  wager:        0,
+  session:      0,
+  cooloff:      0,
+  cooloffUntil: null,
+};
+
 const SEED_SESSIONS: Session[] = [
   { id: 's1', device: 'MacBook · Chrome 128',   location: 'Austin, TX · US', lastActive: 'Active now', current: true },
   { id: 's2', device: 'iPhone 15 · Yala iOS',   location: 'Austin, TX · US', lastActive: '2h ago' },
@@ -127,6 +154,7 @@ export const useSettingsStore = create<SettingsState>()(
       display:       DEFAULT_DISPLAY,
       security:      DEFAULT_SECURITY,
       sessions:      SEED_SESSIONS,
+      limits:        DEFAULT_LIMITS,
 
       setNotification: (key, v) =>
         set((s) => ({ notifications: { ...s.notifications, [key]: v } })),
@@ -136,6 +164,18 @@ export const useSettingsStore = create<SettingsState>()(
         set((s) => ({ display: { ...s.display, [key]: v } })),
       setSecurity: (key, v) =>
         set((s) => ({ security: { ...s.security, [key]: v } })),
+      setLimit: (key, v) =>
+        set((s) => ({ limits: { ...s.limits, [key]: v } })),
+      startCooloff: (days) =>
+        set((s) => ({
+          limits: {
+            ...s.limits,
+            cooloff: days,
+            cooloffUntil: new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        })),
+      clearCooloff: () =>
+        set((s) => ({ limits: { ...s.limits, cooloff: 0, cooloffUntil: null } })),
 
       endSession: (id) => set((s) => ({ sessions: s.sessions.filter((x) => x.id !== id || x.current) })),
       endAllOthers: () => set((s) => ({ sessions: s.sessions.filter((x) => x.current) })),
@@ -146,6 +186,9 @@ export const useSettingsStore = create<SettingsState>()(
           sound:         DEFAULT_SOUND,
           display:       DEFAULT_DISPLAY,
           security:      DEFAULT_SECURITY,
+          // NOTE: limits are deliberately NOT reset — those are protective
+          // user choices, not aesthetic preferences. Cool-offs should NEVER
+          // be wipeable from a "reset settings" button.
         }),
     }),
     {
