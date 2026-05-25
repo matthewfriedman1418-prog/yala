@@ -5,14 +5,37 @@ import { useUIStore } from '@/lib/store/ui';
 import { VIP_TIERS } from '@/lib/mock-data/users';
 import { formatGC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star, Pencil, Check, X, Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star, Pencil, Check, X, Eye, EyeOff, Camera, Trash2 } from 'lucide-react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
+import { YalaAvatar } from '@/components/ui/YalaAvatar';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
-  const { isLoggedIn, user, updateDisplayName, setProfilePrivate } = useAuthStore();
+  const { isLoggedIn, user, updateDisplayName, setProfilePrivate, setAvatarUrl } = useAuthStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarFile = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please choose an image file');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image too large (2MB max)');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const url = ev.target?.result as string;
+      if (url) {
+        setAvatarUrl(url);
+        toast.success('Avatar updated');
+      }
+    };
+    reader.onerror = () => toast.error('Could not read the image');
+    reader.readAsDataURL(file);
+  };
   const { goldCoins, sweepCoins, xp } = useWalletStore();
   const { openAuthModal } = useUIStore();
   const [copied, setCopied] = useState(false);
@@ -82,12 +105,63 @@ export default function ProfilePage() {
       >
         <div className="flex flex-col sm:flex-row items-start gap-6">
 
-          {/* Avatar */}
-          <div
-            className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold flex-shrink-0"
-            style={{ background: `linear-gradient(135deg, ${tierColor}30, ${tierColor}10)`, border: `1px solid ${tierColor}35` }}
-          >
-            {user?.avatar}
+          {/* Avatar — click to upload, hover for replace/remove controls */}
+          <div className="relative group flex-shrink-0">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleAvatarFile(file);
+                e.target.value = ''; // allow re-selecting same file
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="relative block focus:outline-none focus:ring-2 focus:ring-amber-400/40 rounded-full"
+              aria-label="Upload avatar"
+              title="Click to upload an avatar"
+            >
+              {user?.avatarUrl ? (
+                // Custom upload — use YalaAvatar so the tier ring + badge still show
+                <YalaAvatar
+                  initials={user.avatar}
+                  tier={user.vipTier}
+                  size={80}
+                  src={user.avatarUrl}
+                />
+              ) : (
+                <div
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold transition-all group-hover:brightness-110"
+                  style={{ background: `linear-gradient(135deg, ${tierColor}30, ${tierColor}10)`, border: `1px solid ${tierColor}35`, color: '#F5E8C8' }}
+                >
+                  {user?.avatar}
+                </div>
+              )}
+              {/* Hover overlay */}
+              <div
+                className="absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: 'rgba(6,14,10,0.65)' }}
+              >
+                <Camera className="w-5 h-5" style={{ color: '#F5E8C8' }} />
+              </div>
+            </button>
+            {/* Remove avatar button — only when one is set */}
+            {user?.avatarUrl && (
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setAvatarUrl(null); toast.success('Avatar removed'); }}
+                aria-label="Remove avatar"
+                title="Remove avatar"
+                className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+                style={{ background: '#EF4444', color: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
+              >
+                <Trash2 className="w-3 h-3" />
+              </button>
+            )}
           </div>
 
           {/* Name + tier + progress */}

@@ -64,7 +64,7 @@ export function Header() {
 
   return (
     <header
-      className="h-16 flex items-center px-5 flex-shrink-0 relative z-30"
+      className="h-16 flex items-center px-3 sm:px-5 flex-shrink-0 relative z-30 gap-2"
       style={{
         background: 'linear-gradient(180deg, #0E1E15 0%, #0C1812 100%)',
         borderBottom: '1px solid #1A2E22',
@@ -72,11 +72,14 @@ export function Header() {
       }}
     >
       {/* ── LEFT: mobile logo + section switcher ── */}
-      <div className="flex-1 flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-3 min-w-0 lg:flex-1">
         <div className="lg:hidden flex-shrink-0">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-1.5" aria-label="Yala home">
             <YalaPyramidMini />
-            <YalaWordmarkMini />
+            {/* Wordmark hides on the tightest screens to make room for the CTA */}
+            <span className="hidden sm:inline-block">
+              <YalaWordmarkMini />
+            </span>
           </Link>
         </div>
         {/* Casino / Originals / Sports switcher — desktop */}
@@ -116,10 +119,11 @@ export function Header() {
               </div>
             </div>
 
-            {/* BIG green Buy Coins button */}
+            {/* BIG green Buy Coins button — label collapses to just "+" icon on tightest screens */}
             <button
               onClick={openBuyCoins}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
+              aria-label={tr('buyCoins')}
+              className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
               style={{
                 background: 'linear-gradient(135deg, #10B981, #2DC97A)',
                 color: '#060E0A',
@@ -128,21 +132,22 @@ export function Header() {
               }}
             >
               <Plus className="w-4 h-4" />
-              {tr('buyCoins')}
+              <span className="hidden sm:inline">{tr('buyCoins')}</span>
             </button>
           </>
         ) : (
           <>
             <button
               onClick={() => openAuthModal('login')}
-              className="px-5 py-2.5 text-sm font-semibold rounded-xl transition-all hover:opacity-80"
+              className="px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all hover:opacity-80 whitespace-nowrap"
               style={{ border: '1px solid rgba(45,201,122,0.3)', color: '#2DC97A' }}
             >
               {tr('signIn')}
             </button>
             <button
               onClick={() => openAuthModal('register')}
-              className="flex items-center gap-2 px-6 py-2.5 text-sm font-black rounded-xl transition-all hover:brightness-110 active:scale-95"
+              aria-label="Play Free"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-black rounded-xl transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
               style={{
                 background: 'linear-gradient(135deg, #10B981, #2DC97A)',
                 color: '#060E0A',
@@ -150,14 +155,15 @@ export function Header() {
               }}
             >
               <Zap className="w-4 h-4" />
-              Play Free
+              <span className="hidden sm:inline">Play Free</span>
+              <span className="sm:hidden">Play</span>
             </button>
           </>
         )}
       </div>
 
       {/* ── RIGHT: utility icons + profile ── */}
-      <div className="flex-1 flex items-center justify-end gap-1">
+      <div className="flex items-center justify-end gap-0.5 sm:gap-1 lg:flex-1">
         {isLoggedIn && (
           <>
             {/* Notifications */}
@@ -202,6 +208,7 @@ export function Header() {
                   initials={user?.username?.slice(0, 2) || user?.avatar || 'U'}
                   tier={user?.vipTier || 1}
                   size={32}
+                  src={user?.avatarUrl}
                 />
                 <div className="hidden md:block text-left">
                   <p className="text-xs font-bold leading-none" style={{ color: '#F5E8C8' }}>{user?.username}</p>
@@ -229,6 +236,7 @@ export function Header() {
                       initials={user?.username?.slice(0, 2) || user?.avatar || 'U'}
                       tier={vipTier}
                       size={48}
+                      src={user?.avatarUrl}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold truncate" style={{ color: '#F5E8C8' }}>{user?.username}</p>

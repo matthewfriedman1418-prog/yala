@@ -1552,7 +1552,7 @@ export default function SportsbookPage() {
           ? { background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }
           : { background: '#0F1A14', color: '#F5E8C8', border: '1px solid #1A2E22' };
         return (
-          <div className="fixed bottom-12 left-0 right-0 px-4 lg:hidden z-30">
+          <div className="fixed bottom-20 left-0 right-0 px-4 lg:hidden z-30">
             <button
               type="button"
               onClick={() => setMobileSlipOpen(true)}

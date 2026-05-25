@@ -9,7 +9,10 @@ export interface User {
   username: string;
   /** Public-facing display name (shown on profile card, referral card, leaderboards). Editable. */
   displayName: string;
+  /** 1-2 char initials shown when no avatarUrl is set. */
   avatar: string;
+  /** Optional uploaded avatar — data URL today, CDN URL once backend lands. */
+  avatarUrl?: string;
   email: string;
   vipTier: number; // 1-6
   vipName: string;
@@ -62,6 +65,8 @@ interface AuthState {
   updateDisplayName: (name: string) => void;
   setCardVariant: (v: CardVariant) => void;
   setProfilePrivate: (v: boolean) => void;
+  /** Set or replace the user's avatar. Pass null to clear back to initials. */
+  setAvatarUrl: (url: string | null) => void;
 }
 
 /**
@@ -97,6 +102,9 @@ export const useAuthStore = create<AuthState>()(
 
       setProfilePrivate: (v) =>
         set((s) => (s.user ? { user: { ...s.user, profilePrivate: v } } : {})),
+
+      setAvatarUrl: (url) =>
+        set((s) => (s.user ? { user: { ...s.user, avatarUrl: url ?? undefined } } : {})),
     }),
     {
       name: 'yala-auth',
