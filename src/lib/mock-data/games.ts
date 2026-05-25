@@ -45,6 +45,29 @@ export interface Original {
 
 export const YALA_ORIGINALS: Original[] = [
   {
+    slug: 'trail',
+    name: 'Trail',
+    tagline: 'Draw your path. Avoid the hazards. Cash out before you get boxed in.',
+    type: 'Trail',
+    rtp: 99.0,
+    maxWin: '5000×',
+    minBet: 0.1,
+    houseEdge: 1.0,
+    description: 'A Yala original. Pick a starting edge tile and extend your path one orthogonal step at a time. Each safe tile bumps your multiplier. Hit a hazard and the trail goes dark. Reach the opposite edge for a +50% jackpot bonus.',
+    imageUrl: 'https://picsum.photos/seed/trail-game/300/450',
+    gradient: 'from-emerald-900 via-emerald-950 to-amber-950',
+    iconBg: 'bg-emerald-900',
+    rules: [
+      'Set your bet and pick a difficulty (3, 5, or 8 hazards on a 6×6 grid).',
+      'Click any EDGE tile to start your trail.',
+      'Each next tile must be orthogonally adjacent (up / down / left / right) to your last tile.',
+      'Safe tile = multiplier ticks up. Hazard = bust, your bet is lost.',
+      'Cash out any time to lock in your current multiplier.',
+      'Reach a tile on the OPPOSITE edge from your start tile for a +50% jackpot bonus.',
+    ],
+    fairnessNote: 'Trail uses a provably fair seed. Hazard locations are determined before your first reveal from a hash of (server seed + client seed + nonce). The starting tile is always safe.',
+  },
+  {
     slug: 'mirage-crash',
     name: 'Yala Crash',
     tagline: 'Watch the multiplier soar. Cash out before it crashes.',

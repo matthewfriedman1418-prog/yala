@@ -23,6 +23,13 @@ function GameTypeIcon({ type, color }: { type: string; color: string }) {
     </svg>
   );
   if (t.includes('mines')) return <Target className={cls} style={style} />;
+  if (t.includes('trail')) return (
+    <svg className={cls} style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="4" cy="20" r="1.5" fill="currentColor" />
+      <path d="M4 20 L4 14 L10 14 L10 8 L16 8 L16 4" />
+      <circle cx="16" cy="4" r="1.5" fill="currentColor" />
+    </svg>
+  );
   if (t.includes('dice')) return <Dices className={cls} style={style} />;
   if (t.includes('limbo')) return <TrendingUp className={cls} style={style} />;
   if (t.includes('wheel') || t.includes('roulette')) return (
@@ -63,6 +70,7 @@ function GameTypeIcon({ type, color }: { type: string; color: string }) {
 }
 
 const GRADIENT_COLORS: Record<string, string[]> = {
+  'trail': ['#065f46', '#1c1917'],
   'mirage-crash': ['#92400e', '#78350f'],
   'oasis-plinko': ['#065f46', '#134e4a'],
   'dune-mines': ['#78350f', '#1c1917'],
@@ -78,6 +86,7 @@ const GRADIENT_COLORS: Record<string, string[]> = {
 };
 
 const ACCENT_COLORS: Record<string, string> = {
+  'trail': '#2DC97A',
   'mirage-crash': '#FB923C',
   'oasis-plinko': '#2DC97A',
   'dune-mines': '#F0B232',
