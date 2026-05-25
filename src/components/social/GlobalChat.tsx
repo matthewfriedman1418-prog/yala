@@ -11,6 +11,8 @@ import { YalaIcon } from '@/components/ui/YalaIcon';
 import { EmojiPicker, UserProfilePopover, type ChatUserStats } from './ChatPopovers';
 import { TipModal, RainModal } from './ChatActionModals';
 import { useChatStore } from '@/lib/store/chat';
+import { useSettingsStore } from '@/lib/store/settings';
+import { useT } from '@/lib/i18n';
 
 // Mock per-user stats lookup — in real life this comes from the user service.
 // One user ('OasisHunter') is intentionally marked private to demo that state.
@@ -47,7 +49,10 @@ export function GlobalChat() {
   const [rainOpen, setRainOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
-  const blocked   = useChatStore((s) => s.blocked);
+  const blocked          = useChatStore((s) => s.blocked);
+  const compactChat      = useSettingsStore((s) => s.display.compactChat);
+  const showTimestamps   = useSettingsStore((s) => s.display.showTimestamps);
+  const tr               = useT();
 
   // VIP gating
   const userVipTier = user?.vipTier || 0;
@@ -120,7 +125,7 @@ export function GlobalChat() {
             >
               <div className="flex items-center gap-2">
                 <YalaIcon name="sparkle" size={16} />
-                <span className="font-display text-sm font-bold" style={{ color: '#F5E8C8' }}>Live Chat</span>
+                <span className="font-display text-sm font-bold" style={{ color: '#F5E8C8' }}>{tr('chatLive')}</span>
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)' }}>
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-[10px] font-bold number-display" style={{ color: '#2DC97A' }}>
@@ -192,6 +197,8 @@ export function GlobalChat() {
                     <ChatRow
                       key={msg.id}
                       msg={msg}
+                      compact={compactChat}
+                      showTimestamp={showTimestamps}
                       onUserClick={(rect) => {
                         // Build the stats object for the popover. "You" gets the live auth-store data.
                         const isYou = msg.userId === user?.id;
@@ -265,7 +272,7 @@ export function GlobalChat() {
                       type="text"
                       value={message}
                       onChange={(e) => setMessage(e.target.value.slice(0, MAX_MSG))}
-                      placeholder="Say something…"
+                      placeholder={tr('chatSay')}
                       className="flex-1 px-3 py-2 rounded-lg text-xs focus:outline-none transition-colors"
                       style={{
                         background: 'rgba(255,255,255,0.04)',
@@ -305,7 +312,7 @@ export function GlobalChat() {
                   </div>
                   <div className="flex items-center justify-between px-1">
                     <p className="text-[9px]" style={{ color: '#4A6A55' }}>
-                      Enter to send · Be cool
+                      {tr('chatBeCool')}
                     </p>
                     <p
                       className="text-[9px] font-mono font-bold"
@@ -325,7 +332,7 @@ export function GlobalChat() {
                     boxShadow: '0 2px 12px rgba(45,201,122,0.3)',
                   }}
                 >
-                  Sign in to chat
+                  {tr('chatSignInToChat')}
                 </button>
               )}
             </div>
@@ -417,12 +424,17 @@ export function GlobalChat() {
 // Chat row — renders the 3 message kinds (rain / tip / regular)
 function ChatRow({
   msg,
+  compact,
+  showTimestamp,
   onUserClick,
 }: {
   msg: typeof MOCK_CHAT[number];
+  compact?: boolean;
+  showTimestamp?: boolean;
   onUserClick?: (rect: { top: number; left: number }) => void;
 }) {
   const tierColor = getVIPColor(msg.vipTier);
+  const avatarSize = compact ? 22 : 28;
 
   const triggerProfile = (e: React.MouseEvent<HTMLElement>) => {
     if (!onUserClick) return;
@@ -482,8 +494,14 @@ function ChatRow({
   }
 
   // Regular message
+  const rowPadding   = compact ? 'px-2 py-1' : 'px-2 py-1.5';
+  const messageSize  = compact ? 'text-[11px]' : 'text-[12px]';
+  const messageLine  = compact ? 'leading-snug' : 'leading-relaxed';
+  const tsClassName  = showTimestamp
+    ? 'text-[9px] font-mono transition-opacity'
+    : 'text-[9px] font-mono opacity-0 group-hover:opacity-100 transition-opacity';
   return (
-    <div className="group flex gap-2 px-2 py-1.5 rounded-lg transition-colors hover:bg-white/[0.025]">
+    <div className={`group flex gap-2 ${rowPadding} rounded-lg transition-colors hover:bg-white/[0.025]`}>
       <button
         type="button"
         onClick={triggerProfile}
@@ -493,7 +511,7 @@ function ChatRow({
         <YalaAvatar
           initials={msg.avatar}
           tier={msg.vipTier}
-          size={28}
+          size={avatarSize}
           hideBadge
         />
       </button>
@@ -508,13 +526,13 @@ function ChatRow({
             {msg.username}
           </button>
           <span
-            className="text-[9px] font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+            className={tsClassName}
             style={{ color: '#4A6A55' }}
           >
             {formatTime(msg.timestamp)}
           </span>
         </div>
-        <p className="text-[12px] leading-relaxed break-words" style={{ color: '#F5E8C8' }}>
+        <p className={`${messageSize} ${messageLine} break-words`} style={{ color: '#F5E8C8' }}>
           {msg.message}
         </p>
       </div>

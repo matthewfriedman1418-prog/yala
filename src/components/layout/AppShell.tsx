@@ -1,6 +1,8 @@
 'use client';
+import { MotionConfig } from 'framer-motion';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useUIStore } from '@/lib/store/ui';
+import { useSettingsStore } from '@/lib/store/settings';
 import { cn } from '@/lib/utils';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
@@ -25,8 +27,13 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const { activeCurrency } = useWalletStore();
   const { chatOpen } = useUIStore();
+  // Honor the user's "reduce motion" preference across every framer-motion
+  // component in the app. "always" forces non-animated state regardless of
+  // OS preference; "never" lets framer-motion animate freely.
+  const reduceMotion = useSettingsStore((s) => s.display.reduceMotion);
 
   return (
+    <MotionConfig reducedMotion={reduceMotion ? 'always' : 'never'}>
     <div data-currency={activeCurrency} className="flex h-screen overflow-hidden" style={{ backgroundColor: '#060E0A' }}>
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex flex-shrink-0">
@@ -90,5 +97,6 @@ export function AppShell({ children }: AppShellProps) {
         }}
       />
     </div>
+    </MotionConfig>
   );
 }

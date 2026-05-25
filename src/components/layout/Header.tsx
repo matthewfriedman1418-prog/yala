@@ -4,6 +4,7 @@ import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { useNotificationsStore } from '@/lib/store/notifications';
+import { useT } from '@/lib/i18n';
 import { formatGC, formatSC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucide-react';
 import { useState } from 'react';
@@ -45,6 +46,7 @@ export function Header() {
   const { isLoggedIn, user, logout } = useAuthStore();
   const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications } = useUIStore();
   const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
+  const tr = useT();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
@@ -121,7 +123,7 @@ export function Header() {
               }}
             >
               <Plus className="w-4 h-4" />
-              Buy Coins
+              {tr('buyCoins')}
             </button>
           </>
         ) : (
@@ -131,7 +133,7 @@ export function Header() {
               className="px-5 py-2.5 text-sm font-semibold rounded-xl transition-all hover:opacity-80"
               style={{ border: '1px solid rgba(45,201,122,0.3)', color: '#2DC97A' }}
             >
-              Sign In
+              {tr('signIn')}
             </button>
             <button
               onClick={() => openAuthModal('register')}
