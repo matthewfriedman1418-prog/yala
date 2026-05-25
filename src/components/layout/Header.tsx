@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
+import { useNotificationsStore } from '@/lib/store/notifications';
 import { formatGC, formatSC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucide-react';
 import { useState } from 'react';
@@ -43,6 +44,7 @@ export function Header() {
   const { goldCoins, sweepCoins, activeCurrency, xp } = useWalletStore();
   const { isLoggedIn, user, logout } = useAuthStore();
   const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications } = useUIStore();
+  const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
   const [profileOpen, setProfileOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
@@ -155,10 +157,17 @@ export function Header() {
             <button
               onClick={openNotifications}
               className="relative p-2 rounded-lg hover:bg-white/5 transition-colors"
-              aria-label="Open notifications"
+              aria-label={unreadNotifs > 0 ? `Open notifications (${unreadNotifs} unread)` : 'Open notifications'}
             >
-              <Bell className="w-4 h-4" style={{ color: '#8FA899' }} />
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-red-500" />
+              <Bell className="w-4 h-4" style={{ color: unreadNotifs > 0 ? '#F0B232' : '#8FA899' }} />
+              {unreadNotifs > 0 && (
+                <span
+                  className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full text-[9px] font-black flex items-center justify-center"
+                  style={{ background: '#EF4444', color: '#fff', boxShadow: '0 0 0 2px #0C1812' }}
+                >
+                  {unreadNotifs > 9 ? '9+' : unreadNotifs}
+                </span>
+              )}
             </button>
 
             {/* Chat — desktop only */}

@@ -7,11 +7,13 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import type { ComponentType } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Paintbrush, Plus, ChevronDown, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { Paintbrush, Plus, ChevronDown, ChevronsLeft, ChevronsRight, Bell, Settings } from 'lucide-react';
+import { useNotificationsStore } from '@/lib/store/notifications';
 import { YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
 
 // ── Originals sub-menu ────────────────────────────────────────────────────────
 const ORIGINALS_GAMES = [
+  { href: '/originals/trail',                  label: 'Trail',     isNew: true },
   { href: '/originals/mirage-crash',           label: 'Crash' },
   { href: '/originals/oasis-plinko',           label: 'Plinko' },
   { href: '/originals/dune-mines',             label: 'Mines' },
@@ -105,6 +107,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
   const { openAuthModal, openPromotionsDrawer, openBuyCoins, sidebarCollapsed, toggleSidebar } = useUIStore();
+  const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
   const [originalsOpen, setOriginalsOpen] = useState(
     pathname === '/originals' || pathname.startsWith('/originals/')
   );
@@ -125,11 +128,13 @@ export function Sidebar() {
     {
       label: 'ACCOUNT',
       items: [
-        { href: '/wallet',               label: 'Wallet',    icon: yalaNavIcon('wallet-icon') },
-        { href: '/profile/transactions', label: 'History',   icon: yalaNavIcon('activity') },
-        { href: '/vault',                label: 'Vault',     icon: yalaNavIcon('lock') },
-        { href: '/affiliate',            label: 'Affiliate', icon: yalaNavIcon('star') },
-        { href: '/profile',              label: 'Profile',   icon: ProfileOutlineIcon },
+        { href: '/wallet',               label: 'Wallet',        icon: yalaNavIcon('wallet-icon') },
+        { href: '/profile/transactions', label: 'History',       icon: yalaNavIcon('activity') },
+        { href: '/vault',                label: 'Vault',         icon: yalaNavIcon('lock') },
+        { href: '/affiliate',            label: 'Affiliate',     icon: yalaNavIcon('star') },
+        { href: '/notifications',        label: 'Notifications', icon: Bell, badge: unreadNotifs > 0 ? String(unreadNotifs) : undefined },
+        { href: '/profile',              label: 'Profile',       icon: ProfileOutlineIcon },
+        { href: '/settings',             label: 'Settings',      icon: Settings },
       ],
     },
     {
@@ -302,14 +307,22 @@ export function Sidebar() {
                           key={game.href}
                           href={game.href}
                           className={cn(
-                            'flex items-center px-2.5 py-1.5 rounded-lg text-xs transition-all',
+                            'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all',
                             active
                               ? 'font-semibold nav-item-active'
                               : 'hover:text-[#F5E8C8] hover:bg-white/5'
                           )}
                           style={{ color: active ? undefined : '#8FA899' }}
                         >
-                          {game.label}
+                          <span>{game.label}</span>
+                          {game.isNew && (
+                            <span
+                              className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+                              style={{ background: 'rgba(45,201,122,0.14)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.30)' }}
+                            >
+                              New
+                            </span>
+                          )}
                         </Link>
                       );
                     })}

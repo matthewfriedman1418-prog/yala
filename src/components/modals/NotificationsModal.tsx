@@ -2,58 +2,61 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useUIStore } from '@/lib/store/ui';
 import { useWalletStore } from '@/lib/store/wallet';
+import { useNotificationsStore, type NotifKind, type Notification } from '@/lib/store/notifications';
 import { useModalA11y } from '@/lib/hooks/useModalA11y';
 import { formatGC } from '@/lib/utils';
-import { X, CheckCircle2, TrendingUp, Trophy, Bell, CloudRain } from 'lucide-react';
+import {
+  X, CheckCircle2, TrendingUp, Trophy, Bell, CloudRain, Gift, Crown, Sparkles, Settings,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 
 /**
  * Notifications modal — drops down from the Bell in the header.
  *
- * Holds the user's rakeback claim (the action moved off the Rewards page),
- * plus system notifications: race standings, level-ups, completed missions,
- * promo drops, rain alerts.
+ * Holds the user's rakeback claim plus a preview of the latest notifications
+ * (backed by the notifications store, same data the /notifications inbox uses).
  */
-
-type NotifKind = 'rakeback' | 'race' | 'mission' | 'level' | 'promo' | 'rain';
-
-interface MockNotif {
-  id: string;
-  kind: NotifKind;
-  title: string;
-  body: string;
-  time: string;       // relative time string
-  unread?: boolean;
-  href?: string;
-}
-
-const MOCK_NOTIFS: MockNotif[] = [
-  { id: 'n1', kind: 'race',    title: 'You climbed to #47 in the Daily Race', body: 'Wager 879K GC more to break into the prize tier.',                time: '4m ago',  unread: true, href: '/leaderboards' },
-  { id: 'n2', kind: 'mission', title: 'Mission complete · Triple Threat',     body: '+25 SC and 500 XP have been added to your balance.',            time: '1h ago',  unread: true },
-  { id: 'n3', kind: 'level',   title: 'Level up · Sahara Sheikh II',          body: 'Your rakeback rate increased to 8% and unlocked Diamond Tier perks.', time: '6h ago' },
-  { id: 'n4', kind: 'promo',   title: '3 new promotions just dropped',        body: 'Weekend Reload, Lucky 13 Free Spins, Refer-a-Friend bonus.',   time: '1d ago',  href: '/rewards' },
-  { id: 'n5', kind: 'rain',    title: 'PyramidKing made it rain in chat',     body: 'You received 1,250 GC from the rain drop.',                     time: '2d ago' },
-];
 
 function IconBadge({ kind }: { kind: NotifKind }) {
   switch (kind) {
-    case 'rakeback': return <TrendingUp className="w-4 h-4 text-[#2DC97A]" />;
-    case 'race':     return <Trophy     className="w-4 h-4 text-[#F0B232]" />;
-    case 'mission':  return <YalaIcon name="badge-star" size={16} />;
-    case 'level':    return <YalaIcon name="crown"      size={16} />;
-    case 'promo':    return <YalaIcon name="gift"       size={16} />;
-    case 'rain':     return <CloudRain className="w-4 h-4 text-[#60A5FA]" />;
+    case 'race':    return <Trophy     className="w-4 h-4 text-[#F0B232]" />;
+    case 'mission': return <YalaIcon name="badge-star" size={16} />;
+    case 'level':   return <Crown     className="w-4 h-4 text-[#FFD166]" />;
+    case 'promo':   return <Gift      className="w-4 h-4 text-[#F0B232]" />;
+    case 'rain':    return <CloudRain className="w-4 h-4 text-[#60A5FA]" />;
+    case 'win':     return <TrendingUp className="w-4 h-4 text-[#2DC97A]" />;
+    case 'tip':     return <Sparkles  className="w-4 h-4 text-[#F472B6]" />;
+    case 'system':  return <Bell      className="w-4 h-4 text-[#8FA899]" />;
   }
+}
+
+function relTime(ts: string): string {
+  const t   = new Date(ts).getTime();
+  const now = Date.now();
+  const sec = Math.floor((now - t) / 1000);
+  if (sec < 60)             return `${sec}s ago`;
+  if (sec < 60 * 60)        return `${Math.floor(sec / 60)}m ago`;
+  if (sec < 60 * 60 * 24)   return `${Math.floor(sec / 60 / 60)}h ago`;
+  return `${Math.floor(sec / 60 / 60 / 24)}d ago`;
 }
 
 export function NotificationsModal() {
   const { notificationsOpen, closeNotifications } = useUIStore();
   const { rakebackBalance, claimRakeback } = useWalletStore();
+  const items       = useNotificationsStore((s) => s.items);
+  const markRead    = useNotificationsStore((s) => s.markRead);
+  const markAllRead = useNotificationsStore((s) => s.markAllRead);
   const [claimed, setClaimed] = useState(false);
+  const router = useRouter();
   useModalA11y(notificationsOpen, closeNotifications);
+
+  // Show the 5 most-recent in the dropdown; full view lives on /notifications
+  const preview     = items.slice(0, 5);
+  const unreadTotal = items.filter((n) => n.unread).length;
 
   const handleClaim = () => {
     if (rakebackBalance <= 0) return;
@@ -98,12 +101,14 @@ export function NotificationsModal() {
               <div className="flex items-center gap-2">
                 <Bell className="w-4 h-4" style={{ color: '#F0B232' }} />
                 <h3 className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Notifications</h3>
-                <span
-                  className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ background: 'rgba(45,201,122,0.12)', color: '#2DC97A' }}
-                >
-                  {MOCK_NOTIFS.filter(n => n.unread).length} new
-                </span>
+                {unreadTotal > 0 && (
+                  <span
+                    className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                    style={{ background: 'rgba(45,201,122,0.12)', color: '#2DC97A' }}
+                  >
+                    {unreadTotal} new
+                  </span>
+                )}
               </div>
               <button onClick={closeNotifications} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
                 <X className="w-4 h-4" style={{ color: '#8FA899' }} />
@@ -150,10 +155,23 @@ export function NotificationsModal() {
 
             {/* Notifications list */}
             <div className="max-h-[420px] overflow-y-auto no-scrollbar">
-              {MOCK_NOTIFS.map((n) => {
-                const inner = (
-                  <div
-                    className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-white/5"
+              {preview.length === 0 ? (
+                <div className="px-4 py-8 text-center">
+                  <Bell className="w-6 h-6 mx-auto mb-2" style={{ color: '#4A6A55' }} />
+                  <p className="text-xs" style={{ color: '#8FA899' }}>You&apos;re all caught up.</p>
+                </div>
+              ) : preview.map((n: Notification) => {
+                const handleClick = () => {
+                  markRead(n.id);
+                  if (n.href) router.push(n.href);
+                  closeNotifications();
+                };
+                return (
+                  <button
+                    key={n.id}
+                    type="button"
+                    onClick={handleClick}
+                    className="w-full text-left flex items-start gap-3 px-4 py-3 transition-colors hover:bg-white/5"
                     style={{ borderBottom: '1px solid rgba(26,46,34,0.55)' }}
                   >
                     <div
@@ -164,43 +182,50 @@ export function NotificationsModal() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="text-xs font-semibold leading-snug" style={{ color: '#F5E8C8' }}>
+                        <p className={`text-xs leading-snug ${n.unread ? 'font-bold' : 'font-semibold'}`} style={{ color: n.unread ? '#F5E8C8' : '#C5BBA0' }}>
                           {n.title}
                         </p>
                         {n.unread && (
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0 mt-1.5" />
                         )}
                       </div>
-                      <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8FA899' }}>{n.body}</p>
-                      <p className="text-[10px] mt-1 font-mono" style={{ color: '#4A6A55' }}>{n.time}</p>
+                      <p className="text-[11px] mt-0.5 leading-snug truncate" style={{ color: '#8FA899' }}>{n.body}</p>
+                      <p className="text-[10px] mt-1 font-mono" style={{ color: '#4A6A55' }}>{relTime(n.ts)}</p>
                     </div>
-                  </div>
-                );
-
-                return n.href ? (
-                  <Link key={n.id} href={n.href} onClick={closeNotifications}>{inner}</Link>
-                ) : (
-                  <div key={n.id}>{inner}</div>
+                  </button>
                 );
               })}
             </div>
 
             {/* Footer */}
-            <div className="px-4 py-2.5 flex items-center justify-between" style={{ background: '#0A1410', borderTop: '1px solid #1A2E22' }}>
-              <button
-                className="text-[11px] font-semibold transition-colors hover:text-[#F5E8C8]"
-                style={{ color: '#8FA899' }}
-                onClick={() => toast('All notifications marked as read')}
-              >
-                Mark all as read
-              </button>
+            <div className="px-4 py-2.5 flex items-center justify-between gap-3" style={{ background: '#0A1410', borderTop: '1px solid #1A2E22' }}>
+              <div className="flex items-center gap-2">
+                {unreadTotal > 0 && (
+                  <button
+                    className="text-[11px] font-semibold transition-colors hover:text-[#F5E8C8]"
+                    style={{ color: '#8FA899' }}
+                    onClick={() => { markAllRead(); toast.success('All marked as read'); }}
+                  >
+                    Mark all read
+                  </button>
+                )}
+                <Link
+                  href="/settings"
+                  onClick={closeNotifications}
+                  className="text-[11px] font-semibold transition-colors hover:text-[#F5E8C8] flex items-center gap-1"
+                  style={{ color: '#8FA899' }}
+                  title="Notification settings"
+                >
+                  <Settings className="w-3 h-3" />
+                </Link>
+              </div>
               <Link
-                href="/profile/transactions"
+                href="/notifications"
                 onClick={closeNotifications}
-                className="text-[11px] font-semibold transition-colors hover:text-[#F0B232]"
+                className="text-[11px] font-bold transition-colors hover:text-[#F0B232]"
                 style={{ color: '#F0B232' }}
               >
-                View all activity →
+                View all →
               </Link>
             </div>
           </motion.div>
