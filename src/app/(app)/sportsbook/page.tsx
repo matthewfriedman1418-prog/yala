@@ -8,6 +8,7 @@ import { useUIStore } from '@/lib/store/ui';
 import { useSportsbookStore, type PlacedBet } from '@/lib/store/sportsbook';
 import { formatGC, formatSC } from '@/lib/utils';
 import { toast } from 'sonner';
+import { BetConfirmModal, type BetConfirmSummary, type BetConfirmLeg } from '@/components/sportsbook/BetConfirmModal';
 import {
   SPORTSBOOK_GAMES,
   PLAYER_PROPS,
@@ -666,6 +667,7 @@ function BetSlip({
   balance,
   balanceLabel,
   recentBets,
+  onCashOut,
 }: {
   selections: BetSelection[];
   betMode: 'single' | 'parlay';
@@ -682,6 +684,7 @@ function BetSlip({
   balance: number;
   balanceLabel?: string;
   recentBets?: PlacedBet[];
+  onCashOut?: (bet: PlacedBet) => void;
 }) {
   const parlayDec = calcParlayDecimal(selections);
   const parlayOddsAmerican = selections.length > 1 ? Math.round((parlayDec - 1) * 100) : null;
@@ -803,6 +806,20 @@ function BetSlip({
                                 : `→ ${b.potentialPayout.toFixed(2)}`}
                           </span>
                         </div>
+                        {b.status === 'pending' && onCashOut && (
+                          <button
+                            type="button"
+                            onClick={() => onCashOut(b)}
+                            className="mt-2 w-full py-1.5 rounded-md text-[10px] font-bold transition-colors hover:brightness-110"
+                            style={{
+                              background: 'rgba(45,201,122,0.10)',
+                              color: '#2DC97A',
+                              border: '1px solid rgba(45,201,122,0.30)',
+                            }}
+                          >
+                            Cash out early
+                          </button>
+                        )}
                       </div>
                     );
                   })}
@@ -1023,6 +1040,7 @@ export default function SportsbookPage() {
   const { openAuthModal, openBuyCoins } = useUIStore();
   const recentBets = useSportsbookStore((s) => s.bets);
   const addBet     = useSportsbookStore((s) => s.addBet);
+  const settle     = useSportsbookStore((s) => s.settle);
 
   const [activeSport, setActiveSport] = useState<SportKey | 'All'>('All');
   const [contentTab, setContentTab] = useState<ContentTab>('all');
@@ -1032,6 +1050,8 @@ export default function SportsbookPage() {
   const [parlayStake, setParlayStake] = useState('');
   const [betPlaced, setBetPlaced] = useState(false);
   const [mobileSlipOpen, setMobileSlipOpen] = useState(false);
+  const [confirmSummary, setConfirmSummary] = useState<BetConfirmSummary | null>(null);
+  const [placing, setPlacing] = useState(false);
 
   const isGC = activeCurrency === 'GC';
   const balance = isGC ? goldCoins : sweepCoins;
@@ -1069,31 +1089,78 @@ export default function SportsbookPage() {
     setSelections((prev) => prev.filter((_, i) => i !== idx));
   }, []);
 
+  // Step 1: Build the summary + open the confirmation modal.
   const handlePlaceBet = useCallback(() => {
     if (!isLoggedIn) { openAuthModal(); return; }
     if (selections.length === 0) return;
 
-    // Compute total stake + payout across modes, validate balance, record bets
+    const buildLeg = (sel: BetSelection): BetConfirmLeg => ({
+      label: sel.label,
+      gameLabel: sel.gameLabel,
+      odds: sel.odds,
+    });
+
     if (betMode === 'single') {
       const lines = selections
-        .map((sel) => ({
-          sel,
-          stake: Number(stakeInputs[sel.id]) || 0,
-          payout: calcPayout(Number(stakeInputs[sel.id]) || 0, sel.odds),
-        }))
+        .map((sel) => ({ sel, stake: Number(stakeInputs[sel.id]) || 0 }))
         .filter((x) => x.stake > 0);
-
       if (lines.length === 0) { toast.error('Add a stake to at least one selection'); return; }
-      const totalStake = lines.reduce((s, l) => s + l.stake, 0);
-      if (totalStake > balance) { toast.error(`Insufficient ${activeCurrency} balance`); return; }
+      const totalStake      = lines.reduce((s, l) => s + l.stake, 0);
+      const totalProfit     = lines.reduce((s, l) => s + calcPayout(l.stake, l.sel.odds), 0);
+      const totalPayout     = totalStake + totalProfit;
 
-      // Deduct + record each
-      if (isGC) addGC(-totalStake); else addSC(-totalStake);
-      lines.forEach(({ sel, stake, payout }) => {
+      setConfirmSummary({
+        mode: 'single',
+        legs: lines.map((l) => buildLeg(l.sel)),
+        totalStake,
+        potentialPayout: totalPayout,
+        currency: activeCurrency as 'GC' | 'SC',
+        balance,
+      });
+    } else {
+      const stake = Number(parlayStake) || 0;
+      if (stake <= 0) { toast.error('Enter a stake for your parlay'); return; }
+      if (selections.length < 2) { toast.error('A parlay needs at least 2 legs'); return; }
+      const dec    = calcParlayDecimal(selections);
+      const payout = stake + calcParlay(selections, stake);
+      setConfirmSummary({
+        mode: 'parlay',
+        legs: selections.map(buildLeg),
+        totalStake: stake,
+        potentialPayout: payout,
+        parlayDecimalOdds: dec,
+        currency: activeCurrency as 'GC' | 'SC',
+        balance,
+      });
+    }
+  }, [isLoggedIn, openAuthModal, selections, betMode, stakeInputs, parlayStake, balance, activeCurrency]);
+
+  // Step 2: User confirmed — deduct wallet, persist bets, animate success.
+  const confirmAndPlace = useCallback(() => {
+    if (!confirmSummary) return;
+    setPlacing(true);
+
+    if (confirmSummary.totalStake > balance) {
+      toast.error(`Insufficient ${activeCurrency} balance`);
+      setPlacing(false);
+      return;
+    }
+
+    // Deduct
+    if (isGC) addGC(-confirmSummary.totalStake);
+    else      addSC(-confirmSummary.totalStake);
+
+    // Persist
+    if (confirmSummary.mode === 'single') {
+      const lines = selections
+        .map((sel) => ({ sel, stake: Number(stakeInputs[sel.id]) || 0 }))
+        .filter((x) => x.stake > 0);
+      lines.forEach(({ sel, stake }) => {
+        const profit = calcPayout(stake, sel.odds);
         addBet({
           currency: activeCurrency as 'GC' | 'SC',
           stake,
-          potentialPayout: stake + payout,
+          potentialPayout: stake + profit,
           odds: sel.odds > 0 ? 1 + sel.odds / 100 : 1 + 100 / Math.abs(sel.odds),
           mode: 'single',
           summary: sel.label,
@@ -1101,34 +1168,52 @@ export default function SportsbookPage() {
         });
       });
     } else {
-      // Parlay
       const stake = Number(parlayStake) || 0;
-      if (stake <= 0) { toast.error('Enter a stake for your parlay'); return; }
-      if (stake > balance) { toast.error(`Insufficient ${activeCurrency} balance`); return; }
-      if (selections.length < 2) { toast.error('A parlay needs at least 2 legs'); return; }
-
-      const dec    = calcParlayDecimal(selections);
-      const payout = calcParlay(selections, stake);
-      if (isGC) addGC(-stake); else addSC(-stake);
       addBet({
         currency: activeCurrency as 'GC' | 'SC',
         stake,
-        potentialPayout: stake + payout,
-        odds: dec,
+        potentialPayout: confirmSummary.potentialPayout,
+        odds: confirmSummary.parlayDecimalOdds || 1,
         mode: 'parlay',
         summary: `${selections[0].label}${selections.length > 1 ? ` + ${selections.length - 1} more` : ''}`,
         legs: selections.length,
       });
     }
 
-    setBetPlaced(true);
+    // Tiny placement animation, then clear and confirm
     setTimeout(() => {
-      setBetPlaced(false);
-      setSelections([]);
-      setStakeInputs({});
-      setParlayStake('');
-    }, 2200);
-  }, [isLoggedIn, openAuthModal, selections, betMode, stakeInputs, parlayStake, balance, activeCurrency, isGC, addGC, addSC, addBet]);
+      setPlacing(false);
+      setConfirmSummary(null);
+      setBetPlaced(true);
+      toast.success(
+        confirmSummary.mode === 'parlay'
+          ? `${selections.length}-leg parlay placed`
+          : `${selections.length} bet${selections.length === 1 ? '' : 's'} placed`,
+        { description: `${confirmSummary.totalStake.toFixed(2)} ${confirmSummary.currency} staked.` },
+      );
+      setTimeout(() => {
+        setBetPlaced(false);
+        setSelections([]);
+        setStakeInputs({});
+        setParlayStake('');
+      }, 1800);
+    }, 500);
+  }, [confirmSummary, balance, activeCurrency, isGC, addGC, addSC, addBet, selections, stakeInputs, parlayStake]);
+
+  // Cash out a pending bet at fair value (mocked).
+  // Fair value ≈ stake × (current_decimal_odds / original_decimal_odds) discounted ~10%.
+  // We don't have live odds, so we use a randomized "time-decay" multiplier between
+  // 0.55 and 1.05 of stake to feel believable.
+  const handleCashOut = useCallback((bet: PlacedBet) => {
+    if (bet.status !== 'pending') return;
+    const factor = 0.55 + Math.random() * 0.50; // 0.55x..1.05x of stake
+    const payout = +(bet.stake * factor).toFixed(2);
+    if (bet.currency === 'GC') addGC(payout); else addSC(payout);
+    settle(bet.id, 'won');
+    toast.success('Cashed out', {
+      description: `+${payout.toFixed(2)} ${bet.currency} on "${bet.summary}" (${factor < 1 ? 'before settlement' : 'profit'})`,
+    });
+  }, [addGC, addSC, settle]);
 
   const handleCopySlip = useCallback((parlay: CreatorParlay) => {
     if (!isLoggedIn) { openAuthModal(); return; }
@@ -1425,6 +1510,7 @@ export default function SportsbookPage() {
             activeCurrency={activeCurrency}
             balance={balance}
             recentBets={recentBets}
+            onCashOut={handleCashOut}
           />
 
           {/* Popular markets sidebar */}
@@ -1456,25 +1542,37 @@ export default function SportsbookPage() {
       </div>
 
       {/* ── Mobile bet slip FAB ──────────────────────────────────────────── */}
-      {selections.length > 0 && !mobileSlipOpen && (
-        <div className="fixed bottom-12 left-0 right-0 px-4 lg:hidden z-30">
-          <button
-            type="button"
-            onClick={() => setMobileSlipOpen(true)}
-            aria-label="View bet slip"
-            className="w-full flex items-center justify-between px-5 py-3.5 rounded-xl font-bold text-sm shadow-xl"
-            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
-          >
-            <span>View Bet Slip</span>
-            <span className="flex items-center gap-2">
-              <span className="bg-black/20 rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">
-                {selections.length}
+      {(() => {
+        const pendingCount = recentBets.filter((b) => b.status === 'pending').length;
+        const showFab      = !mobileSlipOpen && (selections.length > 0 || pendingCount > 0 || recentBets.length > 0);
+        if (!showFab) return null;
+        const hasSel  = selections.length > 0;
+        const label   = hasSel ? 'View Bet Slip' : pendingCount > 0 ? `${pendingCount} active bet${pendingCount === 1 ? '' : 's'}` : 'Recent bets';
+        const bgStyle = hasSel
+          ? { background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }
+          : { background: '#0F1A14', color: '#F5E8C8', border: '1px solid #1A2E22' };
+        return (
+          <div className="fixed bottom-12 left-0 right-0 px-4 lg:hidden z-30">
+            <button
+              type="button"
+              onClick={() => setMobileSlipOpen(true)}
+              aria-label="Open bet slip"
+              className="w-full flex items-center justify-between px-5 py-3.5 rounded-xl font-bold text-sm shadow-xl"
+              style={bgStyle}
+            >
+              <span>{label}</span>
+              <span className="flex items-center gap-2">
+                {hasSel && (
+                  <span className="bg-black/20 rounded-full w-6 h-6 flex items-center justify-center text-xs font-black">
+                    {selections.length}
+                  </span>
+                )}
+                <ChevronDown className="w-4 h-4 rotate-180" />
               </span>
-              <ChevronDown className="w-4 h-4 rotate-180" />
-            </span>
-          </button>
-        </div>
-      )}
+            </button>
+          </div>
+        );
+      })()}
 
       {/* ── Mobile slip drawer ──────────────────────────────────────────── */}
       <AnimatePresence>
@@ -1527,6 +1625,15 @@ export default function SportsbookPage() {
           </>
         )}
       </AnimatePresence>
+
+      {/* ── Bet confirmation modal (review → confirm pattern) ─────────── */}
+      <BetConfirmModal
+        open={confirmSummary !== null}
+        summary={confirmSummary}
+        onClose={() => setConfirmSummary(null)}
+        onConfirm={confirmAndPlace}
+        placing={placing}
+      />
 
       {/* ── Legal ────────────────────────────────────────────────────────── */}
       <div className="border-t mt-8 pt-5 text-center" style={{ borderColor: '#1A2E22' }}>
