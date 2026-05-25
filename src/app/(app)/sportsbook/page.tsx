@@ -5,7 +5,9 @@ import Image from 'next/image';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
+import { useSportsbookStore, type PlacedBet } from '@/lib/store/sportsbook';
 import { formatGC, formatSC } from '@/lib/utils';
+import { toast } from 'sonner';
 import {
   SPORTSBOOK_GAMES,
   PLAYER_PROPS,
@@ -663,6 +665,7 @@ function BetSlip({
   activeCurrency,
   balance,
   balanceLabel,
+  recentBets,
 }: {
   selections: BetSelection[];
   betMode: 'single' | 'parlay';
@@ -678,6 +681,7 @@ function BetSlip({
   activeCurrency: string;
   balance: number;
   balanceLabel?: string;
+  recentBets?: PlacedBet[];
 }) {
   const parlayDec = calcParlayDecimal(selections);
   const parlayOddsAmerican = selections.length > 1 ? Math.round((parlayDec - 1) * 100) : null;
@@ -747,10 +751,64 @@ function BetSlip({
             <p className="text-xs" style={{ color: '#8FA899' }}>Good luck! Bets are demo only.</p>
           </motion.div>
         ) : selections.length === 0 ? (
-          <div className="py-10 px-4 text-center">
-            <span className="text-3xl block mb-2">🎯</span>
-            <p className="text-sm font-medium mb-1" style={{ color: '#F5E8C8' }}>No selections yet</p>
-            <p className="text-xs" style={{ color: '#8FA899' }}>Click any odds to add to your slip</p>
+          <div>
+            <div className="py-8 px-4 text-center">
+              <span className="text-3xl block mb-2">🎯</span>
+              <p className="text-sm font-medium mb-1" style={{ color: '#F5E8C8' }}>No selections yet</p>
+              <p className="text-xs" style={{ color: '#8FA899' }}>Click any odds to add to your slip</p>
+            </div>
+            {recentBets && recentBets.length > 0 && (
+              <div className="px-3 pb-3" style={{ borderTop: '1px solid #1A2E22' }}>
+                <p className="text-[10px] font-bold uppercase tracking-widest pt-3 pb-2" style={{ color: '#4A6A55' }}>
+                  Your recent bets
+                </p>
+                <div className="space-y-1.5">
+                  {recentBets.slice(0, 5).map((b) => {
+                    const color =
+                      b.status === 'won'  ? '#2DC97A' :
+                      b.status === 'lost' ? '#EF4444' :
+                      b.status === 'void' ? '#8FA899' :
+                                            '#F0B232';
+                    const label =
+                      b.status === 'won'  ? 'Won' :
+                      b.status === 'lost' ? 'Lost' :
+                      b.status === 'void' ? 'Void' :
+                                            'Open';
+                    return (
+                      <div
+                        key={b.id}
+                        className="rounded-lg px-2.5 py-2"
+                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}
+                      >
+                        <div className="flex items-start justify-between gap-2 mb-0.5">
+                          <p className="text-[11px] font-bold leading-snug truncate" style={{ color: '#F5E8C8' }}>
+                            {b.summary}
+                          </p>
+                          <span
+                            className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full flex-shrink-0"
+                            style={{ background: `${color}1A`, color, border: `1px solid ${color}33` }}
+                          >
+                            {label}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] font-mono" style={{ color: '#8FA899' }}>
+                          <span>
+                            {b.mode === 'parlay' ? `${b.legs}-leg parlay` : 'Single'} · {b.stake.toFixed(2)} {b.currency}
+                          </span>
+                          <span style={{ color }}>
+                            {b.status === 'won'
+                              ? `+${b.potentialPayout.toFixed(2)}`
+                              : b.status === 'lost'
+                                ? `-${b.stake.toFixed(2)}`
+                                : `→ ${b.potentialPayout.toFixed(2)}`}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         ) : betMode === 'single' ? (
           <motion.div key="singles" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="divide-y" style={{ borderColor: '#1A2E22' }}>
@@ -960,9 +1018,11 @@ function BetSlip({
 
 // ── Main Page ─────────────────────────────────────────────────────────────
 export default function SportsbookPage() {
-  const { activeCurrency, goldCoins, sweepCoins } = useWalletStore();
+  const { activeCurrency, goldCoins, sweepCoins, addGC, addSC } = useWalletStore();
   const { isLoggedIn } = useAuthStore();
   const { openAuthModal, openBuyCoins } = useUIStore();
+  const recentBets = useSportsbookStore((s) => s.bets);
+  const addBet     = useSportsbookStore((s) => s.addBet);
 
   const [activeSport, setActiveSport] = useState<SportKey | 'All'>('All');
   const [contentTab, setContentTab] = useState<ContentTab>('all');
@@ -971,6 +1031,7 @@ export default function SportsbookPage() {
   const [stakeInputs, setStakeInputs] = useState<Record<string, string>>({});
   const [parlayStake, setParlayStake] = useState('');
   const [betPlaced, setBetPlaced] = useState(false);
+  const [mobileSlipOpen, setMobileSlipOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
   const balance = isGC ? goldCoins : sweepCoins;
@@ -1010,14 +1071,64 @@ export default function SportsbookPage() {
 
   const handlePlaceBet = useCallback(() => {
     if (!isLoggedIn) { openAuthModal(); return; }
+    if (selections.length === 0) return;
+
+    // Compute total stake + payout across modes, validate balance, record bets
+    if (betMode === 'single') {
+      const lines = selections
+        .map((sel) => ({
+          sel,
+          stake: Number(stakeInputs[sel.id]) || 0,
+          payout: calcPayout(Number(stakeInputs[sel.id]) || 0, sel.odds),
+        }))
+        .filter((x) => x.stake > 0);
+
+      if (lines.length === 0) { toast.error('Add a stake to at least one selection'); return; }
+      const totalStake = lines.reduce((s, l) => s + l.stake, 0);
+      if (totalStake > balance) { toast.error(`Insufficient ${activeCurrency} balance`); return; }
+
+      // Deduct + record each
+      if (isGC) addGC(-totalStake); else addSC(-totalStake);
+      lines.forEach(({ sel, stake, payout }) => {
+        addBet({
+          currency: activeCurrency as 'GC' | 'SC',
+          stake,
+          potentialPayout: stake + payout,
+          odds: sel.odds > 0 ? 1 + sel.odds / 100 : 1 + 100 / Math.abs(sel.odds),
+          mode: 'single',
+          summary: sel.label,
+          legs: 1,
+        });
+      });
+    } else {
+      // Parlay
+      const stake = Number(parlayStake) || 0;
+      if (stake <= 0) { toast.error('Enter a stake for your parlay'); return; }
+      if (stake > balance) { toast.error(`Insufficient ${activeCurrency} balance`); return; }
+      if (selections.length < 2) { toast.error('A parlay needs at least 2 legs'); return; }
+
+      const dec    = calcParlayDecimal(selections);
+      const payout = calcParlay(selections, stake);
+      if (isGC) addGC(-stake); else addSC(-stake);
+      addBet({
+        currency: activeCurrency as 'GC' | 'SC',
+        stake,
+        potentialPayout: stake + payout,
+        odds: dec,
+        mode: 'parlay',
+        summary: `${selections[0].label}${selections.length > 1 ? ` + ${selections.length - 1} more` : ''}`,
+        legs: selections.length,
+      });
+    }
+
     setBetPlaced(true);
     setTimeout(() => {
       setBetPlaced(false);
       setSelections([]);
       setStakeInputs({});
       setParlayStake('');
-    }, 2500);
-  }, [isLoggedIn, openAuthModal]);
+    }, 2200);
+  }, [isLoggedIn, openAuthModal, selections, betMode, stakeInputs, parlayStake, balance, activeCurrency, isGC, addGC, addSC, addBet]);
 
   const handleCopySlip = useCallback((parlay: CreatorParlay) => {
     if (!isLoggedIn) { openAuthModal(); return; }
@@ -1313,6 +1424,7 @@ export default function SportsbookPage() {
             betPlaced={betPlaced}
             activeCurrency={activeCurrency}
             balance={balance}
+            recentBets={recentBets}
           />
 
           {/* Popular markets sidebar */}
@@ -1344,9 +1456,12 @@ export default function SportsbookPage() {
       </div>
 
       {/* ── Mobile bet slip FAB ──────────────────────────────────────────── */}
-      {selections.length > 0 && (
+      {selections.length > 0 && !mobileSlipOpen && (
         <div className="fixed bottom-12 left-0 right-0 px-4 lg:hidden z-30">
           <button
+            type="button"
+            onClick={() => setMobileSlipOpen(true)}
+            aria-label="View bet slip"
             className="w-full flex items-center justify-between px-5 py-3.5 rounded-xl font-bold text-sm shadow-xl"
             style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
           >
@@ -1360,6 +1475,58 @@ export default function SportsbookPage() {
           </button>
         </div>
       )}
+
+      {/* ── Mobile slip drawer ──────────────────────────────────────────── */}
+      <AnimatePresence>
+        {mobileSlipOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setMobileSlipOpen(false)}
+              className="fixed inset-0 z-40 bg-black/55 lg:hidden"
+              style={{ backdropFilter: 'blur(2px)' }}
+            />
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 320 }}
+              className="fixed left-0 right-0 bottom-0 z-50 lg:hidden max-h-[85vh] overflow-y-auto rounded-t-2xl"
+              style={{ background: '#0C1812', border: '1px solid #1A2E22', borderBottom: 'none' }}
+            >
+              <div className="sticky top-0 flex items-center justify-between px-4 py-3 z-10" style={{ background: '#0C1812', borderBottom: '1px solid #1A2E22' }}>
+                <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Bet Slip ({selections.length})</p>
+                <button
+                  type="button"
+                  onClick={() => setMobileSlipOpen(false)}
+                  aria-label="Close bet slip"
+                  className="p-1.5 rounded-lg hover:bg-white/10"
+                >
+                  <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                </button>
+              </div>
+              <div className="p-3">
+                <BetSlip
+                  selections={selections}
+                  betMode={betMode}
+                  setBetMode={setBetMode}
+                  stakeInputs={stakeInputs}
+                  setStakeInputs={setStakeInputs}
+                  parlayStake={parlayStake}
+                  setParlayStake={setParlayStake}
+                  onRemove={removeSelection}
+                  onClear={() => setSelections([])}
+                  onPlaceBet={() => { handlePlaceBet(); setMobileSlipOpen(false); }}
+                  betPlaced={betPlaced}
+                  activeCurrency={activeCurrency}
+                  balance={balance}
+                  recentBets={recentBets}
+                />
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ── Legal ────────────────────────────────────────────────────────── */}
       <div className="border-t mt-8 pt-5 text-center" style={{ borderColor: '#1A2E22' }}>
