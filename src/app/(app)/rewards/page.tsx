@@ -1,36 +1,34 @@
 'use client';
 
 /**
- * /rewards — Rewards Hub.
+ * /rewards — Rewards Hub. Slimmed down per simplification pass.
  *
- * Restructured around the pattern every major sweeps / crypto casino converges
- * on (Stake, Roobet, Rainbet, Chumba, BC.Game):
+ *   [VIP status bar]
+ *   [Available now ribbon]   → conditional, only if something is claimable
+ *   [Daily section]          → 3 cards · live countdown to 00:00 UTC
+ *   [Weekly section]         → 3 cards · live countdown to next Monday
+ *   [Monthly section]        → 3 cards · live countdown to 1st of next month
+ *   [Footer link]            → "All promotions →"
  *
- *   [VIP status header]
- *   [Available now ribbon]      → things claimable RIGHT NOW
- *   [Daily section]              → streak calendar + daily race + missions
- *   [Weekly section]             → weekly cashback timer + weekly race
- *   [Monthly section]            → monthly cashback % + level-up + tournament
- *   [Special / promotions]       → promo code redeem + featured promos
- *
- * Each time-anchored section shows a countdown to its reset so the user knows
- * how long they have to act.
+ * The 7-day streak calendar moved out (lives on /daily-bonus where it belongs).
+ * The Special section and promo code input were removed — promo codes aren't
+ * a core sweeps mechanic for us. Daily claim state is shared with /daily-bonus
+ * through the rewards store so both pages stay in sync.
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   ChevronRight, Calendar, Trophy, Crown, TrendingUp, Gift, Sparkles,
-  Clock, Check, Tag, Users,
+  Clock,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useUIStore } from '@/lib/store/ui';
+import { useRewardsStore } from '@/lib/store/rewards';
 import { formatGC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { VIP_TIERS } from '@/lib/mock-data/users';
-import { PROMOTIONS, type Promotion } from '@/lib/mock-data/promotions';
-import { PromoCard } from '@/components/rewards/PromoCard';
 import { YalaIcon } from '@/components/ui/YalaIcon';
 import {
   msUntilNextDailyResetUTC,
@@ -40,7 +38,17 @@ import {
 } from '@/lib/time';
 import { toast } from 'sonner';
 
-// Hook: updates a live countdown to a given reset every second.
+// Daily reward table — must match /daily-bonus
+const DAILY_STREAK_REWARDS = [
+  { day: 1, gc: 1_000,  sc: 0 },
+  { day: 2, gc: 1_500,  sc: 0 },
+  { day: 3, gc: 2_000,  sc: 0 },
+  { day: 4, gc: 2_500,  sc: 1 },
+  { day: 5, gc: 3_000,  sc: 0 },
+  { day: 6, gc: 4_000,  sc: 0 },
+  { day: 7, gc: 7_500,  sc: 5 },
+];
+
 function useCountdown(getMs: () => number): string {
   const [text, setText] = useState(() => formatDuration(getMs()));
   useEffect(() => {
@@ -52,30 +60,18 @@ function useCountdown(getMs: () => number): string {
   return text;
 }
 
-const DAILY_STREAK_REWARDS = [
-  { day: 1, gc: 1_000 },
-  { day: 2, gc: 1_500 },
-  { day: 3, gc: 2_000 },
-  { day: 4, gc: 2_500, sc: 1 },
-  { day: 5, gc: 3_000 },
-  { day: 6, gc: 4_000 },
-  { day: 7, gc: 7_500, sc: 5 },
-];
-
-const DEMO_STREAK_DAY = 4; // Mock — assume the user is on day 4 of their 7-day streak.
-
 export default function RewardsPage() {
   const { isLoggedIn, user }                = useAuthStore();
   const { xp, rakebackBalance, claimRakeback, addGC, addSC } = useWalletStore();
   const { openAuthModal }                   = useUIStore();
-  const [claimed, setClaimed]               = useState<Record<string, boolean>>({});
-  const [code, setCode]                     = useState('');
+  const canClaimDaily                       = useRewardsStore((s) => s.canClaimDailyToday());
+  const pendingStreakDay                    = useRewardsStore((s) => s.pendingStreakDay());
+  const claimDaily                          = useRewardsStore((s) => s.claimDaily);
 
   const dailyCountdown   = useCountdown(msUntilNextDailyResetUTC);
   const weeklyCountdown  = useCountdown(msUntilNextWeeklyResetUTC);
   const monthlyCountdown = useCountdown(msUntilNextMonthlyResetUTC);
 
-  // VIP progress
   const currentTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1)) || VIP_TIERS[0];
   const nextTier    = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1) + 1);
   const progress    = nextTier
@@ -83,22 +79,19 @@ export default function RewardsPage() {
     : 100;
   const tierColor = getVIPColor(user?.vipTier || 1);
 
-  // Things claimable right now
-  const dailyReady    = !claimed.daily;
-  const rakebackReady = rakebackBalance > 0 && !claimed.rakeback;
+  const todayReward    = DAILY_STREAK_REWARDS[Math.min(pendingStreakDay - 1, 6)];
+  const dailyReady     = isLoggedIn && canClaimDaily;
+  const rakebackReady  = isLoggedIn && rakebackBalance > 0;
   const claimableCount = (dailyReady ? 1 : 0) + (rakebackReady ? 1 : 0);
-
-  // Active promos for the bottom row
-  const featuredPromos: Promotion[] = useMemo(() => PROMOTIONS.slice(0, 3), []);
 
   const handleClaimDaily = () => {
     if (!isLoggedIn) { openAuthModal(); return; }
-    const reward = DAILY_STREAK_REWARDS[DEMO_STREAK_DAY - 1];
-    if (reward.gc) addGC(reward.gc);
-    if (reward.sc) addSC(reward.sc);
-    setClaimed((c) => ({ ...c, daily: true }));
-    toast.success(`Day ${DEMO_STREAK_DAY} bonus claimed`, {
-      description: `+${formatGC(reward.gc)} GC${reward.sc ? ` · +${reward.sc} SC` : ''}`,
+    if (!canClaimDaily) return;
+    if (todayReward.gc) addGC(todayReward.gc);
+    if (todayReward.sc) addSC(todayReward.sc);
+    const day = claimDaily();
+    toast.success(`Day ${day} bonus claimed`, {
+      description: `+${formatGC(todayReward.gc)} GC${todayReward.sc ? ` · +${todayReward.sc} SC` : ''}`,
     });
   };
 
@@ -107,27 +100,19 @@ export default function RewardsPage() {
     if (rakebackBalance <= 0) return;
     const amount = rakebackBalance;
     claimRakeback();
-    setClaimed((c) => ({ ...c, rakeback: true }));
     toast.success('Rakeback claimed', { description: `+${formatGC(amount)} GC to your bonus balance.` });
-  };
-
-  const handlePromoClaim = (promo: Promotion) => {
-    if (!isLoggedIn) { openAuthModal(); return; }
-    if (promo.gcBonus) addGC(promo.gcBonus);
-    if (promo.scBonus) addSC(promo.scBonus);
-    toast.success(`Claimed: ${promo.title}`);
   };
 
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
-      {/* ── HEADER + VIP STATUS ───────────────────────────── */}
+      {/* ── HEADER ───────────────────────────────────────────── */}
       <div>
         <div className="flex items-center gap-2 mb-2">
           <YalaIcon name="gift" size={14} />
           <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#F0B232' }}>Rewards</span>
         </div>
         <h1 className="font-display text-3xl font-black tracking-tight" style={{ color: '#F5E8C8' }}>Rewards Hub</h1>
-        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>Daily, weekly, and monthly drops. Everything you&apos;ve earned in one place.</p>
+        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>Daily, weekly, and monthly drops · everything in one place.</p>
       </div>
 
       {/* VIP status bar */}
@@ -197,7 +182,7 @@ export default function RewardsPage() {
       )}
 
       {/* ── AVAILABLE NOW RIBBON ───────────────────────────── */}
-      {isLoggedIn && claimableCount > 0 && (
+      {claimableCount > 0 && (
         <section
           className="rounded-2xl p-4"
           style={{
@@ -206,20 +191,18 @@ export default function RewardsPage() {
             boxShadow: '0 0 24px rgba(45,201,122,0.10)',
           }}
         >
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 animate-pulse" style={{ color: '#2DC97A' }} />
-              <p className="text-sm font-black uppercase tracking-widest" style={{ color: '#2DC97A' }}>
-                {claimableCount} reward{claimableCount === 1 ? '' : 's'} ready
-              </p>
-            </div>
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 animate-pulse" style={{ color: '#2DC97A' }} />
+            <p className="text-sm font-black uppercase tracking-widest" style={{ color: '#2DC97A' }}>
+              {claimableCount} reward{claimableCount === 1 ? '' : 's'} ready
+            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {dailyReady && (
               <ClaimRow
                 icon={<Calendar className="w-4 h-4" />}
-                label={`Day ${DEMO_STREAK_DAY} daily bonus`}
-                amount={`+${formatGC(DAILY_STREAK_REWARDS[DEMO_STREAK_DAY - 1].gc)} GC${DAILY_STREAK_REWARDS[DEMO_STREAK_DAY - 1].sc ? ` · +${DAILY_STREAK_REWARDS[DEMO_STREAK_DAY - 1].sc} SC` : ''}`}
+                label={`Day ${pendingStreakDay} daily bonus`}
+                amount={`+${formatGC(todayReward.gc)} GC${todayReward.sc ? ` · +${todayReward.sc} SC` : ''}`}
                 onClaim={handleClaimDaily}
                 accent="#F0B232"
               />
@@ -237,91 +220,34 @@ export default function RewardsPage() {
         </section>
       )}
 
-      {/* ── DAILY SECTION ──────────────────────────────────── */}
+      {/* ── DAILY ──────────────────────────────────────────── */}
       <Section
         title="Daily"
         subtitle="Resets every 24 hours at 00:00 UTC"
         countdown={dailyCountdown}
-        countdownLabel="resets in"
         accent="#F0B232"
       >
-        {/* Streak calendar */}
-        <div className="grid grid-cols-7 gap-1.5 mb-4">
-          {DAILY_STREAK_REWARDS.map((d) => {
-            const state = d.day < DEMO_STREAK_DAY ? 'done' : d.day === DEMO_STREAK_DAY ? 'today' : 'upcoming';
-            return (
-              <div
-                key={d.day}
-                className="rounded-lg p-2 text-center transition-all"
-                style={{
-                  background:
-                    state === 'done'  ? 'rgba(45,201,122,0.10)' :
-                    state === 'today' ? 'rgba(240,178,50,0.16)' :
-                                        'rgba(255,255,255,0.02)',
-                  border: `1px solid ${
-                    state === 'done'  ? 'rgba(45,201,122,0.30)' :
-                    state === 'today' ? 'rgba(240,178,50,0.50)' :
-                                        '#1A2E22'
-                  }`,
-                  boxShadow: state === 'today' ? '0 0 14px rgba(240,178,50,0.25)' : 'none',
-                }}
-              >
-                <p
-                  className="text-[8px] font-black uppercase tracking-widest mb-0.5"
-                  style={{
-                    color:
-                      state === 'done'  ? '#2DC97A' :
-                      state === 'today' ? '#F0B232' :
-                                          '#4A6A55',
-                  }}
-                >
-                  Day {d.day}
-                </p>
-                <div className="flex justify-center my-1">
-                  {state === 'done' ? (
-                    <Check className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />
-                  ) : (
-                    <YalaIcon name="chip-gold" size={state === 'today' ? 18 : 14} />
-                  )}
-                </div>
-                <p
-                  className="text-[9px] font-mono font-bold"
-                  style={{
-                    color:
-                      state === 'done'  ? '#2DC97A' :
-                      state === 'today' ? '#F5E8C8' :
-                                          '#4A6A55',
-                  }}
-                >
-                  {(d.gc / 1000).toFixed(d.gc < 1000 ? 1 : 0)}K
-                </p>
-                {d.sc && (
-                  <p className="text-[9px] font-mono font-bold mt-0.5" style={{ color: state === 'today' ? '#2DC97A' : '#4A6A55' }}>
-                    +{d.sc} SC
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <RewardCard
             icon={<Calendar className="w-5 h-5" />}
             accent="#F0B232"
-            title="Daily login bonus"
-            description={`Day ${DEMO_STREAK_DAY} of 7 — claim today to keep your streak alive.`}
+            title="Daily bonus"
+            description={
+              dailyReady
+                ? `Day ${pendingStreakDay} of 7 — claim today to keep the streak.`
+                : 'You\'ve claimed today. Streak resumes tomorrow.'
+            }
             href="/daily-bonus"
             ready={dailyReady}
-            primaryLabel={dailyReady ? 'Claim today' : 'Claimed today'}
-            onPrimary={handleClaimDaily}
-            primaryDisabled={!dailyReady}
+            primaryLabel={dailyReady ? 'Claim' : 'View streak'}
+            primaryHref={dailyReady ? undefined : '/daily-bonus'}
+            onPrimary={dailyReady ? handleClaimDaily : undefined}
           />
           <RewardCard
             icon={<Trophy className="w-5 h-5" />}
             accent="#EF4444"
             title="Daily race"
-            description="Wager GC to climb the daily leaderboard. Top 100 split a 500K GC pool."
+            description="Wager SC to climb the daily leaderboard. Top 100 split the prize pool."
             href="/leaderboards"
             badge="Live"
           />
@@ -333,34 +259,22 @@ export default function RewardsPage() {
             href="/missions"
             badge="3 open"
           />
-          <RewardCard
-            icon={<TrendingUp className="w-5 h-5" />}
-            accent="#2DC97A"
-            title="Instant rakeback"
-            description="A small slice of every wager is returned to your bonus balance, immediately."
-            href="/rakeback"
-            badge={rakebackBalance > 0 ? `${formatGC(rakebackBalance)} ready` : undefined}
-            ready={rakebackReady}
-            primaryLabel={rakebackReady ? 'Claim' : 'How it works'}
-            onPrimary={rakebackReady ? handleClaimRakeback : undefined}
-          />
         </div>
       </Section>
 
-      {/* ── WEEKLY SECTION ────────────────────────────────── */}
+      {/* ── WEEKLY ─────────────────────────────────────────── */}
       <Section
         title="Weekly"
         subtitle="Resets every Monday at 00:00 UTC"
         countdown={weeklyCountdown}
-        countdownLabel="resets in"
         accent="#34D399"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <RewardCard
             icon={<TrendingUp className="w-5 h-5" />}
             accent="#2DC97A"
             title="Weekly cashback"
-            description="Get back 10% of net GC losses every Monday. Calculated automatically."
+            description="Get back 10% of net GC losses every Monday. Auto-credited."
             href="/rakeback"
             badge="10%"
           />
@@ -368,51 +282,42 @@ export default function RewardsPage() {
             icon={<Trophy className="w-5 h-5" />}
             accent="#F0B232"
             title="Weekly race"
-            description="A bigger pool, slower pace. Wager all week to climb the standings."
+            description="Bigger pool, slower pace. Wager all week to climb."
             href="/leaderboards"
             badge="Open"
           />
           <RewardCard
             icon={<YalaIcon name="badge-star" size={20} />}
             accent="#A78BFA"
-            title="Weekly mission pack"
-            description="5 harder missions that refresh every Monday. Higher rewards than daily."
+            title="Weekly missions"
+            description="5 harder missions, refresh Monday. Bigger rewards than daily."
             href="/missions"
             badge="5 open"
-          />
-          <RewardCard
-            icon={<Gift className="w-5 h-5" />}
-            accent="#FB923C"
-            title="Weekend reload"
-            description="+20% bonus on any GC purchase Friday through Sunday."
-            href="/wallet/buy"
-            badge="Fri–Sun"
           />
         </div>
       </Section>
 
-      {/* ── MONTHLY SECTION ───────────────────────────────── */}
+      {/* ── MONTHLY ────────────────────────────────────────── */}
       <Section
         title="Monthly"
         subtitle="Resets on the first of each month, 00:00 UTC"
         countdown={monthlyCountdown}
-        countdownLabel="resets in"
         accent="#A78BFA"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <RewardCard
             icon={<TrendingUp className="w-5 h-5" />}
             accent="#2DC97A"
             title="Monthly cashback"
-            description="Tier-gated cashback on net losses. Higher VIP = bigger %. Auto-credited."
+            description="Tier-gated cashback on net losses. Higher VIP = bigger %."
             href="/vip"
-            badge={`${currentTier.rakeback}% your tier`}
+            badge={`${currentTier.rakeback}% · your tier`}
           />
           <RewardCard
             icon={<Crown className="w-5 h-5" />}
             accent="#FFD166"
             title="Level-up bonuses"
-            description="Cross a VIP tier and unlock a one-time GC + SC drop, plus permanent perk upgrades."
+            description="Cross a VIP tier for a one-time GC + SC drop plus permanent perks."
             href="/vip"
             badge="Tier rewards"
           />
@@ -420,104 +325,32 @@ export default function RewardsPage() {
             icon={<Trophy className="w-5 h-5" />}
             accent="#EF4444"
             title="Monthly tournament"
-            description="A multi-day Originals bracket with the biggest prize pool of the month."
+            description="A multi-day Originals bracket with the biggest pool of the month."
             href="/leaderboards"
           />
-          <RewardCard
-            icon={<Sparkles className="w-5 h-5" />}
-            accent="#F472B6"
-            title="Birthday bonus"
-            description="Tell us your birthday in profile — we&apos;ll send a bonus drop that morning."
-            href="/profile"
-            badge="Set in profile"
-          />
         </div>
       </Section>
 
-      {/* ── SPECIAL / PROMO CODE ──────────────────────────── */}
-      <Section
-        title="Special"
-        subtitle="One-off offers, codes, and referrals"
-        accent="#60A5FA"
+      {/* ── FOOTER LINK ────────────────────────────────────── */}
+      <Link
+        href="/promotions"
+        className="flex items-center justify-between gap-3 rounded-2xl p-4 transition-colors hover:bg-white/[0.025]"
+        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
       >
-        <div
-          className="rounded-2xl p-4 mb-3"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
-        >
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.30)' }}
-              >
-                <Tag className="w-4 h-4" style={{ color: '#60A5FA' }} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Have a promo code?</p>
-                <p className="text-[11px]" style={{ color: '#8FA899' }}>Redeem on the Promotions page for instant GC / SC.</p>
-              </div>
-            </div>
-            <div className="flex items-stretch gap-2 sm:w-[360px]">
-              <input
-                type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
-                placeholder="ENTER CODE"
-                className="flex-1 px-3 py-2.5 rounded-xl text-sm font-mono font-bold tracking-wider uppercase focus:outline-none transition-colors"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
-              />
-              <Link
-                href={code ? `/promotions?code=${encodeURIComponent(code)}` : '/promotions'}
-                className="px-4 py-2.5 rounded-xl text-sm font-black transition-colors hover:brightness-110 flex items-center"
-                style={{ background: 'rgba(96,165,250,0.14)', border: '1px solid rgba(96,165,250,0.40)', color: '#60A5FA' }}
-              >
-                Open <ChevronRight className="w-3.5 h-3.5 ml-1" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <RewardCard
-            icon={<Users className="w-5 h-5" />}
-            accent="#60A5FA"
-            title="Refer a friend"
-            description="Send your code. Earn 5,000 GC when they make their first purchase. No cap."
-            href="/affiliate"
-            badge="Evergreen"
-          />
-          <RewardCard
-            icon={<Gift className="w-5 h-5" />}
-            accent="#F0B232"
-            title="All promotions"
-            description="Browse every active offer — reload, race, cashback, VIP, referral, more."
-            href="/promotions"
-            badge={`${PROMOTIONS.length} active`}
-          />
-        </div>
-      </Section>
-
-      {/* ── FEATURED PROMOTIONS ──────────────────────────── */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
-            <h2 className="font-display text-lg font-bold" style={{ color: '#F5E8C8' }}>Featured promotions</h2>
-          </div>
-          <Link
-            href="/promotions"
-            className="text-[11px] font-bold flex items-center gap-0.5"
-            style={{ color: '#F0B232' }}
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(240,178,50,0.10)', border: '1px solid rgba(240,178,50,0.30)' }}
           >
-            See all <ChevronRight className="w-3 h-3" />
-          </Link>
+            <Gift className="w-5 h-5" style={{ color: '#F0B232' }} />
+          </div>
+          <div>
+            <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>All promotions</p>
+            <p className="text-[11px]" style={{ color: '#8FA899' }}>Reload bonuses, races, tournaments, referrals — every active offer.</p>
+          </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {featuredPromos.map((p, i) => (
-            <PromoCard key={p.id} promo={p} index={i} onClaim={handlePromoClaim} />
-          ))}
-        </div>
-      </section>
+        <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />
+      </Link>
 
       <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
         <p className="text-[11px]" style={{ color: 'rgba(143,168,153,0.5)' }}>
@@ -531,12 +364,11 @@ export default function RewardsPage() {
 // ─── Sub-components ───────────────────────────────────────────────────────
 
 function Section({
-  title, subtitle, countdown, countdownLabel, accent, children,
+  title, subtitle, countdown, accent, children,
 }: {
   title: string;
   subtitle?: string;
   countdown?: string;
-  countdownLabel?: string;
   accent: string;
   children: React.ReactNode;
 }) {
@@ -556,9 +388,7 @@ function Section({
             style={{ background: `${accent}10`, border: `1px solid ${accent}28` }}
           >
             <Clock className="w-3 h-3" style={{ color: accent }} />
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
-              {countdownLabel ?? 'in'}
-            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>resets in</span>
             <span className="text-[11px] font-mono font-black" style={{ color: accent }}>{countdown}</span>
           </div>
         )}
@@ -569,7 +399,7 @@ function Section({
 }
 
 function RewardCard({
-  icon, accent, title, description, href, badge, ready, primaryLabel, onPrimary, primaryDisabled,
+  icon, accent, title, description, href, badge, ready, primaryLabel, onPrimary, primaryHref,
 }: {
   icon: React.ReactNode;
   accent: string;
@@ -580,7 +410,7 @@ function RewardCard({
   ready?: boolean;
   primaryLabel?: string;
   onPrimary?: () => void;
-  primaryDisabled?: boolean;
+  primaryHref?: string;
 }) {
   return (
     <div
@@ -612,12 +442,23 @@ function RewardCard({
         <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: '#8FA899' }}>{description}</p>
       </div>
       <div className="flex items-center gap-2">
-        {primaryLabel ? (
+        {primaryLabel && primaryHref ? (
+          <Link
+            href={primaryHref}
+            className="flex-1 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98] text-center"
+            style={{
+              background: `${accent}14`,
+              color: accent,
+              border: `1px solid ${accent}40`,
+            }}
+          >
+            {primaryLabel}
+          </Link>
+        ) : primaryLabel ? (
           <button
             type="button"
-            disabled={primaryDisabled}
             onClick={onPrimary}
-            className="flex-1 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: ready ? `linear-gradient(135deg, ${accent}, ${accent}cc)` : `${accent}14`,
               color: ready ? '#060E0A' : accent,

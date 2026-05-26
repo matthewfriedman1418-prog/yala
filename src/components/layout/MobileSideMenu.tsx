@@ -22,7 +22,7 @@ const MENU_SECTIONS = [
     items: [
       { href: '/vip',          label: 'VIP Club',     renderIcon: () => <YI name="ticket"    /> },
       { href: '/rewards',      label: 'Rewards Hub',  renderIcon: () => <YI name="gift"/> },
-      { href: '/daily-bonus',  label: 'Free Play',    renderIcon: () => <YI name="chip-gold"/>, badge: 'NEW' },
+      { href: '/daily-bonus',  label: 'Daily Bonus',  renderIcon: () => <YI name="chip-gold"/>, badge: 'NEW' },
       { href: '/missions',     label: 'Missions',     renderIcon: () => <YI name="crown"     /> },
       { href: '/leaderboards', label: 'Leaderboards', renderIcon: () => <YI name="trophy"    /> },
     ],

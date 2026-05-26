@@ -123,7 +123,7 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-[fade-in_0.3s_ease-out] max-w-4xl">
+    <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
 
       {/* ── Header ─────────────────────────────────────── */}
       <div className="flex items-end justify-between gap-3 flex-wrap">

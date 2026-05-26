@@ -6,6 +6,7 @@ import { useNotificationsStore } from '@/lib/store/notifications';
 import { useSettingsStore } from '@/lib/store/settings';
 import { useChatStore } from '@/lib/store/chat';
 import { useSportsbookStore } from '@/lib/store/sportsbook';
+import { useRewardsStore } from '@/lib/store/rewards';
 
 /**
  * Mount-once component that triggers Zustand persist rehydration.
@@ -21,6 +22,7 @@ export function StoreHydration() {
     useSettingsStore.persist.rehydrate();
     useChatStore.persist.rehydrate();
     useSportsbookStore.persist.rehydrate();
+    useRewardsStore.persist.rehydrate();
   }, []);
   return null;
 }

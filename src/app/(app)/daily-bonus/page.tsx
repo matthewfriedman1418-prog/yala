@@ -1,10 +1,10 @@
 'use client';
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
+import { useRewardsStore } from '@/lib/store/rewards';
 import { formatGC } from '@/lib/utils';
 import { CheckCircle2, ChevronRight, Zap } from 'lucide-react';
 import { GoldCoinIcon, SweepCoinIcon, YalaIcon, type YalaIconName } from '@/components/ui/YalaIcon';
@@ -57,26 +57,33 @@ export default function DailyBonusPage() {
   const { addGC, addSC } = useWalletStore();
   const { isLoggedIn } = useAuthStore();
   const { openAuthModal } = useUIStore();
-  const [currentStreak] = useState(4);
-  const [dailyClaimed, setDailyClaimed] = useState(false);
+  const canClaim         = useRewardsStore((s) => s.canClaimDailyToday());
+  const pendingStreakDay = useRewardsStore((s) => s.pendingStreakDay());
+  const claimedStreakDay = useRewardsStore((s) => s.streakDay);
+  const claimDaily       = useRewardsStore((s) => s.claimDaily);
 
+  // The "current" day shown is the pending one if a claim is available,
+  // otherwise the most-recently-claimed day.
+  const currentStreak = canClaim ? pendingStreakDay : (claimedStreakDay || 1);
+  const dailyClaimed  = !canClaim;
   const todayReward = STREAK_REWARDS[Math.min(currentStreak - 1, 6)];
 
   const handleDailyClaim = () => {
     if (!isLoggedIn) { openAuthModal(); return; }
+    if (!canClaim) return;
     addGC(todayReward.gc);
     if (todayReward.sc) addSC(todayReward.sc);
-    setDailyClaimed(true);
+    const day = claimDaily();
     const reward = [
       todayReward.gc ? `${formatGC(todayReward.gc)} GC` : '',
       todayReward.sc ? `${todayReward.sc} SC` : '',
     ].filter(Boolean).join(' + ');
-    if (currentStreak === 7) {
+    if (day === 7) {
       toast.success('7-day streak complete! 🏆', {
         description: `${reward} added · new cycle starts at midnight UTC.`,
       });
     } else {
-      toast.success(`Day ${currentStreak} claimed`, { description: `${reward} added to your wallet.` });
+      toast.success(`Day ${day} claimed`, { description: `${reward} added to your wallet.` });
     }
   };
 

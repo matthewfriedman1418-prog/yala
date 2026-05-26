@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useWalletStore } from '@/lib/store/wallet';
 import { WEEKLY_LEADERBOARD, SC_LEADERBOARD } from '@/lib/mock-data/users';
 import { formatGC, formatSC, getVIPColor } from '@/lib/utils';
 import { TrendingUp, Flame, Users } from 'lucide-react';
@@ -10,8 +9,10 @@ import { YalaIcon, GoldCoinIcon, SweepCoinIcon } from '@/components/ui/YalaIcon'
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'alltime';
 
-// Daily race prize pool + countdown (was on the Rewards page — consolidated here)
-const DAILY_RACE_POOL = 500_000;
+// Daily race prize pool + countdown (was on the Rewards page — consolidated here).
+// Pool is in the active currency unit (5,000 SC default; equivalent ~500K GC).
+const DAILY_RACE_POOL_GC = 500_000;
+const DAILY_RACE_POOL_SC = 5_000;
 const DAILY_RACE_ENDS_IN = 14 * 3600 + 32 * 60 + 9;
 
 function useCountdown(initial: number) {
@@ -28,9 +29,10 @@ function useCountdown(initial: number) {
 }
 
 export default function LeaderboardsPage() {
-  const { activeCurrency } = useWalletStore();
   const [period, setPeriod] = useState<Period>('weekly');
-  const [mode, setMode] = useState<'GC' | 'SC'>(activeCurrency as 'GC' | 'SC');
+  // SC is the meaningful currency on a leaderboard (real prizes redeem from SC),
+  // so we default to SC regardless of the user's active wallet toggle.
+  const [mode, setMode] = useState<'GC' | 'SC'>('SC');
   const dailyCountdown = useCountdown(DAILY_RACE_ENDS_IN);
 
   const leaderboard = mode === 'GC' ? WEEKLY_LEADERBOARD : SC_LEADERBOARD;
@@ -107,7 +109,7 @@ export default function LeaderboardsPage() {
       </div>
 
       {/* Prize pool banner — daily race when daily selected, weekly otherwise */}
-      {period === 'daily' && mode === 'GC' && (
+      {period === 'daily' && (
         <div
           className="relative rounded-2xl overflow-hidden flex items-center justify-between px-5 py-4 border"
           style={{ background: 'rgba(45,201,122,0.06)', borderColor: 'rgba(45,201,122,0.22)' }}
@@ -134,8 +136,8 @@ export default function LeaderboardsPage() {
                   Live
                 </span>
               </div>
-              <p className="font-display text-2xl font-bold number-display" style={{ color: '#F0B232' }}>
-                {DAILY_RACE_POOL.toLocaleString()} <span className="text-sm">GC</span>
+              <p className="font-display text-2xl font-bold number-display" style={{ color: accent }}>
+                {(mode === 'SC' ? DAILY_RACE_POOL_SC : DAILY_RACE_POOL_GC).toLocaleString()} <span className="text-sm">{mode}</span>
               </p>
             </div>
           </div>
@@ -149,12 +151,14 @@ export default function LeaderboardsPage() {
           </div>
         </div>
       )}
-      {period === 'weekly' && mode === 'GC' && (
+      {period === 'weekly' && (
         <div className="flex items-center justify-between px-5 py-4 rounded-2xl border"
-          style={{ background: 'rgba(240,178,50,0.06)', borderColor: 'rgba(240,178,50,0.22)' }}>
+          style={{ background: `rgba(${accentRgb},0.06)`, borderColor: `rgba(${accentRgb},0.22)` }}>
           <div>
             <p className="text-xs uppercase tracking-wide mb-1" style={{ color: '#8FA899' }}>Weekly Prize Pool</p>
-            <p className="font-display text-3xl font-bold number-display" style={{ color: '#F0B232' }}>100,000 GC</p>
+            <p className="font-display text-3xl font-bold number-display" style={{ color: accent }}>
+              {mode === 'SC' ? '1,000 SC' : '100,000 GC'}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-xs" style={{ color: '#8FA899' }}>Resets in</p>

@@ -13,8 +13,7 @@
  */
 
 import { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Gift, Sparkles, Mail, Check, ChevronRight, Search, Tag } from 'lucide-react';
+import { Gift, Sparkles, Mail, Check, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { useUIStore } from '@/lib/store/ui';
 import { useAuthStore } from '@/lib/store/auth';
@@ -37,22 +36,12 @@ const FILTERS: { id: FilterId; label: string }[] = [
   { id: 'referral',    label: 'Referrals' },
 ];
 
-// Mock promo codes a user could redeem. In production this hits the backend.
-const VALID_CODES: Record<string, { gc?: number; sc?: number; label: string }> = {
-  YALA10:    { gc: 10_000, sc: 5,  label: '10,000 GC + 5 SC' },
-  WELCOME50: { gc: 50_000, sc: 10, label: '50,000 GC + 10 SC' },
-  CARAVAN:   { gc: 5_000,         label: '5,000 GC' },
-  DUNE25:    {            sc: 25, label: '25 SC' },
-};
-
 export default function PromotionsPage() {
   const { isLoggedIn, user }              = useAuthStore();
   const { openAuthModal, openBuyCoins }   = useUIStore();
   const { addGC, addSC }                  = useWalletStore();
 
-  const [filter, setFilter]   = useState<FilterId>('all');
-  const [code, setCode]       = useState('');
-  const [redeeming, setRedeeming] = useState(false);
+  const [filter, setFilter]         = useState<FilterId>('all');
   const [emailDraft, setEmailDraft] = useState('');
   const [emailSent, setEmailSent]   = useState(false);
 
@@ -78,25 +67,6 @@ export default function PromotionsPage() {
     () => (filter === 'all' ? PROMOTIONS : PROMOTIONS.filter((p) => p.type === filter)),
     [filter],
   );
-
-  const handleRedeem = () => {
-    if (!isLoggedIn) { openAuthModal(); return; }
-    const trimmed = code.trim().toUpperCase();
-    if (!trimmed) { toast.error('Enter a promo code'); return; }
-    setRedeeming(true);
-    setTimeout(() => {
-      setRedeeming(false);
-      const hit = VALID_CODES[trimmed];
-      if (!hit) {
-        toast.error('Invalid code', { description: `"${trimmed}" doesn't match any active promotion.` });
-        return;
-      }
-      if (hit.gc) addGC(hit.gc);
-      if (hit.sc) addSC(hit.sc);
-      setCode('');
-      toast.success(`Code redeemed: ${hit.label}`, { description: 'Added to your wallet.' });
-    }, 600);
-  };
 
   const handleClaim = (promo: Promotion) => {
     if (!isLoggedIn) { openAuthModal(); return; }
@@ -186,61 +156,6 @@ export default function PromotionsPage() {
             >
               {isLoggedIn ? 'Buy Coins' : 'Sign Up & Claim'}
               <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PROMO CODE REDEMPTION ────────────────────────── */}
-      <section
-        className="rounded-2xl p-4 sm:p-5"
-        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
-      >
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(240,178,50,0.10)', border: '1px solid rgba(240,178,50,0.30)' }}
-            >
-              <Tag className="w-4 h-4" style={{ color: '#F0B232' }} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Have a promo code?</p>
-              <p className="text-[11px]" style={{ color: '#8FA899' }}>
-                Try <code className="font-mono font-bold" style={{ color: '#F0B232' }}>YALA10</code>, <code className="font-mono font-bold" style={{ color: '#F0B232' }}>WELCOME50</code>, or <code className="font-mono font-bold" style={{ color: '#F0B232' }}>CARAVAN</code> in the demo.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-stretch gap-2 sm:w-[360px]">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#4A6A55' }} />
-              <input
-                type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleRedeem(); }}
-                placeholder="ENTER CODE"
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm font-mono font-bold tracking-wider uppercase focus:outline-none transition-colors"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid #1A2E22',
-                  color: '#F5E8C8',
-                }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(240,178,50,0.45)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
-              />
-            </div>
-            <button
-              onClick={handleRedeem}
-              disabled={redeeming}
-              className="px-4 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{
-                background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-                color: '#060E0A',
-                boxShadow: '0 4px 16px rgba(240,178,50,0.30)',
-              }}
-            >
-              {redeeming ? 'Redeeming…' : 'Redeem'}
             </button>
           </div>
         </div>

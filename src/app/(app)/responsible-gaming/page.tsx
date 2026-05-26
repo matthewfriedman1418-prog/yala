@@ -66,7 +66,7 @@ export default function ResponsibleGamingPage() {
     : 0;
 
   return (
-    <div className="max-w-3xl space-y-8 animate-[fade-in_0.3s_ease-out]">
+    <div className="space-y-8 animate-[fade-in_0.3s_ease-out]">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-2">
@@ -113,7 +113,7 @@ export default function ResponsibleGamingPage() {
       {/* Tools */}
       <div>
         <h2 className="font-display text-xl font-bold mb-4" style={{ color: '#F5E8C8' }}>Self-Management Tools</h2>
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           {TOOLS.map((tool) => {
             const Icon = tool.icon;
             const isOpen = openId === tool.id;

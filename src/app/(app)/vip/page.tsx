@@ -9,6 +9,7 @@ import { VIP_TIERS } from '@/lib/mock-data/users';
 import { formatXP, getVIPColor } from '@/lib/utils';
 import { TrendingUp, Check, Lock as LockIcon } from 'lucide-react';
 import { YalaIcon } from '@/components/ui/YalaIcon';
+import { YalaReferralCard } from '@/components/affiliate/YalaReferralCard';
 
 // Tier perks. 'Daily bonus' removed — that's available to everyone, not
 // a VIP exclusive. Each tier adds on top of the previous one.
@@ -44,9 +45,17 @@ export default function VIPPage() {
           border: '1px solid rgba(240,178,50,0.22)',
         }}
       >
-        {/* Decorative crown watermark, subtle */}
-        <div className="absolute right-6 top-6 opacity-[0.06] pointer-events-none">
-          <YalaIcon name="crown" size={140} />
+        {/* Decorative VIP card watermark — anchors the "members only" vibe better than a crown. */}
+        <div
+          className="absolute -right-10 -bottom-12 opacity-[0.22] pointer-events-none hidden sm:block"
+          style={{ transform: 'rotate(-10deg)', width: 320 }}
+          aria-hidden
+        >
+          <YalaReferralCard
+            code={user?.referralCode || 'DESERT88'}
+            displayName={user?.displayName || user?.username || 'DesertFox88'}
+            variant={user?.cardVariant === 'rotate' ? 8 : (user?.cardVariant ?? 8)}
+          />
         </div>
 
         <div className="relative z-10 max-w-2xl">
