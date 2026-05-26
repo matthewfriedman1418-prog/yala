@@ -4,6 +4,7 @@ import { useWalletStore } from '@/lib/store/wallet';
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { useNotificationsStore } from '@/lib/store/notifications';
+import { useRewardsStore } from '@/lib/store/rewards';
 import { useT } from '@/lib/i18n';
 import { formatGC, formatSC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
 import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap, Gift } from 'lucide-react';
@@ -48,6 +49,12 @@ export function Header() {
   const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications, openRewardsDrawer } = useUIStore();
   const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
   const tr = useT();
+  // Any rewards claimable right now? Shows a dot on the Gift icon.
+  const canClaimDaily   = useRewardsStore((s) => s.canClaimDailyToday());
+  const canClaimWeekly  = useRewardsStore((s) => s.canClaimWeekly());
+  const canClaimMonthly = useRewardsStore((s) => s.canClaimMonthly());
+  const rakebackBalance = useWalletStore((s) => s.rakebackBalance);
+  const rewardsReady    = (canClaimDaily ? 1 : 0) + (canClaimWeekly ? 1 : 0) + (canClaimMonthly ? 1 : 0) + (rakebackBalance > 0 ? 1 : 0);
   const [profileOpen, setProfileOpen] = useState(false);
 
   const isGC = activeCurrency === 'GC';
@@ -166,14 +173,22 @@ export function Header() {
       <div className="flex items-center justify-end gap-0.5 sm:gap-1 lg:flex-1">
         {isLoggedIn && (
           <>
-            {/* Rewards drawer trigger */}
+            {/* Rewards & Offers drawer trigger */}
             <button
               onClick={openRewardsDrawer}
-              className="p-2 rounded-lg hover:bg-white/5 transition-colors"
-              aria-label="Open rewards"
-              title="Rewards"
+              className="relative p-2 rounded-lg hover:bg-white/5 transition-colors"
+              aria-label={rewardsReady > 0 ? `Open rewards (${rewardsReady} ready)` : 'Open rewards & offers'}
+              title="Rewards & Offers"
             >
               <Gift className="w-4 h-4" style={{ color: '#F0B232' }} />
+              {rewardsReady > 0 && (
+                <span
+                  className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full text-[9px] font-black flex items-center justify-center"
+                  style={{ background: '#2DC97A', color: '#060E0A', boxShadow: '0 0 0 2px #0C1812' }}
+                >
+                  {rewardsReady > 9 ? '9+' : rewardsReady}
+                </span>
+              )}
             </button>
 
             {/* Notifications */}

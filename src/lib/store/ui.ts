@@ -25,12 +25,19 @@ interface UIState {
   openRedeemModal: () => void;
   closeRedeemModal: () => void;
 
-  promotionsDrawerOpen: boolean;
-  openPromotionsDrawer: () => void;
-  closePromotionsDrawer: () => void;
-
-  rewardsDrawerOpen: boolean;
+  /**
+   * Unified Rewards & Offers drawer state. Both legacy `openPromotionsDrawer`
+   * and `openRewardsDrawer` functions are kept so existing call sites don't
+   * have to change — they just preselect a different tab.
+   */
+  rewardsOffersDrawerOpen: boolean;
+  rewardsOffersDrawerTab: 'rewards' | 'promotions';
   openRewardsDrawer: () => void;
+  openPromotionsDrawer: () => void;
+  setRewardsOffersDrawerTab: (tab: 'rewards' | 'promotions') => void;
+  closeRewardsOffersDrawer: () => void;
+  /** Legacy aliases so existing close calls still work. */
+  closePromotionsDrawer: () => void;
   closeRewardsDrawer: () => void;
 
   sidebarCollapsed: boolean;
@@ -84,13 +91,14 @@ export const useUIStore = create<UIState>()(
   openRedeemModal: () => set({ redeemModalOpen: true }),
   closeRedeemModal: () => set({ redeemModalOpen: false }),
 
-  promotionsDrawerOpen: false,
-  openPromotionsDrawer: () => set({ promotionsDrawerOpen: true }),
-  closePromotionsDrawer: () => set({ promotionsDrawerOpen: false }),
-
-  rewardsDrawerOpen: false,
-  openRewardsDrawer: () => set({ rewardsDrawerOpen: true }),
-  closeRewardsDrawer: () => set({ rewardsDrawerOpen: false }),
+  rewardsOffersDrawerOpen: false,
+  rewardsOffersDrawerTab:  'rewards',
+  openRewardsDrawer:    () => set({ rewardsOffersDrawerOpen: true,  rewardsOffersDrawerTab: 'rewards' }),
+  openPromotionsDrawer: () => set({ rewardsOffersDrawerOpen: true,  rewardsOffersDrawerTab: 'promotions' }),
+  setRewardsOffersDrawerTab: (tab) => set({ rewardsOffersDrawerTab: tab }),
+  closeRewardsOffersDrawer:  () => set({ rewardsOffersDrawerOpen: false }),
+  closePromotionsDrawer:     () => set({ rewardsOffersDrawerOpen: false }),
+  closeRewardsDrawer:        () => set({ rewardsOffersDrawerOpen: false }),
 
   sidebarCollapsed: false,
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
