@@ -36,6 +36,10 @@ interface RewardsState {
   streakDay: number;
   /** YYYY-MM-DD UTC of the most-recent claim. Null = never claimed. */
   lastClaimDateUTC: string | null;
+  /** ISO date of the most-recent weekly bonus claim. Null = never. */
+  lastWeeklyClaimDateUTC: string | null;
+  /** ISO date of the most-recent monthly bonus claim. Null = never. */
+  lastMonthlyClaimDateUTC: string | null;
 
   /** True when today (UTC) hasn't been claimed yet. */
   canClaimDailyToday: () => boolean;
@@ -43,6 +47,13 @@ interface RewardsState {
   pendingStreakDay: () => number;
   /** Mark today as claimed and advance the streak. Returns the day claimed (1..7). */
   claimDaily: () => number;
+
+  /** Has at least one calendar-week (Mon UTC reset) elapsed since the last claim? */
+  canClaimWeekly: () => boolean;
+  /** Has at least one calendar-month (1st UTC reset) elapsed since the last claim? */
+  canClaimMonthly: () => boolean;
+  claimWeekly: () => void;
+  claimMonthly: () => void;
 }
 
 export const useRewardsStore = create<RewardsState>()(
@@ -50,6 +61,8 @@ export const useRewardsStore = create<RewardsState>()(
     (set, get) => ({
       streakDay: 0,           // "no run yet"; pendingStreakDay() will return 1
       lastClaimDateUTC: null,
+      lastWeeklyClaimDateUTC: null,
+      lastMonthlyClaimDateUTC: null,
 
       canClaimDailyToday: () => {
         const last = get().lastClaimDateUTC;
@@ -77,6 +90,35 @@ export const useRewardsStore = create<RewardsState>()(
         set({ streakDay: next, lastClaimDateUTC: utcDateKey() });
         return next;
       },
+
+      // Weekly bonus: claimable if never claimed, or if the last claim was
+      // before the most-recent Monday 00:00 UTC. (i.e. a new week has started.)
+      canClaimWeekly: () => {
+        const last = get().lastWeeklyClaimDateUTC;
+        if (!last) return true;
+        const now = new Date();
+        const day = now.getUTCDay();
+        const daysSinceMonday = day === 0 ? 6 : day - 1;
+        const mondayKey = utcDateKey(
+          new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - daysSinceMonday)),
+        );
+        return last < mondayKey;
+      },
+
+      // Monthly bonus: claimable if never claimed, or if the last claim was
+      // before the 1st of the current month UTC.
+      canClaimMonthly: () => {
+        const last = get().lastMonthlyClaimDateUTC;
+        if (!last) return true;
+        const now = new Date();
+        const firstOfMonthKey = utcDateKey(
+          new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)),
+        );
+        return last < firstOfMonthKey;
+      },
+
+      claimWeekly:  () => set({ lastWeeklyClaimDateUTC:  utcDateKey() }),
+      claimMonthly: () => set({ lastMonthlyClaimDateUTC: utcDateKey() }),
     }),
     {
       name: 'yala-rewards',

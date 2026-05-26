@@ -29,6 +29,10 @@ interface UIState {
   openPromotionsDrawer: () => void;
   closePromotionsDrawer: () => void;
 
+  rewardsDrawerOpen: boolean;
+  openRewardsDrawer: () => void;
+  closeRewardsDrawer: () => void;
+
   sidebarCollapsed: boolean;
   toggleSidebar: () => void;
 
@@ -83,6 +87,10 @@ export const useUIStore = create<UIState>()(
   promotionsDrawerOpen: false,
   openPromotionsDrawer: () => set({ promotionsDrawerOpen: true }),
   closePromotionsDrawer: () => set({ promotionsDrawerOpen: false }),
+
+  rewardsDrawerOpen: false,
+  openRewardsDrawer: () => set({ rewardsDrawerOpen: true }),
+  closeRewardsDrawer: () => set({ rewardsDrawerOpen: false }),
 
   sidebarCollapsed: false,
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),

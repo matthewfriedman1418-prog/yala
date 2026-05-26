@@ -1,27 +1,26 @@
 'use client';
 
 /**
- * /rewards — Rewards Hub. Slimmed down per simplification pass.
+ * /rewards — Rewards Hub. Slimmed-down per feedback that the prior version had
+ * too much going on. New shape:
  *
- *   [VIP status bar]
- *   [Available now ribbon]   → conditional, only if something is claimable
- *   [Daily section]          → 3 cards · live countdown to 00:00 UTC
- *   [Weekly section]         → 3 cards · live countdown to next Monday
- *   [Monthly section]        → 3 cards · live countdown to 1st of next month
- *   [Footer link]            → "All promotions →"
+ *   1. Header
+ *   2. VIP status bar (compact)
+ *   3. Daily streak strip (7 circles, claim button if today is unclaimed)
+ *   4. Available now ribbon — only renders if something is claimable
+ *   5. Three big bonus cards: Instant Rakeback / Weekly Bonus / Monthly Bonus
+ *   6. Footer link to the Promotions drawer for specials / missions
  *
- * The 7-day streak calendar moved out (lives on /daily-bonus where it belongs).
- * The Special section and promo code input were removed — promo codes aren't
- * a core sweeps mechanic for us. Daily claim state is shared with /daily-bonus
- * through the rewards store so both pages stay in sync.
+ * Race / missions / level-ups / tournaments removed from this page — they have
+ * their own dedicated routes (/leaderboards, /missions, /vip). The drawer +
+ * "Available now" ribbon surfaces anything claimable from those flows.
  */
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
-  ChevronRight, Calendar, Trophy, Crown, TrendingUp, Gift, Sparkles,
-  Clock,
+  ChevronRight, Calendar, Sparkles, Check, TrendingUp, Clock, Gift,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import { useWalletStore } from '@/lib/store/wallet';
@@ -38,16 +37,18 @@ import {
 } from '@/lib/time';
 import { toast } from 'sonner';
 
-// Daily reward table — must match /daily-bonus
 const DAILY_STREAK_REWARDS = [
-  { day: 1, gc: 1_000,  sc: 0 },
-  { day: 2, gc: 1_500,  sc: 0 },
-  { day: 3, gc: 2_000,  sc: 0 },
-  { day: 4, gc: 2_500,  sc: 1 },
-  { day: 5, gc: 3_000,  sc: 0 },
-  { day: 6, gc: 4_000,  sc: 0 },
-  { day: 7, gc: 7_500,  sc: 5 },
+  { day: 1, gc: 1_000, sc: 0 },
+  { day: 2, gc: 1_500, sc: 0 },
+  { day: 3, gc: 2_000, sc: 0 },
+  { day: 4, gc: 2_500, sc: 1 },
+  { day: 5, gc: 3_000, sc: 0 },
+  { day: 6, gc: 4_000, sc: 0 },
+  { day: 7, gc: 7_500, sc: 5 },
 ];
+
+const WEEKLY_BONUS_SC  = 5;
+const MONTHLY_BONUS_SC = 25;
 
 function useCountdown(getMs: () => number): string {
   const [text, setText] = useState(() => formatDuration(getMs()));
@@ -61,17 +62,23 @@ function useCountdown(getMs: () => number): string {
 }
 
 export default function RewardsPage() {
-  const { isLoggedIn, user }                = useAuthStore();
+  const { isLoggedIn, user } = useAuthStore();
   const { xp, rakebackBalance, claimRakeback, addGC, addSC } = useWalletStore();
-  const { openAuthModal, openPromotionsDrawer } = useUIStore();
-  const canClaimDaily                       = useRewardsStore((s) => s.canClaimDailyToday());
-  const pendingStreakDay                    = useRewardsStore((s) => s.pendingStreakDay());
-  const claimDaily                          = useRewardsStore((s) => s.claimDaily);
+  const { openAuthModal, openPromotionsDrawer }              = useUIStore();
+  const canClaimDaily    = useRewardsStore((s) => s.canClaimDailyToday());
+  const pendingStreakDay = useRewardsStore((s) => s.pendingStreakDay());
+  const streakDay        = useRewardsStore((s) => s.streakDay);
+  const claimDaily       = useRewardsStore((s) => s.claimDaily);
+  const canClaimWeekly   = useRewardsStore((s) => s.canClaimWeekly());
+  const canClaimMonthly  = useRewardsStore((s) => s.canClaimMonthly());
+  const claimWeekly      = useRewardsStore((s) => s.claimWeekly);
+  const claimMonthly     = useRewardsStore((s) => s.claimMonthly);
 
   const dailyCountdown   = useCountdown(msUntilNextDailyResetUTC);
   const weeklyCountdown  = useCountdown(msUntilNextWeeklyResetUTC);
   const monthlyCountdown = useCountdown(msUntilNextMonthlyResetUTC);
 
+  // VIP
   const currentTier = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1)) || VIP_TIERS[0];
   const nextTier    = VIP_TIERS.find((t) => t.tier === (user?.vipTier || 1) + 1);
   const progress    = nextTier
@@ -79,11 +86,18 @@ export default function RewardsPage() {
     : 100;
   const tierColor = getVIPColor(user?.vipTier || 1);
 
-  const todayReward    = DAILY_STREAK_REWARDS[Math.min(pendingStreakDay - 1, 6)];
-  const dailyReady     = isLoggedIn && canClaimDaily;
-  const rakebackReady  = isLoggedIn && rakebackBalance > 0;
-  const claimableCount = (dailyReady ? 1 : 0) + (rakebackReady ? 1 : 0);
+  // Streak rendering
+  const renderDay = canClaimDaily ? pendingStreakDay : (streakDay || 1);
+  const todayReward = DAILY_STREAK_REWARDS[Math.min(renderDay - 1, 6)];
 
+  // Available-now rows (only ready-to-claim things — small format)
+  const dailyReady    = isLoggedIn && canClaimDaily;
+  const rakebackReady = isLoggedIn && rakebackBalance > 0;
+  const weeklyReady   = isLoggedIn && canClaimWeekly;
+  const monthlyReady  = isLoggedIn && canClaimMonthly;
+  const claimableCount = [dailyReady, rakebackReady, weeklyReady, monthlyReady].filter(Boolean).length;
+
+  // Handlers
   const handleClaimDaily = () => {
     if (!isLoggedIn) { openAuthModal(); return; }
     if (!canClaimDaily) return;
@@ -103,6 +117,22 @@ export default function RewardsPage() {
     toast.success('Rakeback claimed', { description: `+${formatGC(amount)} GC to your bonus balance.` });
   };
 
+  const handleClaimWeekly = () => {
+    if (!isLoggedIn) { openAuthModal(); return; }
+    if (!canClaimWeekly) return;
+    addSC(WEEKLY_BONUS_SC);
+    claimWeekly();
+    toast.success('Weekly bonus claimed', { description: `+${WEEKLY_BONUS_SC} SC. Next claim Monday 00:00 UTC.` });
+  };
+
+  const handleClaimMonthly = () => {
+    if (!isLoggedIn) { openAuthModal(); return; }
+    if (!canClaimMonthly) return;
+    addSC(MONTHLY_BONUS_SC);
+    claimMonthly();
+    toast.success('Monthly bonus claimed', { description: `+${MONTHLY_BONUS_SC} SC. Next claim on the 1st 00:00 UTC.` });
+  };
+
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       {/* ── HEADER ───────────────────────────────────────────── */}
@@ -112,10 +142,15 @@ export default function RewardsPage() {
           <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#F0B232' }}>Rewards</span>
         </div>
         <h1 className="font-display text-3xl font-black tracking-tight" style={{ color: '#F5E8C8' }}>Rewards Hub</h1>
-        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>Daily, weekly, and monthly drops · everything in one place.</p>
+        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>
+          Your bonuses, all in one place.{' '}
+          <button type="button" onClick={openPromotionsDrawer} className="underline" style={{ color: '#F0B232' }}>
+            Special offers &amp; missions →
+          </button>
+        </p>
       </div>
 
-      {/* VIP status bar */}
+      {/* ── VIP STATUS BAR ───────────────────────────────────── */}
       {isLoggedIn ? (
         <div
           className="rounded-2xl p-4 flex items-center gap-4"
@@ -132,9 +167,7 @@ export default function RewardsPage() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <p className="font-display font-bold text-sm" style={{ color: tierColor }}>
-                {getVIPName(user?.vipTier || 1)}
-              </p>
+              <p className="font-display font-bold text-sm" style={{ color: tierColor }}>{getVIPName(user?.vipTier || 1)}</p>
               <span className="text-[10px] font-mono" style={{ color: '#8FA899' }}>{formatXP(xp)} XP</span>
             </div>
             {nextTier ? (
@@ -170,7 +203,7 @@ export default function RewardsPage() {
           style={{ background: '#0F1A14', border: '1px solid rgba(240,178,50,0.20)' }}
         >
           <p className="font-bold mb-1" style={{ color: '#F5E8C8' }}>Sign in to claim your rewards</p>
-          <p className="text-xs mb-3" style={{ color: '#8FA899' }}>Earn XP, climb tiers, unlock daily bonuses and cashback.</p>
+          <p className="text-xs mb-3" style={{ color: '#8FA899' }}>Earn XP, climb tiers, unlock bonuses.</p>
           <button
             onClick={() => openAuthModal('register')}
             className="px-5 py-2 rounded-xl text-xs font-bold transition-all hover:brightness-110"
@@ -181,7 +214,103 @@ export default function RewardsPage() {
         </div>
       )}
 
-      {/* ── AVAILABLE NOW RIBBON ───────────────────────────── */}
+      {/* ── DAILY STREAK STRIP ──────────────────────────────── */}
+      <section>
+        <div className="flex items-end justify-between gap-3 mb-3 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <div className="w-1 h-6 rounded-full" style={{ background: '#F0B232' }} />
+            <div>
+              <h2 className="font-display text-lg font-black tracking-tight leading-none" style={{ color: '#F5E8C8' }}>Daily streak</h2>
+              <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>Show up every day · resets at 00:00 UTC</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ background: 'rgba(240,178,50,0.10)', border: '1px solid rgba(240,178,50,0.28)' }}>
+            <Clock className="w-3 h-3" style={{ color: '#F0B232' }} />
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>resets in</span>
+            <span className="text-[11px] font-mono font-black" style={{ color: '#F0B232' }}>{dailyCountdown}</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+          {DAILY_STREAK_REWARDS.map((d) => {
+            const state = d.day < renderDay
+              ? 'done'
+              : d.day === renderDay
+                ? (canClaimDaily ? 'today' : 'done')
+                : 'upcoming';
+            return (
+              <div
+                key={d.day}
+                className="rounded-lg p-2 text-center transition-all"
+                style={{
+                  background:
+                    state === 'done'  ? 'rgba(45,201,122,0.10)' :
+                    state === 'today' ? 'rgba(240,178,50,0.16)' :
+                                        'rgba(255,255,255,0.02)',
+                  border: `1px solid ${
+                    state === 'done'  ? 'rgba(45,201,122,0.30)' :
+                    state === 'today' ? 'rgba(240,178,50,0.50)' :
+                                        '#1A2E22'
+                  }`,
+                  boxShadow: state === 'today' ? '0 0 14px rgba(240,178,50,0.25)' : 'none',
+                }}
+              >
+                <p
+                  className="text-[8px] font-black uppercase tracking-widest mb-0.5"
+                  style={{
+                    color:
+                      state === 'done'  ? '#2DC97A' :
+                      state === 'today' ? '#F0B232' :
+                                          '#4A6A55',
+                  }}
+                >
+                  Day {d.day}
+                </p>
+                <div className="flex justify-center my-1">
+                  {state === 'done' ? (
+                    <Check className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />
+                  ) : (
+                    <YalaIcon name="chip-gold" size={state === 'today' ? 18 : 14} />
+                  )}
+                </div>
+                <p
+                  className="text-[9px] font-mono font-bold"
+                  style={{
+                    color:
+                      state === 'done'  ? '#2DC97A' :
+                      state === 'today' ? '#F5E8C8' :
+                                          '#4A6A55',
+                  }}
+                >
+                  {(d.gc / 1000).toFixed(d.gc < 1000 ? 1 : 0)}K
+                </p>
+                {d.sc > 0 && (
+                  <p className="text-[9px] font-mono font-bold mt-0.5" style={{ color: state === 'today' ? '#2DC97A' : '#4A6A55' }}>
+                    +{d.sc} SC
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {dailyReady && (
+          <button
+            type="button"
+            onClick={handleClaimDaily}
+            className="w-full mt-3 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98]"
+            style={{
+              background: 'linear-gradient(135deg, #F0B232, #FFD166)',
+              color: '#060E0A',
+              boxShadow: '0 4px 16px rgba(240,178,50,0.35)',
+            }}
+          >
+            Claim Day {renderDay} · +{formatGC(todayReward.gc)} GC{todayReward.sc ? ` · +${todayReward.sc} SC` : ''}
+          </button>
+        )}
+      </section>
+
+      {/* ── AVAILABLE NOW (small claim rows for things that are ready) ── */}
       {claimableCount > 0 && (
         <section
           className="rounded-2xl p-4"
@@ -197,7 +326,7 @@ export default function RewardsPage() {
               {claimableCount} reward{claimableCount === 1 ? '' : 's'} ready
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="space-y-2">
             {dailyReady && (
               <ClaimRow
                 icon={<Calendar className="w-4 h-4" />}
@@ -210,128 +339,84 @@ export default function RewardsPage() {
             {rakebackReady && (
               <ClaimRow
                 icon={<TrendingUp className="w-4 h-4" />}
-                label="Rakeback ready"
+                label="Instant rakeback"
                 amount={`+${formatGC(rakebackBalance)} GC`}
                 onClaim={handleClaimRakeback}
                 accent="#2DC97A"
+              />
+            )}
+            {weeklyReady && (
+              <ClaimRow
+                icon={<TrendingUp className="w-4 h-4" />}
+                label="Weekly bonus"
+                amount={`+${WEEKLY_BONUS_SC} SC`}
+                onClaim={handleClaimWeekly}
+                accent="#34D399"
+              />
+            )}
+            {monthlyReady && (
+              <ClaimRow
+                icon={<TrendingUp className="w-4 h-4" />}
+                label="Monthly bonus"
+                amount={`+${MONTHLY_BONUS_SC} SC`}
+                onClaim={handleClaimMonthly}
+                accent="#A78BFA"
               />
             )}
           </div>
         </section>
       )}
 
-      {/* ── DAILY ──────────────────────────────────────────── */}
-      <Section
-        title="Daily"
-        subtitle="Resets every 24 hours at 00:00 UTC"
-        countdown={dailyCountdown}
-        accent="#F0B232"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <RewardCard
-            icon={<Calendar className="w-5 h-5" />}
-            accent="#F0B232"
-            title="Daily bonus"
-            description={
-              dailyReady
-                ? `Day ${pendingStreakDay} of 7 — claim today to keep the streak.`
-                : 'You\'ve claimed today. Streak resumes tomorrow.'
-            }
-            href="/daily-bonus"
-            ready={dailyReady}
-            primaryLabel={dailyReady ? 'Claim' : 'View streak'}
-            primaryHref={dailyReady ? undefined : '/daily-bonus'}
-            onPrimary={dailyReady ? handleClaimDaily : undefined}
-          />
-          <RewardCard
-            icon={<Trophy className="w-5 h-5" />}
-            accent="#EF4444"
-            title="Daily race"
-            description="Wager SC to climb the daily leaderboard. Top 100 split the prize pool."
-            href="/leaderboards"
-            badge="Live"
-          />
-          <RewardCard
-            icon={<YalaIcon name="badge-star" size={20} />}
-            accent="#A78BFA"
-            title="Daily missions"
-            description="3 quick tasks refresh every day. Each grants GC + XP."
-            href="/missions"
-            badge="3 open"
-          />
+      {/* ── THE 3 BIG BONUS CARDS ───────────────────────────── */}
+      <section>
+        <div className="flex items-center gap-2.5 mb-3">
+          <div className="w-1 h-6 rounded-full" style={{ background: '#2DC97A' }} />
+          <div>
+            <h2 className="font-display text-lg font-black tracking-tight leading-none" style={{ color: '#F5E8C8' }}>Your bonuses</h2>
+            <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>Rates scale with your VIP tier · auto-credited when ready</p>
+          </div>
         </div>
-      </Section>
-
-      {/* ── WEEKLY ─────────────────────────────────────────── */}
-      <Section
-        title="Weekly"
-        subtitle="Resets every Monday at 00:00 UTC"
-        countdown={weeklyCountdown}
-        accent="#34D399"
-      >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <RewardCard
-            icon={<TrendingUp className="w-5 h-5" />}
+          <BigBonusCard
+            title="Instant Rakeback"
+            subtitle="Claim every 30 minutes"
+            rateLabel="Tier rate"
+            rate={`${currentTier.rakeback}%`}
             accent="#2DC97A"
-            title="Weekly cashback"
-            description="Get back 10% of net GC losses every Monday. Auto-credited."
-            href="/rakeback"
-            badge="10%"
+            ready={rakebackReady}
+            readyAmount={`${formatGC(rakebackBalance)} GC`}
+            countdown="Live"
+            onClaim={handleClaimRakeback}
+            isLoggedIn={isLoggedIn}
           />
-          <RewardCard
-            icon={<Trophy className="w-5 h-5" />}
-            accent="#F0B232"
-            title="Weekly race"
-            description="Bigger pool, slower pace. Wager all week to climb."
-            href="/leaderboards"
-            badge="Open"
+          <BigBonusCard
+            title="Weekly Bonus"
+            subtitle="10% of net losses · Mon 00:00 UTC"
+            rateLabel="Weekly rate"
+            rate="10%"
+            accent="#34D399"
+            ready={weeklyReady}
+            readyAmount={`${WEEKLY_BONUS_SC.toFixed(2)} SC`}
+            countdown={weeklyCountdown}
+            onClaim={handleClaimWeekly}
+            isLoggedIn={isLoggedIn}
           />
-          <RewardCard
-            icon={<YalaIcon name="badge-star" size={20} />}
+          <BigBonusCard
+            title="Monthly Bonus"
+            subtitle={`${currentTier.rakeback}% net losses · 1st 00:00 UTC`}
+            rateLabel="Tier rate"
+            rate={`${currentTier.rakeback}%`}
             accent="#A78BFA"
-            title="Weekly missions"
-            description="5 harder missions, refresh Monday. Bigger rewards than daily."
-            href="/missions"
-            badge="5 open"
+            ready={monthlyReady}
+            readyAmount={`${MONTHLY_BONUS_SC.toFixed(2)} SC`}
+            countdown={monthlyCountdown}
+            onClaim={handleClaimMonthly}
+            isLoggedIn={isLoggedIn}
           />
         </div>
-      </Section>
+      </section>
 
-      {/* ── MONTHLY ────────────────────────────────────────── */}
-      <Section
-        title="Monthly"
-        subtitle="Resets on the first of each month, 00:00 UTC"
-        countdown={monthlyCountdown}
-        accent="#A78BFA"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <RewardCard
-            icon={<TrendingUp className="w-5 h-5" />}
-            accent="#2DC97A"
-            title="Monthly cashback"
-            description="Tier-gated cashback on net losses. Higher VIP = bigger %."
-            href="/vip"
-            badge={`${currentTier.rakeback}% · your tier`}
-          />
-          <RewardCard
-            icon={<Crown className="w-5 h-5" />}
-            accent="#FFD166"
-            title="Level-up bonuses"
-            description="Cross a VIP tier for a one-time GC + SC drop plus permanent perks."
-            href="/vip"
-            badge="Tier rewards"
-          />
-          <RewardCard
-            icon={<Trophy className="w-5 h-5" />}
-            accent="#EF4444"
-            title="Monthly tournament"
-            description="A multi-day Originals bracket with the biggest pool of the month."
-            href="/leaderboards"
-          />
-        </div>
-      </Section>
-
-      {/* ── FOOTER LINK ────────────────────────────────────── */}
+      {/* ── SPECIAL OFFERS LINK ─────────────────────────────── */}
       <button
         type="button"
         onClick={openPromotionsDrawer}
@@ -347,7 +432,7 @@ export default function RewardsPage() {
           </div>
           <div>
             <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Special offers &amp; missions</p>
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>Welcome pack, tournaments, referral, daily missions.</p>
+            <p className="text-[11px]" style={{ color: '#8FA899' }}>Welcome pack, tournaments, referrals, daily missions.</p>
           </div>
         </div>
         <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />
@@ -364,54 +449,19 @@ export default function RewardsPage() {
 
 // ─── Sub-components ───────────────────────────────────────────────────────
 
-function Section({
-  title, subtitle, countdown, accent, children,
+function BigBonusCard({
+  title, subtitle, rateLabel, rate, accent, ready, readyAmount, countdown, onClaim, isLoggedIn,
 }: {
   title: string;
-  subtitle?: string;
-  countdown?: string;
+  subtitle: string;
+  rateLabel: string;
+  rate: string;
   accent: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section>
-      <div className="flex items-end justify-between gap-3 mb-3 flex-wrap">
-        <div className="flex items-center gap-2.5">
-          <div className="w-1 h-6 rounded-full" style={{ background: accent }} />
-          <div>
-            <h2 className="font-display text-lg font-black tracking-tight leading-none" style={{ color: '#F5E8C8' }}>{title}</h2>
-            {subtitle && <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>{subtitle}</p>}
-          </div>
-        </div>
-        {countdown && (
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-            style={{ background: `${accent}10`, border: `1px solid ${accent}28` }}
-          >
-            <Clock className="w-3 h-3" style={{ color: accent }} />
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>resets in</span>
-            <span className="text-[11px] font-mono font-black" style={{ color: accent }}>{countdown}</span>
-          </div>
-        )}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function RewardCard({
-  icon, accent, title, description, href, badge, ready, primaryLabel, onPrimary, primaryHref,
-}: {
-  icon: React.ReactNode;
-  accent: string;
-  title: string;
-  description: string;
-  href: string;
-  badge?: string;
-  ready?: boolean;
-  primaryLabel?: string;
-  onPrimary?: () => void;
-  primaryHref?: string;
+  ready: boolean;
+  readyAmount: string;
+  countdown: string;
+  onClaim: () => void;
+  isLoggedIn: boolean;
 }) {
   return (
     <div
@@ -422,61 +472,45 @@ function RewardCard({
         boxShadow: ready ? `0 0 20px ${accent}1A` : 'none',
       }}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: `${accent}14`, border: `1px solid ${accent}33`, color: accent }}
-        >
-          {icon}
+      <div>
+        <p className="font-display font-black text-base leading-tight" style={{ color: '#F5E8C8' }}>{title}</p>
+        <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>{subtitle}</p>
+      </div>
+
+      <div className="flex items-center justify-between text-[11px]" style={{ borderTop: '1px solid #1A2E22', paddingTop: 10 }}>
+        <span style={{ color: '#8FA899' }}>{rateLabel}</span>
+        <span className="font-mono font-black" style={{ color: accent }}>{rate}</span>
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Ready</p>
+          <p className="font-mono font-black text-lg leading-tight mt-0.5" style={{ color: ready ? accent : '#4A6A55' }}>
+            {ready ? readyAmount : '0.00'}
+          </p>
         </div>
-        {badge && (
-          <span
-            className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
-            style={{ background: `${accent}1A`, color: accent, border: `1px solid ${accent}33` }}
-          >
-            {badge}
-          </span>
-        )}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="font-bold text-sm" style={{ color: '#F5E8C8' }}>{title}</p>
-        <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: '#8FA899' }}>{description}</p>
-      </div>
-      <div className="flex items-center gap-2">
-        {primaryLabel && primaryHref ? (
-          <Link
-            href={primaryHref}
-            className="flex-1 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98] text-center"
-            style={{
-              background: `${accent}14`,
-              color: accent,
-              border: `1px solid ${accent}40`,
-            }}
-          >
-            {primaryLabel}
-          </Link>
-        ) : primaryLabel ? (
+        {ready ? (
           <button
             type="button"
-            onClick={onPrimary}
-            className="flex-1 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98]"
+            onClick={onClaim}
+            className="flex-shrink-0 px-3 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
-              background: ready ? `linear-gradient(135deg, ${accent}, ${accent}cc)` : `${accent}14`,
-              color: ready ? '#060E0A' : accent,
-              border: ready ? 'none' : `1px solid ${accent}40`,
-              boxShadow: ready ? `0 4px 14px ${accent}40` : 'none',
+              background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
+              color: '#060E0A',
+              boxShadow: `0 4px 14px ${accent}40`,
             }}
           >
-            {primaryLabel}
+            Claim
           </button>
-        ) : null}
-        <Link
-          href={href}
-          className="flex items-center gap-1 text-[11px] font-bold px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
-        >
-          Details <ChevronRight className="w-3 h-3" />
-        </Link>
+        ) : (
+          <div
+            className="flex-shrink-0 flex items-center gap-1 px-2.5 py-2 rounded-lg text-[10px] font-mono font-bold"
+            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+          >
+            <Clock className="w-3 h-3" />
+            {isLoggedIn ? countdown : '—'}
+          </div>
+        )}
       </div>
     </div>
   );

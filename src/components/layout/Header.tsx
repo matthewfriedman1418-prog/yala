@@ -6,7 +6,7 @@ import { useUIStore } from '@/lib/store/ui';
 import { useNotificationsStore } from '@/lib/store/notifications';
 import { useT } from '@/lib/i18n';
 import { formatGC, formatSC, formatXP, getVIPColor, getVIPName } from '@/lib/utils';
-import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap } from 'lucide-react';
+import { Bell, ChevronDown, LogOut, User, Plus, MessageCircle, Zap, Gift } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { WalletToggle } from '../wallet/WalletToggle';
@@ -45,7 +45,7 @@ function YalaWordmarkMini() {
 export function Header() {
   const { goldCoins, sweepCoins, activeCurrency, xp } = useWalletStore();
   const { isLoggedIn, user, logout } = useAuthStore();
-  const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications } = useUIStore();
+  const { openAuthModal, openBuyCoins, toggleChat, chatOpen, openNotifications, openRewardsDrawer } = useUIStore();
   const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
   const tr = useT();
   const [profileOpen, setProfileOpen] = useState(false);
@@ -166,6 +166,16 @@ export function Header() {
       <div className="flex items-center justify-end gap-0.5 sm:gap-1 lg:flex-1">
         {isLoggedIn && (
           <>
+            {/* Rewards drawer trigger */}
+            <button
+              onClick={openRewardsDrawer}
+              className="p-2 rounded-lg hover:bg-white/5 transition-colors"
+              aria-label="Open rewards"
+              title="Rewards"
+            >
+              <Gift className="w-4 h-4" style={{ color: '#F0B232' }} />
+            </button>
+
             {/* Notifications */}
             <button
               onClick={openNotifications}
