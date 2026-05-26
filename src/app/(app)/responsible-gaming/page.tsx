@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Shield, Phone, Clock, Ban, TrendingDown, AlertCircle, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSettingsStore } from '@/lib/store/settings';
+import { SelfExclusionModal } from '@/components/modals/ComplianceModals';
 
 type LimitId = 'deposit' | 'wager' | 'session' | 'cooloff' | 'selfexclude';
 const TOOLS: { id: LimitId; title: string; desc: string; icon: typeof TrendingDown; unit?: string }[] = [
@@ -32,6 +33,7 @@ export default function ResponsibleGamingPage() {
   const clearCooloff  = useSettingsStore((s) => s.clearCooloff);
 
   const [openId, setOpenId] = useState<LimitId | null>(null);
+  const [excludeModalOpen, setExcludeModalOpen] = useState(false);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   // Live values from the store (so the "current" badge stays accurate)
@@ -145,7 +147,7 @@ export default function ResponsibleGamingPage() {
                   <button
                     onClick={() => {
                       if (tool.id === 'selfexclude') {
-                        toast('Contact support to begin self-exclusion', { description: 'support@yala.com or use the in-app chat.' });
+                        setExcludeModalOpen(true);
                         return;
                       }
                       setOpenId(isOpen ? null : tool.id);
@@ -156,7 +158,7 @@ export default function ResponsibleGamingPage() {
                     className="px-3 py-1.5 rounded-lg text-xs font-semibold flex-shrink-0 border transition-all hover:border-emerald-400/50"
                     style={{ borderColor: '#2a2a2a', color: '#9CA3AF' }}
                   >
-                    {tool.id === 'selfexclude' ? 'Contact Support' : isOpen ? 'Cancel' : isActive ? 'Change' : 'Set Limit'}
+                    {tool.id === 'selfexclude' ? 'Exclude me' : isOpen ? 'Cancel' : isActive ? 'Change' : 'Set Limit'}
                   </button>
                 </div>
 
@@ -257,6 +259,29 @@ export default function ResponsibleGamingPage() {
           Gold Coins are virtual currency with no monetary value. Yala is a social sweepstakes platform for entertainment only.
         </p>
       </div>
+
+      <SelfExclusionModal
+        open={excludeModalOpen}
+        onClose={() => setExcludeModalOpen(false)}
+        onConfirm={(length) => {
+          // Temporary windows reuse the existing cool-off plumbing.
+          if (length === '24h') startCooloff(1);
+          else if (length === '7d')  startCooloff(7);
+          else if (length === '30d') startCooloff(30);
+          else if (length === '6m')  startCooloff(180);
+          else {
+            // Permanent — same plumbing but a very long window. Backend handles real permanence.
+            startCooloff(3650);
+          }
+          toast.success(
+            length === 'permanent' ? 'Permanent self-exclusion set' : `Self-exclusion started`,
+            { description: length === 'permanent'
+                ? 'Your account is closed. Contact support if this was a mistake.'
+                : 'Your account is paused. Server-side enforcement ships with the real backend.',
+            },
+          );
+        }}
+      />
     </div>
   );
 }

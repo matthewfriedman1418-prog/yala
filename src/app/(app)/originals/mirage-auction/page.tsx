@@ -611,7 +611,7 @@ function BidderLane({
       }}
     >
       {/* Lane header */}
-      <div className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: '1px solid #1A2E22' }}>
+      <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2" style={{ borderBottom: '1px solid #1A2E22' }}>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
           style={{ background: `${tierColor}22`, border: `1px solid ${tierColor}55`, color: tierColor }}>
           <span className="text-[10px] font-black">{bidder.avatar}</span>
@@ -627,22 +627,22 @@ function BidderLane({
       </div>
 
       {/* Card */}
-      <div className="px-3 py-2 flex items-center justify-center" style={{ borderBottom: '1px solid #1A2E22', background: '#0A1410' }}>
+      <div className="px-2 sm:px-3 py-2 flex items-center justify-center" style={{ borderBottom: '1px solid #1A2E22', background: '#0A1410' }}>
         {bidder.cardRevealed ? (
           <div className="text-center">
-            <p className="font-display font-black text-2xl number-display" style={{ color: tierColor }}>{bidder.card}</p>
+            <p className="font-display font-black text-xl sm:text-2xl number-display" style={{ color: tierColor }}>{bidder.card}</p>
             <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: '#4A6A55' }}>Card</p>
           </div>
         ) : (
           <div className="text-center">
-            <div className="font-display font-black text-2xl" style={{ color: '#4A6A55' }}>?</div>
+            <div className="font-display font-black text-xl sm:text-2xl" style={{ color: '#4A6A55' }}>?</div>
             <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: '#4A6A55' }}>Hidden</p>
           </div>
         )}
       </div>
 
       {/* Bid rows */}
-      <div className="px-3 py-2 space-y-1">
+      <div className="px-2 sm:px-3 py-2 space-y-1">
         {[...Array(ROUNDS)].map((_, ri) => {
           const round = ri + 1;
           const bid = bidder.bids[ri];
@@ -674,7 +674,7 @@ function BidderLane({
       </div>
 
       {/* Total */}
-      <div className="px-3 py-2 flex items-center justify-between" style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}>
+      <div className="px-2 sm:px-3 py-2 flex items-center justify-between" style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}>
         <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Total</span>
         <span className="font-mono font-black text-sm" style={{
           color: overbid ? '#EF4444' : (won ? accent : '#F5E8C8'),

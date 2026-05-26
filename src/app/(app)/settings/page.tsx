@@ -25,6 +25,7 @@ import {
 import { useAuthStore } from '@/lib/store/auth';
 import { useUIStore } from '@/lib/store/ui';
 import { useSettingsStore, type Language, type Density } from '@/lib/store/settings';
+import { TwoFactorSetupModal, PasswordChangeModal, EmailVerifyModal } from '@/components/modals/SecurityModals';
 
 type SectionId = 'account' | 'notifications' | 'sound' | 'display' | 'security' | 'sessions' | 'danger';
 
@@ -56,6 +57,9 @@ export default function SettingsPage() {
   const [active, setActive] = useState<SectionId>('account');
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
+  const [twoFactorModalOpen, setTwoFactorModalOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen]   = useState(false);
+  const [emailModalOpen, setEmailModalOpen]         = useState(false);
 
   // Signed-out state
   if (!isLoggedIn) {
@@ -240,7 +244,38 @@ export default function SettingsPage() {
               </Group>
               <Group label="Delivery channels">
                 <Row label="Email" hint={`Send important alerts to ${user?.email}.`}><Toggle on={settings.notifications.email} onChange={(v) => settings.setNotification('email', v)} /></Row>
-                <Row label="Push"  hint="Browser push notifications (requires permission)."><Toggle on={settings.notifications.push}  onChange={(v) => settings.setNotification('push', v)} /></Row>
+                <Row label="Push"  hint="Browser push notifications (requires permission).">
+                  <Toggle
+                    on={settings.notifications.push}
+                    onChange={async (v) => {
+                      // Real browser push needs a Notification.requestPermission() round-trip.
+                      // We try it for real on the way IN, just toggle off on the way out.
+                      if (!v) { settings.setNotification('push', false); return; }
+                      if (typeof window === 'undefined' || !('Notification' in window)) {
+                        toast.error('Browser push not supported on this device');
+                        return;
+                      }
+                      if (Notification.permission === 'granted') {
+                        settings.setNotification('push', true);
+                        toast.success('Push notifications enabled');
+                        return;
+                      }
+                      if (Notification.permission === 'denied') {
+                        toast.error('Push is blocked', {
+                          description: 'You denied notifications for Yala previously. Re-enable from your browser settings.',
+                        });
+                        return;
+                      }
+                      const result = await Notification.requestPermission();
+                      if (result === 'granted') {
+                        settings.setNotification('push', true);
+                        toast.success('Push notifications enabled');
+                      } else {
+                        toast('Push not enabled', { description: 'You can change this any time in your browser settings.' });
+                      }
+                    }}
+                  />
+                </Row>
               </Group>
             </Card>
           )}
@@ -305,7 +340,11 @@ export default function SettingsPage() {
                 {settings.security.twoFactorEnabled ? (
                   <button
                     type="button"
-                    onClick={() => { settings.setSecurity('twoFactorEnabled', false); toast('2FA disabled'); }}
+                    onClick={() => {
+                      if (!confirm('Disable two-factor authentication? Your account will be less protected.')) return;
+                      settings.setSecurity('twoFactorEnabled', false);
+                      toast('2FA disabled');
+                    }}
                     className="text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:bg-red-500/10"
                     style={{ background: 'rgba(45,201,122,0.10)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.30)' }}
                   >
@@ -314,7 +353,7 @@ export default function SettingsPage() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => { settings.setSecurity('twoFactorEnabled', true); toast.success('2FA enabled (demo)'); }}
+                    onClick={() => setTwoFactorModalOpen(true)}
                     className="text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:brightness-110"
                     style={{ background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.30)' }}
                   >
@@ -327,11 +366,21 @@ export default function SettingsPage() {
               <Row label="Password" hint="Last changed 3 months ago.">
                 <button
                   type="button"
-                  onClick={() => toast('Password change flow coming soon')}
+                  onClick={() => setPasswordModalOpen(true)}
                   className="text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:bg-white/5"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 >
                   Change password
+                </button>
+              </Row>
+              <Row label="Email verification" hint="Verified email is required before redeeming SC.">
+                <button
+                  type="button"
+                  onClick={() => setEmailModalOpen(true)}
+                  className="text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:bg-white/5"
+                  style={{ background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.30)', color: '#60A5FA' }}
+                >
+                  Verify email →
                 </button>
               </Row>
             </Card>
@@ -451,6 +500,22 @@ export default function SettingsPage() {
           )}
         </div>
       </div>
+
+      {/* Security modals */}
+      <TwoFactorSetupModal
+        open={twoFactorModalOpen}
+        onClose={() => setTwoFactorModalOpen(false)}
+        onConfirm={() => settings.setSecurity('twoFactorEnabled', true)}
+      />
+      <PasswordChangeModal
+        open={passwordModalOpen}
+        onClose={() => setPasswordModalOpen(false)}
+      />
+      <EmailVerifyModal
+        open={emailModalOpen}
+        onClose={() => setEmailModalOpen(false)}
+        email={user?.email}
+      />
     </div>
   );
 }

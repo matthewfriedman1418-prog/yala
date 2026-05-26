@@ -9,6 +9,7 @@ import { formatSC } from '@/lib/utils';
 import { ArrowUpRight, Shield, AlertCircle, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
 import { toast } from 'sonner';
+import { TaxFormW9Modal } from '@/components/modals/ComplianceModals';
 
 const REDEMPTION_METHODS = [
   { id: 'paypal', label: 'PayPal',         min: 25,  fee: 0, time: '1–2 business days',  hint: 'Fastest', accent: '#60A5FA' },
@@ -25,6 +26,10 @@ export default function RedeemPage() {
   const [step, setStep]     = useState<StepKey>('select');
   const [methodId, setMethodId] = useState<typeof REDEMPTION_METHODS[number]['id']>('paypal');
   const [amount, setAmount] = useState('');
+  // W-9 is required before paying out $600+ cumulative per year. For the demo
+  // we trigger it when the SINGLE redemption is $600+, mocking the threshold.
+  const [w9ModalOpen, setW9ModalOpen]   = useState(false);
+  const [w9OnFile, setW9OnFile]         = useState(false);
 
   const method = REDEMPTION_METHODS.find((m) => m.id === methodId)!;
   const amountNum = Number(amount) || 0;
@@ -296,7 +301,15 @@ export default function RedeemPage() {
                 Back
               </button>
               <button
-                onClick={() => { setStep('success'); toast.success('Redemption submitted', { description: `${amountNum} SC → $${usdValue.toFixed(2)} pending review.` }); }}
+                onClick={() => {
+                  // Trigger W-9 collection on $600+ redemptions if not already on file.
+                  if (usdValue >= 600 && !w9OnFile) {
+                    setW9ModalOpen(true);
+                    return;
+                  }
+                  setStep('success');
+                  toast.success('Redemption submitted', { description: `${amountNum} SC → $${usdValue.toFixed(2)} pending review.` });
+                }}
                 className="flex-1 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#060E0A' }}
               >
@@ -358,6 +371,17 @@ export default function RedeemPage() {
         Sweep Coins redeemable where permitted by law. See{' '}
         <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80" style={{ color: '#8FA899' }}>Sweepstakes Rules</Link>. 18+ only.
       </p>
+
+      <TaxFormW9Modal
+        open={w9ModalOpen}
+        onClose={() => setW9ModalOpen(false)}
+        prefillName={user?.displayName ?? user?.username}
+        onSubmit={() => {
+          setW9OnFile(true);
+          setStep('success');
+          toast.success('Redemption submitted', { description: `${amountNum} SC → $${usdValue.toFixed(2)} pending review.` });
+        }}
+      />
     </div>
   );
 }
