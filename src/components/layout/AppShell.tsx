@@ -18,7 +18,6 @@ import { OnboardingModal } from '../modals/OnboardingModal';
 import { NotificationsModal } from '../modals/NotificationsModal';
 import { StoreHydration } from '../system/StoreHydration';
 import { Toaster } from 'sonner';
-import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 import { RainBanner } from '../social/RainBanner';
 
 interface AppShellProps {
@@ -72,7 +71,6 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Side panels */}
       <GlobalChat />
-      <PromotionsDrawer />
 
       {/* Mobile bottom nav + slide-up menu */}
       <div className="lg:hidden">
