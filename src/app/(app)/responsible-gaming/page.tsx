@@ -103,7 +103,7 @@ export default function ResponsibleGamingPage() {
           <button
             onClick={() => { clearCooloff(); toast('Cool-off cleared (demo only)'); }}
             className="text-xs font-bold underline flex-shrink-0"
-            style={{ color: '#8FA899' }}
+            style={{ color: '#8FA3B8' }}
           >
             Clear (demo)
           </button>
@@ -179,7 +179,7 @@ export default function ResponsibleGamingPage() {
                         Confirm
                       </button>
                     </div>
-                    <p className="text-[10px]" style={{ color: '#4A6A55' }}>Enter 0 to remove the limit. Real limits will be enforced server-side; this demo persists locally.</p>
+                    <p className="text-[10px]" style={{ color: '#4A5878' }}>Enter 0 to remove the limit. Real limits will be enforced server-side; this demo persists locally.</p>
                   </div>
                   );
                 })()}
@@ -187,7 +187,7 @@ export default function ResponsibleGamingPage() {
                 {/* Cool-off duration picker */}
                 {isOpen && tool.id === 'cooloff' && (
                   <div className="mt-4 pt-4 border-t border-[#1E1E1E]">
-                    <p className="text-[11px] mb-2" style={{ color: '#8FA899' }}>Choose how long you&apos;d like to take a break:</p>
+                    <p className="text-[11px] mb-2" style={{ color: '#8FA3B8' }}>Choose how long you&apos;d like to take a break:</p>
                     <div className="grid grid-cols-3 gap-2">
                       {COOLOFF_OPTIONS.map((o) => (
                         <button
@@ -201,7 +201,7 @@ export default function ResponsibleGamingPage() {
                         </button>
                       ))}
                     </div>
-                    <p className="text-[10px] mt-2" style={{ color: '#4A6A55' }}>
+                    <p className="text-[10px] mt-2" style={{ color: '#4A5878' }}>
                       Once active, you cannot reverse a cool-off without contacting support (server-enforced in production).
                     </p>
                   </div>

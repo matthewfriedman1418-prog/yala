@@ -36,7 +36,7 @@ export function EmptyState({
     <button
       onClick={ctaOnClick}
       className="mt-4 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-      style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+      style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814' }}
     >
       {ctaLabel}
     </button>
@@ -59,7 +59,7 @@ export function EmptyState({
         {title}
       </p>
       {body && (
-        <p className={cn('max-w-sm', size === 'sm' ? 'text-xs' : 'text-sm')} style={{ color: '#8FA899' }}>
+        <p className={cn('max-w-sm', size === 'sm' ? 'text-xs' : 'text-sm')} style={{ color: '#8FA3B8' }}>
           {body}
         </p>
       )}

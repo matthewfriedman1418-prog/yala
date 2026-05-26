@@ -67,7 +67,7 @@ export default function ProvidersPage() {
           background: `
             radial-gradient(ellipse at 0% 0%, rgba(167,139,250,0.18) 0%, transparent 55%),
             radial-gradient(ellipse at 100% 100%, rgba(240,178,50,0.14) 0%, transparent 50%),
-            linear-gradient(135deg, #0F1A14 0%, #0A1410 100%)
+            linear-gradient(135deg, #0F1828 0%, #08121C 100%)
           `,
           border: '1px solid rgba(167,139,250,0.20)',
         }}
@@ -82,7 +82,7 @@ export default function ProvidersPage() {
           <h1 className="font-display text-3xl sm:text-4xl font-black tracking-tight mb-2" style={{ color: '#F5E8C8' }}>
             Studios behind the lobby
           </h1>
-          <p className="text-sm sm:text-base max-w-md mb-4" style={{ color: '#8FA899' }}>
+          <p className="text-sm sm:text-base max-w-md mb-4" style={{ color: '#8FA3B8' }}>
             Curated partners shipping new slots, table games, live, and game shows. Tap a studio to filter the casino down to just their library.
           </p>
           <div className="flex items-center gap-2 flex-wrap">
@@ -96,16 +96,16 @@ export default function ProvidersPage() {
       {/* ── SEARCH ────────────────────────────────────────── */}
       <section>
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#4A6A55' }} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#4A5878' }} />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search providers…"
             className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm outline-none transition-colors"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238', color: '#F5E8C8' }}
             onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(167,139,250,0.45)')}
-            onBlur={(e)  => (e.currentTarget.style.borderColor = '#1A2E22')}
+            onBlur={(e)  => (e.currentTarget.style.borderColor = '#1A2238')}
           />
           {query && (
             <button
@@ -113,7 +113,7 @@ export default function ProvidersPage() {
               onClick={() => setQuery('')}
               aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md hover:bg-white/5 transition-colors"
-              style={{ color: '#8FA899' }}
+              style={{ color: '#8FA3B8' }}
             >
               Clear
             </button>
@@ -151,7 +151,7 @@ export default function ProvidersPage() {
               {query ? 'Results' : 'All studios'}
             </h2>
           </div>
-          <p className="text-[11px]" style={{ color: '#4A6A55' }}>
+          <p className="text-[11px]" style={{ color: '#4A5878' }}>
             {filtered.length} of {totalProviders}
           </p>
         </div>
@@ -159,10 +159,10 @@ export default function ProvidersPage() {
         {filtered.length === 0 ? (
           <div
             className="rounded-2xl p-10 text-center"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238' }}
           >
             <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>No providers match &quot;{query}&quot;</p>
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>Try a different name — we partner with 12 studios.</p>
+            <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Try a different name — we partner with 12 studios.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -181,13 +181,13 @@ export default function ProvidersPage() {
       {/* ── Partner CTA ───────────────────────────────────── */}
       <section
         className="rounded-2xl p-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
-        style={{ background: '#0A1410', border: '1px solid #1A2E22' }}
+        style={{ background: '#08121C', border: '1px solid #1A2238' }}
       >
         <div className="flex items-center gap-3 flex-1">
           <Sparkles className="w-5 h-5 flex-shrink-0" style={{ color: '#F0B232' }} />
           <div>
             <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>New providers added regularly</p>
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>Studios interested in shipping with us can reach out.</p>
+            <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Studios interested in shipping with us can reach out.</p>
           </div>
         </div>
         <Link
@@ -199,8 +199,8 @@ export default function ProvidersPage() {
         </Link>
       </section>
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-[11px]" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-[11px]" style={{ color: 'rgba(143,163,184,0.5)' }}>
           18+ · No Purchase Necessary · Void Where Prohibited
         </p>
       </div>
@@ -216,7 +216,7 @@ function Stat({ label, value, accent }: { label: string; value: string; accent: 
       className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
       style={{ background: `${accent}10`, border: `1px solid ${accent}28` }}
     >
-      <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>{label}</span>
+      <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>{label}</span>
       <span className="text-[11px] font-mono font-black" style={{ color: accent }}>{value}</span>
     </div>
   );
@@ -246,7 +246,7 @@ function FeaturedProviderCard({
         style={{
           background: `
             radial-gradient(ellipse at 50% 0%, ${color}24, transparent 65%),
-            linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)
+            linear-gradient(180deg, #0F1828 0%, #08121C 100%)
           `,
           border: `1px solid ${color}40`,
           boxShadow: `0 4px 20px ${color}1A`,
@@ -282,13 +282,13 @@ function FeaturedProviderCard({
           {headlineGame ? (
             <div className="space-y-0.5">
               {preview.map((g) => (
-                <p key={g.id} className="text-[10px] truncate" style={{ color: '#8FA899' }}>
+                <p key={g.id} className="text-[10px] truncate" style={{ color: '#8FA3B8' }}>
                   · {g.name}
                 </p>
               ))}
             </div>
           ) : (
-            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Library inbound</p>
+            <p className="text-[10px]" style={{ color: '#4A5878' }}>Library inbound</p>
           )}
         </div>
         <div
@@ -321,7 +321,7 @@ function ProviderTile({
         href={`/casino?provider=${encodeURIComponent(provider.name)}`}
         className="group block rounded-2xl p-4 text-center transition-all hover:-translate-y-0.5"
         style={{
-          background: '#0F1A14',
+          background: '#0F1828',
           border: `1px solid ${color}33`,
         }}
       >

@@ -161,11 +161,11 @@ export default function TransactionsPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Your activity</h1>
-        <p style={{ color: '#8FA899' }}>Bets, purchases, redemptions, and bonuses — all in one place.</p>
+        <p style={{ color: '#8FA3B8' }}>Bets, purchases, redemptions, and bonuses — all in one place.</p>
       </div>
 
       {/* ── TAB SWITCHER ── */}
-      <div className="flex gap-1 p-1 rounded-xl w-fit" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+      <div className="flex gap-1 p-1 rounded-xl w-fit" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
         {([
           { id: 'bets'         as const, label: 'Bet History',   icon: 'dice'        as const, count: ALL_BET_HISTORY.length },
           { id: 'transactions' as const, label: 'Transactions',  icon: 'wallet-icon' as const, count: MOCK_TRANSACTIONS.length },
@@ -176,14 +176,14 @@ export default function TransactionsPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
             style={activeTab === t.id
               ? { background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.28)' }
-              : { color: '#8FA899', border: '1px solid transparent' }
+              : { color: '#8FA3B8', border: '1px solid transparent' }
             }
           >
             <YalaIcon name={t.icon} size={14} />
             {t.label}
             <span
               className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded"
-              style={{ background: 'rgba(255,255,255,0.06)', color: activeTab === t.id ? '#F0B232' : '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.06)', color: activeTab === t.id ? '#F0B232' : '#8FA3B8' }}
             >
               {t.count}
             </span>
@@ -198,19 +198,19 @@ export default function TransactionsPage() {
           <div className="flex items-start justify-between gap-3 flex-wrap">
             {/* Search */}
             <div className="relative flex-1 min-w-[200px] max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#4A6A55' }} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#4A5878' }} />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search game or provider…"
                 className="w-full pl-9 pr-3 py-2 rounded-lg text-xs focus:outline-none transition-colors"
-                style={{ background: '#0F1A14', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                style={{ background: '#0F1828', border: '1px solid #1A2238', color: '#F5E8C8' }}
               />
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
               {/* Currency */}
-              <div className="flex gap-1 p-1 rounded-lg" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+              <div className="flex gap-1 p-1 rounded-lg" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
                 {(['all', 'GC', 'SC'] as BetCcy[]).map((c) => (
                   <button
                     key={c}
@@ -220,7 +220,7 @@ export default function TransactionsPage() {
                       ? c === 'SC'
                         ? { background: 'rgba(45,201,122,0.15)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.35)' }
                         : { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.35)' }
-                      : { color: '#8FA899', border: '1px solid transparent' }
+                      : { color: '#8FA3B8', border: '1px solid transparent' }
                     }
                   >
                     {c === 'GC' && <GoldCoinIcon size={11} />}
@@ -231,7 +231,7 @@ export default function TransactionsPage() {
               </div>
 
               {/* Period */}
-              <div className="flex gap-1 p-1 rounded-lg" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+              <div className="flex gap-1 p-1 rounded-lg" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
                 {(['today', '7d', '30d', 'all'] as Period[]).map((p) => (
                   <button
                     key={p}
@@ -239,7 +239,7 @@ export default function TransactionsPage() {
                     className="px-2.5 py-1 rounded-md text-xs font-bold transition-all"
                     style={betPeriod === p
                       ? { background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.28)' }
-                      : { color: '#8FA899', border: '1px solid transparent' }
+                      : { color: '#8FA3B8', border: '1px solid transparent' }
                     }
                   >
                     {PERIOD_LABEL[p]}
@@ -253,10 +253,10 @@ export default function TransactionsPage() {
           {filteredBets.length > 0 && <BetSummary bets={filteredBets} />}
 
           {/* Bet table */}
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
             <div
               className="hidden sm:grid text-[10px] font-bold uppercase tracking-widest px-5 py-3"
-              style={{ gridTemplateColumns: '2.2fr 0.8fr 1fr 0.8fr 1.2fr', color: '#8FA899', borderBottom: '1px solid #1A2E22' }}
+              style={{ gridTemplateColumns: '2.2fr 0.8fr 1fr 0.8fr 1.2fr', color: '#8FA3B8', borderBottom: '1px solid #1A2238' }}
             >
               <span>Game</span>
               <span>Currency</span>
@@ -275,7 +275,7 @@ export default function TransactionsPage() {
                 />
               </div>
             ) : (
-              <div className="divide-y" style={{ borderColor: '#1A2E22' }}>
+              <div className="divide-y" style={{ borderColor: '#1A2238' }}>
                 {filteredBets.map((b) => {
                   const won = b.profit > 0;
                   const profitColor = won ? '#2DC97A' : '#EF4444';
@@ -287,7 +287,7 @@ export default function TransactionsPage() {
                       {/* Game + provider */}
                       <div className="min-w-0 col-span-2 sm:col-span-1">
                         <p className="text-sm font-semibold truncate" style={{ color: '#F5E8C8' }}>{b.game}</p>
-                        <p className="text-[10px] mt-0.5 truncate" style={{ color: '#4A6A55' }}>
+                        <p className="text-[10px] mt-0.5 truncate" style={{ color: '#4A5878' }}>
                           {b.provider} · {fmtAgo(b.ts)}
                         </p>
                       </div>
@@ -299,9 +299,9 @@ export default function TransactionsPage() {
                         </span>
                       </div>
                       {/* Bet */}
-                      <p className="text-xs font-mono text-right" style={{ color: '#8FA899' }}>{fmtBet(b)}</p>
+                      <p className="text-xs font-mono text-right" style={{ color: '#8FA3B8' }}>{fmtBet(b)}</p>
                       {/* Multi */}
-                      <p className="text-xs font-mono text-right" style={{ color: b.multiplier > 1 ? '#F0B232' : '#4A6A55' }}>
+                      <p className="text-xs font-mono text-right" style={{ color: b.multiplier > 1 ? '#F0B232' : '#4A5878' }}>
                         {b.multiplier > 0 ? `${b.multiplier.toFixed(2)}×` : '—'}
                       </p>
                       {/* Profit */}
@@ -319,8 +319,8 @@ export default function TransactionsPage() {
             )}
           </div>
 
-          <p className="text-[10px] text-center" style={{ color: '#4A6A55' }}>
-            Showing <span style={{ color: '#8FA899' }}>{filteredBets.length}</span> of {ALL_BET_HISTORY.length} bets ·
+          <p className="text-[10px] text-center" style={{ color: '#4A5878' }}>
+            Showing <span style={{ color: '#8FA3B8' }}>{filteredBets.length}</span> of {ALL_BET_HISTORY.length} bets ·
             {' '}{PERIOD_LABEL[betPeriod]}{betCurrency !== 'all' ? ` · ${betCurrency} only` : ''}
           </p>
         </div>
@@ -330,7 +330,7 @@ export default function TransactionsPage() {
       {activeTab === 'transactions' && (
         <div className="space-y-5">
           {/* Filter pills */}
-          <div className="flex gap-1 p-1 rounded-lg w-fit" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+          <div className="flex gap-1 p-1 rounded-lg w-fit" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
             {([
               { id: 'all'   as const, label: 'All'           },
               { id: 'GC'    as const, label: 'Gold Coins'    },
@@ -345,7 +345,7 @@ export default function TransactionsPage() {
                   ? f.id === 'SC'
                     ? { background: 'rgba(45,201,122,0.15)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.35)' }
                     : { background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.28)' }
-                  : { color: '#8FA899', border: '1px solid transparent' }
+                  : { color: '#8FA3B8', border: '1px solid transparent' }
                 }
               >
                 {f.id === 'GC' && <GoldCoinIcon size={11} />}
@@ -356,7 +356,7 @@ export default function TransactionsPage() {
           </div>
 
           {/* Table */}
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
             {filteredTx.length === 0 ? (
               <EmptyState
                 icon="activity"
@@ -368,7 +368,7 @@ export default function TransactionsPage() {
                 ctaHref={txFilter === 'all' ? '/wallet' : undefined}
               />
             ) : (
-              <div className="divide-y" style={{ borderColor: '#1A2E22' }}>
+              <div className="divide-y" style={{ borderColor: '#1A2238' }}>
                 {filteredTx.map((tx) => {
                   const isCredit = CREDIT_TYPES.includes(tx.type);
                   const iconName: YalaIconName = TX_ICON[tx.type] ?? 'activity';
@@ -385,11 +385,11 @@ export default function TransactionsPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold truncate" style={{ color: '#F5E8C8' }}>{tx.description}</p>
-                        <div className="flex items-center gap-2 text-[10px] mt-0.5" style={{ color: '#8FA899' }}>
+                        <div className="flex items-center gap-2 text-[10px] mt-0.5" style={{ color: '#8FA3B8' }}>
                           <span className="uppercase tracking-wide font-bold">{TX_LABEL[tx.type]}</span>
-                          <span style={{ color: '#4A6A55' }}>·</span>
+                          <span style={{ color: '#4A5878' }}>·</span>
                           <span>{formatTime(tx.timestamp)}</span>
-                          {tx.method && (<><span style={{ color: '#4A6A55' }}>·</span><span>{tx.method}</span></>)}
+                          {tx.method && (<><span style={{ color: '#4A5878' }}>·</span><span>{tx.method}</span></>)}
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -425,8 +425,8 @@ export default function TransactionsPage() {
         </div>
       )}
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.5)' }}>
           18+ · No real money gambling · Gold Coins have no cash value · <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80">Sweepstakes Rules</Link>
         </p>
       </div>
@@ -455,9 +455,9 @@ function BetSummary({ bets }: { bets: BetEntry[] }) {
         <div
           key={c.label}
           className="rounded-xl p-4"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
-          <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>{c.label}</p>
+          <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>{c.label}</p>
           <p className="font-display text-xl font-black number-display leading-none mt-1.5" style={{ color: c.color }}>
             {c.value}
           </p>

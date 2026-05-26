@@ -101,7 +101,7 @@ export default function DailyBonusPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Daily Free Play</h1>
-        <p style={{ color: '#8FA899' }}>
+        <p style={{ color: '#8FA3B8' }}>
           No purchase necessary. Coins, races, and missions reset every day at midnight UTC.
         </p>
       </div>
@@ -111,8 +111,8 @@ export default function DailyBonusPage() {
         className="relative rounded-2xl overflow-hidden p-6 lg:p-7"
         style={{
           background: dailyClaimed
-            ? 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.10) 0%, transparent 55%), #0F1A14'
-            : 'radial-gradient(ellipse at 15% 80%, rgba(240,178,50,0.14) 0%, transparent 55%), radial-gradient(ellipse at 90% 0%, rgba(45,201,122,0.08) 0%, transparent 55%), #0F1A14',
+            ? 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.10) 0%, transparent 55%), #0F1828'
+            : 'radial-gradient(ellipse at 15% 80%, rgba(240,178,50,0.14) 0%, transparent 55%), radial-gradient(ellipse at 90% 0%, rgba(45,201,122,0.08) 0%, transparent 55%), #0F1828',
           border: `1px solid ${dailyClaimed ? 'rgba(45,201,122,0.28)' : 'rgba(240,178,50,0.24)'}`,
         }}
       >
@@ -130,13 +130,13 @@ export default function DailyBonusPage() {
               <YalaIcon name="daily-star" size={32} />
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#8FA899' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: '#8FA3B8' }}>
                 Login Streak
               </p>
               <p className="font-display text-2xl font-black" style={{ color: '#F0B232' }}>
-                Day {currentStreak} <span className="text-sm" style={{ color: '#8FA899' }}>of 7</span>
+                Day {currentStreak} <span className="text-sm" style={{ color: '#8FA3B8' }}>of 7</span>
               </p>
-              <p className="text-sm mt-1 flex items-center gap-2 flex-wrap" style={{ color: '#8FA899' }}>
+              <p className="text-sm mt-1 flex items-center gap-2 flex-wrap" style={{ color: '#8FA3B8' }}>
                 Today:
                 <span className="font-bold flex items-center gap-1" style={{ color: '#F5E8C8' }}>
                   <GoldCoinIcon size={12} /> {formatGC(todayReward.gc)} GC
@@ -172,7 +172,7 @@ export default function DailyBonusPage() {
                     border: `1px solid ${
                       current ? 'rgba(240,178,50,0.55)' :
                       past    ? 'rgba(45,201,122,0.22)' :
-                      '#1A2E22'
+                      '#1A2238'
                     }`,
                     boxShadow: current ? '0 0 16px rgba(240,178,50,0.18)' : undefined,
                   }}
@@ -190,7 +190,7 @@ export default function DailyBonusPage() {
                   <p
                     className="text-[9px] font-bold"
                     style={{
-                      color: current ? '#F0B232' : past ? '#2DC97A' : '#4A6A55',
+                      color: current ? '#F0B232' : past ? '#2DC97A' : '#4A5878',
                     }}
                   >
                     {r.special ? 'BIG' : `D${r.day}`}
@@ -199,7 +199,7 @@ export default function DailyBonusPage() {
                   <p
                     className="text-[9px] font-mono leading-none"
                     style={{
-                      color: current ? '#F5E8C8' : future ? '#4A6A55' : '#8FA899',
+                      color: current ? '#F5E8C8' : future ? '#4A5878' : '#8FA3B8',
                     }}
                   >
                     {r.gc >= 1000 ? `${r.gc / 1000}K` : r.gc}
@@ -227,7 +227,7 @@ export default function DailyBonusPage() {
                   <YalaIcon name="trophy" size={24} />
                   <div>
                     <p className="text-sm font-black" style={{ color: '#F0B232' }}>Streak complete!</p>
-                    <p className="text-[10px]" style={{ color: '#8FA899' }}>
+                    <p className="text-[10px]" style={{ color: '#8FA3B8' }}>
                       New 7-day cycle starts at midnight UTC
                     </p>
                   </div>
@@ -244,7 +244,7 @@ export default function DailyBonusPage() {
                   <CheckCircle2 className="w-5 h-5" style={{ color: '#2DC97A' }} />
                   <div>
                     <p className="text-sm font-bold" style={{ color: '#2DC97A' }}>Claimed</p>
-                    <p className="text-[10px]" style={{ color: '#8FA899' }}>
+                    <p className="text-[10px]" style={{ color: '#8FA3B8' }}>
                       Day {currentStreak + 1} unlocks tomorrow
                     </p>
                   </div>
@@ -257,7 +257,7 @@ export default function DailyBonusPage() {
                   className="w-full lg:w-auto flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
                   style={{
                     background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-                    color: '#060E0A',
+                    color: '#040814',
                     boxShadow: '0 4px 20px rgba(240,178,50,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
                   }}
                 >
@@ -267,7 +267,7 @@ export default function DailyBonusPage() {
                 </motion.button>
               )}
             </AnimatePresence>
-            <p className="text-[10px] text-center mt-2" style={{ color: '#4A6A55' }}>
+            <p className="text-[10px] text-center mt-2" style={{ color: '#4A5878' }}>
               {dailyClaimed && currentStreak === 7
                 ? 'Streak resets to Day 1 tomorrow · keep showing up'
                 : 'Resets midnight UTC · No purchase necessary'}
@@ -293,7 +293,7 @@ export default function DailyBonusPage() {
               <Link
                 href={opt.href}
                 className="block h-full rounded-2xl p-4 transition-all hover:-translate-y-0.5 group"
-                style={{ background: '#0F1A14', border: `1px solid ${opt.color}22` }}
+                style={{ background: '#0F1828', border: `1px solid ${opt.color}22` }}
               >
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-3"
@@ -304,7 +304,7 @@ export default function DailyBonusPage() {
                 <p className="font-bold text-sm mb-1 transition-colors group-hover:text-[#F5E8C8]" style={{ color: '#F5E8C8' }}>
                   {opt.title}
                 </p>
-                <p className="text-xs leading-relaxed mb-3" style={{ color: '#8FA899' }}>
+                <p className="text-xs leading-relaxed mb-3" style={{ color: '#8FA3B8' }}>
                   {opt.desc}
                 </p>
                 <span className="text-xs font-bold flex items-center gap-1 transition-transform group-hover:translate-x-0.5" style={{ color: opt.color }}>
@@ -342,14 +342,14 @@ export default function DailyBonusPage() {
             {dailyClaimed && currentStreak === 7 ? (
               <>
                 <p className="font-bold mb-0.5" style={{ color: '#F5E8C8' }}>You did it · 7-day streak unlocked</p>
-                <p className="text-sm" style={{ color: '#8FA899' }}>
+                <p className="text-sm" style={{ color: '#8FA3B8' }}>
                   Cycle resets at midnight UTC. Show up tomorrow and start Day 1 — keep showing up and you&apos;ll unlock VIP streak rewards.
                 </p>
               </>
             ) : (
               <>
                 <p className="font-bold mb-0.5" style={{ color: '#F5E8C8' }}>Keep your streak alive</p>
-                <p className="text-sm" style={{ color: '#8FA899' }}>
+                <p className="text-sm" style={{ color: '#8FA3B8' }}>
                   Day 7 pays <span className="font-bold" style={{ color: '#F0B232' }}>5,000 GC + 1 SC</span> — your biggest daily haul. Don&apos;t break the chain.
                 </p>
               </>
@@ -361,7 +361,7 @@ export default function DailyBonusPage() {
           className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:brightness-110 active:scale-95"
           style={{
             background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-            color: '#060E0A',
+            color: '#040814',
             boxShadow: '0 2px 12px rgba(45,201,122,0.3)',
           }}
         >
@@ -370,8 +370,8 @@ export default function DailyBonusPage() {
         </Link>
       </div>
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.5)' }}>
           18+ · No Purchase Necessary · Gold Coins have no cash value · Void Where Prohibited · <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80">Sweepstakes Rules</Link>
         </p>
       </div>

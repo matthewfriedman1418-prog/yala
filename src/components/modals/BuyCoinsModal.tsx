@@ -110,8 +110,8 @@ export function BuyCoinsModal() {
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
           className="relative w-full max-w-xl rounded-2xl overflow-hidden z-10"
           style={{
-            backgroundColor: '#0F1A14',
-            border: '1px solid #1A2E22',
+            backgroundColor: '#0F1828',
+            border: '1px solid #1A2238',
             boxShadow: '0 24px 64px rgba(0,0,0,0.75), 0 0 0 1px rgba(240,178,50,0.04)',
             maxHeight: '92vh',
           }}
@@ -133,7 +133,7 @@ export function BuyCoinsModal() {
                     <YalaIcon name="coin-stack" size={28} />
                     <div>
                       <h2 className="font-display text-lg font-bold" style={{ color: '#F5E8C8' }}>Get Coins</h2>
-                      <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>
+                      <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>
                         Gold Coins · Sweep Coins · Weekend reload active
                       </p>
                     </div>
@@ -143,14 +143,14 @@ export function BuyCoinsModal() {
                     aria-label="Close"
                     className="p-2 rounded-lg transition-colors hover:bg-white/10"
                   >
-                    <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                    <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
                   </button>
                 </div>
 
                 <div className="px-6 pb-6 space-y-5">
                   {/* ── PACKAGES ── */}
                   <section>
-                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2.5" style={{ color: '#8FA899' }}>
+                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2.5" style={{ color: '#8FA3B8' }}>
                       Choose a package
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -167,12 +167,12 @@ export function BuyCoinsModal() {
 
                   {/* ── PAYMENT METHOD ── */}
                   <section>
-                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2.5" style={{ color: '#8FA899' }}>
+                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2.5" style={{ color: '#8FA3B8' }}>
                       Payment method
                     </p>
                     <div
                       className="grid grid-cols-4 gap-1 p-1 rounded-xl"
-                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
+                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}
                     >
                       {([
                         { id: 'card'   as PayMethod, label: 'Card' },
@@ -186,7 +186,7 @@ export function BuyCoinsModal() {
                           className="flex flex-col items-center justify-center gap-1 py-2 rounded-lg text-[10px] font-bold transition-all"
                           style={payMethod === m.id
                             ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' }
-                            : { color: '#8FA899', border: '1px solid transparent' }
+                            : { color: '#8FA3B8', border: '1px solid transparent' }
                           }
                         >
                           <PayMethodIcon method={m.id} active={payMethod === m.id} />
@@ -213,7 +213,7 @@ export function BuyCoinsModal() {
                             placeholder="1234 5678 9012 3456"
                             className="buy-input pr-10 number-display"
                           />
-                          <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#8FA899' }} />
+                          <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#8FA3B8' }} />
                         </div>
                         <div className="grid grid-cols-2 gap-2.5">
                           <input
@@ -267,7 +267,7 @@ export function BuyCoinsModal() {
                               className="py-2 rounded-lg text-xs font-black transition-all"
                               style={cryptoCoin === c.symbol
                                 ? { background: 'rgba(96,165,250,0.15)', color: '#60A5FA', border: '1px solid rgba(96,165,250,0.4)' }
-                                : { background: 'rgba(255,255,255,0.04)', color: '#8FA899', border: '1px solid #1A2E22' }
+                                : { background: 'rgba(255,255,255,0.04)', color: '#8FA3B8', border: '1px solid #1A2238' }
                               }
                             >
                               {c.symbol}
@@ -290,11 +290,11 @@ export function BuyCoinsModal() {
                             >
                               {copied
                                 ? <Check className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />
-                                : <Copy className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />
+                                : <Copy className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} />
                               }
                             </button>
                           </div>
-                          <p className="text-[10px]" style={{ color: '#8FA899' }}>
+                          <p className="text-[10px]" style={{ color: '#8FA3B8' }}>
                             Demo only — address is a placeholder.
                           </p>
                         </div>
@@ -305,10 +305,10 @@ export function BuyCoinsModal() {
                   {/* ── ORDER SUMMARY ── */}
                   <div
                     className="rounded-xl p-3.5"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2238' }}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>Order summary</span>
+                      <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>Order summary</span>
                       <span className="font-display text-lg font-black number-display" style={{ color: '#F0B232' }}>${pkg.price.toFixed(2)}</span>
                     </div>
                     <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
@@ -334,7 +334,7 @@ export function BuyCoinsModal() {
                       className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
                       style={{
                         background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-                        color: '#060E0A',
+                        color: '#040814',
                         boxShadow: '0 4px 18px rgba(45,201,122,0.35), inset 0 1px 0 rgba(255,255,255,0.2)',
                       }}
                     >
@@ -348,7 +348,7 @@ export function BuyCoinsModal() {
                   )}
 
                   {/* Compliance footer */}
-                  <p className="text-[10px] text-center leading-relaxed" style={{ color: '#4A6A55' }}>
+                  <p className="text-[10px] text-center leading-relaxed" style={{ color: '#4A5878' }}>
                     No Purchase Necessary · Gold Coins have no cash value · 18+ · Void where prohibited
                   </p>
                 </div>
@@ -364,11 +364,11 @@ export function BuyCoinsModal() {
               font-size: 14px;
               color: #F5E8C8;
               background: rgba(255,255,255,0.04);
-              border: 1px solid #1A2E22;
+              border: 1px solid #1A2238;
               outline: none;
               transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
             }
-            .buy-input::placeholder { color: #4A6A55; }
+            .buy-input::placeholder { color: #4A5878; }
             .buy-input:focus {
               border-color: rgba(240,178,50,0.45);
               background: rgba(240,178,50,0.04);
@@ -387,7 +387,7 @@ function PackageCard({ pkg, selected, onSelect }: { pkg: Package; selected: bool
   const isBest    = pkg.badge === 'BEST VALUE';
   const accent = selected
     ? (isPopular ? '#F0B232' : isBest ? '#2DC97A' : '#F0B232')
-    : '#1A2E22';
+    : '#1A2238';
 
   return (
     <button
@@ -397,7 +397,7 @@ function PackageCard({ pkg, selected, onSelect }: { pkg: Package; selected: bool
         background: selected
           ? `linear-gradient(135deg, ${accent}10, transparent)`
           : 'rgba(255,255,255,0.02)',
-        border: `1px solid ${selected ? `${accent}aa` : '#1A2E22'}`,
+        border: `1px solid ${selected ? `${accent}aa` : '#1A2238'}`,
         boxShadow: selected ? `0 0 0 1px ${accent}33` : 'none',
       }}
     >
@@ -406,7 +406,7 @@ function PackageCard({ pkg, selected, onSelect }: { pkg: Package; selected: bool
           className="absolute -top-1.5 right-3 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded"
           style={{
             background: isPopular ? '#F0B232' : isBest ? '#2DC97A' : '#60A5FA',
-            color: '#060E0A',
+            color: '#040814',
           }}
         >
           {pkg.badge}
@@ -420,18 +420,18 @@ function PackageCard({ pkg, selected, onSelect }: { pkg: Package; selected: bool
         <p className="text-[11px] flex items-center gap-1.5" style={{ color: '#F5E8C8' }}>
           <GoldCoinIcon size={12} />
           <span className="number-display font-semibold">{formatGC(pkg.gc)}</span>
-          <span style={{ color: '#8FA899' }}>GC</span>
+          <span style={{ color: '#8FA3B8' }}>GC</span>
         </p>
         <p className="text-[11px] flex items-center gap-1.5" style={{ color: '#2DC97A' }}>
           <SweepCoinIcon size={14} />
           <span className="number-display font-semibold">{pkg.sc}</span>
-          <span style={{ color: '#8FA899' }}>SC</span>
+          <span style={{ color: '#8FA3B8' }}>SC</span>
         </p>
         {pkg.bonus > 0 && (
           <p className="text-[11px] flex items-center gap-1" style={{ color: '#F0B232' }}>
             <span className="font-bold">+</span>
             <span className="number-display font-semibold">{formatGC(pkg.bonus)}</span>
-            <span style={{ color: '#8FA899' }}>bonus GC</span>
+            <span style={{ color: '#8FA3B8' }}>bonus GC</span>
           </p>
         )}
       </div>
@@ -441,7 +441,7 @@ function PackageCard({ pkg, selected, onSelect }: { pkg: Package; selected: bool
 
 // ────────────────────────────────────────────────────────────────────────────
 function PayMethodIcon({ method, active }: { method: PayMethod; active: boolean }) {
-  const color = active ? '#F0B232' : '#8FA899';
+  const color = active ? '#F0B232' : '#8FA3B8';
   if (method === 'card')   return <CreditCard className="w-4 h-4" style={{ color }} />;
   if (method === 'crypto') return <YalaIcon name="diamond" size={14} />;
   if (method === 'apple')  return (
@@ -478,7 +478,7 @@ function ApplePayBlock({ onPay, price, loading }: { onPay: () => void; price: nu
           </>
         )}
       </button>
-      <p className="text-[10px] text-center" style={{ color: '#8FA899' }}>Authenticate with Face ID or Touch ID</p>
+      <p className="text-[10px] text-center" style={{ color: '#8FA3B8' }}>Authenticate with Face ID or Touch ID</p>
     </div>
   );
 }
@@ -504,7 +504,7 @@ function GooglePayBlock({ onPay, price, loading }: { onPay: () => void; price: n
           </>
         )}
       </button>
-      <p className="text-[10px] text-center" style={{ color: '#8FA899' }}>Complete with your Google account</p>
+      <p className="text-[10px] text-center" style={{ color: '#8FA3B8' }}>Complete with your Google account</p>
     </div>
   );
 }
@@ -525,14 +525,14 @@ function SuccessView({ pkg, onClose }: { pkg: Package; onClose: () => void }) {
       <h3 className="font-display text-xl font-bold mb-2" style={{ color: '#F5E8C8' }}>
         Coins on the way
       </h3>
-      <p className="text-sm mb-5" style={{ color: '#8FA899' }}>
+      <p className="text-sm mb-5" style={{ color: '#8FA3B8' }}>
         {pkg.name} Pack credited to your wallet.
       </p>
 
       {/* Breakdown card */}
       <div
         className="rounded-xl p-4 space-y-2 max-w-xs mx-auto mb-6 text-left"
-        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}
+        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}
       >
         <div className="flex items-center justify-between">
           <span className="text-xs flex items-center gap-2" style={{ color: '#F5E8C8' }}>
@@ -547,7 +547,7 @@ function SuccessView({ pkg, onClose }: { pkg: Package; onClose: () => void }) {
           <span className="text-sm font-bold number-display" style={{ color: '#2DC97A' }}>+{pkg.sc}</span>
         </div>
         {pkg.bonus > 0 && (
-          <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: '#1A2E22' }}>
+          <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: '#1A2238' }}>
             <span className="text-xs flex items-center gap-2" style={{ color: '#F0B232' }}>
               <span className="font-black">+</span> Bonus GC
             </span>
@@ -561,7 +561,7 @@ function SuccessView({ pkg, onClose }: { pkg: Package; onClose: () => void }) {
         className="w-full max-w-xs mx-auto py-3 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-95"
         style={{
           background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-          color: '#060E0A',
+          color: '#040814',
           boxShadow: '0 4px 18px rgba(45,201,122,0.35)',
         }}
       >

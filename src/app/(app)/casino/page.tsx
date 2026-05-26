@@ -80,7 +80,7 @@ function GameScrollRow({ games }: { games: typeof ALL_GAMES }) {
       <button
         onClick={() => scroll('left')}
         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -ml-4 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ background: 'rgba(12,24,18,0.95)', border: '1px solid #1A2E22', boxShadow: '0 4px 16px rgba(0,0,0,0.5)' }}
+        style={{ background: 'rgba(10,16,28,0.95)', border: '1px solid #1A2238', boxShadow: '0 4px 16px rgba(0,0,0,0.5)' }}
       >
         <ChevronLeft className="w-4 h-4" style={{ color: '#F5E8C8' }} />
       </button>
@@ -111,7 +111,7 @@ function GameScrollRow({ games }: { games: typeof ALL_GAMES }) {
       <button
         onClick={() => scroll('right')}
         className="absolute right-0 top-1/2 -translate-y-1/2 z-10 -mr-4 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ background: 'rgba(12,24,18,0.95)', border: '1px solid #1A2E22', boxShadow: '0 4px 16px rgba(0,0,0,0.5)' }}
+        style={{ background: 'rgba(10,16,28,0.95)', border: '1px solid #1A2238', boxShadow: '0 4px 16px rgba(0,0,0,0.5)' }}
       >
         <ChevronRight className="w-4 h-4" style={{ color: '#F5E8C8' }} />
       </button>
@@ -157,7 +157,7 @@ const ORIGINALS_PALETTE: Record<string, { from: string; to: string; label: strin
   'oasis-plinko':            { from: '#064E3B', to: '#011A14', label: '💧' },
   'dune-mines':              { from: '#78350F', to: '#1C0A00', label: '💣' },
   'golden-dice':             { from: '#92400E', to: '#2A0F00', label: '🎲' },
-  'sandstorm-limbo':         { from: '#1B6B45', to: '#0C1812', label: '🌪' },
+  'sandstorm-limbo':         { from: '#1B6B45', to: '#0A101C', label: '🌪' },
   'emerald-wheel':           { from: '#064E3B', to: '#011A14', label: '🎡' },
   'caravan-keno':            { from: '#78350F', to: '#1C0A00', label: '🎯' },
   'night-bazaar-blackjack':  { from: '#1E293B', to: '#0F172A', label: '♠️' },
@@ -168,7 +168,7 @@ const ORIGINALS_PALETTE: Record<string, { from: string; to: string; label: strin
 };
 
 function OriginalCard({ orig }: { orig: typeof YALA_ORIGINALS[0] }) {
-  const pal = ORIGINALS_PALETTE[orig.slug] || { from: '#1C2E22', to: '#0C1812', label: '⚡' };
+  const pal = ORIGINALS_PALETTE[orig.slug] || { from: '#1C2E3A', to: '#0A101C', label: '⚡' };
   return (
     <Link href={`/originals/${orig.slug}`}>
       <div
@@ -194,7 +194,7 @@ function OriginalCard({ orig }: { orig: typeof YALA_ORIGINALS[0] }) {
           <p className="text-[11px] font-bold text-white leading-tight truncate">{orig.name}</p>
           <div className="flex items-center justify-between mt-0.5">
             <p className="text-[9px] font-medium" style={{ color: '#F0B232' }}>{orig.type}</p>
-            <p className="text-[9px]" style={{ color: '#8FA899' }}>RTP {orig.rtp}%</p>
+            <p className="text-[9px]" style={{ color: '#8FA3B8' }}>RTP {orig.rtp}%</p>
           </div>
         </div>
       </div>
@@ -240,9 +240,9 @@ function LiveBetsFeed() {
         }
       `}</style>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: '1px solid #1A2E22' }}>
+        <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: '1px solid #1A2238' }}>
           <div className="flex items-center gap-2.5">
             <Activity className="w-4 h-4" style={{ color: '#2DC97A' }} />
             <h2 className="font-bold text-sm" style={{ color: '#F5E8C8' }}>Live Bets</h2>
@@ -251,13 +251,13 @@ function LiveBetsFeed() {
               <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">Live</span>
             </div>
           </div>
-          <span className="text-[11px]" style={{ color: '#4A6A55' }}>Updated in real time</span>
+          <span className="text-[11px]" style={{ color: '#4A5878' }}>Updated in real time</span>
         </div>
 
         {/* Column labels */}
         <div
           className="grid px-5 py-2 text-[10px] font-bold uppercase tracking-widest"
-          style={{ gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr', color: '#4A6A55', borderBottom: '1px solid rgba(26,46,34,0.5)' }}
+          style={{ gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr', color: '#4A5878', borderBottom: '1px solid rgba(26,34,56,0.5)' }}
         >
           <span>Game</span>
           <span>Player</span>
@@ -277,7 +277,7 @@ function LiveBetsFeed() {
                 style={{
                   gridTemplateColumns: '2.2fr 1.4fr 1fr 0.8fr 1fr',
                   height: ROW_H,
-                  borderBottom: '1px solid rgba(26,46,34,0.35)',
+                  borderBottom: '1px solid rgba(26,34,56,0.35)',
                 }}
               >
                 {/* Game */}
@@ -291,13 +291,13 @@ function LiveBetsFeed() {
                   <span className="text-xs font-medium truncate" style={{ color: '#F5E8C8' }}>{bet.game}</span>
                 </div>
                 {/* Player */}
-                <span className="text-xs font-mono" style={{ color: '#8FA899' }}>{bet.user}</span>
+                <span className="text-xs font-mono" style={{ color: '#8FA3B8' }}>{bet.user}</span>
                 {/* Bet */}
-                <span className="text-xs number-display" style={{ color: '#8FA899' }}>
+                <span className="text-xs number-display" style={{ color: '#8FA3B8' }}>
                   {bet.currency === 'GC' ? `${bet.bet.toLocaleString()} GC` : `${bet.bet} SC`}
                 </span>
                 {/* Multi */}
-                <span className="text-xs font-semibold number-display" style={{ color: win ? '#F0B232' : '#4A6A55' }}>
+                <span className="text-xs font-semibold number-display" style={{ color: win ? '#F0B232' : '#4A5878' }}>
                   {win ? `${bet.multiplier}x` : '—'}
                 </span>
                 {/* Profit */}
@@ -336,7 +336,7 @@ function SignedOutHero({ openAuthModal }: { openAuthModal: (tab?: 'login' | 'reg
           <span style={{ color: '#F5E8C8' }}>LET&apos;S PLAY</span>
         </h1>
 
-        <p className="text-base max-w-md" style={{ color: '#8FA899', lineHeight: 1.55 }}>
+        <p className="text-base max-w-md" style={{ color: '#8FA3B8', lineHeight: 1.55 }}>
           200+ casino games. Real cash prizes. Free to start, no deposit needed.
         </p>
 
@@ -346,7 +346,7 @@ function SignedOutHero({ openAuthModal }: { openAuthModal: (tab?: 'login' | 'reg
             className="flex items-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-black transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
             style={{
               background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: '0 4px 28px rgba(45,201,122,0.45), inset 0 1px 0 rgba(255,255,255,0.2)',
             }}
           >
@@ -356,7 +356,7 @@ function SignedOutHero({ openAuthModal }: { openAuthModal: (tab?: 'login' | 'reg
           <button
             onClick={() => openAuthModal('login')}
             className="px-5 py-3.5 rounded-2xl text-sm font-semibold transition-all hover:bg-white/5"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
           >
             Sign In
           </button>
@@ -365,13 +365,13 @@ function SignedOutHero({ openAuthModal }: { openAuthModal: (tab?: 'login' | 'reg
         {/* Editorial stats row (no pills). Numbers do the work. */}
         <div className="flex items-end gap-8 mt-2">
           <HeroStat value="200+" label="Games" />
-          <span className="self-stretch w-px" style={{ background: '#1A2E22' }} />
+          <span className="self-stretch w-px" style={{ background: '#1A2238' }} />
           <HeroStat value="2,847" label="Playing now" live />
-          <span className="self-stretch w-px" style={{ background: '#1A2E22' }} />
+          <span className="self-stretch w-px" style={{ background: '#1A2238' }} />
           <HeroStat value="$4.2M" label="Prize pool YTD" />
         </div>
 
-        <p className="text-[10px] mt-1" style={{ color: '#4A6A55' }}>
+        <p className="text-[10px] mt-1" style={{ color: '#4A5878' }}>
           18+ · No purchase necessary · Sweep Coins redeemable for cash where permitted by law
         </p>
       </div>
@@ -395,7 +395,7 @@ function HeroStat({ value, label, live }: { value: string; label: string; live?:
       </p>
       <div className="flex items-center gap-1.5 mt-1.5">
         {live && <span className="live-dot" style={{ width: 6, height: 6 }} />}
-        <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: '#8FA899' }}>
+        <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: '#8FA3B8' }}>
           {label}
         </span>
       </div>
@@ -434,7 +434,7 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
       {/* TOP ROW — welcome/tagline on the left, primary CTAs on the right */}
       <div className="flex items-end justify-between gap-6 flex-wrap">
         <div className="flex flex-col gap-3 max-w-2xl">
-          <p className="text-xs font-semibold" style={{ color: '#8FA899' }}>
+          <p className="text-xs font-semibold" style={{ color: '#8FA3B8' }}>
             Welcome back, <span className="font-bold" style={{ color: '#F5E8C8' }}>{userName || 'Player'}</span>
           </p>
           <h1
@@ -451,17 +451,17 @@ function SignedInHero({ userName, openBuyCoins }: { userName?: string; openBuyCo
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
             style={{
               background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: '0 4px 22px rgba(45,201,122,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
             }}
           >
-            <Play className="w-4 h-4 flex-shrink-0" fill="#060E0A" />
+            <Play className="w-4 h-4 flex-shrink-0" fill="#040814" />
             Browse games
           </Link>
           <button
             onClick={openBuyCoins}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:bg-white/5"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
           >
             <Plus className="w-4 h-4" strokeWidth={2.5} />
             Get coins
@@ -502,11 +502,11 @@ function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) 
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-2 mb-1.5">
             <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Daily Streak</span>
-            <span className="text-[10px] font-mono font-bold" style={{ color: '#8FA899' }}>Day 4 / 7</span>
+            <span className="text-[10px] font-mono font-bold" style={{ color: '#8FA3B8' }}>Day 4 / 7</span>
           </div>
           <div className="flex gap-0.5 mb-2">
             {[1,2,3,4,5,6,7].map((d) => (
-              <div key={d} className="flex-1 h-1 rounded-full" style={{ background: d <= 4 ? '#F0B232' : '#1A2E22' }} />
+              <div key={d} className="flex-1 h-1 rounded-full" style={{ background: d <= 4 ? '#F0B232' : '#1A2238' }} />
             ))}
           </div>
           <div className="flex items-center justify-between">
@@ -543,13 +543,13 @@ function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) 
               <span className="live-dot" style={{ width: 6, height: 6 }} />
               <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Daily Race</span>
             </div>
-            <span className="text-[10px] font-mono font-bold" style={{ color: '#8FA899' }}>14h 32m</span>
+            <span className="text-[10px] font-mono font-bold" style={{ color: '#8FA3B8' }}>14h 32m</span>
           </div>
           <p className="font-display text-base font-black number-display leading-none" style={{ color: '#F5E8C8' }}>
-            500,000 <span className="text-[11px] font-normal" style={{ color: '#8FA899' }}>GC pool</span>
+            500,000 <span className="text-[11px] font-normal" style={{ color: '#8FA3B8' }}>GC pool</span>
           </p>
           <div className="flex items-center justify-between mt-1.5">
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>
+            <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
               You: <span className="font-bold" style={{ color: '#F5E8C8' }}>#47</span>
             </p>
             <span className="text-[11px] font-bold flex items-center gap-0.5 transition-transform group-hover:translate-x-0.5" style={{ color: '#2DC97A' }}>
@@ -583,7 +583,7 @@ function PromoStripCard({ variant }: { variant: 'streak' | 'race' | 'reload' }) 
         </div>
         <p className="font-display text-base font-black leading-none" style={{ color: '#F5E8C8' }}>+20% bonus</p>
         <div className="flex items-center justify-between mt-1.5">
-          <p className="text-[11px]" style={{ color: '#8FA899' }}>
+          <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
             every coin purchase
           </p>
           <span className="text-[11px] font-bold flex items-center gap-0.5 transition-transform group-hover:translate-x-0.5" style={{ color: '#60A5FA' }}>
@@ -616,24 +616,24 @@ function HeroDailyRaceCard() {
           <span className="live-dot" />
           <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Daily Race · Live</span>
         </div>
-        <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Prize pool</p>
+        <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Prize pool</p>
         <p className="font-display text-2xl font-black number-display" style={{ color: '#F0B232' }}>
           500,000 <span className="text-sm">GC</span>
         </p>
       </div>
       <div className="relative">
-        <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Ends in</p>
+        <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Ends in</p>
         <p className="font-mono text-base font-bold" style={{ color: '#F5E8C8' }}>14h 32m 09s</p>
       </div>
       <div className="relative flex items-center justify-between pt-3 mt-1" style={{ borderTop: '1px solid rgba(45,201,122,0.15)' }}>
         <div>
-          <p className="text-[10px]" style={{ color: '#8FA899' }}>Your rank</p>
+          <p className="text-[10px]" style={{ color: '#8FA3B8' }}>Your rank</p>
           <p className="text-sm font-bold number-display" style={{ color: '#F5E8C8' }}>#47</p>
         </div>
         <Link
           href="/leaderboards"
           className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:opacity-90 active:scale-95"
-          style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#060E0A' }}
+          style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#040814' }}
         >
           Race
           <ChevronRight className="w-3 h-3" />
@@ -657,8 +657,8 @@ function CasinoHero({
     <section
       className="relative rounded-2xl overflow-hidden"
       style={{
-        background: 'radial-gradient(ellipse at 12% 80%, rgba(45,201,122,0.18) 0%, transparent 55%), radial-gradient(ellipse at 92% 8%, rgba(240,178,50,0.14) 0%, transparent 55%), linear-gradient(180deg, #0A1410 0%, #060E0A 100%)',
-        border: '1px solid #1A2E22',
+        background: 'radial-gradient(ellipse at 12% 80%, rgba(45,201,122,0.18) 0%, transparent 55%), radial-gradient(ellipse at 92% 8%, rgba(240,178,50,0.14) 0%, transparent 55%), linear-gradient(180deg, #08121C 0%, #040814 100%)',
+        border: '1px solid #1A2238',
       }}
     >
       {isLoggedIn
@@ -743,16 +743,16 @@ export default function CasinoPage() {
       {/* ── 3. SEARCH BAR (with category + provider filters) ─── */}
       <section>
         <div className="relative mb-3">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#4A6A55' }} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#4A5878' }} />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search games or providers…"
             className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm outline-none transition-colors"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238', color: '#F5E8C8' }}
             onFocus={e  => (e.currentTarget.style.borderColor = `${accent}55`)}
-            onBlur={e => (e.currentTarget.style.borderColor = '#1A2E22')}
+            onBlur={e => (e.currentTarget.style.borderColor = '#1A2238')}
           />
           {isSearching && (
             <button
@@ -760,7 +760,7 @@ export default function CasinoPage() {
               onClick={() => { setSearch(''); setActiveCategory('all'); setActiveProvider('all'); }}
               aria-label="Clear search and filters"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md hover:bg-white/5 transition-colors"
-              style={{ color: '#8FA899' }}
+              style={{ color: '#8FA3B8' }}
             >
               Clear
             </button>
@@ -787,7 +787,7 @@ export default function CasinoPage() {
             <button
               onClick={() => setActiveProvider('all')}
               className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-              style={activeProvider === 'all' ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1A14', color: '#8FA899', border: '1px solid #1A2E22' }}
+              style={activeProvider === 'all' ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1828', color: '#8FA3B8', border: '1px solid #1A2238' }}
             >
               All Providers
             </button>
@@ -796,7 +796,7 @@ export default function CasinoPage() {
                 key={prov}
                 onClick={() => setActiveProvider(prov)}
                 className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap"
-                style={activeProvider === prov ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1A14', color: '#8FA899', border: '1px solid #1A2E22' }}
+                style={activeProvider === prov ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1828', color: '#8FA3B8', border: '1px solid #1A2238' }}
               >
                 {prov}
               </button>
@@ -808,14 +808,14 @@ export default function CasinoPage() {
         {isSearching && (
           <div className="mt-2">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-xs" style={{ color: '#4A6A55' }}>
+              <p className="text-xs" style={{ color: '#4A5878' }}>
                 {filteredGames.length} game{filteredGames.length !== 1 ? 's' : ''}
               </p>
             </div>
             {filteredGames.length === 0 ? (
-              <div className="rounded-2xl p-10 text-center" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+              <div className="rounded-2xl p-10 text-center" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
                 <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>No games match those filters</p>
-                <p className="text-[11px]" style={{ color: '#8FA899' }}>Try clearing search or picking a different category or provider.</p>
+                <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Try clearing search or picking a different category or provider.</p>
               </div>
             ) : (
               <GameScrollRow key={`${activeCategory}-${activeProvider}-${search}`} games={filteredGames} />

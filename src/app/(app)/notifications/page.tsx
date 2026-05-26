@@ -46,7 +46,7 @@ const KIND_META: Record<NotifKind, { color: string; bg: string; icon: React.Reac
   promo:   { color: '#F0B232', bg: 'rgba(240,178,50,0.10)',  icon: <Gift       className="w-4 h-4" /> },
   rain:    { color: '#60A5FA', bg: 'rgba(96,165,250,0.10)',  icon: <CloudRain  className="w-4 h-4" /> },
   tip:     { color: '#F472B6', bg: 'rgba(244,114,182,0.10)', icon: <Sparkles   className="w-4 h-4" /> },
-  system:  { color: '#8FA899', bg: 'rgba(143,168,153,0.08)', icon: <Bell       className="w-4 h-4" /> },
+  system:  { color: '#8FA3B8', bg: 'rgba(143,163,184,0.08)', icon: <Bell       className="w-4 h-4" /> },
 };
 
 // Group notifications into Today / Yesterday / Earlier / Older buckets
@@ -104,12 +104,12 @@ export default function NotificationsPage() {
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-64 gap-4">
-        <Bell className="w-10 h-10" style={{ color: '#4A6A55' }} />
-        <p style={{ color: '#8FA899' }}>Sign in to see your notifications.</p>
+        <Bell className="w-10 h-10" style={{ color: '#4A5878' }} />
+        <p style={{ color: '#8FA3B8' }}>Sign in to see your notifications.</p>
         <button
           onClick={() => openAuthModal()}
           className="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110"
-          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814' }}
         >
           Sign in
         </button>
@@ -142,7 +142,7 @@ export default function NotificationsPage() {
               </span>
             )}
           </div>
-          <p className="text-xs" style={{ color: '#8FA899' }}>
+          <p className="text-xs" style={{ color: '#8FA3B8' }}>
             Wins, missions, promos, tips, and account events.{' '}
             <Link href="/settings" className="underline hover:text-[#F0B232]" style={{ color: '#F0B232' }}>
               Notification preferences →
@@ -159,7 +159,7 @@ export default function NotificationsPage() {
                 toast.success('All notifications marked as read');
               }}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#F5E8C8' }}
             >
               <CheckCheck className="w-3.5 h-3.5" />
               Mark all read
@@ -170,7 +170,7 @@ export default function NotificationsPage() {
               type="button"
               onClick={() => { reseed(); toast.success('Notifications restored'); }}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Restore demo
@@ -185,7 +185,7 @@ export default function NotificationsPage() {
                 }
               }}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors hover:bg-red-500/10"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
             >
               <Trash2 className="w-3.5 h-3.5" />
               Clear all
@@ -196,7 +196,7 @@ export default function NotificationsPage() {
 
       {/* ── Filter pills ───────────────────────────────── */}
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-        <FilterIcon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#4A6A55' }} />
+        <FilterIcon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#4A5878' }} />
         {FILTERS.map((f) => {
           const active = filter === f.id;
           const count = f.id === 'all'
@@ -213,7 +213,7 @@ export default function NotificationsPage() {
               style={
                 active
                   ? { background: 'rgba(240,178,50,0.14)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.36)' }
-                  : { color: '#8FA899', border: '1px solid #1A2E22', background: 'rgba(255,255,255,0.02)' }
+                  : { color: '#8FA3B8', border: '1px solid #1A2238', background: 'rgba(255,255,255,0.02)' }
               }
             >
               {f.label}
@@ -222,7 +222,7 @@ export default function NotificationsPage() {
                   className="text-[9px] font-mono font-black px-1 rounded"
                   style={{
                     background: active ? 'rgba(240,178,50,0.20)' : 'rgba(255,255,255,0.04)',
-                    color:      active ? '#F0B232' : '#4A6A55',
+                    color:      active ? '#F0B232' : '#4A5878',
                   }}
                 >
                   {count}
@@ -240,12 +240,12 @@ export default function NotificationsPage() {
         <div className="space-y-6">
           {grouped.map((group) => (
             <div key={group.label}>
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-2 px-1" style={{ color: '#4A6A55' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-2 px-1" style={{ color: '#4A5878' }}>
                 {group.label}
               </p>
               <div
                 className="rounded-2xl overflow-hidden"
-                style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+                style={{ background: '#0F1828', border: '1px solid #1A2238' }}
               >
                 <AnimatePresence initial={false}>
                   {group.items.map((n, i) => {
@@ -259,7 +259,7 @@ export default function NotificationsPage() {
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.18 }}
                         className="group relative"
-                        style={i < group.items.length - 1 ? { borderBottom: '1px solid rgba(26,46,34,0.55)' } : undefined}
+                        style={i < group.items.length - 1 ? { borderBottom: '1px solid rgba(26,34,56,0.55)' } : undefined}
                       >
                         <button
                           type="button"
@@ -281,9 +281,9 @@ export default function NotificationsPage() {
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0 mt-1.5" />
                               )}
                             </div>
-                            <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8FA899' }}>{n.body}</p>
+                            <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8FA3B8' }}>{n.body}</p>
                             <div className="flex items-center gap-3 mt-1.5">
-                              <p className="text-[10px] font-mono" style={{ color: '#4A6A55' }}>{relativeTime(n.ts)}</p>
+                              <p className="text-[10px] font-mono" style={{ color: '#4A5878' }}>{relativeTime(n.ts)}</p>
                               {n.href && (
                                 <p className="text-[10px] flex items-center gap-0.5" style={{ color: meta.color }}>
                                   Open <ChevronRight className="w-2.5 h-2.5" />
@@ -306,7 +306,7 @@ export default function NotificationsPage() {
                               aria-label="Mark as read"
                               className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
                             >
-                              <Check className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />
+                              <Check className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} />
                             </button>
                           )}
                           <button
@@ -316,7 +316,7 @@ export default function NotificationsPage() {
                             aria-label="Delete notification"
                             className="p-1.5 rounded-lg hover:bg-red-500/15 transition-colors"
                           >
-                            <X className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />
+                            <X className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} />
                           </button>
                         </div>
                       </motion.div>
@@ -332,13 +332,13 @@ export default function NotificationsPage() {
       {/* ── Footer hint ────────────────────────────────── */}
       <div
         className="flex items-center justify-between gap-3 p-4 rounded-2xl"
-        style={{ background: '#0A1410', border: '1px solid #1A2E22' }}
+        style={{ background: '#08121C', border: '1px solid #1A2238' }}
       >
         <div className="flex items-center gap-3">
           <Settings className="w-4 h-4" style={{ color: '#F0B232' }} />
           <div>
             <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Too many alerts?</p>
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>Choose what reaches your bell from Settings.</p>
+            <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Choose what reaches your bell from Settings.</p>
           </div>
         </div>
         <Link
@@ -358,18 +358,18 @@ function EmptyState({ filter, hasAny }: { filter: Filter; hasAny: boolean }) {
   return (
     <div
       className="flex flex-col items-center justify-center text-center py-16 rounded-2xl"
-      style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+      style={{ background: '#0F1828', border: '1px solid #1A2238' }}
     >
       <div
         className="w-14 h-14 rounded-2xl flex items-center justify-center mb-3"
-        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
+        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}
       >
-        <Inbox className="w-7 h-7" style={{ color: '#4A6A55' }} />
+        <Inbox className="w-7 h-7" style={{ color: '#4A5878' }} />
       </div>
       <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>
         {filter === 'all' ? "You're all caught up" : 'Nothing here'}
       </p>
-      <p className="text-[12px] mb-4" style={{ color: '#8FA899' }}>
+      <p className="text-[12px] mb-4" style={{ color: '#8FA3B8' }}>
         {filter === 'all'
           ? hasAny ? 'Tap "Restore demo" to put the seed back.' : "When something interesting happens, you'll see it here."
           : `No ${filter === 'unread' ? 'unread items' : `${filter} notifications`} right now.`}

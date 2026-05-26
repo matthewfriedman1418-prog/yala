@@ -50,7 +50,7 @@ export default function WalletPage() {
       <div className="max-w-2xl mx-auto">
         <div
           className="rounded-2xl p-10 text-center"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
           <div
             className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
@@ -59,21 +59,21 @@ export default function WalletPage() {
             <YalaIcon name="wallet-icon" size={32} />
           </div>
           <h1 className="font-display text-2xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Your wallet</h1>
-          <p className="text-sm mb-6" style={{ color: '#8FA899' }}>
+          <p className="text-sm mb-6" style={{ color: '#8FA3B8' }}>
             Sign in to see your balances, deposit coins, and redeem Sweep Coins for cash prizes.
           </p>
           <div className="flex items-center gap-2 justify-center">
             <button
               onClick={() => openAuthModal('register')}
               className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95"
-              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814' }}
             >
               Create account
             </button>
             <button
               onClick={() => openAuthModal('login')}
               className="px-6 py-2.5 rounded-xl text-sm font-semibold border transition-all hover:bg-white/5"
-              style={{ borderColor: '#1A2E22', color: '#8FA899' }}
+              style={{ borderColor: '#1A2238', color: '#8FA3B8' }}
             >
               Sign in
             </button>
@@ -111,7 +111,7 @@ export default function WalletPage() {
             </div>
           </div>
           <h1 className="font-display text-3xl font-bold" style={{ color: '#F5E8C8' }}>Your Balances</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#8FA899' }}>Deposit, redeem, and manage your coins.</p>
+          <p className="text-sm mt-0.5" style={{ color: '#8FA3B8' }}>Deposit, redeem, and manage your coins.</p>
         </div>
 
         <div className="flex flex-col items-end gap-1.5">
@@ -134,7 +134,7 @@ export default function WalletPage() {
           <Link
             href="/vault"
             className="flex items-center gap-1.5 text-[10px] font-bold transition-colors hover:opacity-80"
-            style={{ color: '#8FA899' }}
+            style={{ color: '#8FA3B8' }}
           >
             <YalaIcon name="lock" size={11} />
             Vault · {vaultBalance.toFixed(2)} SC locked
@@ -146,7 +146,7 @@ export default function WalletPage() {
       <div
         className="relative rounded-2xl overflow-hidden p-6"
         style={{
-          background: 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.16) 0%, transparent 55%), linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)',
+          background: 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.16) 0%, transparent 55%), linear-gradient(180deg, #0F1828 0%, #08121C 100%)',
           border: '1px solid rgba(45,201,122,0.22)',
         }}
       >
@@ -156,7 +156,7 @@ export default function WalletPage() {
               <SweepCoinIcon size={60} />
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>
+              <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>
                 Sweep Coins balance
               </p>
               <p
@@ -166,7 +166,7 @@ export default function WalletPage() {
                 {formatSC(sweepCoins)}
                 <span className="ml-2" style={{ fontSize: '0.45em', color: '#2DC97A' }}>SC</span>
               </p>
-              <p className="text-xs mt-1.5 number-display" style={{ color: '#8FA899' }}>
+              <p className="text-xs mt-1.5 number-display" style={{ color: '#8FA3B8' }}>
                 ≈ <span style={{ color: '#F5E8C8' }}>${sweepCoins.toFixed(2)}</span> USD at redemption
               </p>
             </div>
@@ -179,7 +179,7 @@ export default function WalletPage() {
               className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
               style={{
                 background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: '0 4px 18px rgba(240,178,50,0.35), inset 0 1px 0 rgba(255,255,255,0.2)',
               }}
             >
@@ -191,7 +191,7 @@ export default function WalletPage() {
               className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
               style={{
                 background: 'linear-gradient(135deg, #2DC97A, #10B981)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: sweepCoins >= 25 ? '0 4px 18px rgba(45,201,122,0.35)' : 'none',
               }}
             >
@@ -205,11 +205,11 @@ export default function WalletPage() {
       <div
         className="rounded-2xl overflow-hidden"
         style={{
-          background: 'radial-gradient(ellipse at 90% 0%, rgba(240,178,50,0.08) 0%, transparent 50%), #0F1A14',
+          background: 'radial-gradient(ellipse at 90% 0%, rgba(240,178,50,0.08) 0%, transparent 50%), #0F1828',
           border: '1px solid rgba(240,178,50,0.22)',
         }}
       >
-        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A2E22' }}>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A2238' }}>
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" style={{ color: '#F0B232' }} />
             <h3 className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Top up your wallet</h3>
@@ -237,7 +237,7 @@ export default function WalletPage() {
                   background: popular
                     ? 'linear-gradient(180deg, rgba(240,178,50,0.10), rgba(240,178,50,0.02))'
                     : 'rgba(255,255,255,0.02)',
-                  border: `1px solid ${popular ? 'rgba(240,178,50,0.4)' : '#1A2E22'}`,
+                  border: `1px solid ${popular ? 'rgba(240,178,50,0.4)' : '#1A2238'}`,
                 }}
               >
                 {pkg.badge && (
@@ -245,7 +245,7 @@ export default function WalletPage() {
                     className="absolute -top-2 left-4 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded"
                     style={{
                       background: popular ? '#F0B232' : '#2DC97A',
-                      color: '#060E0A',
+                      color: '#040814',
                     }}
                   >
                     {pkg.badge}
@@ -276,7 +276,7 @@ export default function WalletPage() {
                   disabled={buying !== null}
                   className="mt-auto w-full py-2.5 rounded-xl text-xs font-black transition-all hover:brightness-110 active:scale-95 disabled:opacity-60"
                   style={popular
-                    ? { background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A', boxShadow: '0 2px 12px rgba(240,178,50,0.3)' }
+                    ? { background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814', boxShadow: '0 2px 12px rgba(240,178,50,0.3)' }
                     : { background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.3)', color: '#F0B232' }
                   }
                 >
@@ -290,7 +290,7 @@ export default function WalletPage() {
 
       {/* ── QUICK ACTIONS ───────────────────────────────────── */}
       <div>
-        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#8FA899' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#8FA3B8' }}>
           Manage coins
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -330,9 +330,9 @@ export default function WalletPage() {
       {/* ── RECENT ACTIVITY ─────────────────────────────────── */}
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+        style={{ background: '#0F1828', border: '1px solid #1A2238' }}
       >
-        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A2E22' }}>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A2238' }}>
           <div className="flex items-center gap-2">
             <YalaIcon name="activity" size={16} />
             <h3 className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Recent activity</h3>
@@ -340,14 +340,14 @@ export default function WalletPage() {
           <Link
             href="/profile/transactions"
             className="text-[11px] font-semibold flex items-center gap-1 transition-colors hover:text-[#F0B232]"
-            style={{ color: '#8FA899' }}
+            style={{ color: '#8FA3B8' }}
           >
             View all <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
 
         {/* Filter chips — money in/out only */}
-        <div className="flex gap-1.5 px-5 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
+        <div className="flex gap-1.5 px-5 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
           {([
             { id: 'all',         label: 'All' },
             { id: 'purchases',   label: 'Purchases' },
@@ -359,7 +359,7 @@ export default function WalletPage() {
               className="px-3 py-1 rounded-full text-[11px] font-bold transition-all"
               style={txFilter === f.id
                 ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' }
-                : { background: 'rgba(255,255,255,0.03)', color: '#8FA899', border: '1px solid #1A2E22' }
+                : { background: 'rgba(255,255,255,0.03)', color: '#8FA3B8', border: '1px solid #1A2238' }
               }
             >
               {f.label}
@@ -367,10 +367,10 @@ export default function WalletPage() {
           ))}
         </div>
 
-        <div className="divide-y" style={{ borderColor: '#1A2E22' }}>
+        <div className="divide-y" style={{ borderColor: '#1A2238' }}>
           {recentTxns.length === 0 ? (
             <div className="py-10 text-center">
-              <p className="text-sm" style={{ color: '#8FA899' }}>No activity matches this filter.</p>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>No activity matches this filter.</p>
             </div>
           ) : (
             recentTxns.map((txn, i) => <TxnRow key={txn.id} txn={txn} delay={i * 0.04} />)
@@ -380,9 +380,9 @@ export default function WalletPage() {
 
       {/* ── Compliance footer ── */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl"
-        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}>
-        <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#4A6A55' }} />
-        <p className="text-[11px] leading-relaxed" style={{ color: '#8FA899' }}>
+        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2238' }}>
+        <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#4A5878' }} />
+        <p className="text-[11px] leading-relaxed" style={{ color: '#8FA3B8' }}>
           Gold Coins are virtual play coins and have no cash value. Sweep Coins are redeemable for prizes
           under our <Link href="/sweepstakes-rules" className="font-semibold transition-colors hover:opacity-80" style={{ color: '#F0B232' }}>Sweepstakes Rules</Link>.
           18+ only · Void where prohibited.
@@ -409,8 +409,8 @@ function ActionTile({
     <div
       className="rounded-2xl p-4 transition-all group h-full flex flex-col gap-2.5"
       style={{
-        background: '#0F1A14',
-        border: '1px solid #1A2E22',
+        background: '#0F1828',
+        border: '1px solid #1A2238',
         opacity: disabled ? 0.55 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
@@ -431,7 +431,7 @@ function ActionTile({
       </div>
       <div>
         <p className="font-bold text-sm transition-colors group-hover:text-[#F5E8C8]" style={{ color: '#F5E8C8' }}>{title}</p>
-        <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>
+        <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }}>
           {disabled ? (disabledHint ?? blurb) : blurb}
         </p>
       </div>
@@ -483,12 +483,12 @@ function TxnRow({ txn, delay }: { txn: Transaction; delay: number }) {
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold truncate" style={{ color: '#F5E8C8' }}>{txn.description}</p>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#8FA899' }}>{TXN_LABEL[txn.type]}</span>
-          <span className="text-[10px]" style={{ color: '#4A6A55' }}>·</span>
-          <span className="text-[10px]" style={{ color: '#8FA899' }}>{formatTime(txn.timestamp)}</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#8FA3B8' }}>{TXN_LABEL[txn.type]}</span>
+          <span className="text-[10px]" style={{ color: '#4A5878' }}>·</span>
+          <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{formatTime(txn.timestamp)}</span>
           {txn.status !== 'completed' && (
             <>
-              <span className="text-[10px]" style={{ color: '#4A6A55' }}>·</span>
+              <span className="text-[10px]" style={{ color: '#4A5878' }}>·</span>
               <span className="text-[10px] font-bold uppercase" style={{ color: txn.status === 'pending' ? '#F59E0B' : '#EF4444' }}>{txn.status}</span>
             </>
           )}

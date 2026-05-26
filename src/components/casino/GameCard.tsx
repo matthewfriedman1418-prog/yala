@@ -74,7 +74,7 @@ export function GameCard({ game, size = 'md' }: GameCardProps) {
     <button
       onClick={handleClick}
       className={cn('group relative w-full rounded-xl overflow-hidden game-card-hover', sizeClasses[size])}
-      style={{ background: showImage ? '#0C1812' : getGradient(game.gradient) }}
+      style={{ background: showImage ? '#0A101C' : getGradient(game.gradient) }}
     >
       {/* Cover image */}
       {showImage && (

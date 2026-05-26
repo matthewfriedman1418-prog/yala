@@ -61,7 +61,7 @@ export default function VaultPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>The Vault</h1>
-        <p style={{ color: '#8FA899' }}>
+        <p style={{ color: '#8FA3B8' }}>
           Lock away Sweep Coins you don&apos;t want to spend. Your vault balance won&apos;t be used while playing — keeping your prize-eligible balance safe.
         </p>
       </div>
@@ -72,25 +72,25 @@ export default function VaultPage() {
           className="rounded-2xl p-5 text-center"
           style={{ background: ACCENT_BG, border: `1px solid ${ACCENT_BORDER}` }}
         >
-          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: '#8FA899' }}>Vault Balance</p>
+          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: '#8FA3B8' }}>Vault Balance</p>
           <p className="font-display text-3xl font-black number-display" style={{ color: ACCENT }}>{formatSC(vaultBalance)}</p>
           <p className="text-xs mt-1" style={{ color: ACCENT }}>SC protected</p>
         </div>
         <div
           className="rounded-2xl p-5 text-center"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}
+          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}
         >
-          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: '#8FA899' }}>Available to Play</p>
+          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: '#8FA3B8' }}>Available to Play</p>
           <p className="font-display text-3xl font-black number-display" style={{ color: '#F5E8C8' }}>{formatSC(sweepCoins)}</p>
-          <p className="text-xs mt-1" style={{ color: '#4A6A55' }}>SC in wallet</p>
+          <p className="text-xs mt-1" style={{ color: '#4A5878' }}>SC in wallet</p>
         </div>
         <div
           className="rounded-2xl p-5 text-center"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}
+          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}
         >
-          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: '#8FA899' }}>% Protected</p>
+          <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: '#8FA3B8' }}>% Protected</p>
           <p className="font-display text-3xl font-black number-display" style={{ color: '#F5E8C8' }}>{vaultPct}%</p>
-          <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+          <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{ width: `${vaultPct}%`, background: `linear-gradient(90deg, ${ACCENT_DARK}, ${ACCENT})` }}
@@ -105,15 +105,15 @@ export default function VaultPage() {
         {/* Action panel */}
         <div
           className="rounded-2xl p-6"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
           <div className="flex gap-2 mb-6">
             <button
               onClick={() => setActiveAction('deposit')}
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
               style={activeAction === 'deposit'
-                ? { background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DARK})`, color: '#060E0A' }
-                : { background: 'rgba(255,255,255,0.05)', color: '#8FA899' }}
+                ? { background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DARK})`, color: '#040814' }
+                : { background: 'rgba(255,255,255,0.05)', color: '#8FA3B8' }}
             >
               <Lock className="w-4 h-4" /> Lock Coins
             </button>
@@ -122,7 +122,7 @@ export default function VaultPage() {
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
               style={activeAction === 'withdraw'
                 ? { background: 'linear-gradient(135deg, #10B981, #059669)', color: '#fff' }
-                : { background: 'rgba(255,255,255,0.05)', color: '#8FA899' }}
+                : { background: 'rgba(255,255,255,0.05)', color: '#8FA3B8' }}
             >
               <Unlock className="w-4 h-4" /> Unlock Coins
             </button>
@@ -132,8 +132,8 @@ export default function VaultPage() {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-medium" style={{ color: '#8FA899' }}>Amount to Lock</label>
-                  <span className="text-xs" style={{ color: '#4A6A55' }}>Wallet: {formatSC(sweepCoins)} SC</span>
+                  <label className="text-xs font-medium" style={{ color: '#8FA3B8' }}>Amount to Lock</label>
+                  <span className="text-xs" style={{ color: '#4A5878' }}>Wallet: {formatSC(sweepCoins)} SC</span>
                 </div>
                 <input
                   type="text"
@@ -142,7 +142,7 @@ export default function VaultPage() {
                   onChange={(e) => setDepositAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                   placeholder="Enter SC amount"
                   className="w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition-colors number-display"
-                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2238', color: '#F5E8C8' }}
                 />
               </div>
               <div className="grid grid-cols-4 gap-2">
@@ -151,7 +151,7 @@ export default function VaultPage() {
                     key={amt}
                     onClick={() => setDepositAmount(String(amt))}
                     className="py-1.5 rounded-lg text-xs border transition-all"
-                    style={{ borderColor: '#1A2E22', color: '#8FA899' }}
+                    style={{ borderColor: '#1A2238', color: '#8FA3B8' }}
                   >
                     {amt} SC
                   </button>
@@ -161,7 +161,7 @@ export default function VaultPage() {
                 <button
                   onClick={handleDeposit}
                   className="w-full py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95"
-                  style={{ background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DARK})`, color: '#060E0A' }}
+                  style={{ background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT_DARK})`, color: '#040814' }}
                 >
                   <Lock className="w-4 h-4 inline mr-2" />Lock in Vault
                 </button>
@@ -179,8 +179,8 @@ export default function VaultPage() {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-medium" style={{ color: '#8FA899' }}>Amount to Unlock</label>
-                  <span className="text-xs" style={{ color: '#4A6A55' }}>Vault: {formatSC(vaultBalance)} SC</span>
+                  <label className="text-xs font-medium" style={{ color: '#8FA3B8' }}>Amount to Unlock</label>
+                  <span className="text-xs" style={{ color: '#4A5878' }}>Vault: {formatSC(vaultBalance)} SC</span>
                 </div>
                 <input
                   type="text"
@@ -189,7 +189,7 @@ export default function VaultPage() {
                   onChange={(e) => setWithdrawAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                   placeholder="Enter SC amount"
                   className="w-full px-4 py-3 rounded-xl text-sm border focus:outline-none focus:border-emerald-400/50 transition-colors number-display"
-                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2238', color: '#F5E8C8' }}
                 />
               </div>
               <button
@@ -214,7 +214,7 @@ export default function VaultPage() {
         {/* Info panel */}
         <div
           className="rounded-2xl p-6 space-y-5"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
           <div className="flex items-center gap-2">
             <Info className="w-4 h-4" style={{ color: ACCENT }} />
@@ -250,7 +250,7 @@ export default function VaultPage() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold mb-0.5" style={{ color: '#F5E8C8' }}>{item.title}</p>
-                  <p className="text-xs leading-relaxed" style={{ color: '#8FA899' }}>{item.desc}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: '#8FA3B8' }}>{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -262,15 +262,15 @@ export default function VaultPage() {
             style={{ background: ACCENT_BG, border: `1px solid ${ACCENT_BORDER}` }}
           >
             <p className="text-xs font-semibold mb-1" style={{ color: ACCENT }}>💡 Tip</p>
-            <p className="text-xs" style={{ color: '#8FA899' }}>
+            <p className="text-xs" style={{ color: '#8FA3B8' }}>
               Lock away SC after a winning session so you can&apos;t accidentally wager it back. Sweep Coins are the only currency redeemable for prizes.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.4)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.4)' }}>
           18+ · Sweep Coins are redeemable for prizes · No Purchase Necessary · Void Where Prohibited
         </p>
       </div>

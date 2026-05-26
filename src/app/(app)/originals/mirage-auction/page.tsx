@@ -234,18 +234,18 @@ export default function MirageAuctionPage() {
   // ── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
-      <Link href="/originals" className="inline-flex items-center gap-1.5 text-sm transition-opacity hover:opacity-80" style={{ color: '#8FA899' }}>
+      <Link href="/originals" className="inline-flex items-center gap-1.5 text-sm transition-opacity hover:opacity-80" style={{ color: '#8FA3B8' }}>
         <ChevronLeft className="w-4 h-4" /> All Originals
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
         {/* LEFT — auction floor */}
         <div className="rounded-3xl overflow-hidden" style={{
-          background: `radial-gradient(ellipse at 50% -10%, ${accent}14, transparent 60%), #0C1812`,
-          border: '1px solid #1A2E22',
+          background: `radial-gradient(ellipse at 50% -10%, ${accent}14, transparent 60%), #0A101C`,
+          border: '1px solid #1A2238',
         }}>
           {/* Header */}
-          <header className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4" style={{ borderBottom: '1px solid #1A2E22' }}>
+          <header className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4" style={{ borderBottom: '1px solid #1A2238' }}>
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: `linear-gradient(135deg, ${accent}28, ${accent}08)`, border: `1px solid ${accent}40` }}>
@@ -257,7 +257,7 @@ export default function MirageAuctionPage() {
                   <span className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
                     style={{ background: `${accent}1A`, color: accent, border: `1px solid ${accent}40` }}>New · Yala Original</span>
                 </div>
-                <p className="text-[11px] truncate" style={{ color: '#8FA899' }}>
+                <p className="text-[11px] truncate" style={{ color: '#8FA3B8' }}>
                   4-round hidden-info auction · vs 3 AI personalities · 99% RTP
                 </p>
               </div>
@@ -301,20 +301,20 @@ export default function MirageAuctionPage() {
         </div>
 
         {/* RIGHT — control panel */}
-        <div className="rounded-3xl p-5 space-y-5 self-start" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+        <div className="rounded-3xl p-5 space-y-5 self-start" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
           {/* Balance */}
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Balance</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Balance</span>
             <div className="flex items-center gap-1.5">
               {isGC ? <GoldCoinIcon size={14} /> : <SweepCoinIcon size={14} />}
               <span className="font-mono font-black text-sm" style={{ color: accent }}>{isGC ? formatGC(goldCoins) : sweepCoins.toFixed(2)}</span>
-              <span className="text-[10px]" style={{ color: '#8FA899' }}>{activeCurrency}</span>
+              <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{activeCurrency}</span>
             </div>
           </div>
 
           {/* Bet */}
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>Bet amount</label>
+            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>Bet amount</label>
             <div className="relative">
               <input
                 type="number"
@@ -327,17 +327,17 @@ export default function MirageAuctionPage() {
                 min={0}
                 step={isGC ? 1 : 0.1}
                 className="w-full pl-3 pr-20 py-2.5 rounded-xl text-sm font-mono font-bold focus:outline-none transition-colors disabled:opacity-60"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = `${accent}66`)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
               />
               <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex gap-1">
                 <button type="button" disabled={phase === 'bidding' || phase === 'revealing'} onClick={() => setBet((b) => Math.max(isGC ? 1 : 0.1, +(b / 2).toFixed(2)))}
                   className="px-2 py-1 rounded-lg text-[10px] font-black transition-colors hover:bg-white/10 disabled:opacity-50"
-                  style={{ color: '#8FA899', background: 'rgba(255,255,255,0.04)' }}>½</button>
+                  style={{ color: '#8FA3B8', background: 'rgba(255,255,255,0.04)' }}>½</button>
                 <button type="button" disabled={phase === 'bidding' || phase === 'revealing'} onClick={() => setBet((b) => Math.min(balance, +(b * 2).toFixed(2)) || (isGC ? 1 : 0.1))}
                   className="px-2 py-1 rounded-lg text-[10px] font-black transition-colors hover:bg-white/10 disabled:opacity-50"
-                  style={{ color: '#8FA899', background: 'rgba(255,255,255,0.04)' }}>2×</button>
+                  style={{ color: '#8FA3B8', background: 'rgba(255,255,255,0.04)' }}>2×</button>
               </div>
             </div>
             <div className="flex gap-1 mt-2 flex-wrap">
@@ -346,8 +346,8 @@ export default function MirageAuctionPage() {
                   className="px-2 py-1 rounded-md text-[10px] font-bold transition-colors disabled:opacity-50"
                   style={{
                     background: bet === v ? `${accent}1A` : 'rgba(255,255,255,0.03)',
-                    color:      bet === v ? accent : '#8FA899',
-                    border:     `1px solid ${bet === v ? `${accent}44` : '#1A2E22'}`,
+                    color:      bet === v ? accent : '#8FA3B8',
+                    border:     `1px solid ${bet === v ? `${accent}44` : '#1A2238'}`,
                   }}>{v < 10 ? v.toFixed(1) : v}</button>
               ))}
             </div>
@@ -356,7 +356,7 @@ export default function MirageAuctionPage() {
           {/* Bid chips — only visible during bidding */}
           {phase === 'bidding' && (
             <div>
-              <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>
+              <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>
                 Round {round} of {ROUNDS} · your bid
               </label>
               <div className="grid grid-cols-3 gap-1.5">
@@ -367,16 +367,16 @@ export default function MirageAuctionPage() {
                       className="py-2 px-2 rounded-lg text-center transition-all"
                       style={{
                         background: active ? `${accent}14` : 'rgba(255,255,255,0.03)',
-                        border:     `1px solid ${active ? `${accent}55` : '#1A2E22'}`,
+                        border:     `1px solid ${active ? `${accent}55` : '#1A2238'}`,
                       }}>
                       <p className="text-[10px] font-black font-mono" style={{ color: active ? accent : '#F5E8C8' }}>{(f * 100).toFixed(0)}%</p>
-                      <p className="text-[9px]" style={{ color: '#8FA899' }}>{(player.card * f).toFixed(1)}</p>
+                      <p className="text-[9px]" style={{ color: '#8FA3B8' }}>{(player.card * f).toFixed(1)}</p>
                     </button>
                   );
                 })}
               </div>
-              <div className="mt-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-                <p className="text-[10px] flex items-center justify-between" style={{ color: '#8FA899' }}>
+              <div className="mt-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+                <p className="text-[10px] flex items-center justify-between" style={{ color: '#8FA3B8' }}>
                   <span>Card · running total · after this bid</span>
                   <span className="font-mono font-bold" style={{ color: '#F5E8C8' }}>
                     {player.card} · {playerTotal.toFixed(1)} → <span style={{ color: (playerTotal + pendingBidValue > player.card) ? '#EF4444' : accent }}>{(playerTotal + pendingBidValue).toFixed(1)}</span>
@@ -398,7 +398,7 @@ export default function MirageAuctionPage() {
               className="w-full py-3.5 rounded-xl font-display text-base font-black transition-all hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: `linear-gradient(135deg, ${accent}, ${accentSec})`,
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: `0 6px 24px ${accent}40`,
               }}>
               {!isLoggedIn ? (
@@ -418,7 +418,7 @@ export default function MirageAuctionPage() {
                 background: phase === 'bidding'
                   ? `linear-gradient(135deg, ${accent}, ${accentSec})`
                   : 'rgba(255,255,255,0.04)',
-                color:     phase === 'bidding' ? '#060E0A' : '#8FA899',
+                color:     phase === 'bidding' ? '#040814' : '#8FA3B8',
                 boxShadow: phase === 'bidding' ? `0 6px 24px ${accent}40` : 'none',
               }}>
               {phase === 'bidding'
@@ -428,18 +428,18 @@ export default function MirageAuctionPage() {
           )}
 
           {/* Bandits roster */}
-          <div className="pt-2" style={{ borderTop: '1px solid #1A2E22' }}>
-            <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block" style={{ color: '#8FA899' }}>The bandits</span>
+          <div className="pt-2" style={{ borderTop: '1px solid #1A2238' }}>
+            <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block" style={{ color: '#8FA3B8' }}>The bandits</span>
             <div className="space-y-1.5">
               {AI_DEFS.map((a) => (
                 <div key={a.id} className="flex items-start gap-2">
                   <div className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}>
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}>
                     <span className="text-[10px] font-black">{a.avatar}</span>
                   </div>
                   <div className="min-w-0">
                     <p className="text-[11px] font-bold leading-tight" style={{ color: '#F5E8C8' }}>{a.name}</p>
-                    <p className="text-[10px] leading-snug" style={{ color: '#8FA899' }}>{a.blurb}</p>
+                    <p className="text-[10px] leading-snug" style={{ color: '#8FA3B8' }}>{a.blurb}</p>
                   </div>
                 </div>
               ))}
@@ -447,15 +447,15 @@ export default function MirageAuctionPage() {
           </div>
 
           {/* Local history */}
-          <div className="pt-2" style={{ borderTop: '1px solid #1A2E22' }}>
+          <div className="pt-2" style={{ borderTop: '1px solid #1A2238' }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Your last auctions</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Your last auctions</span>
               {history.length > 0 && (
-                <button type="button" onClick={() => setHistory([])} className="text-[10px] underline opacity-60 hover:opacity-100" style={{ color: '#8FA899' }}>clear</button>
+                <button type="button" onClick={() => setHistory([])} className="text-[10px] underline opacity-60 hover:opacity-100" style={{ color: '#8FA3B8' }}>clear</button>
               )}
             </div>
             {history.length === 0 ? (
-              <p className="text-[11px]" style={{ color: '#4A6A55' }}>Your wins and busts will show here.</p>
+              <p className="text-[11px]" style={{ color: '#4A5878' }}>Your wins and busts will show here.</p>
             ) : (
               <div className="flex flex-wrap gap-1">
                 {history.map((h, i) => (
@@ -477,8 +477,8 @@ export default function MirageAuctionPage() {
       </div>
 
       {/* Lower tabs */}
-      <div className="rounded-3xl" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
-        <div className="flex border-b" style={{ borderColor: '#1A2E22' }}>
+      <div className="rounded-3xl" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
+        <div className="flex border-b" style={{ borderColor: '#1A2238' }}>
           {([
             { id: 'recent',      label: 'Recent Plays',   icon: TrendingUp },
             { id: 'leaderboard', label: 'Leaderboard',    icon: BarChart3 },
@@ -490,7 +490,7 @@ export default function MirageAuctionPage() {
             return (
               <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
                 className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[11px] font-bold transition-colors relative"
-                style={{ color: active ? accent : '#8FA899' }}>
+                style={{ color: active ? accent : '#8FA3B8' }}>
                 <Icon className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{tab.label}</span>
                 {active && <motion.div layoutId="auction-tab" className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: accent }} />}
@@ -522,8 +522,8 @@ function initialBidders(): Bidder[] {
 
 function StatChip({ label, value }: { label: string; value: string }) {
   return (
-    <div className="px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
-      <p className="text-[8px] font-bold uppercase tracking-widest leading-none" style={{ color: '#8FA899' }}>{label}</p>
+    <div className="px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
+      <p className="text-[8px] font-bold uppercase tracking-widest leading-none" style={{ color: '#8FA3B8' }}>{label}</p>
       <p className="text-[11px] font-mono font-black leading-tight mt-0.5" style={{ color: '#F5E8C8' }}>{value}</p>
     </div>
   );
@@ -539,7 +539,7 @@ function StatusBanner({
   if (phase === 'idle') {
     return (
       <div className="text-center py-3 px-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }}>
-        <p className="text-[11px]" style={{ color: '#8FA899' }}>
+        <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
           Place a bet to start a 4-round auction. You&apos;ll see your hidden card; the bandits&apos; cards stay face-down until the end.
         </p>
       </div>
@@ -549,18 +549,18 @@ function StatusBanner({
     return (
       <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl" style={{ background: `${accent}10`, border: `1px solid ${accent}33` }}>
         <div>
-          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Round</p>
-          <p className="font-mono font-black text-2xl leading-tight mt-1" style={{ color: accent }}>{round} <span className="text-base" style={{ color: '#8FA899' }}>/ {ROUNDS}</span></p>
+          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Round</p>
+          <p className="font-mono font-black text-2xl leading-tight mt-1" style={{ color: accent }}>{round} <span className="text-base" style={{ color: '#8FA3B8' }}>/ {ROUNDS}</span></p>
         </div>
         <div className="hidden sm:block">
-          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Your card</p>
+          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Your card</p>
           <p className="font-mono font-black text-lg leading-tight mt-1" style={{ color: '#F5E8C8' }}>{player.card}</p>
         </div>
         <div className="text-right">
-          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Your total bid</p>
+          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Your total bid</p>
           <p className="font-mono font-black text-lg leading-tight mt-1" style={{
             color: playerTotal > player.card ? '#EF4444' : '#F5E8C8',
-          }}>{playerTotal.toFixed(1)} <span className="text-[10px]" style={{ color: '#8FA899' }}>/ {player.card}</span></p>
+          }}>{playerTotal.toFixed(1)} <span className="text-[10px]" style={{ color: '#8FA3B8' }}>/ {player.card}</span></p>
         </div>
       </div>
     );
@@ -606,12 +606,12 @@ function BidderLane({
       className="rounded-2xl overflow-hidden transition-all"
       style={{
         background: won ? `${accent}10` : 'rgba(255,255,255,0.02)',
-        border: `1px solid ${won ? `${accent}55` : isYou ? '#F0B23244' : '#1A2E22'}`,
+        border: `1px solid ${won ? `${accent}55` : isYou ? '#F0B23244' : '#1A2238'}`,
         opacity: loseHighlight && !won ? 0.7 : 1,
       }}
     >
       {/* Lane header */}
-      <div className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: '1px solid #1A2E22' }}>
+      <div className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: '1px solid #1A2238' }}>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
           style={{ background: `${tierColor}22`, border: `1px solid ${tierColor}55`, color: tierColor }}>
           <span className="text-[10px] font-black">{bidder.avatar}</span>
@@ -627,16 +627,16 @@ function BidderLane({
       </div>
 
       {/* Card */}
-      <div className="px-3 py-2 flex items-center justify-center" style={{ borderBottom: '1px solid #1A2E22', background: '#0A1410' }}>
+      <div className="px-3 py-2 flex items-center justify-center" style={{ borderBottom: '1px solid #1A2238', background: '#08121C' }}>
         {bidder.cardRevealed ? (
           <div className="text-center">
             <p className="font-display font-black text-2xl number-display" style={{ color: tierColor }}>{bidder.card}</p>
-            <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: '#4A6A55' }}>Card</p>
+            <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: '#4A5878' }}>Card</p>
           </div>
         ) : (
           <div className="text-center">
-            <div className="font-display font-black text-2xl" style={{ color: '#4A6A55' }}>?</div>
-            <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: '#4A6A55' }}>Hidden</p>
+            <div className="font-display font-black text-2xl" style={{ color: '#4A5878' }}>?</div>
+            <p className="text-[8px] font-bold uppercase tracking-widest" style={{ color: '#4A5878' }}>Hidden</p>
           </div>
         )}
       </div>
@@ -650,7 +650,7 @@ function BidderLane({
           const pending = !visible && round === currentRound && phase === 'bidding';
           return (
             <div key={ri} className="flex items-center justify-between text-[11px] font-mono">
-              <span style={{ color: pending ? accent : '#4A6A55' }}>R{round}</span>
+              <span style={{ color: pending ? accent : '#4A5878' }}>R{round}</span>
               {visible && bid !== undefined ? (
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -666,7 +666,7 @@ function BidderLane({
               ) : pending ? (
                 <span style={{ color: accent }}>· · ·</span>
               ) : (
-                <span style={{ color: '#1A2E22' }}>—</span>
+                <span style={{ color: '#1A2238' }}>—</span>
               )}
             </div>
           );
@@ -674,8 +674,8 @@ function BidderLane({
       </div>
 
       {/* Total */}
-      <div className="px-3 py-2 flex items-center justify-between" style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}>
-        <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Total</span>
+      <div className="px-3 py-2 flex items-center justify-between" style={{ borderTop: '1px solid #1A2238', background: '#08121C' }}>
+        <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Total</span>
         <span className="font-mono font-black text-sm" style={{
           color: overbid ? '#EF4444' : (won ? accent : '#F5E8C8'),
         }}>
@@ -698,13 +698,13 @@ function RecentPlaysList({ accent }: { accent: string }) {
               <YalaAvatar initials={p.avatar} tier={p.tier} size={26} hideBadge />
               <div className="min-w-0">
                 <p className="text-[12px] font-bold truncate" style={{ color: tierColor }}>{p.user}</p>
-                <p className="text-[9px] font-mono" style={{ color: '#4A6A55' }}>{p.time} ago</p>
+                <p className="text-[9px] font-mono" style={{ color: '#4A5878' }}>{p.time} ago</p>
               </div>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="text-right"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Bet</p><p className="font-mono font-bold text-[11px]" style={{ color: '#F5E8C8' }}>{p.bet}</p></div>
-              <div className="text-right w-14"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>×</p><p className="font-mono font-bold text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `${p.mult.toFixed(2)}×` : 'BUST'}</p></div>
-              <div className="text-right w-16"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Payout</p><p className="font-mono font-black text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `+${p.payout}` : '0'}</p></div>
+              <div className="text-right"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Bet</p><p className="font-mono font-bold text-[11px]" style={{ color: '#F5E8C8' }}>{p.bet}</p></div>
+              <div className="text-right w-14"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>×</p><p className="font-mono font-bold text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `${p.mult.toFixed(2)}×` : 'BUST'}</p></div>
+              <div className="text-right w-16"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Payout</p><p className="font-mono font-black text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `+${p.payout}` : '0'}</p></div>
             </div>
           </div>
         );
@@ -722,11 +722,11 @@ function LeaderboardList({ accent }: { accent: string }) {
         const pct = (p.profit / max) * 100;
         return (
           <div key={p.rank} className="flex items-center gap-3 px-2 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)' }}>
-            <span className="font-mono font-black text-sm w-6 text-center" style={{ color: p.rank <= 3 ? accent : '#8FA899' }}>{p.rank}</span>
+            <span className="font-mono font-black text-sm w-6 text-center" style={{ color: p.rank <= 3 ? accent : '#8FA3B8' }}>{p.rank}</span>
             <YalaAvatar initials={p.avatar} tier={p.tier} size={26} hideBadge />
             <div className="flex-1 min-w-0">
               <p className="text-[12px] font-bold truncate" style={{ color: tierColor }}>{p.user}</p>
-              <div className="h-1 mt-1 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+              <div className="h-1 mt-1 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                 <div className="h-full rounded-full" style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${accent}, ${tierColor})` }} />
               </div>
             </div>
@@ -752,7 +752,7 @@ function RulesPanel() {
     <ol className="space-y-2.5 list-decimal list-inside">
       {rules.map((r, i) => (
         <li key={i} className="text-[13px] leading-relaxed" style={{ color: '#F5E8C8' }}>
-          <span style={{ color: '#8FA899' }}>{r}</span>
+          <span style={{ color: '#8FA3B8' }}>{r}</span>
         </li>
       ))}
     </ol>
@@ -762,20 +762,20 @@ function RulesPanel() {
 function FairnessPanel({ seed, nonce }: { seed: string; nonce: number }) {
   return (
     <div className="space-y-3">
-      <p className="text-[12px] leading-relaxed" style={{ color: '#8FA899' }}>
+      <p className="text-[12px] leading-relaxed" style={{ color: '#8FA3B8' }}>
         Each bandit&apos;s hidden card and bid randomness are derived from a provably fair seed. The 4.5× multiplier constant was tuned by simulation (200K rounds) to land at ~99% RTP under balanced player strategy.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Server seed (hashed)</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Server seed (hashed)</p>
           <p className="font-mono text-[10px] break-all mt-1" style={{ color: '#F5E8C8' }}>{seed || '—'}</p>
         </div>
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Nonce</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Nonce</p>
           <p className="font-mono text-[11px] mt-1" style={{ color: '#F5E8C8' }}>{nonce}</p>
         </div>
       </div>
-      <p className="text-[10px]" style={{ color: '#4A6A55' }}>
+      <p className="text-[10px]" style={{ color: '#4A5878' }}>
         Seed rotates after each round. Verification tooling will ship with the production build.
       </p>
     </div>

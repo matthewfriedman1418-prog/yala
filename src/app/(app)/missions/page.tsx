@@ -61,7 +61,7 @@ const ACHIEVEMENTS: Achievement[] = [
 ];
 
 const RARITY: Record<Rarity, { color: string; label: string }> = {
-  Common:    { color: '#8FA899', label: 'Common' },
+  Common:    { color: '#8FA3B8', label: 'Common' },
   Uncommon:  { color: '#2DC97A', label: 'Uncommon' },
   Rare:      { color: '#60A5FA', label: 'Rare' },
   Epic:      { color: '#A78BFA', label: 'Epic' },
@@ -105,7 +105,7 @@ export default function MissionsPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Quests & Achievements</h1>
-        <p style={{ color: '#8FA899' }}>Complete missions for bonus GC and SC. Unlock achievements as you play.</p>
+        <p style={{ color: '#8FA3B8' }}>Complete missions for bonus GC and SC. Unlock achievements as you play.</p>
       </div>
 
       {/* ── STAT STRIP (3 cells) ── */}
@@ -134,7 +134,7 @@ export default function MissionsPage() {
       </div>
 
       {/* ── TAB SWITCHER ── */}
-      <div className="flex gap-1 p-1 rounded-xl w-fit" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+      <div className="flex gap-1 p-1 rounded-xl w-fit" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
         {[
           { id: 'daily'        as const, label: 'Daily',        hint: `${dailyDone}/${DAILY_MISSIONS.length}` },
           { id: 'weekly'       as const, label: 'Weekly',       hint: `${weeklyDone}/${WEEKLY_MISSIONS.length}` },
@@ -146,13 +146,13 @@ export default function MissionsPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
             style={activeTab === t.id
               ? { background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.28)' }
-              : { color: '#8FA899', border: '1px solid transparent' }
+              : { color: '#8FA3B8', border: '1px solid transparent' }
             }
           >
             {t.label}
             <span
               className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded"
-              style={{ background: 'rgba(255,255,255,0.06)', color: activeTab === t.id ? '#F0B232' : '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.06)', color: activeTab === t.id ? '#F0B232' : '#8FA3B8' }}
             >
               {t.hint}
             </span>
@@ -169,10 +169,10 @@ export default function MissionsPage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs" style={{ color: '#8FA899' }}>
+              <p className="text-xs" style={{ color: '#8FA3B8' }}>
                 <span className="font-bold" style={{ color: '#F5E8C8' }}>{dailyDone}</span> of {DAILY_MISSIONS.length} complete
               </p>
-              <p className="text-xs font-mono" style={{ color: '#8FA899' }}>
+              <p className="text-xs font-mono" style={{ color: '#8FA3B8' }}>
                 Resets in <span className="font-bold" style={{ color: '#F5E8C8' }}>14h 22m</span>
               </p>
             </div>
@@ -197,10 +197,10 @@ export default function MissionsPage() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs" style={{ color: '#8FA899' }}>
+              <p className="text-xs" style={{ color: '#8FA3B8' }}>
                 <span className="font-bold" style={{ color: '#F5E8C8' }}>{weeklyDone}</span> of {WEEKLY_MISSIONS.length} complete
               </p>
-              <p className="text-xs font-mono" style={{ color: '#8FA899' }}>
+              <p className="text-xs font-mono" style={{ color: '#8FA3B8' }}>
                 Resets in <span className="font-bold" style={{ color: '#F5E8C8' }}>3d 14h</span>
               </p>
             </div>
@@ -241,8 +241,8 @@ export default function MissionsPage() {
         )}
       </AnimatePresence>
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.5)' }}>
           18+ · No Purchase Necessary · Void Where Prohibited · <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80">Sweepstakes Rules</Link>
         </p>
       </div>
@@ -257,16 +257,16 @@ function StatCell({ label, value, sub, accent, icon }: {
   return (
     <div
       className="rounded-2xl p-4"
-      style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+      style={{ background: '#0F1828', border: '1px solid #1A2238' }}
     >
       <div className="flex items-center gap-2 mb-1.5">
         {icon}
-        <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>
+        <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>
           {label}
         </span>
       </div>
       <p className="font-display text-2xl font-black number-display leading-none" style={{ color: accent }}>{value}</p>
-      <p className="text-[10px] mt-1" style={{ color: '#4A6A55' }}>{sub}</p>
+      <p className="text-[10px] mt-1" style={{ color: '#4A5878' }}>{sub}</p>
     </div>
   );
 }
@@ -291,8 +291,8 @@ function MissionRow({ mission, claimed, delay, onClaim }: {
       style={{
         background: canClaim
           ? 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(240,178,50,0.02))'
-          : '#0F1A14',
-        border: `1px solid ${canClaim ? 'rgba(240,178,50,0.32)' : '#1A2E22'}`,
+          : '#0F1828',
+        border: `1px solid ${canClaim ? 'rgba(240,178,50,0.32)' : '#1A2238'}`,
       }}
     >
       <div
@@ -326,9 +326,9 @@ function MissionRow({ mission, claimed, delay, onClaim }: {
             )}
           </div>
         </div>
-        <p className="text-xs mb-2" style={{ color: '#8FA899' }}>{mission.desc}</p>
+        <p className="text-xs mb-2" style={{ color: '#8FA3B8' }}>{mission.desc}</p>
         <div className="flex items-center gap-3">
-          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${isComplete ? 100 : progress}%` }}
@@ -341,7 +341,7 @@ function MissionRow({ mission, claimed, delay, onClaim }: {
               }}
             />
           </div>
-          <span className="text-[10px] font-mono font-bold flex-shrink-0" style={{ color: '#8FA899' }}>
+          <span className="text-[10px] font-mono font-bold flex-shrink-0" style={{ color: '#8FA3B8' }}>
             {isComplete ? 'Done' : `${mission.progress}/${mission.total}`}
           </span>
         </div>
@@ -353,7 +353,7 @@ function MissionRow({ mission, claimed, delay, onClaim }: {
           className="px-3.5 py-2 rounded-xl text-xs font-black transition-all hover:brightness-110 active:scale-95 flex-shrink-0"
           style={{
             background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-            color: '#060E0A',
+            color: '#040814',
             boxShadow: '0 2px 12px rgba(240,178,50,0.3)',
           }}
         >
@@ -382,8 +382,8 @@ function AchievementCard({ achievement, delay }: { achievement: Achievement; del
       style={{
         background: earned
           ? `linear-gradient(135deg, ${r.color}10, transparent)`
-          : '#0F1A14',
-        border: `1px solid ${earned ? `${r.color}44` : '#1A2E22'}`,
+          : '#0F1828',
+        border: `1px solid ${earned ? `${r.color}44` : '#1A2238'}`,
         opacity: earned ? 1 : 0.85,
       }}
     >
@@ -398,7 +398,7 @@ function AchievementCard({ achievement, delay }: { achievement: Achievement; del
         className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative"
         style={{
           background: earned ? `${r.color}14` : 'rgba(255,255,255,0.03)',
-          border: `1px solid ${earned ? `${r.color}40` : '#1A2E22'}`,
+          border: `1px solid ${earned ? `${r.color}40` : '#1A2238'}`,
           opacity: earned ? 1 : 0.5,
           filter: earned ? 'none' : 'grayscale(80%)',
         }}
@@ -407,18 +407,18 @@ function AchievementCard({ achievement, delay }: { achievement: Achievement; del
         {!earned && (
           <div
             className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238' }}
           >
-            <LockIcon className="w-2.5 h-2.5" style={{ color: '#8FA899' }} strokeWidth={3} />
+            <LockIcon className="w-2.5 h-2.5" style={{ color: '#8FA3B8' }} strokeWidth={3} />
           </div>
         )}
       </div>
 
       <div className="flex-1 min-w-0 relative">
-        <p className="font-bold text-sm" style={{ color: earned ? '#F5E8C8' : '#8FA899' }}>
+        <p className="font-bold text-sm" style={{ color: earned ? '#F5E8C8' : '#8FA3B8' }}>
           {achievement.title}
         </p>
-        <p className="text-[11px] mt-0.5 leading-snug" style={{ color: earned ? '#8FA899' : '#4A6A55' }}>
+        <p className="text-[11px] mt-0.5 leading-snug" style={{ color: earned ? '#8FA3B8' : '#4A5878' }}>
           {achievement.desc}
         </p>
         <div className="flex items-center gap-2 mt-2">

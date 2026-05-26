@@ -48,8 +48,8 @@ export default function LeaderboardsPage() {
       {/* Header */}
       <div className="relative rounded-2xl overflow-hidden p-6 sm:p-10 border"
         style={{
-          borderColor: '#1A2E22',
-          background: `radial-gradient(ellipse at 30% 50%, rgba(${accentRgb},0.12) 0%, transparent 60%), #0A1410`,
+          borderColor: '#1A2238',
+          background: `radial-gradient(ellipse at 30% 50%, rgba(${accentRgb},0.12) 0%, transparent 60%), #08121C`,
         }}>
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-3">
@@ -57,7 +57,7 @@ export default function LeaderboardsPage() {
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: accent }}>Leaderboards</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>Desert Champions</h1>
-          <p className="text-sm max-w-lg" style={{ color: '#8FA899' }}>
+          <p className="text-sm max-w-lg" style={{ color: '#8FA3B8' }}>
             Top wagerers compete for daily, weekly, and monthly prize pools.
           </p>
         </div>
@@ -66,13 +66,13 @@ export default function LeaderboardsPage() {
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Mode toggle — uses YalaIcons now (gold coin / cash bill), no Unicode glyphs */}
-        <div className="flex gap-2 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
+        <div className="flex gap-2 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
           <button
             onClick={() => setMode('GC')}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
             style={mode === 'GC'
-              ? { background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }
-              : { color: '#8FA899' }}
+              ? { background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }
+              : { color: '#8FA3B8' }}
           >
             <GoldCoinIcon size={16} />
             Gold Coins
@@ -81,8 +81,8 @@ export default function LeaderboardsPage() {
             onClick={() => setMode('SC')}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
             style={mode === 'SC'
-              ? { background: 'linear-gradient(135deg, #2DC97A, #5EDDA0)', color: '#060E0A' }
-              : { color: '#8FA899' }}
+              ? { background: 'linear-gradient(135deg, #2DC97A, #5EDDA0)', color: '#040814' }
+              : { color: '#8FA3B8' }}
           >
             <SweepCoinIcon size={18} />
             Sweep Coins
@@ -90,14 +90,14 @@ export default function LeaderboardsPage() {
         </div>
 
         {/* Period */}
-        <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
+        <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
           {(['daily', 'weekly', 'monthly', 'alltime'] as const).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
               className={cn(
                 'flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-bold capitalize transition-all',
-                period === p ? 'text-black' : 'text-[#8FA899]'
+                period === p ? 'text-black' : 'text-[#8FA3B8]'
               )}
               style={period === p ? { background: accent } : {}}
             >
@@ -142,11 +142,11 @@ export default function LeaderboardsPage() {
             </div>
           </div>
           <div className="relative text-right">
-            <p className="text-xs" style={{ color: '#8FA899' }}>Ends in</p>
+            <p className="text-xs" style={{ color: '#8FA3B8' }}>Ends in</p>
             <p className="font-bold text-lg number-display" style={{ color: '#F5E8C8' }}>{dailyCountdown}</p>
             <div className="flex items-center gap-1 justify-end mt-1">
-              <Users className="w-3 h-3" style={{ color: '#4A6A55' }} />
-              <span className="text-[10px]" style={{ color: '#4A6A55' }}>2,847 racing</span>
+              <Users className="w-3 h-3" style={{ color: '#4A5878' }} />
+              <span className="text-[10px]" style={{ color: '#4A5878' }}>2,847 racing</span>
             </div>
           </div>
         </div>
@@ -155,13 +155,13 @@ export default function LeaderboardsPage() {
         <div className="flex items-center justify-between px-5 py-4 rounded-2xl border"
           style={{ background: `rgba(${accentRgb},0.06)`, borderColor: `rgba(${accentRgb},0.22)` }}>
           <div>
-            <p className="text-xs uppercase tracking-wide mb-1" style={{ color: '#8FA899' }}>Weekly Prize Pool</p>
+            <p className="text-xs uppercase tracking-wide mb-1" style={{ color: '#8FA3B8' }}>Weekly Prize Pool</p>
             <p className="font-display text-3xl font-bold number-display" style={{ color: accent }}>
               {mode === 'SC' ? '1,000 SC' : '100,000 GC'}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs" style={{ color: '#8FA899' }}>Resets in</p>
+            <p className="text-xs" style={{ color: '#8FA3B8' }}>Resets in</p>
             <p className="font-bold text-lg number-display" style={{ color: '#F5E8C8' }}>3d 14h 22m</p>
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function LeaderboardsPage() {
 
       {/* Leaderboard table */}
       <div className="glass-card overflow-hidden">
-        <div className="px-4 py-3 border-b flex items-center justify-between" style={{ borderColor: '#1A2E22' }}>
+        <div className="px-4 py-3 border-b flex items-center justify-between" style={{ borderColor: '#1A2238' }}>
           <div className="flex items-center gap-2">
             {mode === 'GC' ? <GoldCoinIcon size={14} /> : <SweepCoinIcon size={16} />}
             <p className="text-xs font-bold uppercase tracking-wide" style={{ color: '#F5E8C8' }}>
@@ -179,7 +179,7 @@ export default function LeaderboardsPage() {
           <TrendingUp className="w-4 h-4" style={{ color: accent }} />
         </div>
 
-        <div className="divide-y" style={{ borderColor: '#1A2E22' }}>
+        <div className="divide-y" style={{ borderColor: '#1A2238' }}>
           {leaderboard.map((entry, i) => (
             <motion.div
               key={entry.rank}
@@ -188,7 +188,7 @@ export default function LeaderboardsPage() {
               transition={{ delay: i * 0.04 }}
               className="flex items-center gap-4 px-4 py-3.5 border-b last:border-b-0"
               style={{
-                borderColor: '#1A2E22',
+                borderColor: '#1A2238',
                 ...(entry.isYou ? { background: `rgba(${accentRgb},0.06)`, borderLeft: `2px solid ${accent}` } : {}),
               }}
             >
@@ -201,7 +201,7 @@ export default function LeaderboardsPage() {
                 ) : entry.rank === 3 ? (
                   <span className="text-sm font-bold tabular-nums" style={{ color: '#CD7F32' }}>3</span>
                 ) : (
-                  <span className="text-sm font-bold" style={{ color: '#8FA899' }}>#{entry.rank}</span>
+                  <span className="text-sm font-bold" style={{ color: '#8FA3B8' }}>#{entry.rank}</span>
                 )}
               </div>
 
@@ -225,7 +225,7 @@ export default function LeaderboardsPage() {
                       >You</span>
                     )}
                   </p>
-                  <span className="text-[10px] hidden sm:inline" style={{ color: '#8FA899' }}>{entry.country}</span>
+                  <span className="text-[10px] hidden sm:inline" style={{ color: '#8FA3B8' }}>{entry.country}</span>
                 </div>
               </div>
 
@@ -236,7 +236,7 @@ export default function LeaderboardsPage() {
                   <p className="text-sm font-bold number-display" style={{ color: accent }}>
                     {mode === 'GC' ? formatGC(entry.amount) : formatSC(entry.amount)}
                   </p>
-                  <p className="text-[10px] text-right" style={{ color: '#8FA899' }}>wagered</p>
+                  <p className="text-[10px] text-right" style={{ color: '#8FA3B8' }}>wagered</p>
                 </div>
               </div>
 
@@ -249,7 +249,7 @@ export default function LeaderboardsPage() {
                       : (entry.rank === 1 ? '30K'  : entry.rank === 2 ? '20K' : entry.rank === 3 ? '15K' : entry.rank === 4 ? '10K' : '5K')
                     } GC
                   </p>
-                  <p className="text-[10px]" style={{ color: '#8FA899' }}>prize</p>
+                  <p className="text-[10px]" style={{ color: '#8FA3B8' }}>prize</p>
                 </div>
               )}
             </motion.div>
@@ -257,8 +257,8 @@ export default function LeaderboardsPage() {
         </div>
       </div>
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>18+ · No Purchase Necessary · Void Where Prohibited</p>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.5)' }}>18+ · No Purchase Necessary · Void Where Prohibited</p>
       </div>
     </div>
   );

@@ -58,8 +58,8 @@ export function SectionSwitcher({ compact }: { compact?: boolean }) {
         compact && 'p-0.5',
       )}
       style={{
-        background: '#07110A',
-        border: '1px solid #1A2E22',
+        background: '#06101C',
+        border: '1px solid #1A2238',
         boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)',
       }}
     >
@@ -82,7 +82,7 @@ export function SectionSwitcher({ compact }: { compact?: boolean }) {
                     border: `1px solid ${s.hue}44`,
                     boxShadow: `0 0 14px ${s.hue}22`,
                   }
-                : { color: '#8FA899', border: '1px solid transparent' }
+                : { color: '#8FA3B8', border: '1px solid transparent' }
             }
             aria-current={active ? 'page' : undefined}
           >

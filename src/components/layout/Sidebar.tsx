@@ -155,7 +155,7 @@ export function Sidebar() {
       collapsed ? 'justify-center px-2 py-2.5' : 'gap-3 px-3 py-2',
       isActive
         ? 'nav-item-active font-semibold'
-        : 'text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5'
+        : 'text-[#8FA3B8] hover:text-[#F5E8C8] hover:bg-white/5'
     );
 
   const isOriginalsActive = pathname === '/originals' || pathname.startsWith('/originals/');
@@ -163,16 +163,16 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        'h-screen flex flex-col border-r border-[#1A2E22] overflow-y-auto no-scrollbar transition-[width] duration-200 ease-out',
+        'h-screen flex flex-col border-r border-[#1A2238] overflow-y-auto no-scrollbar transition-[width] duration-200 ease-out',
         collapsed ? 'w-[68px]' : 'w-56'
       )}
-      style={{ backgroundColor: '#0C1812' }}
+      style={{ backgroundColor: '#0A101C' }}
     >
       {/* ── Logo: pyramid + gradient wordmark ── */}
       <Link
         href="/"
         className={cn(
-          'flex items-center border-b border-[#1A2E22] flex-shrink-0 group',
+          'flex items-center border-b border-[#1A2238] flex-shrink-0 group',
           collapsed ? 'justify-center px-2 py-4' : 'gap-3 px-4 py-5'
         )}
       >
@@ -182,7 +182,7 @@ export function Sidebar() {
             <YalaWordmark width={82} height={30} />
             <span
               className="text-[8px] tracking-[0.22em] uppercase font-bold font-mono mt-1.5 text-center"
-              style={{ color: '#8FA899' }}
+              style={{ color: '#8FA3B8' }}
             >
               Social Casino
             </span>
@@ -192,7 +192,7 @@ export function Sidebar() {
 
       {/* Auth buttons — logged out */}
       {!isLoggedIn && (
-        <div className="px-3 py-3 border-b border-[#1A2E22] space-y-2 flex-shrink-0">
+        <div className="px-3 py-3 border-b border-[#1A2238] space-y-2 flex-shrink-0">
           <button
             onClick={() => openAuthModal('register')}
             className="w-full py-2.5 px-4 rounded-xl text-sm font-black text-black transition-all hover:brightness-110 active:scale-95"
@@ -212,7 +212,7 @@ export function Sidebar() {
 
       {/* Buy Coins CTA — logged in */}
       {isLoggedIn && (
-        <div className={cn('border-b border-[#1A2E22] flex-shrink-0', collapsed ? 'px-2 py-3' : 'px-3 py-3')}>
+        <div className={cn('border-b border-[#1A2238] flex-shrink-0', collapsed ? 'px-2 py-3' : 'px-3 py-3')}>
           <button
             onClick={openBuyCoins}
             aria-label="Buy coins"
@@ -222,7 +222,7 @@ export function Sidebar() {
             )}
             style={{
               background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: '0 2px 14px rgba(16,185,129,0.3)',
             }}
           >
@@ -238,7 +238,7 @@ export function Sidebar() {
         {/* ── PLAY section ── */}
         <div>
           {!collapsed && (
-            <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
+            <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A5878' }}>
               PLAY
             </p>
           )}
@@ -286,7 +286,7 @@ export function Sidebar() {
                   </span>
                   <ChevronDown
                     className={cn('w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200', originalsOpen && 'rotate-180')}
-                    style={{ color: '#4A6A55' }}
+                    style={{ color: '#4A5878' }}
                   />
                 </>
               )}
@@ -302,7 +302,7 @@ export function Sidebar() {
                   transition={{ duration: 0.2, ease: 'easeInOut' }}
                   className="overflow-hidden"
                 >
-                  <div className="ml-4 pl-2.5 py-1 space-y-0.5 border-l" style={{ borderColor: '#1A2E22' }}>
+                  <div className="ml-4 pl-2.5 py-1 space-y-0.5 border-l" style={{ borderColor: '#1A2238' }}>
                     {ORIGINALS_GAMES.map((game) => {
                       const active = pathname === game.href;
                       return (
@@ -315,7 +315,7 @@ export function Sidebar() {
                               ? 'font-semibold nav-item-active'
                               : 'hover:text-[#F5E8C8] hover:bg-white/5'
                           )}
-                          style={{ color: active ? undefined : '#8FA899' }}
+                          style={{ color: active ? undefined : '#8FA3B8' }}
                         >
                           <span>{game.label}</span>
                           {game.isNew && (
@@ -340,7 +340,7 @@ export function Sidebar() {
         {NAV_SECTIONS.map((section) => (
           <div key={section.label}>
             {!collapsed && (
-              <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A6A55' }}>
+              <p className="text-[9px] font-bold tracking-widest uppercase px-2 mb-1" style={{ color: '#4A5878' }}>
                 {section.label}
               </p>
             )}
@@ -396,7 +396,7 @@ export function Sidebar() {
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className={cn(
-            'w-full flex items-center rounded-lg text-xs font-semibold transition-all hover:bg-white/5 text-[#8FA899] hover:text-[#F5E8C8]',
+            'w-full flex items-center rounded-lg text-xs font-semibold transition-all hover:bg-white/5 text-[#8FA3B8] hover:text-[#F5E8C8]',
             collapsed ? 'justify-center py-2' : 'gap-2 px-2 py-2'
           )}
         >
@@ -411,8 +411,8 @@ export function Sidebar() {
       {!collapsed && (
         <div className="px-3 pb-4 flex-shrink-0">
           <div className="text-center">
-            <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>18+ · Free to Play · No Real Money</p>
-            <p className="text-[9px] leading-tight" style={{ color: '#4A6A55' }}>Void Where Prohibited</p>
+            <p className="text-[9px] leading-tight" style={{ color: '#4A5878' }}>18+ · Free to Play · No Real Money</p>
+            <p className="text-[9px] leading-tight" style={{ color: '#4A5878' }}>Void Where Prohibited</p>
           </div>
         </div>
       )}

@@ -35,7 +35,7 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <MotionConfig reducedMotion={reduceMotion ? 'always' : 'never'}>
-    <div data-currency={activeCurrency} className="flex h-screen overflow-hidden" style={{ backgroundColor: '#060E0A' }}>
+    <div data-currency={activeCurrency} className="flex h-screen overflow-hidden" style={{ backgroundColor: '#040814' }}>
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex flex-shrink-0">
         <Sidebar />
@@ -51,7 +51,7 @@ export function AppShell({ children }: AppShellProps) {
         {/* Mobile section switcher — sits just below the header on small screens */}
         <div
           className="lg:hidden flex items-center px-3 py-2 flex-shrink-0 overflow-x-auto no-scrollbar"
-          style={{ background: '#0A1410', borderBottom: '1px solid #1A2E22' }}
+          style={{ background: '#08121C', borderBottom: '1px solid #1A2238' }}
         >
           <SectionSwitcher compact />
         </div>
@@ -98,8 +98,8 @@ export function AppShell({ children }: AppShellProps) {
         theme="dark"
         toastOptions={{
           style: {
-            background: '#0C1812',
-            border: '1px solid #1A2E22',
+            background: '#0A101C',
+            border: '1px solid #1A2238',
             color: '#F5E8C8',
             fontFamily: 'Manrope, system-ui, sans-serif',
           },

@@ -142,7 +142,7 @@ export default function RewardsPage() {
           <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#F0B232' }}>Rewards</span>
         </div>
         <h1 className="font-display text-3xl font-black tracking-tight" style={{ color: '#F5E8C8' }}>Rewards Hub</h1>
-        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>
+        <p className="text-sm mt-1" style={{ color: '#8FA3B8' }}>
           Your bonuses, all in one place.{' '}
           <button type="button" onClick={openPromotionsDrawer} className="underline" style={{ color: '#F0B232' }}>
             Special offers &amp; missions →
@@ -155,7 +155,7 @@ export default function RewardsPage() {
         <div
           className="rounded-2xl p-4 flex items-center gap-4"
           style={{
-            background: `radial-gradient(ellipse at 0% 50%, ${tierColor}10, transparent 60%), #0F1A14`,
+            background: `radial-gradient(ellipse at 0% 50%, ${tierColor}10, transparent 60%), #0F1828`,
             border: `1px solid ${tierColor}33`,
           }}
         >
@@ -168,11 +168,11 @@ export default function RewardsPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <p className="font-display font-bold text-sm" style={{ color: tierColor }}>{getVIPName(user?.vipTier || 1)}</p>
-              <span className="text-[10px] font-mono" style={{ color: '#8FA899' }}>{formatXP(xp)} XP</span>
+              <span className="text-[10px] font-mono" style={{ color: '#8FA3B8' }}>{formatXP(xp)} XP</span>
             </div>
             {nextTier ? (
               <>
-                <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+                <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
@@ -181,7 +181,7 @@ export default function RewardsPage() {
                     style={{ background: `linear-gradient(90deg, ${tierColor}, ${getVIPColor(nextTier.tier)})` }}
                   />
                 </div>
-                <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>
+                <p className="text-[10px] mt-1" style={{ color: '#8FA3B8' }}>
                   {(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}
                 </p>
               </>
@@ -192,7 +192,7 @@ export default function RewardsPage() {
           <Link
             href="/vip"
             className="hidden sm:flex items-center gap-1 text-xs font-bold flex-shrink-0 px-3 py-1.5 rounded-lg transition-colors hover:bg-white/5"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
           >
             VIP Club <ChevronRight className="w-3 h-3" />
           </Link>
@@ -200,14 +200,14 @@ export default function RewardsPage() {
       ) : (
         <div
           className="rounded-2xl p-5 text-center"
-          style={{ background: '#0F1A14', border: '1px solid rgba(240,178,50,0.20)' }}
+          style={{ background: '#0F1828', border: '1px solid rgba(240,178,50,0.20)' }}
         >
           <p className="font-bold mb-1" style={{ color: '#F5E8C8' }}>Sign in to claim your rewards</p>
-          <p className="text-xs mb-3" style={{ color: '#8FA899' }}>Earn XP, climb tiers, unlock bonuses.</p>
+          <p className="text-xs mb-3" style={{ color: '#8FA3B8' }}>Earn XP, climb tiers, unlock bonuses.</p>
           <button
             onClick={() => openAuthModal('register')}
             className="px-5 py-2 rounded-xl text-xs font-bold transition-all hover:brightness-110"
-            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814' }}
           >
             Create free account
           </button>
@@ -221,12 +221,12 @@ export default function RewardsPage() {
             <div className="w-1 h-6 rounded-full" style={{ background: '#F0B232' }} />
             <div>
               <h2 className="font-display text-lg font-black tracking-tight leading-none" style={{ color: '#F5E8C8' }}>Daily streak</h2>
-              <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>Show up every day · resets at 00:00 UTC</p>
+              <p className="text-[10px] mt-1" style={{ color: '#8FA3B8' }}>Show up every day · resets at 00:00 UTC</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ background: 'rgba(240,178,50,0.10)', border: '1px solid rgba(240,178,50,0.28)' }}>
             <Clock className="w-3 h-3" style={{ color: '#F0B232' }} />
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>resets in</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>resets in</span>
             <span className="text-[11px] font-mono font-black" style={{ color: '#F0B232' }}>{dailyCountdown}</span>
           </div>
         </div>
@@ -250,7 +250,7 @@ export default function RewardsPage() {
                   border: `1px solid ${
                     state === 'done'  ? 'rgba(45,201,122,0.30)' :
                     state === 'today' ? 'rgba(240,178,50,0.50)' :
-                                        '#1A2E22'
+                                        '#1A2238'
                   }`,
                   boxShadow: state === 'today' ? '0 0 14px rgba(240,178,50,0.25)' : 'none',
                 }}
@@ -261,7 +261,7 @@ export default function RewardsPage() {
                     color:
                       state === 'done'  ? '#2DC97A' :
                       state === 'today' ? '#F0B232' :
-                                          '#4A6A55',
+                                          '#4A5878',
                   }}
                 >
                   Day {d.day}
@@ -279,13 +279,13 @@ export default function RewardsPage() {
                     color:
                       state === 'done'  ? '#2DC97A' :
                       state === 'today' ? '#F5E8C8' :
-                                          '#4A6A55',
+                                          '#4A5878',
                   }}
                 >
                   {(d.gc / 1000).toFixed(d.gc < 1000 ? 1 : 0)}K
                 </p>
                 {d.sc > 0 && (
-                  <p className="text-[9px] font-mono font-bold mt-0.5" style={{ color: state === 'today' ? '#2DC97A' : '#4A6A55' }}>
+                  <p className="text-[9px] font-mono font-bold mt-0.5" style={{ color: state === 'today' ? '#2DC97A' : '#4A5878' }}>
                     +{d.sc} SC
                   </p>
                 )}
@@ -301,7 +301,7 @@ export default function RewardsPage() {
             className="w-full mt-3 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: '0 4px 16px rgba(240,178,50,0.35)',
             }}
           >
@@ -373,7 +373,7 @@ export default function RewardsPage() {
           <div className="w-1 h-6 rounded-full" style={{ background: '#2DC97A' }} />
           <div>
             <h2 className="font-display text-lg font-black tracking-tight leading-none" style={{ color: '#F5E8C8' }}>Your bonuses</h2>
-            <p className="text-[10px] mt-1" style={{ color: '#8FA899' }}>Rates scale with your VIP tier · auto-credited when ready</p>
+            <p className="text-[10px] mt-1" style={{ color: '#8FA3B8' }}>Rates scale with your VIP tier · auto-credited when ready</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -421,7 +421,7 @@ export default function RewardsPage() {
         type="button"
         onClick={openPromotionsDrawer}
         className="w-full flex items-center justify-between gap-3 rounded-2xl p-4 transition-colors hover:bg-white/[0.025] text-left"
-        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+        style={{ background: '#0F1828', border: '1px solid #1A2238' }}
       >
         <div className="flex items-center gap-3">
           <div
@@ -432,14 +432,14 @@ export default function RewardsPage() {
           </div>
           <div>
             <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Special offers &amp; missions</p>
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>Welcome pack, tournaments, referrals, daily missions.</p>
+            <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Welcome pack, tournaments, referrals, daily missions.</p>
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />
+        <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA3B8' }} />
       </button>
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-[11px]" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-[11px]" style={{ color: 'rgba(143,163,184,0.5)' }}>
           No Purchase Necessary · 18+ · Gold Coins have no cash value · Void Where Prohibited
         </p>
       </div>
@@ -467,25 +467,25 @@ function BigBonusCard({
     <div
       className="rounded-2xl p-4 flex flex-col gap-3 transition-all"
       style={{
-        background: '#0F1A14',
-        border: `1px solid ${ready ? `${accent}55` : '#1A2E22'}`,
+        background: '#0F1828',
+        border: `1px solid ${ready ? `${accent}55` : '#1A2238'}`,
         boxShadow: ready ? `0 0 20px ${accent}1A` : 'none',
       }}
     >
       <div>
         <p className="font-display font-black text-base leading-tight" style={{ color: '#F5E8C8' }}>{title}</p>
-        <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>{subtitle}</p>
+        <p className="text-[10px] mt-0.5" style={{ color: '#8FA3B8' }}>{subtitle}</p>
       </div>
 
-      <div className="flex items-center justify-between text-[11px]" style={{ borderTop: '1px solid #1A2E22', paddingTop: 10 }}>
-        <span style={{ color: '#8FA899' }}>{rateLabel}</span>
+      <div className="flex items-center justify-between text-[11px]" style={{ borderTop: '1px solid #1A2238', paddingTop: 10 }}>
+        <span style={{ color: '#8FA3B8' }}>{rateLabel}</span>
         <span className="font-mono font-black" style={{ color: accent }}>{rate}</span>
       </div>
 
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Ready</p>
-          <p className="font-mono font-black text-lg leading-tight mt-0.5" style={{ color: ready ? accent : '#4A6A55' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Ready</p>
+          <p className="font-mono font-black text-lg leading-tight mt-0.5" style={{ color: ready ? accent : '#4A5878' }}>
             {ready ? readyAmount : '0.00'}
           </p>
         </div>
@@ -496,7 +496,7 @@ function BigBonusCard({
             className="flex-shrink-0 px-3 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: `0 4px 14px ${accent}40`,
             }}
           >
@@ -505,7 +505,7 @@ function BigBonusCard({
         ) : (
           <div
             className="flex-shrink-0 flex items-center gap-1 px-2.5 py-2 rounded-lg text-[10px] font-mono font-bold"
-            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
           >
             <Clock className="w-3 h-3" />
             {isLoggedIn ? countdown : '—'}
@@ -528,7 +528,7 @@ function ClaimRow({
   return (
     <div
       className="rounded-xl p-3 flex items-center gap-3"
-      style={{ background: '#0F1A14', border: `1px solid ${accent}30` }}
+      style={{ background: '#0F1828', border: `1px solid ${accent}30` }}
     >
       <div
         className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -546,7 +546,7 @@ function ClaimRow({
         className="px-3 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-[0.98]"
         style={{
           background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-          color: '#060E0A',
+          color: '#040814',
           boxShadow: `0 3px 12px ${accent}40`,
         }}
       >

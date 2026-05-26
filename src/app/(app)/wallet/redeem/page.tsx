@@ -40,7 +40,7 @@ export default function RedeemPage() {
       <Link
         href="/wallet"
         className="inline-flex items-center gap-1 text-xs font-semibold transition-colors hover:text-[#F0B232]"
-        style={{ color: '#8FA899' }}
+        style={{ color: '#8FA3B8' }}
       >
         <ChevronLeft className="w-3 h-3" /> Back to wallet
       </Link>
@@ -57,7 +57,7 @@ export default function RedeemPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold" style={{ color: '#F5E8C8' }}>Redeem Sweep Coins</h1>
-        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>
+        <p className="text-sm mt-1" style={{ color: '#8FA3B8' }}>
           1 SC = $1.00 USD. Cashouts go through identity verification before payout.
         </p>
       </div>
@@ -66,16 +66,16 @@ export default function RedeemPage() {
       <div
         className="rounded-2xl p-5 flex items-center justify-between"
         style={{
-          background: 'radial-gradient(ellipse at 10% 80%, rgba(45,201,122,0.14) 0%, transparent 55%), #0F1A14',
+          background: 'radial-gradient(ellipse at 10% 80%, rgba(45,201,122,0.14) 0%, transparent 55%), #0F1828',
           border: '1px solid rgba(45,201,122,0.22)',
         }}
       >
         <div>
-          <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>Available SC Balance</p>
+          <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>Available SC Balance</p>
           <p className="font-display text-3xl font-black number-display mt-1" style={{ color: '#2DC97A' }}>
-            {formatSC(sweepCoins)} <span className="text-base" style={{ color: '#8FA899' }}>SC</span>
+            {formatSC(sweepCoins)} <span className="text-base" style={{ color: '#8FA3B8' }}>SC</span>
           </p>
-          <p className="text-xs mt-1 number-display" style={{ color: '#8FA899' }}>
+          <p className="text-xs mt-1 number-display" style={{ color: '#8FA3B8' }}>
             ≈ <span style={{ color: '#F5E8C8' }}>${sweepCoins.toFixed(2)}</span> USD if redeemed today
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function RedeemPage() {
         style={{ background: 'rgba(45,201,122,0.05)', border: '1px solid rgba(45,201,122,0.18)' }}
       >
         <AlertCircle className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-        <p className="text-xs leading-relaxed" style={{ color: '#8FA899' }}>
+        <p className="text-xs leading-relaxed" style={{ color: '#8FA3B8' }}>
           <span className="font-bold" style={{ color: '#2DC97A' }}>No purchase necessary.</span>{' '}
           Sweep Coins can be earned for free through daily bonuses, missions, login streaks, and our AMOE.{' '}
           <Link href="/sweepstakes-rules" className="font-semibold underline transition-colors hover:opacity-80" style={{ color: '#2DC97A' }}>See Sweepstakes Rules</Link>.
@@ -108,9 +108,9 @@ export default function RedeemPage() {
             {/* Methods */}
             <div
               className="rounded-2xl p-5"
-              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+              style={{ background: '#0F1828', border: '1px solid #1A2238' }}
             >
-              <p className="text-[10px] uppercase tracking-widest font-bold mb-3" style={{ color: '#8FA899' }}>
+              <p className="text-[10px] uppercase tracking-widest font-bold mb-3" style={{ color: '#8FA3B8' }}>
                 Payout method
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -121,7 +121,7 @@ export default function RedeemPage() {
                     className="text-left p-4 rounded-xl transition-all relative"
                     style={{
                       background: methodId === m.id ? `${m.accent}10` : 'rgba(255,255,255,0.02)',
-                      border: `1px solid ${methodId === m.id ? `${m.accent}55` : '#1A2E22'}`,
+                      border: `1px solid ${methodId === m.id ? `${m.accent}55` : '#1A2238'}`,
                     }}
                   >
                     {methodId === m.id && (
@@ -134,7 +134,7 @@ export default function RedeemPage() {
                       {m.hint}
                     </p>
                     <p className="font-bold text-sm mb-1" style={{ color: '#F5E8C8' }}>{m.label}</p>
-                    <p className="text-[11px]" style={{ color: '#8FA899' }}>
+                    <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
                       Min {m.min} SC · {m.time}
                     </p>
                   </button>
@@ -145,10 +145,10 @@ export default function RedeemPage() {
             {/* Amount + presets */}
             <div
               className="rounded-2xl p-5 space-y-3"
-              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+              style={{ background: '#0F1828', border: '1px solid #1A2238' }}
             >
               <div className="flex items-center justify-between mb-1">
-                <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>
+                <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>
                   Amount
                 </p>
                 <button
@@ -171,16 +171,16 @@ export default function RedeemPage() {
                   className="w-full pl-12 pr-20 py-4 rounded-xl font-display text-2xl font-bold number-display transition-colors focus:outline-none"
                   style={{
                     background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid #1A2E22',
+                    border: '1px solid #1A2238',
                     color: '#F5E8C8',
                   }}
                   onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(45,201,122,0.5)')}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
                 />
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2">
                   <SweepCoinIcon size={28} />
                 </div>
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold" style={{ color: '#8FA899' }}>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold" style={{ color: '#8FA3B8' }}>
                   SC
                 </span>
               </div>
@@ -193,8 +193,8 @@ export default function RedeemPage() {
                       className="px-3 py-1.5 rounded-full text-xs font-bold transition-all hover:bg-white/5"
                       style={{
                         background: amountNum === v ? 'rgba(45,201,122,0.15)' : 'rgba(255,255,255,0.04)',
-                        border: `1px solid ${amountNum === v ? 'rgba(45,201,122,0.4)' : '#1A2E22'}`,
-                        color: amountNum === v ? '#2DC97A' : '#8FA899',
+                        border: `1px solid ${amountNum === v ? 'rgba(45,201,122,0.4)' : '#1A2238'}`,
+                        color: amountNum === v ? '#2DC97A' : '#8FA3B8',
                       }}
                     >
                       {v} SC
@@ -207,7 +207,7 @@ export default function RedeemPage() {
                   className="flex items-center justify-between rounded-xl px-3.5 py-2.5"
                   style={{ background: 'rgba(45,201,122,0.06)', border: '1px solid rgba(45,201,122,0.18)' }}
                 >
-                  <span className="text-xs" style={{ color: '#8FA899' }}>You receive</span>
+                  <span className="text-xs" style={{ color: '#8FA3B8' }}>You receive</span>
                   <span className="font-display text-base font-bold number-display" style={{ color: '#2DC97A' }}>
                     ${usdValue.toFixed(2)} USD
                   </span>
@@ -223,12 +223,12 @@ export default function RedeemPage() {
                     <Shield className="w-4 h-4 text-amber-400 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="text-sm font-bold text-amber-400">KYC verification required</p>
-                      <p className="text-xs mt-0.5" style={{ color: '#8FA899' }}>You must verify your identity before redeeming.</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#8FA3B8' }}>You must verify your identity before redeeming.</p>
                     </div>
                     <Link
                       href="/kyc"
                       className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 whitespace-nowrap"
-                      style={{ background: '#F59E0B', color: '#060E0A' }}
+                      style={{ background: '#F59E0B', color: '#040814' }}
                     >
                       Verify
                     </Link>
@@ -240,7 +240,7 @@ export default function RedeemPage() {
                   className="w-full py-3.5 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
                     background: 'linear-gradient(135deg, #2DC97A, #10B981)',
-                    color: '#060E0A',
+                    color: '#040814',
                     boxShadow: canRedeem ? '0 4px 18px rgba(45,201,122,0.35)' : 'none',
                   }}
                 >
@@ -255,7 +255,7 @@ export default function RedeemPage() {
               <button
                 onClick={() => openAuthModal()}
                 className="w-full py-3.5 rounded-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95"
-                style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
+                style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
               >
                 Sign in to redeem
               </button>
@@ -270,10 +270,10 @@ export default function RedeemPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             className="rounded-2xl p-5 space-y-4"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238' }}
           >
             <h3 className="font-display text-lg font-bold" style={{ color: '#F5E8C8' }}>Review redemption</h3>
-            <div className="rounded-xl divide-y" style={{ background: 'rgba(255,255,255,0.02)', borderColor: '#1A2E22' }}>
+            <div className="rounded-xl divide-y" style={{ background: 'rgba(255,255,255,0.02)', borderColor: '#1A2238' }}>
               {[
                 { label: 'Amount',          value: `${amountNum} SC`, accent: '#2DC97A' },
                 { label: 'USD value',       value: `$${usdValue.toFixed(2)}`, accent: '#F5E8C8' },
@@ -281,8 +281,8 @@ export default function RedeemPage() {
                 { label: 'Processing time', value: method.time,        accent: '#F5E8C8' },
                 { label: 'Fee',             value: 'Free',             accent: '#2DC97A' },
               ].map((row) => (
-                <div key={row.label} className="flex justify-between items-center px-4 py-3" style={{ borderColor: '#1A2E22', borderTopWidth: 0 }}>
-                  <span className="text-xs" style={{ color: '#8FA899' }}>{row.label}</span>
+                <div key={row.label} className="flex justify-between items-center px-4 py-3" style={{ borderColor: '#1A2238', borderTopWidth: 0 }}>
+                  <span className="text-xs" style={{ color: '#8FA3B8' }}>{row.label}</span>
                   <span className="text-sm font-bold number-display" style={{ color: row.accent }}>{row.value}</span>
                 </div>
               ))}
@@ -291,19 +291,19 @@ export default function RedeemPage() {
               <button
                 onClick={() => setStep('select')}
                 className="flex-1 py-3 rounded-xl text-sm font-semibold border transition-all hover:bg-white/5"
-                style={{ borderColor: '#1A2E22', color: '#8FA899' }}
+                style={{ borderColor: '#1A2238', color: '#8FA3B8' }}
               >
                 Back
               </button>
               <button
                 onClick={() => { setStep('success'); toast.success('Redemption submitted', { description: `${amountNum} SC → $${usdValue.toFixed(2)} pending review.` }); }}
                 className="flex-1 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
-                style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#060E0A' }}
+                style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#040814' }}
               >
                 Confirm redemption
               </button>
             </div>
-            <p className="text-[10px] text-center leading-relaxed" style={{ color: '#4A6A55' }}>
+            <p className="text-[10px] text-center leading-relaxed" style={{ color: '#4A5878' }}>
               By proceeding, you confirm you&apos;re eligible to redeem under the Sweepstakes Rules and applicable state law.
             </p>
           </motion.div>
@@ -316,7 +316,7 @@ export default function RedeemPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 24, stiffness: 320 }}
             className="rounded-2xl p-8 text-center space-y-4"
-            style={{ background: '#0F1A14', border: '1px solid rgba(45,201,122,0.3)' }}
+            style={{ background: '#0F1828', border: '1px solid rgba(45,201,122,0.3)' }}
           >
             <div
               className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center"
@@ -326,10 +326,10 @@ export default function RedeemPage() {
             </div>
             <div>
               <h3 className="font-display text-xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Redemption submitted</h3>
-              <p className="text-sm" style={{ color: '#8FA899' }}>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>
                 <span className="font-bold" style={{ color: '#2DC97A' }}>{amountNum} SC</span> (${usdValue.toFixed(2)} USD) is pending review.
               </p>
-              <p className="text-xs mt-1" style={{ color: '#8FA899' }}>
+              <p className="text-xs mt-1" style={{ color: '#8FA3B8' }}>
                 Estimated arrival: <span className="font-semibold" style={{ color: '#F5E8C8' }}>{method.time}</span>
               </p>
             </div>
@@ -337,14 +337,14 @@ export default function RedeemPage() {
               <button
                 onClick={() => { setStep('select'); setAmount(''); }}
                 className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all hover:bg-white/5"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
               >
                 New redemption
               </button>
               <Link
                 href="/wallet"
                 className="flex-1 py-3 rounded-xl text-sm font-bold text-center transition-all hover:brightness-110"
-                style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
+                style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
               >
                 Back to wallet
               </Link>
@@ -353,10 +353,10 @@ export default function RedeemPage() {
         )}
       </AnimatePresence>
 
-      <p className="text-[11px] text-center pt-2" style={{ color: '#4A6A55' }}>
+      <p className="text-[11px] text-center pt-2" style={{ color: '#4A5878' }}>
         <YalaIcon name="shield" size={10} className="inline mr-1" />
         Sweep Coins redeemable where permitted by law. See{' '}
-        <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80" style={{ color: '#8FA899' }}>Sweepstakes Rules</Link>. 18+ only.
+        <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80" style={{ color: '#8FA3B8' }}>Sweepstakes Rules</Link>. 18+ only.
       </p>
     </div>
   );

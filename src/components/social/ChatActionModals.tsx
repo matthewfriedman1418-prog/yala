@@ -102,35 +102,35 @@ export function TipModal({ open, target, onClose, onSend }: TipModalProps) {
             aria-labelledby="tip-modal-title"
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[80] w-[380px] max-w-[calc(100vw-2rem)] rounded-2xl overflow-hidden shadow-2xl"
             style={{
-              background: '#0F1A14',
+              background: '#0F1828',
               border: `1px solid ${accent}40`,
               boxShadow: `0 20px 60px rgba(0,0,0,0.65), 0 0 32px ${accent}1F`,
             }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
+            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
               <div className="flex items-center gap-2">
                 <Gift className="w-4 h-4" style={{ color: accent }} />
                 <h3 id="tip-modal-title" className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Send a tip</h3>
               </div>
               <button onClick={onClose} aria-label="Close" className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
               </button>
             </div>
 
             {/* Recipient */}
-            <div className="px-4 py-3 flex items-center gap-3" style={{ background: `${tierColor}08`, borderBottom: '1px solid #1A2E22' }}>
+            <div className="px-4 py-3 flex items-center gap-3" style={{ background: `${tierColor}08`, borderBottom: '1px solid #1A2238' }}>
               <YalaAvatar initials={target.avatar} tier={target.vipTier} size={36} />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold truncate" style={{ color: tierColor }}>{target.username}</p>
-                <p className="text-[10px]" style={{ color: '#8FA899' }}>Tier {target.vipTier}</p>
+                <p className="text-[10px]" style={{ color: '#8FA3B8' }}>Tier {target.vipTier}</p>
               </div>
             </div>
 
             {/* Body */}
             <div className="px-4 py-4 space-y-3">
               {/* Currency segmented */}
-              <div className="flex rounded-lg p-0.5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
+              <div className="flex rounded-lg p-0.5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
                 {(['GC', 'SC'] as const).map((c) => {
                   const active = currency === c;
                   const cAccent = c === 'GC' ? '#F0B232' : '#2DC97A';
@@ -140,7 +140,7 @@ export function TipModal({ open, target, onClose, onSend }: TipModalProps) {
                       className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-bold transition-colors"
                       style={{
                         background: active ? `${cAccent}14` : 'transparent',
-                        color:      active ? cAccent : '#8FA899',
+                        color:      active ? cAccent : '#8FA3B8',
                       }}
                     >
                       {c === 'GC' ? <GoldCoinIcon size={12} /> : <SweepCoinIcon size={12} />}
@@ -153,8 +153,8 @@ export function TipModal({ open, target, onClose, onSend }: TipModalProps) {
               {/* Amount input */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Amount</label>
-                  <span className="text-[10px] font-mono" style={{ color: '#4A6A55' }}>
+                  <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Amount</label>
+                  <span className="text-[10px] font-mono" style={{ color: '#4A5878' }}>
                     Balance: {isGC ? formatGC(balance) : balance.toFixed(2)} {currency}
                   </span>
                 </div>
@@ -168,11 +168,11 @@ export function TipModal({ open, target, onClose, onSend }: TipModalProps) {
                   className="w-full px-3 py-2.5 rounded-xl text-sm font-mono font-bold focus:outline-none transition-colors"
                   style={{
                     background: 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${tooLow || tooHigh ? '#EF4444' : '#1A2E22'}`,
+                    border: `1px solid ${tooLow || tooHigh ? '#EF4444' : '#1A2238'}`,
                     color: '#F5E8C8',
                   }}
                   onFocus={(e) => { if (!tooLow && !tooHigh) e.currentTarget.style.borderColor = `${accent}66`; }}
-                  onBlur={(e) => { if (!tooLow && !tooHigh) e.currentTarget.style.borderColor = '#1A2E22'; }}
+                  onBlur={(e) => { if (!tooLow && !tooHigh) e.currentTarget.style.borderColor = '#1A2238'; }}
                 />
                 {tooLow && (
                   <p className="text-[10px] mt-1" style={{ color: '#EF4444' }}>
@@ -196,8 +196,8 @@ export function TipModal({ open, target, onClose, onSend }: TipModalProps) {
                       className="px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors"
                       style={{
                         background: parseFloat(amount) === adj ? `${accent}1A` : 'rgba(255,255,255,0.03)',
-                        color:      parseFloat(amount) === adj ? accent : '#8FA899',
-                        border:     `1px solid ${parseFloat(amount) === adj ? `${accent}44` : '#1A2E22'}`,
+                        color:      parseFloat(amount) === adj ? accent : '#8FA3B8',
+                        border:     `1px solid ${parseFloat(amount) === adj ? `${accent}44` : '#1A2238'}`,
                       }}
                     >
                       {isGC ? v : adj}
@@ -216,7 +216,7 @@ export function TipModal({ open, target, onClose, onSend }: TipModalProps) {
                 className="w-full py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{
                   background: `linear-gradient(135deg, ${accent}, ${isGC ? '#FFD166' : '#34D399'})`,
-                  color: '#060E0A',
+                  color: '#040814',
                   boxShadow: `0 4px 16px ${accent}40`,
                 }}
               >
@@ -311,18 +311,18 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
             aria-labelledby="rain-modal-title"
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[80] w-[400px] max-w-[calc(100vw-2rem)] rounded-2xl overflow-hidden shadow-2xl"
             style={{
-              background: '#0F1A14',
+              background: '#0F1828',
               border: `1px solid ${accent}44`,
               boxShadow: `0 20px 60px rgba(0,0,0,0.65), 0 0 32px ${accent}1F`,
             }}
           >
-            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
+            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
               <div className="flex items-center gap-2">
                 <CloudRain className="w-4 h-4" style={{ color: accent }} />
                 <h3 id="rain-modal-title" className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Make it rain</h3>
               </div>
               <button onClick={onClose} aria-label="Close" className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
               </button>
             </div>
 
@@ -340,7 +340,7 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
             )}
 
             <div className="px-4 py-4 space-y-3">
-              <div className="flex rounded-lg p-0.5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
+              <div className="flex rounded-lg p-0.5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
                 {(['GC', 'SC'] as const).map((c) => {
                   const active = currency === c;
                   const cAccent = c === 'GC' ? '#F0B232' : '#2DC97A';
@@ -350,7 +350,7 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
                       className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-bold transition-colors disabled:opacity-40"
                       style={{
                         background: active ? `${cAccent}14` : 'transparent',
-                        color:      active ? cAccent : '#8FA899',
+                        color:      active ? cAccent : '#8FA3B8',
                       }}
                     >
                       {c === 'GC' ? <GoldCoinIcon size={12} /> : <SweepCoinIcon size={12} />}
@@ -363,8 +363,8 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
               {/* Amount */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Total amount</label>
-                  <span className="text-[10px] font-mono" style={{ color: '#4A6A55' }}>
+                  <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Total amount</label>
+                  <span className="text-[10px] font-mono" style={{ color: '#4A5878' }}>
                     Balance: {isGC ? formatGC(balance) : balance.toFixed(2)} {currency}
                   </span>
                 </div>
@@ -379,11 +379,11 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
                   className="w-full px-3 py-2.5 rounded-xl text-sm font-mono font-bold focus:outline-none transition-colors disabled:opacity-40"
                   style={{
                     background: 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${tooLow || tooHigh ? '#EF4444' : '#1A2E22'}`,
+                    border: `1px solid ${tooLow || tooHigh ? '#EF4444' : '#1A2238'}`,
                     color: '#F5E8C8',
                   }}
                   onFocus={(e) => { if (!tooLow && !tooHigh) e.currentTarget.style.borderColor = `${accent}66`; }}
-                  onBlur={(e) => { if (!tooLow && !tooHigh) e.currentTarget.style.borderColor = '#1A2E22'; }}
+                  onBlur={(e) => { if (!tooLow && !tooHigh) e.currentTarget.style.borderColor = '#1A2238'; }}
                 />
                 {tooLow  && <p className="text-[10px] mt-1" style={{ color: '#EF4444' }}>Minimum rain is {minRain} {currency}</p>}
                 {tooHigh && <p className="text-[10px] mt-1" style={{ color: '#EF4444' }}>Insufficient {currency} balance</p>}
@@ -396,8 +396,8 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
                         className="px-2.5 py-1 rounded-md text-[10px] font-bold transition-colors disabled:opacity-40"
                         style={{
                           background: parseFloat(amount) === adj ? `${accent}1A` : 'rgba(255,255,255,0.03)',
-                          color:      parseFloat(amount) === adj ? accent : '#8FA899',
-                          border:     `1px solid ${parseFloat(amount) === adj ? `${accent}44` : '#1A2E22'}`,
+                          color:      parseFloat(amount) === adj ? accent : '#8FA3B8',
+                          border:     `1px solid ${parseFloat(amount) === adj ? `${accent}44` : '#1A2238'}`,
                         }}
                       >
                         {isGC ? v.toLocaleString() : adj}
@@ -409,7 +409,7 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
 
               {/* Recipients */}
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#8FA899' }}>
+                <label className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#8FA3B8' }}>
                   Split across
                 </label>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -421,8 +421,8 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
                         className="py-1.5 rounded-md text-xs font-bold transition-colors disabled:opacity-40"
                         style={{
                           background: active ? `${accent}1A` : 'rgba(255,255,255,0.03)',
-                          color:      active ? accent : '#8FA899',
-                          border:     `1px solid ${active ? `${accent}44` : '#1A2E22'}`,
+                          color:      active ? accent : '#8FA3B8',
+                          border:     `1px solid ${active ? `${accent}44` : '#1A2238'}`,
                         }}
                       >
                         {c} <span className="text-[9px] font-normal">users</span>
@@ -431,7 +431,7 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
                   })}
                 </div>
                 {!gated && perPerson > 0 && (
-                  <p className="text-[10px] mt-2 text-center" style={{ color: '#8FA899' }}>
+                  <p className="text-[10px] mt-2 text-center" style={{ color: '#8FA3B8' }}>
                     ≈ <span className="font-mono font-bold" style={{ color: accent }}>{perPerson.toFixed(2)} {currency}</span> per recipient
                   </p>
                 )}
@@ -446,7 +446,7 @@ export function RainModal({ open, onClose, onSend }: RainModalProps) {
                 className="w-full py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 style={{
                   background: `linear-gradient(135deg, ${accent}, #818CF8)`,
-                  color: '#060E0A',
+                  color: '#040814',
                   boxShadow: `0 4px 16px ${accent}40`,
                 }}
               >

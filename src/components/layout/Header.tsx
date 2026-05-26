@@ -73,8 +73,8 @@ export function Header() {
     <header
       className="h-16 flex items-center px-3 sm:px-5 flex-shrink-0 relative z-30 gap-2"
       style={{
-        background: 'linear-gradient(180deg, #0E1E15 0%, #0C1812 100%)',
-        borderBottom: '1px solid #1A2E22',
+        background: 'linear-gradient(180deg, #0E1828 0%, #0A101C 100%)',
+        borderBottom: '1px solid #1A2238',
         boxShadow: '0 1px 0 rgba(45,201,122,0.06), 0 4px 16px rgba(0,0,0,0.3)',
       }}
     >
@@ -133,7 +133,7 @@ export function Header() {
               className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
               style={{
                 background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: '0 2px 20px rgba(16,185,129,0.45), inset 0 1px 0 rgba(255,255,255,0.2)',
                 letterSpacing: '0.01em',
               }}
@@ -157,7 +157,7 @@ export function Header() {
               className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-black rounded-xl transition-all hover:brightness-110 active:scale-95 whitespace-nowrap"
               style={{
                 background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: '0 2px 20px rgba(16,185,129,0.35)',
               }}
             >
@@ -184,7 +184,7 @@ export function Header() {
               {rewardsReady > 0 && (
                 <span
                   className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full text-[9px] font-black flex items-center justify-center"
-                  style={{ background: '#2DC97A', color: '#060E0A', boxShadow: '0 0 0 2px #0C1812' }}
+                  style={{ background: '#2DC97A', color: '#040814', boxShadow: '0 0 0 2px #0A101C' }}
                 >
                   {rewardsReady > 9 ? '9+' : rewardsReady}
                 </span>
@@ -197,11 +197,11 @@ export function Header() {
               className="relative p-2 rounded-lg hover:bg-white/5 transition-colors"
               aria-label={unreadNotifs > 0 ? `Open notifications (${unreadNotifs} unread)` : 'Open notifications'}
             >
-              <Bell className="w-4 h-4" style={{ color: unreadNotifs > 0 ? '#F0B232' : '#8FA899' }} />
+              <Bell className="w-4 h-4" style={{ color: unreadNotifs > 0 ? '#F0B232' : '#8FA3B8' }} />
               {unreadNotifs > 0 && (
                 <span
                   className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full text-[9px] font-black flex items-center justify-center"
-                  style={{ background: '#EF4444', color: '#fff', boxShadow: '0 0 0 2px #0C1812' }}
+                  style={{ background: '#EF4444', color: '#fff', boxShadow: '0 0 0 2px #0A101C' }}
                 >
                   {unreadNotifs > 9 ? '9+' : unreadNotifs}
                 </span>
@@ -212,7 +212,7 @@ export function Header() {
             <button
               onClick={toggleChat}
               className="hidden lg:flex relative p-2 rounded-lg hover:bg-white/5 transition-colors items-center justify-center"
-              style={{ color: chatOpen ? '#2DC97A' : '#8FA899' }}
+              style={{ color: chatOpen ? '#2DC97A' : '#8FA3B8' }}
               aria-label={chatOpen ? 'Close live chat' : 'Open live chat'}
               aria-pressed={chatOpen}
             >
@@ -241,19 +241,19 @@ export function Header() {
                     {getVIPName(user?.vipTier || 1)}
                   </p>
                 </div>
-                <ChevronDown className="w-3 h-3 hidden md:block" style={{ color: '#8FA899' }} />
+                <ChevronDown className="w-3 h-3 hidden md:block" style={{ color: '#8FA3B8' }} />
               </button>
 
               {profileOpen && (
                 <div
                   className="absolute right-0 top-full mt-2 w-64 rounded-2xl overflow-hidden shadow-2xl z-50"
-                  style={{ backgroundColor: '#101C16', border: '1px solid #1A2E22', boxShadow: '0 16px 48px rgba(0,0,0,0.6)' }}
+                  style={{ backgroundColor: '#101C28', border: '1px solid #1A2238', boxShadow: '0 16px 48px rgba(0,0,0,0.6)' }}
                 >
                   {/* Big avatar header */}
                   <div
                     className="px-4 py-4 flex items-center gap-3"
                     style={{
-                      borderBottom: '1px solid #1A2E22',
+                      borderBottom: '1px solid #1A2238',
                       background: 'linear-gradient(180deg, rgba(240,178,50,0.06) 0%, transparent 100%)',
                     }}
                   >
@@ -265,7 +265,7 @@ export function Header() {
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold truncate" style={{ color: '#F5E8C8' }}>{user?.username}</p>
-                      <p className="text-[10px] truncate" style={{ color: '#8FA899' }}>{user?.email}</p>
+                      <p className="text-[10px] truncate" style={{ color: '#8FA3B8' }}>{user?.email}</p>
                       <p className="text-[10px] mt-1 font-bold tracking-wider uppercase" style={{ color: tierColor }}>
                         {getVIPName(vipTier)} · Tier {vipTier}
                       </p>
@@ -275,12 +275,12 @@ export function Header() {
                         <div className="flex justify-between text-[9px] mb-1 font-mono">
                           <span style={{ color: tierColor }}>{formatXP(xp)} XP</span>
                           {nextTier && (
-                            <span style={{ color: '#4A6A55' }}>
+                            <span style={{ color: '#4A5878' }}>
                               {(nextTier.xpRequired - xp).toLocaleString()} to {nextTier.name}
                             </span>
                           )}
                         </div>
-                        <div className="h-[3px] rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+                        <div className="h-[3px] rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${xpProgress}%` }}

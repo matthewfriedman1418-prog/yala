@@ -111,7 +111,7 @@ export function OnboardingModal() {
         exit={{ opacity: 0, y: -10, scale: 0.97 }}
         transition={{ type: 'spring', damping: 24, stiffness: 320 }}
         className="relative w-full max-w-sm rounded-2xl overflow-hidden z-10"
-        style={{ backgroundColor: '#101C16', border: '1px solid #1A2E22', boxShadow: '0 32px 80px rgba(0,0,0,0.8)' }}
+        style={{ backgroundColor: '#101C28', border: '1px solid #1A2238', boxShadow: '0 32px 80px rgba(0,0,0,0.8)' }}
       >
         {/* Shimmer top bar */}
         <div
@@ -132,7 +132,7 @@ export function OnboardingModal() {
               style={{
                 width: i === step ? 20 : 6,
                 height: 6,
-                backgroundColor: i === step ? '#F0B232' : i < step ? '#2DC97A' : '#1A2E22',
+                backgroundColor: i === step ? '#F0B232' : i < step ? '#2DC97A' : '#1A2238',
               }}
             />
           ))}
@@ -166,7 +166,7 @@ export function OnboardingModal() {
               <h2 className="font-display text-2xl font-black" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 Welcome to Yala
               </h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#8FA899' }}>
+              <p className="text-sm leading-relaxed" style={{ color: '#8FA3B8' }}>
                 You just unlocked one of the sharpest social casinos on the internet. Free to play, zero pressure, maximum fun.
               </p>
               <div className="flex flex-wrap gap-2 justify-center pt-1">
@@ -184,14 +184,14 @@ export function OnboardingModal() {
             <div className="space-y-3">
               <div className="text-center mb-3">
                 <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Two Ways to Play</h2>
-                <p className="text-xs mt-1" style={{ color: '#8FA899' }}>Switch anytime. No pressure.</p>
+                <p className="text-xs mt-1" style={{ color: '#8FA3B8' }}>Switch anytime. No pressure.</p>
               </div>
               <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.2)' }}>
                 <div className="flex items-center gap-3">
                   <GoldCoinIcon size={32} />
                   <div>
                     <p className="font-bold text-sm" style={{ color: '#F0B232' }}>Gold Coins</p>
-                    <p className="text-xs" style={{ color: '#8FA899' }}>Play for fun. Earn through missions, bonuses, and daily rewards. Zero cash value.</p>
+                    <p className="text-xs" style={{ color: '#8FA3B8' }}>Play for fun. Earn through missions, bonuses, and daily rewards. Zero cash value.</p>
                   </div>
                 </div>
               </div>
@@ -200,7 +200,7 @@ export function OnboardingModal() {
                   <SweepCoinIcon size={36} />
                   <div>
                     <p className="font-bold text-sm" style={{ color: '#10B981' }}>Sweep Coins</p>
-                    <p className="text-xs" style={{ color: '#8FA899' }}>Play the sweepstakes mode. Eligible for redemption under sweepstakes rules. No purchase necessary to enter or win.</p>
+                    <p className="text-xs" style={{ color: '#8FA3B8' }}>Play the sweepstakes mode. Eligible for redemption under sweepstakes rules. No purchase necessary to enter or win.</p>
                   </div>
                 </div>
               </div>
@@ -214,7 +214,7 @@ export function OnboardingModal() {
           {step === 2 && (
             <div className="text-center space-y-4">
               <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Your Starter Pack</h2>
-              <p className="text-sm" style={{ color: '#8FA899' }}>A gift from Yala. Yours the moment you click.</p>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>A gift from Yala. Yours the moment you click.</p>
 
               <div className="space-y-3">
                 <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.25)' }}>
@@ -267,7 +267,7 @@ export function OnboardingModal() {
                 🏆
               </motion.div>
               <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>You&apos;re All Set</h2>
-              <p className="text-sm" style={{ color: '#8FA899' }}>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>
                 Casino, sportsbook, originals, daily bonuses. It&apos;s all right here.
               </p>
               <div className="grid grid-cols-2 gap-2 pt-1">
@@ -292,7 +292,7 @@ export function OnboardingModal() {
                 href="/originals"
                 onClick={dismissAndRemember}
                 className="flex items-center justify-center gap-1 text-xs transition-colors"
-                style={{ color: '#8FA899' }}
+                style={{ color: '#8FA3B8' }}
               >
                 Explore Yala Originals <ChevronRight className="w-3 h-3" />
               </Link>
@@ -315,7 +315,7 @@ export function OnboardingModal() {
               onClick={handleNext}
               disabled={!claimed}
               className="w-full mt-3 py-2 rounded-xl text-xs font-medium transition-all disabled:opacity-30"
-              style={{ color: '#8FA899' }}
+              style={{ color: '#8FA3B8' }}
             >
               {claimed ? 'Continue' : 'Claim your coins to proceed'}
             </button>

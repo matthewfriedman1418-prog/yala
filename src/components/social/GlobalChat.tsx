@@ -116,12 +116,12 @@ export function GlobalChat() {
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 26, stiffness: 320 }}
             className="fixed right-0 top-14 bottom-0 w-[340px] z-40 flex flex-col"
-            style={{ backgroundColor: '#0C1812', borderLeft: '1px solid #1A2E22' }}
+            style={{ backgroundColor: '#0A101C', borderLeft: '1px solid #1A2238' }}
           >
             {/* ── Header ─────────────────────────────────────── */}
             <div
               className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-              style={{ borderBottom: '1px solid #1A2E22' }}
+              style={{ borderBottom: '1px solid #1A2238' }}
             >
               <div className="flex items-center gap-2">
                 <YalaIcon name="sparkle" size={16} />
@@ -138,14 +138,14 @@ export function GlobalChat() {
                 aria-label="Close chat"
                 className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
               >
-                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
               </button>
             </div>
 
             {/* ── Room pills ─────────────────────────────────── */}
             <div
               className="flex gap-1 px-3 py-2 flex-shrink-0 overflow-x-auto no-scrollbar"
-              style={{ borderBottom: '1px solid #1A2E22' }}
+              style={{ borderBottom: '1px solid #1A2238' }}
             >
               {ROOMS.map((r) => {
                 const isActive = effectiveRoom === r.id;
@@ -159,7 +159,7 @@ export function GlobalChat() {
                     className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex-shrink-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     style={isActive
                       ? { background: 'rgba(240,178,50,0.12)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.28)' }
-                      : { color: '#8FA899', border: '1px solid transparent' }
+                      : { color: '#8FA3B8', border: '1px solid transparent' }
                     }
                   >
                     {locked && <YalaIcon name="lock" size={9} />}
@@ -167,7 +167,7 @@ export function GlobalChat() {
                     {r.id === 'vip' && (
                       <span
                         className="text-[8px] font-mono font-bold"
-                        style={{ color: isActive ? '#F0B232' : '#4A6A55' }}
+                        style={{ color: isActive ? '#F0B232' : '#4A5878' }}
                       >
                         T4+
                       </span>
@@ -180,7 +180,7 @@ export function GlobalChat() {
             {/* ── Pinned announcement ────────────────────────── */}
             <div
               className="flex items-start gap-2 px-3 py-2.5 flex-shrink-0"
-              style={{ background: 'rgba(240,178,50,0.04)', borderBottom: '1px solid #1A2E22' }}
+              style={{ background: 'rgba(240,178,50,0.04)', borderBottom: '1px solid #1A2238' }}
             >
               <Pin className="w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: '#F0B232' }} />
               <div className="flex-1 min-w-0">
@@ -227,14 +227,14 @@ export function GlobalChat() {
 
             {/* ── Typing indicator ───────────────────────────── */}
             {typing.length > 0 && (
-              <div className="flex-shrink-0 px-3 py-1.5" style={{ borderTop: '1px solid #1A2E22' }}>
+              <div className="flex-shrink-0 px-3 py-1.5" style={{ borderTop: '1px solid #1A2238' }}>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-0.5">
                     <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#2DC97A', animationDelay: '0ms' }} />
                     <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#2DC97A', animationDelay: '150ms' }} />
                     <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: '#2DC97A', animationDelay: '300ms' }} />
                   </div>
-                  <span className="text-[10px]" style={{ color: '#8FA899' }}>
+                  <span className="text-[10px]" style={{ color: '#8FA3B8' }}>
                     <span className="font-bold" style={{ color: '#F5E8C8' }}>{typing[0]}</span>
                     {typing.length > 1 && ` + ${typing.length - 1} other${typing.length > 2 ? 's' : ''}`} typing…
                   </span>
@@ -243,7 +243,7 @@ export function GlobalChat() {
             )}
 
             {/* ── Input ──────────────────────────────────────── */}
-            <div className="flex-shrink-0 px-3 py-3" style={{ borderTop: '1px solid #1A2E22' }}>
+            <div className="flex-shrink-0 px-3 py-3" style={{ borderTop: '1px solid #1A2238' }}>
               {isLoggedIn ? (
                 <form onSubmit={handleSend} className="space-y-1.5">
                   <div className="relative flex items-center gap-1.5">
@@ -254,7 +254,7 @@ export function GlobalChat() {
                         onClick={() => setEmojiOpen((o) => !o)}
                         aria-label="Emoji picker"
                         className="p-2 rounded-lg transition-colors hover:bg-white/5"
-                        style={{ color: emojiOpen ? '#F0B232' : '#8FA899', background: emojiOpen ? 'rgba(240,178,50,0.08)' : 'transparent' }}
+                        style={{ color: emojiOpen ? '#F0B232' : '#8FA3B8', background: emojiOpen ? 'rgba(240,178,50,0.08)' : 'transparent' }}
                       >
                         <Smile className="w-4 h-4" />
                       </button>
@@ -276,11 +276,11 @@ export function GlobalChat() {
                       className="flex-1 px-3 py-2 rounded-lg text-xs focus:outline-none transition-colors"
                       style={{
                         background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid #1A2E22',
+                        border: '1px solid #1A2238',
                         color: '#F5E8C8',
                       }}
                       onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(240,178,50,0.4)')}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
                       maxLength={MAX_MSG}
                     />
                     {/* Rain button — VIP4+ gated, visually disabled below */}
@@ -291,7 +291,7 @@ export function GlobalChat() {
                       title={canRain ? 'Make it rain' : 'Rain requires VIP Tier 4+'}
                       className="p-2 rounded-lg transition-colors hover:bg-white/5"
                       style={{
-                        color: canRain ? '#60A5FA' : '#4A6A55',
+                        color: canRain ? '#60A5FA' : '#4A5878',
                         background: canRain ? 'rgba(96,165,250,0.08)' : 'transparent',
                         cursor: canRain ? 'pointer' : 'not-allowed',
                       }}
@@ -307,16 +307,16 @@ export function GlobalChat() {
                         background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
                       }}
                     >
-                      <Send className="w-3.5 h-3.5" style={{ color: '#060E0A' }} />
+                      <Send className="w-3.5 h-3.5" style={{ color: '#040814' }} />
                     </button>
                   </div>
                   <div className="flex items-center justify-between px-1">
-                    <p className="text-[9px]" style={{ color: '#4A6A55' }}>
+                    <p className="text-[9px]" style={{ color: '#4A5878' }}>
                       {tr('chatBeCool')}
                     </p>
                     <p
                       className="text-[9px] font-mono font-bold"
-                      style={{ color: message.length > MAX_MSG - 30 ? '#F59E0B' : '#4A6A55' }}
+                      style={{ color: message.length > MAX_MSG - 30 ? '#F59E0B' : '#4A5878' }}
                     >
                       {message.length}/{MAX_MSG}
                     </p>
@@ -328,7 +328,7 @@ export function GlobalChat() {
                   className="w-full py-2.5 rounded-lg text-xs font-black transition-all hover:brightness-110 active:scale-95"
                   style={{
                     background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
-                    color: '#060E0A',
+                    color: '#040814',
                     boxShadow: '0 2px 12px rgba(45,201,122,0.3)',
                   }}
                 >
@@ -340,9 +340,9 @@ export function GlobalChat() {
             {/* ── Socials row ────────────────────────────────── */}
             <div
               className="flex-shrink-0 flex items-center justify-between px-3 py-2.5"
-              style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}
+              style={{ borderTop: '1px solid #1A2238', background: '#08121C' }}
             >
-              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>
                 Join the community
               </span>
               <div className="flex items-center gap-1.5">
@@ -463,9 +463,9 @@ function ChatRow({
           <span className="number-display font-black" style={{ color: '#F0B232' }}>
             {msg.rainAmount?.toLocaleString()}
           </span>{' '}
-          <span className="text-[10px]" style={{ color: '#8FA899' }}>{msg.currency}</span>
+          <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{msg.currency}</span>
         </p>
-        <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>
+        <p className="text-[10px] mt-0.5" style={{ color: '#8FA3B8' }}>
           Recipients picked at random from active chatters
         </p>
       </div>
@@ -527,7 +527,7 @@ function ChatRow({
           </button>
           <span
             className={tsClassName}
-            style={{ color: '#4A6A55' }}
+            style={{ color: '#4A5878' }}
           >
             {formatTime(msg.timestamp)}
           </span>
@@ -552,7 +552,7 @@ function ChatEmpty({ hasBlocked }: { hasBlocked?: boolean }) {
       <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>
         {hasBlocked ? 'All visible messages are hidden' : "It's quiet in here"}
       </p>
-      <p className="text-[11px]" style={{ color: '#8FA899' }}>
+      <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
         {hasBlocked
           ? 'You\'ve blocked the active chatters. Manage from a user\'s profile.'
           : 'Be the first to say something.'}
@@ -578,11 +578,11 @@ function SocialIcon({ network, href }: { network: 'discord' | 'x' | 'instagram';
       className="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
       style={{
         background: 'rgba(255,255,255,0.04)',
-        border: '1px solid #1A2E22',
-        color: '#8FA899',
+        border: '1px solid #1A2238',
+        color: '#8FA3B8',
       }}
       onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = HOVER; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8FA899'; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8FA3B8'; }}
     >
       {network === 'discord' && (
         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">

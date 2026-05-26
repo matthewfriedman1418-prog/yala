@@ -30,7 +30,7 @@ const MENU_SECTIONS = [
   {
     label: 'Social',
     items: [
-      { href: '/rooms',     label: 'Rooms',     renderIcon: () => <Users    className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
+      { href: '/rooms',     label: 'Rooms',     renderIcon: () => <Users    className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA3B8' }} /> },
       { href: '/affiliate', label: 'Affiliate', renderIcon: () => <YI name="star" /> },
     ],
   },
@@ -44,7 +44,7 @@ const MENU_SECTIONS = [
       { href: '/notifications',        label: 'Notifications', renderIcon: () => <YI name="badge-star" /> },
       { href: '/settings',             label: 'Settings',  renderIcon: () => <YI name="lock" /> },
       { href: '/responsible-gaming',   label: 'Responsible Gaming', renderIcon: () => <YI name="shield" /> },
-      { href: '/support',              label: 'Help',      renderIcon: () => <HelpCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} /> },
+      { href: '/support',              label: 'Help',      renderIcon: () => <HelpCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA3B8' }} /> },
     ],
   },
 ] as const;
@@ -77,18 +77,18 @@ export function MobileSideMenu() {
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
             className="fixed left-0 right-0 bottom-0 z-50 rounded-t-2xl overflow-hidden"
             style={{
-              backgroundColor: '#0C1812',
-              border: '1px solid #1A2E22',
+              backgroundColor: '#0A101C',
+              border: '1px solid #1A2238',
               maxHeight: '85vh',
             }}
           >
             {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: '#1A2E22' }} />
+              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: '#1A2238' }} />
             </div>
 
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
+            <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
               <div className="flex items-center gap-2.5">
                 {isLoggedIn && user ? (
                   <>
@@ -112,7 +112,7 @@ export function MobileSideMenu() {
                 onClick={handleClose}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               >
-                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
               </button>
             </div>
 
@@ -122,7 +122,7 @@ export function MobileSideMenu() {
               {isLoggedIn && (
                 <div className="mx-4 mt-4 p-3 rounded-xl flex items-center gap-3" style={{ background: 'rgba(45,201,122,0.06)', border: '1px solid rgba(45,201,122,0.12)' }}>
                   <div className="flex-1">
-                    <p className="text-[10px] uppercase tracking-wide" style={{ color: '#8FA899' }}>Balance</p>
+                    <p className="text-[10px] uppercase tracking-wide" style={{ color: '#8FA3B8' }}>Balance</p>
                     <p className="text-base font-bold number-display" style={{ color: activeCurrency === 'GC' ? '#F0B232' : '#10B981' }}>
                       {activeCurrency === 'GC' ? formatGC(goldCoins) : formatSC(sweepCoins)}
                     </p>
@@ -152,7 +152,7 @@ export function MobileSideMenu() {
                       >
                         {item.iconEl}
                       </div>
-                      <span className="text-[11px] font-medium" style={{ color: '#8FA899' }}>{item.label}</span>
+                      <span className="text-[11px] font-medium" style={{ color: '#8FA3B8' }}>{item.label}</span>
                     </>
                   );
                   if ('action' in item && item.action) {
@@ -184,7 +184,7 @@ export function MobileSideMenu() {
               <div className="px-4 pb-4 mt-4 space-y-4">
                 {MENU_SECTIONS.map((section) => (
                   <div key={section.label}>
-                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2 px-1" style={{ color: '#8FA899' }}>
+                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2 px-1" style={{ color: '#8FA3B8' }}>
                       {section.label}
                     </p>
                     <div className="space-y-0.5">
@@ -195,7 +195,7 @@ export function MobileSideMenu() {
                           onClick={handleClose}
                           className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors"
                         >
-                          <span className="flex-shrink-0" style={{ color: '#8FA899' }}>
+                          <span className="flex-shrink-0" style={{ color: '#8FA3B8' }}>
                             {item.renderIcon()}
                           </span>
                           <span className="text-sm flex-1" style={{ color: '#F5E8C8' }}>{item.label}</span>
@@ -211,7 +211,7 @@ export function MobileSideMenu() {
                 ))}
 
                 {/* Auth actions */}
-                <div style={{ borderTop: '1px solid #1A2E22', paddingTop: 16 }}>
+                <div style={{ borderTop: '1px solid #1A2238', paddingTop: 16 }}>
                   {isLoggedIn ? (
                     <button
                       onClick={() => { logout(); handleClose(); }}

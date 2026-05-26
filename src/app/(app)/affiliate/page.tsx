@@ -36,7 +36,7 @@ const MOCK_REFERRALS = [
 ];
 
 const COMMISSION_TIERS = [
-  { tier: 'Starter',   refs: '1–4',   rate: '5,000 GC / referral', bonus: null,          color: '#8FA899' },
+  { tier: 'Starter',   refs: '1–4',   rate: '5,000 GC / referral', bonus: null,          color: '#8FA3B8' },
   { tier: 'Silver',    refs: '5–19',  rate: '5,000 GC + 1% wager', bonus: '10K GC bonus', color: '#C0C0C0' },
   { tier: 'Gold',      refs: '20–49', rate: '5,000 GC + 2% wager', bonus: '50K GC bonus', color: '#F0B232' },
   { tier: 'Platinum',  refs: '50+',   rate: '5,000 GC + 3% wager', bonus: 'Custom deal',  color: '#A78BFA' },
@@ -50,7 +50,7 @@ function SharingCard({ code }: { code: string }) {
       style={{
         aspectRatio: '4 / 5',
         borderRadius: '24px',
-        background: 'radial-gradient(ellipse 80% 60% at 50% 55%, #0b2418 0%, #081610 45%, #060E0A 75%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% 55%, #0b2418 0%, #081610 45%, #040814 75%)',
         boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(240,178,50,0.18), 0 0 40px rgba(45,201,122,0.06)',
         containerType: 'inline-size',
       }}
@@ -212,8 +212,8 @@ function CodePicker({ currentCode, onCodeSet }: { currentCode: string; onCodeSet
   return (
     <div className="space-y-3">
       <div>
-        <p className="text-xs font-semibold mb-1" style={{ color: '#8FA899' }}>Choose your referral link name</p>
-        <p className="text-[11px]" style={{ color: '#4A6A55' }}>
+        <p className="text-xs font-semibold mb-1" style={{ color: '#8FA3B8' }}>Choose your referral link name</p>
+        <p className="text-[11px]" style={{ color: '#4A5878' }}>
           Pick a custom name for your referral link. Your friends will see this in the URL when they sign up.
         </p>
       </div>
@@ -227,11 +227,11 @@ function CodePicker({ currentCode, onCodeSet }: { currentCode: string; onCodeSet
               ? '1px solid rgba(45,201,122,0.5)'
               : available === false
                 ? '1px solid rgba(239,68,68,0.4)'
-                : '1px solid #1A2E22',
-            background: '#0F1A14',
+                : '1px solid #1A2238',
+            background: '#0F1828',
           }}
         >
-          <span className="px-3 text-xs font-mono font-semibold flex-shrink-0 whitespace-nowrap" style={{ color: '#4A6A55' }}>
+          <span className="px-3 text-xs font-mono font-semibold flex-shrink-0 whitespace-nowrap" style={{ color: '#4A5878' }}>
             yala.gg/r/
           </span>
           <input
@@ -254,7 +254,7 @@ function CodePicker({ currentCode, onCodeSet }: { currentCode: string; onCodeSet
           onClick={checkAvailability}
           disabled={checking || input.length < 3}
           className="px-4 py-3 rounded-xl text-xs font-semibold transition-all disabled:opacity-40 flex-shrink-0"
-          style={{ background: '#1A2E22', color: '#8FA899', border: '1px solid #1A2E22' }}
+          style={{ background: '#1A2238', color: '#8FA3B8', border: '1px solid #1A2238' }}
         >
           {checking ? '...' : 'Check'}
         </button>
@@ -267,7 +267,7 @@ function CodePicker({ currentCode, onCodeSet }: { currentCode: string; onCodeSet
               exit={{ opacity: 0, scale: 0.9 }}
               onClick={claimCode}
               className="px-4 py-3 rounded-xl text-xs font-black transition-all hover:brightness-110 flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#060E0A' }}
+              style={{ background: 'linear-gradient(135deg, #2DC97A, #10B981)', color: '#040814' }}
             >
               Claim It
             </motion.button>
@@ -287,7 +287,7 @@ function CodePicker({ currentCode, onCodeSet }: { currentCode: string; onCodeSet
       )}
 
       <div className="flex items-center gap-2 pt-1">
-        <span className="text-[10px]" style={{ color: '#4A6A55' }}>Current code:</span>
+        <span className="text-[10px]" style={{ color: '#4A5878' }}>Current code:</span>
         <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded" style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232' }}>
           {currentCode}
         </span>
@@ -312,7 +312,7 @@ export default function AffiliatePage() {
     <style>
       *{margin:0;padding:0;box-sizing:border-box}
       body{background:#050805;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Archivo Black',serif}
-      .card{position:relative;width:400px;aspect-ratio:4/5;background:radial-gradient(ellipse 80% 60% at 50% 55%,#0b2418 0%,#081610 45%,#060E0A 75%);border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(240,178,50,.18),0 0 40px rgba(45,201,122,.06)}
+      .card{position:relative;width:400px;aspect-ratio:4/5;background:radial-gradient(ellipse 80% 60% at 50% 55%,#0b2418 0%,#081610 45%,#040814 75%);border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px rgba(240,178,50,.18),0 0 40px rgba(45,201,122,.06)}
       .frame{position:absolute;inset:10px;border-radius:18px;border:1px solid rgba(240,178,50,.32);pointer-events:none;z-index:10}
       .content{position:absolute;inset:0;display:flex;flex-direction:column;padding:36px;z-index:9}
       .eyebrow{text-align:center;font-family:monospace;font-size:11px;letter-spacing:.32em;color:#2DC97A;text-transform:uppercase;margin-bottom:auto}
@@ -373,7 +373,7 @@ export default function AffiliatePage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold" style={{ color: '#F5E8C8' }}>Affiliate Program</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#8FA899' }}>
+          <p className="text-sm mt-0.5" style={{ color: '#8FA3B8' }}>
             Share your code · earn coins every time a friend plays
           </p>
         </div>
@@ -381,7 +381,7 @@ export default function AffiliatePage() {
           <button
             onClick={() => openAuthModal('register')}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110"
-            style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#060E0A' }}
+            style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#040814' }}
           >
             <Zap className="w-4 h-4" />
             Join Free
@@ -407,8 +407,8 @@ export default function AffiliatePage() {
               {/* Card style picker */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Card Style</p>
-                  <span className="text-[10px] font-mono" style={{ color: '#4A6A55' }}>
+                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Card Style</p>
+                  <span className="text-[10px] font-mono" style={{ color: '#4A5878' }}>
                     {cardVariant === 'rotate' ? 'cycles every 4s' : `#${String(cardVariant).padStart(2, '0')}`}
                   </span>
                 </div>
@@ -420,8 +420,8 @@ export default function AffiliatePage() {
                   }}
                   className="w-full px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none transition-colors"
                   style={{
-                    background: '#0F1A14',
-                    border: '1px solid #1A2E22',
+                    background: '#0F1828',
+                    border: '1px solid #1A2238',
                     color: '#F5E8C8',
                   }}
                 >
@@ -437,7 +437,7 @@ export default function AffiliatePage() {
                   className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:brightness-110 active:scale-95"
                   style={{
                     background: copiedField === 'link' ? 'rgba(45,201,122,0.15)' : 'linear-gradient(135deg, #10B981, #2DC97A)',
-                    color: copiedField === 'link' ? '#2DC97A' : '#060E0A',
+                    color: copiedField === 'link' ? '#2DC97A' : '#040814',
                     border: copiedField === 'link' ? '1px solid rgba(45,201,122,0.4)' : 'none',
                   }}
                 >
@@ -455,7 +455,7 @@ export default function AffiliatePage() {
                 <button
                   onClick={downloadCard}
                   className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:bg-white/5"
-                  style={{ background: 'rgba(255,255,255,0.04)', color: '#8FA899', border: '1px solid #1A2E22' }}
+                  style={{ background: 'rgba(255,255,255,0.04)', color: '#8FA3B8', border: '1px solid #1A2238' }}
                   title="Download / Print card"
                 >
                   <Download className="w-3.5 h-3.5" />
@@ -470,12 +470,12 @@ export default function AffiliatePage() {
               <div
                 className="rounded-2xl p-6"
                 style={{
-                  background: 'radial-gradient(ellipse at 80% 20%, rgba(240,178,50,0.06) 0%, transparent 55%), #0F1A14',
+                  background: 'radial-gradient(ellipse at 80% 20%, rgba(240,178,50,0.06) 0%, transparent 55%), #0F1828',
                   border: '1px solid rgba(240,178,50,0.18)',
                 }}
               >
                 <p className="font-bold text-sm mb-1" style={{ color: '#F5E8C8' }}>Your Referral Link</p>
-                <p className="text-xs mb-5" style={{ color: '#8FA899' }}>
+                <p className="text-xs mb-5" style={{ color: '#8FA3B8' }}>
                   Claim a custom name — your friends see it in the URL when they sign up.
                 </p>
                 <CodePicker currentCode={referralCode} onCodeSet={setReferralCode} />
@@ -484,9 +484,9 @@ export default function AffiliatePage() {
               {/* How it works */}
               <div
                 className="rounded-2xl p-5"
-                style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
+                style={{ background: '#0A101C', border: '1px solid #1A2238' }}
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest mb-4" style={{ color: '#4A6A55' }}>How it works</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest mb-4" style={{ color: '#4A5878' }}>How it works</p>
                 <div className="space-y-3">
                   {[
                     { step: '01', text: 'Share your link or code on social, Discord, or anywhere', color: '#2DC97A' },
@@ -496,8 +496,8 @@ export default function AffiliatePage() {
                   ].map((s) => (
                     <div key={s.step} className="flex items-center gap-3">
                       <span className="font-mono text-[11px] font-bold flex-shrink-0 w-6 text-right" style={{ color: s.color }}>{s.step}</span>
-                      <div className="w-px h-3 flex-shrink-0" style={{ background: '#1A2E22' }} />
-                      <p className="text-xs" style={{ color: '#8FA899' }}>{s.text}</p>
+                      <div className="w-px h-3 flex-shrink-0" style={{ background: '#1A2238' }} />
+                      <p className="text-xs" style={{ color: '#8FA3B8' }}>{s.text}</p>
                     </div>
                   ))}
                 </div>
@@ -516,16 +516,16 @@ export default function AffiliatePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06 }}
                   className="rounded-xl p-4"
-                  style={{ background: '#0F1A14', border: `1px solid ${stat.color}18` }}
+                  style={{ background: '#0F1828', border: `1px solid ${stat.color}18` }}
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${stat.color}12` }}>
                       <Icon className="w-3.5 h-3.5" style={{ color: stat.color }} />
                     </div>
-                    <p className="text-[10px] font-medium" style={{ color: '#8FA899' }}>{stat.label}</p>
+                    <p className="text-[10px] font-medium" style={{ color: '#8FA3B8' }}>{stat.label}</p>
                   </div>
                   <p className="font-black text-2xl number-display" style={{ color: stat.color }}>{stat.value}</p>
-                  <p className="text-[9px] mt-0.5" style={{ color: '#4A6A55' }}>{stat.sub}</p>
+                  <p className="text-[9px] mt-0.5" style={{ color: '#4A5878' }}>{stat.sub}</p>
                 </motion.div>
               );
             })}
@@ -551,7 +551,7 @@ export default function AffiliatePage() {
                   }}
                 >
                   <p className="font-black text-sm mb-1" style={{ color: tier.color }}>{tier.tier}</p>
-                  <p className="text-[10px] mb-2" style={{ color: '#8FA899' }}>{tier.refs} referrals</p>
+                  <p className="text-[10px] mb-2" style={{ color: '#8FA3B8' }}>{tier.refs} referrals</p>
                   <p className="text-[11px] font-semibold mb-1" style={{ color: '#F5E8C8' }}>{tier.rate}</p>
                   {tier.bonus && (
                     <p className="text-[9px] font-bold px-1.5 py-0.5 rounded inline-block" style={{ background: `${tier.color}15`, color: tier.color }}>
@@ -564,10 +564,10 @@ export default function AffiliatePage() {
           </div>
 
           {/* ── REFERRAL HISTORY TABLE ── */}
-          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #1A2E22' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #1A2238' }}>
             <div
               className="px-5 py-4 flex items-center justify-between"
-              style={{ background: '#0F1A14', borderBottom: '1px solid #1A2E22' }}
+              style={{ background: '#0F1828', borderBottom: '1px solid #1A2238' }}
             >
               <h2 className="font-bold text-sm" style={{ color: '#F5E8C8' }}>
                 Your Referrals
@@ -585,21 +585,21 @@ export default function AffiliatePage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 + i * 0.05 }}
                 className="flex items-center gap-4 px-5 py-3.5 border-b transition-colors hover:bg-white/[0.02]"
-                style={{ borderColor: '#1A2E22' }}
+                style={{ borderColor: '#1A2238' }}
               >
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-black flex-shrink-0"
-                  style={{ background: ref.status === 'active' ? 'linear-gradient(135deg, #2DC97A, #10B981)' : '#1A2E22' }}
+                  style={{ background: ref.status === 'active' ? 'linear-gradient(135deg, #2DC97A, #10B981)' : '#1A2238' }}
                 >
                   {ref.username[0]}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold truncate" style={{ color: '#F5E8C8' }}>{ref.username}</p>
-                  <p className="text-[10px]" style={{ color: '#4A6A55' }}>Joined {ref.joinDate}</p>
+                  <p className="text-[10px]" style={{ color: '#4A5878' }}>Joined {ref.joinDate}</p>
                 </div>
                 <div className="hidden sm:block text-right">
-                  <p className="text-[10px]" style={{ color: '#4A6A55' }}>Wagered</p>
-                  <p className="text-xs font-bold number-display" style={{ color: '#8FA899' }}>
+                  <p className="text-[10px]" style={{ color: '#4A5878' }}>Wagered</p>
+                  <p className="text-xs font-bold number-display" style={{ color: '#8FA3B8' }}>
                     {ref.wagered > 0 ? formatGC(ref.wagered) : '—'}
                   </p>
                 </div>
@@ -611,15 +611,15 @@ export default function AffiliatePage() {
                   {ref.status === 'active' ? 'Active' : 'Pending'}
                 </span>
                 <div className="text-right flex-shrink-0 min-w-[80px]">
-                  <p className="text-sm font-black number-display" style={{ color: ref.earned > 0 ? '#F0B232' : '#4A6A55' }}>
+                  <p className="text-sm font-black number-display" style={{ color: ref.earned > 0 ? '#F0B232' : '#4A5878' }}>
                     {ref.earned > 0 ? `+${formatGC(ref.earned)} GC` : 'Pending'}
                   </p>
                 </div>
               </motion.div>
             ))}
 
-            <div className="px-5 py-3 flex items-center justify-between" style={{ background: '#0F1A14' }}>
-              <p className="text-xs" style={{ color: '#4A6A55' }}>Showing {MOCK_REFERRALS.length} of {MOCK_REFERRALS.length} referrals</p>
+            <div className="px-5 py-3 flex items-center justify-between" style={{ background: '#0F1828' }}>
+              <p className="text-xs" style={{ color: '#4A5878' }}>Showing {MOCK_REFERRALS.length} of {MOCK_REFERRALS.length} referrals</p>
               <button
                 type="button"
                 onClick={() => toast('Full report exports as CSV', { description: 'Real download lands with the backend; this is a 5-row preview.' })}
@@ -642,7 +642,7 @@ export default function AffiliatePage() {
             </div>
             <div className="flex-1">
               <p className="font-bold mb-1" style={{ color: '#F5E8C8' }}>Creator Program</p>
-              <p className="text-sm" style={{ color: '#8FA899' }}>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>
                 Streamers and content creators get higher commission rates, custom branding, and dedicated account managers. Apply to unlock creator-tier benefits.
               </p>
             </div>
@@ -656,16 +656,16 @@ export default function AffiliatePage() {
         </>
       ) : (
         /* Logged out state */
-        <div className="rounded-2xl p-10 text-center" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+        <div className="rounded-2xl p-10 text-center" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
           <Users className="w-12 h-12 mx-auto mb-4 opacity-30" style={{ color: '#F0B232' }} />
           <h2 className="font-display text-xl font-bold mb-2" style={{ color: '#F5E8C8' }}>Join to access your affiliate dashboard</h2>
-          <p className="text-sm mb-6 max-w-sm mx-auto" style={{ color: '#8FA899' }}>
+          <p className="text-sm mb-6 max-w-sm mx-auto" style={{ color: '#8FA3B8' }}>
             Sign up free and start earning 5,000 GC for every friend who joins and plays.
           </p>
           <button
             onClick={() => openAuthModal('register')}
             className="px-7 py-3 rounded-xl font-black text-sm transition-all hover:brightness-110"
-            style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#060E0A' }}
+            style={{ background: 'linear-gradient(135deg, #10B981, #2DC97A)', color: '#040814' }}
           >
             Sign Up Free
           </button>
@@ -673,7 +673,7 @@ export default function AffiliatePage() {
       )}
 
       <div className="text-center pt-2">
-        <p className="text-[10px]" style={{ color: '#4A6A55' }}>
+        <p className="text-[10px]" style={{ color: '#4A5878' }}>
           18+ · Free to play · No real money · Max 50 referrals per account · Void where prohibited
         </p>
       </div>

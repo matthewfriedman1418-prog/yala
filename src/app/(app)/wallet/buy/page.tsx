@@ -24,7 +24,7 @@ export default function BuyRedirectPage() {
           className="w-10 h-10 rounded-full mx-auto mb-3 border-2 border-t-transparent animate-spin"
           style={{ borderColor: 'rgba(240,178,50,0.4)', borderTopColor: 'transparent' }}
         />
-        <p className="text-sm" style={{ color: '#8FA899' }}>Opening Buy Coins…</p>
+        <p className="text-sm" style={{ color: '#8FA3B8' }}>Opening Buy Coins…</p>
       </div>
     </div>
   );

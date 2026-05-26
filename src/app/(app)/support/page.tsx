@@ -30,7 +30,7 @@ export default function SupportPage() {
           <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#F0B232' }}>Support</span>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Help Center</h1>
-        <p style={{ color: '#8FA899' }}>Search the FAQ, hit live chat, or open a ticket.</p>
+        <p style={{ color: '#8FA3B8' }}>Search the FAQ, hit live chat, or open a ticket.</p>
       </div>
 
       {/* Two-column layout: contact + FAQ on the left, ticket on the right */}
@@ -44,7 +44,7 @@ export default function SupportPage() {
               type="button"
               onClick={() => toast('Live chat opens here', { description: 'Real chat widget (Intercom/Zendesk) ships with the backend.' })}
               className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
-              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+              style={{ background: '#0F1828', border: '1px solid #1A2238' }}
             >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
@@ -52,7 +52,7 @@ export default function SupportPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-sm mb-0.5" style={{ color: '#F5E8C8' }}>Live Chat</p>
-                <p className="text-xs leading-snug" style={{ color: '#8FA899' }}>Real-time agent</p>
+                <p className="text-xs leading-snug" style={{ color: '#8FA3B8' }}>Real-time agent</p>
                 <div className="flex items-center gap-1 mt-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-[10px] text-emerald-400 font-semibold">24/7</span>
@@ -62,7 +62,7 @@ export default function SupportPage() {
             <a
               href="mailto:support@yala.com?subject=Yala%20Support%20Request"
               className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
-              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+              style={{ background: '#0F1828', border: '1px solid #1A2238' }}
             >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
@@ -70,8 +70,8 @@ export default function SupportPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-sm mb-0.5" style={{ color: '#F5E8C8' }}>Email</p>
-                <p className="text-xs leading-snug truncate" style={{ color: '#8FA899' }}>support@yala.com</p>
-                <p className="text-[10px] mt-1.5 font-semibold" style={{ color: '#8FA899' }}>&lt; 24h response</p>
+                <p className="text-xs leading-snug truncate" style={{ color: '#8FA3B8' }}>support@yala.com</p>
+                <p className="text-[10px] mt-1.5 font-semibold" style={{ color: '#8FA3B8' }}>&lt; 24h response</p>
               </div>
             </a>
           </div>
@@ -79,9 +79,9 @@ export default function SupportPage() {
           {/* FAQ — tighter spacing */}
           <div>
             <h2 className="font-display text-lg font-bold mb-3" style={{ color: '#F5E8C8' }}>Frequently Asked Questions</h2>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
               {FAQS.map((faq, i) => (
-                <div key={i} className={i > 0 ? 'border-t' : ''} style={{ borderColor: '#1A2E22' }}>
+                <div key={i} className={i > 0 ? 'border-t' : ''} style={{ borderColor: '#1A2238' }}>
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-white/5"
@@ -89,11 +89,11 @@ export default function SupportPage() {
                     <p className="font-medium text-sm pr-4" style={{ color: '#F5E8C8' }}>{faq.q}</p>
                     {openFaq === i
                       ? <ChevronUp className="w-4 h-4 flex-shrink-0" style={{ color: '#F0B232' }} />
-                      : <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />}
+                      : <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA3B8' }} />}
                   </button>
                   {openFaq === i && (
                     <div className="px-4 pb-4 -mt-1">
-                      <p className="text-xs leading-relaxed" style={{ color: '#8FA899' }}>{faq.a}</p>
+                      <p className="text-xs leading-relaxed" style={{ color: '#8FA3B8' }}>{faq.a}</p>
                     </div>
                   )}
                 </div>
@@ -103,13 +103,13 @@ export default function SupportPage() {
         </div>
 
         {/* RIGHT column: sticky ticket form */}
-        <div className="rounded-2xl p-5 lg:sticky lg:top-4" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+        <div className="rounded-2xl p-5 lg:sticky lg:top-4" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
           <h3 className="font-semibold text-sm mb-3" style={{ color: '#F5E8C8' }}>Submit a Ticket</h3>
           {!submitted ? (
             <div className="space-y-2.5">
-              <input type="email" value={ticketForm.email} onChange={(e) => setTicketForm({ ...ticketForm, email: e.target.value })} placeholder="Your email" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
-              <input type="text" value={ticketForm.subject} onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })} placeholder="Subject" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
-              <textarea value={ticketForm.message} onChange={(e) => setTicketForm({ ...ticketForm, message: e.target.value })} placeholder="Describe your issue…" rows={5} className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50 resize-none" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
+              <input type="email" value={ticketForm.email} onChange={(e) => setTicketForm({ ...ticketForm, email: e.target.value })} placeholder="Your email" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2238' }} />
+              <input type="text" value={ticketForm.subject} onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })} placeholder="Subject" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2238' }} />
+              <textarea value={ticketForm.message} onChange={(e) => setTicketForm({ ...ticketForm, message: e.target.value })} placeholder="Describe your issue…" rows={5} className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50 resize-none" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2238' }} />
               <button
                 onClick={() => {
                   if (!ticketForm.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ticketForm.email)) {
@@ -128,7 +128,7 @@ export default function SupportPage() {
               >
                 Submit Ticket
               </button>
-              <p className="text-[10px] text-center pt-1" style={{ color: '#4A6A55' }}>
+              <p className="text-[10px] text-center pt-1" style={{ color: '#4A5878' }}>
                 Average response time: under 24h
               </p>
             </div>
@@ -136,17 +136,17 @@ export default function SupportPage() {
             <div className="text-center py-4">
               <CheckCircle2Icon />
               <p className="text-emerald-400 font-semibold text-sm mt-2">Ticket Submitted</p>
-              <p className="text-xs mt-1" style={{ color: '#8FA899' }}>We will reply to {ticketForm.email} within 24h.</p>
+              <p className="text-xs mt-1" style={{ color: '#8FA3B8' }}>We will reply to {ticketForm.email} within 24h.</p>
             </div>
           )}
 
           {/* RG helpline tucked in the same column */}
-          <div className="mt-5 pt-4" style={{ borderTop: '1px solid #1A2E22' }}>
-            <p className="text-[10px] uppercase tracking-widest font-semibold mb-1" style={{ color: '#8FA899' }}>Problem Gambling</p>
+          <div className="mt-5 pt-4" style={{ borderTop: '1px solid #1A2238' }}>
+            <p className="text-[10px] uppercase tracking-widest font-semibold mb-1" style={{ color: '#8FA3B8' }}>Problem Gambling</p>
             <p className="text-xs" style={{ color: '#F5E8C8' }}>
               Helpline: <a href="tel:1-800-522-4700" className="font-bold" style={{ color: '#2DC97A' }}>1-800-522-4700</a>
             </p>
-            <p className="text-[10px] mt-0.5" style={{ color: '#4A6A55' }}>24/7 · free · confidential</p>
+            <p className="text-[10px] mt-0.5" style={{ color: '#4A5878' }}>24/7 · free · confidential</p>
           </div>
         </div>
       </div>

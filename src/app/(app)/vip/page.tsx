@@ -41,7 +41,7 @@ export default function VIPPage() {
       <div
         className="relative rounded-2xl overflow-hidden p-6 sm:p-8"
         style={{
-          background: 'radial-gradient(ellipse at 20% 70%, rgba(240,178,50,0.16) 0%, transparent 55%), radial-gradient(ellipse at 90% 0%, rgba(45,201,122,0.10) 0%, transparent 55%), linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)',
+          background: 'radial-gradient(ellipse at 20% 70%, rgba(240,178,50,0.16) 0%, transparent 55%), radial-gradient(ellipse at 90% 0%, rgba(45,201,122,0.10) 0%, transparent 55%), linear-gradient(180deg, #0F1828 0%, #08121C 100%)',
           border: '1px solid rgba(240,178,50,0.22)',
         }}
       >
@@ -71,7 +71,7 @@ export default function VIPPage() {
           <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>
             Six tiers. <span className="gold-shimmer">Real perks.</span>
           </h1>
-          <p className="text-sm max-w-lg mb-5" style={{ color: '#8FA899' }}>
+          <p className="text-sm max-w-lg mb-5" style={{ color: '#8FA3B8' }}>
             Every GC you wager earns XP toward the next tier. Higher tiers unlock bigger rakeback, faster cashouts, and custom offers.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
@@ -87,7 +87,7 @@ export default function VIPPage() {
         <div
           className="rounded-2xl p-5 sm:p-6"
           style={{
-            background: '#0F1A14',
+            background: '#0F1828',
             border: `1px solid ${tierColor}38`,
             boxShadow: `0 0 32px ${tierColor}12`,
           }}
@@ -105,13 +105,13 @@ export default function VIPPage() {
                 <YalaIcon name={currentTier.icon} size={28} />
               </div>
               <div>
-                <p className="text-[10px] uppercase tracking-widest font-bold mb-0.5" style={{ color: '#8FA899' }}>
+                <p className="text-[10px] uppercase tracking-widest font-bold mb-0.5" style={{ color: '#8FA3B8' }}>
                   Your tier
                 </p>
                 <p className="font-display text-xl font-bold" style={{ color: tierColor }}>
                   {currentTier.name}
                 </p>
-                <p className="text-xs number-display mt-0.5" style={{ color: '#8FA899' }}>
+                <p className="text-xs number-display mt-0.5" style={{ color: '#8FA3B8' }}>
                   {formatXP(xp)} XP earned
                 </p>
               </div>
@@ -123,7 +123,7 @@ export default function VIPPage() {
             >
               <TrendingUp className="w-4 h-4" style={{ color: '#2DC97A' }} />
               <div>
-                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: '#8FA899' }}>Rakeback rate</p>
+                <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: '#8FA3B8' }}>Rakeback rate</p>
                 <p className="text-lg font-black number-display leading-none" style={{ color: '#2DC97A' }}>
                   {currentTier.rakeback}%
                 </p>
@@ -136,13 +136,13 @@ export default function VIPPage() {
             <div>
               <div className="flex justify-between text-xs mb-2">
                 <span className="font-bold" style={{ color: tierColor }}>{currentTier.name}</span>
-                <span style={{ color: '#8FA899' }}>
+                <span style={{ color: '#8FA3B8' }}>
                   <span className="font-mono font-bold" style={{ color: '#F5E8C8' }}>
                     {(nextTier.xpRequired - xp).toLocaleString()}
                   </span> XP to <span className="font-bold" style={{ color: getVIPColor(nextTier.tier) }}>{nextTier.name}</span>
                 </span>
               </div>
-              <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#1A2E22' }}>
+              <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#1A2238' }}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
@@ -156,7 +156,7 @@ export default function VIPPage() {
                   />
                 </motion.div>
               </div>
-              <p className="text-[10px] mt-1.5 text-right number-display" style={{ color: '#8FA899' }}>
+              <p className="text-[10px] mt-1.5 text-right number-display" style={{ color: '#8FA3B8' }}>
                 {progress.toFixed(1)}% progress
               </p>
             </div>
@@ -195,7 +195,7 @@ export default function VIPPage() {
                 style={{
                   background: isCurrent
                     ? `linear-gradient(135deg, ${tier.color}14, transparent)`
-                    : '#0F1A14',
+                    : '#0F1828',
                   border: `1px solid ${isCurrent ? `${tier.color}55` : `${tier.color}22`}`,
                   boxShadow: isCurrent ? `0 0 28px ${tier.color}1A` : undefined,
                 }}
@@ -217,20 +217,20 @@ export default function VIPPage() {
                       <p className="font-display font-bold text-base leading-none" style={{ color: tier.color }}>
                         {tier.name}
                       </p>
-                      <p className="text-[11px] number-display mt-1" style={{ color: '#8FA899' }}>
+                      <p className="text-[11px] number-display mt-1" style={{ color: '#8FA3B8' }}>
                         {tier.xpRequired === 0 ? 'Starting tier' : `${tier.xpRequired.toLocaleString()} XP`}
                       </p>
                     </div>
                   </div>
                   {isCurrent
-                    ? <span className="text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider" style={{ background: tier.color, color: '#060E0A' }}>
+                    ? <span className="text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider" style={{ background: tier.color, color: '#040814' }}>
                         Current
                       </span>
                     : isUnlocked
                       ? <span className="text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1" style={{ background: 'rgba(45,201,122,0.12)', color: '#2DC97A' }}>
                           <Check className="w-3 h-3" strokeWidth={3} /> Reached
                         </span>
-                      : <span className="text-[10px] font-bold flex items-center gap-1" style={{ color: '#4A6A55' }}>
+                      : <span className="text-[10px] font-bold flex items-center gap-1" style={{ color: '#4A5878' }}>
                           <LockIcon className="w-3 h-3" /> Locked
                         </span>
                   }
@@ -257,15 +257,15 @@ export default function VIPPage() {
                         className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-px"
                         style={{
                           background: isUnlocked ? `${tier.color}22` : 'rgba(255,255,255,0.04)',
-                          border: isUnlocked ? `1px solid ${tier.color}40` : '1px solid #1A2E22',
+                          border: isUnlocked ? `1px solid ${tier.color}40` : '1px solid #1A2238',
                         }}
                       >
                         {isUnlocked
                           ? <Check className="w-2.5 h-2.5" style={{ color: tier.color }} strokeWidth={3} />
-                          : <LockIcon className="w-2 h-2" style={{ color: '#4A6A55' }} strokeWidth={3} />
+                          : <LockIcon className="w-2 h-2" style={{ color: '#4A5878' }} strokeWidth={3} />
                         }
                       </span>
-                      <span style={{ color: isUnlocked ? '#F5E8C8' : '#8FA899' }}>{benefit}</span>
+                      <span style={{ color: isUnlocked ? '#F5E8C8' : '#8FA3B8' }}>{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -279,7 +279,7 @@ export default function VIPPage() {
       {!isLoggedIn && (
         <div
           className="text-center py-10 rounded-2xl"
-          style={{ background: '#0F1A14', border: '1px solid rgba(240,178,50,0.25)' }}
+          style={{ background: '#0F1828', border: '1px solid rgba(240,178,50,0.25)' }}
         >
           <div
             className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4"
@@ -290,13 +290,13 @@ export default function VIPPage() {
           <p className="font-display font-bold text-lg mb-1" style={{ color: '#F5E8C8' }}>
             Start earning VIP tier
           </p>
-          <p className="text-sm mb-5" style={{ color: '#8FA899' }}>Every wager earns XP toward your next tier.</p>
+          <p className="text-sm mb-5" style={{ color: '#8FA3B8' }}>Every wager earns XP toward your next tier.</p>
           <button
             onClick={() => openAuthModal('register')}
             className="px-7 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-95"
             style={{
               background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: '0 4px 20px rgba(45,201,122,0.35)',
             }}
           >
@@ -305,8 +305,8 @@ export default function VIPPage() {
         </div>
       )}
 
-      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.5)' }}>
           18+ · No Purchase Necessary · Void Where Prohibited · <Link href="/sweepstakes-rules" className="underline transition-colors hover:opacity-80">Sweepstakes Rules</Link>
         </p>
       </div>
@@ -318,7 +318,7 @@ function HeroPerkStat({ icon, value, label }: { icon: 'trending' | 'trophy' | 'c
   return (
     <div
       className="rounded-xl px-3.5 py-2.5 flex items-center gap-3"
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}
+      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}
     >
       <div
         className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -331,7 +331,7 @@ function HeroPerkStat({ icon, value, label }: { icon: 'trending' | 'trophy' | 'c
       </div>
       <div>
         <p className="font-display text-base font-black leading-none" style={{ color: '#F5E8C8' }}>{value}</p>
-        <p className="text-[10px] uppercase tracking-widest mt-1" style={{ color: '#8FA899' }}>{label}</p>
+        <p className="text-[10px] uppercase tracking-widest mt-1" style={{ color: '#8FA3B8' }}>{label}</p>
       </div>
     </div>
   );

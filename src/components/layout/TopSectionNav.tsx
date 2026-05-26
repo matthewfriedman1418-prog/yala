@@ -18,7 +18,7 @@ export function TopSectionNav() {
   return (
     <div
       className="h-10 flex items-center px-2 flex-shrink-0 overflow-x-auto no-scrollbar"
-      style={{ backgroundColor: '#07110A', borderBottom: '1px solid #1A2E22' }}
+      style={{ backgroundColor: '#06101C', borderBottom: '1px solid #1A2238' }}
     >
       {SECTIONS.map((s) => {
         const Icon = s.icon;
@@ -33,7 +33,7 @@ export function TopSectionNav() {
             href={s.href}
             className={cn(
               'relative flex items-center gap-1.5 px-4 h-full text-xs font-semibold transition-colors whitespace-nowrap flex-shrink-0',
-              isActive ? 'text-[#F5E8C8]' : 'text-[#4A6A55] hover:text-[#8FA899]'
+              isActive ? 'text-[#F5E8C8]' : 'text-[#4A5878] hover:text-[#8FA3B8]'
             )}
           >
             <Icon className="w-3.5 h-3.5" />

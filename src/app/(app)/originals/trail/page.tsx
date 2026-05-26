@@ -278,7 +278,7 @@ export default function TrailPage() {
       <Link
         href="/originals"
         className="inline-flex items-center gap-1.5 text-sm transition-opacity hover:opacity-80"
-        style={{ color: '#8FA899' }}
+        style={{ color: '#8FA3B8' }}
       >
         <ChevronLeft className="w-4 h-4" />
         All Originals
@@ -290,14 +290,14 @@ export default function TrailPage() {
         <div
           className="rounded-3xl overflow-hidden"
           style={{
-            background: `radial-gradient(ellipse at 50% -10%, ${accent}14, transparent 60%), #0C1812`,
-            border: '1px solid #1A2E22',
+            background: `radial-gradient(ellipse at 50% -10%, ${accent}14, transparent 60%), #0A101C`,
+            border: '1px solid #1A2238',
           }}
         >
           {/* Header strip */}
           <div
             className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4"
-            style={{ borderBottom: '1px solid #1A2E22' }}
+            style={{ borderBottom: '1px solid #1A2238' }}
           >
             <div className="flex items-center gap-3 min-w-0">
               <div
@@ -318,7 +318,7 @@ export default function TrailPage() {
                     New · Yala Original
                   </span>
                 </div>
-                <p className="text-[11px] truncate" style={{ color: '#8FA899' }}>
+                <p className="text-[11px] truncate" style={{ color: '#8FA3B8' }}>
                   Adjacent-tile path game · 99% RTP · 5000× max win
                 </p>
               </div>
@@ -372,11 +372,11 @@ export default function TrailPage() {
         {/* RIGHT: control panel */}
         <div
           className="rounded-3xl p-5 space-y-5 self-start"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
           {/* Balance */}
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>
               Balance
             </span>
             <div className="flex items-center gap-1.5">
@@ -384,13 +384,13 @@ export default function TrailPage() {
               <span className="font-mono font-black text-sm" style={{ color: accent }}>
                 {isGC ? formatGC(goldCoins) : sweepCoins.toFixed(2)}
               </span>
-              <span className="text-[10px]" style={{ color: '#8FA899' }}>{activeCurrency}</span>
+              <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{activeCurrency}</span>
             </div>
           </div>
 
           {/* Bet input */}
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>
+            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>
               Bet amount
             </label>
             <div className="relative">
@@ -407,11 +407,11 @@ export default function TrailPage() {
                 className="w-full pl-3 pr-20 py-2.5 rounded-xl text-sm font-mono font-bold focus:outline-none transition-colors disabled:opacity-60"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid #1A2E22',
+                  border: '1px solid #1A2238',
                   color: '#F5E8C8',
                 }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = `${accent}66`)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
               />
               <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex gap-1">
                 <button
@@ -419,7 +419,7 @@ export default function TrailPage() {
                   disabled={phase === 'playing'}
                   onClick={() => setBet((b) => Math.max(isGC ? 1 : 0.1, +(b / 2).toFixed(2)))}
                   className="px-2 py-1 rounded-lg text-[10px] font-black transition-colors hover:bg-white/10 disabled:opacity-50"
-                  style={{ color: '#8FA899', background: 'rgba(255,255,255,0.04)' }}
+                  style={{ color: '#8FA3B8', background: 'rgba(255,255,255,0.04)' }}
                 >
                   ½
                 </button>
@@ -428,7 +428,7 @@ export default function TrailPage() {
                   disabled={phase === 'playing'}
                   onClick={() => setBet((b) => Math.min(balance, +(b * 2).toFixed(2)) || (isGC ? 1 : 0.1))}
                   className="px-2 py-1 rounded-lg text-[10px] font-black transition-colors hover:bg-white/10 disabled:opacity-50"
-                  style={{ color: '#8FA899', background: 'rgba(255,255,255,0.04)' }}
+                  style={{ color: '#8FA3B8', background: 'rgba(255,255,255,0.04)' }}
                 >
                   2×
                 </button>
@@ -444,8 +444,8 @@ export default function TrailPage() {
                   className="px-2 py-1 rounded-md text-[10px] font-bold transition-colors disabled:opacity-50"
                   style={{
                     background: bet === v ? `${accent}1A` : 'rgba(255,255,255,0.03)',
-                    color:      bet === v ? accent : '#8FA899',
-                    border:     `1px solid ${bet === v ? `${accent}44` : '#1A2E22'}`,
+                    color:      bet === v ? accent : '#8FA3B8',
+                    border:     `1px solid ${bet === v ? `${accent}44` : '#1A2238'}`,
                   }}
                 >
                   {v < 10 ? v.toFixed(1) : v}
@@ -456,7 +456,7 @@ export default function TrailPage() {
 
           {/* Difficulty */}
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>
+            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>
               Difficulty
             </label>
             <div className="grid grid-cols-3 gap-1.5">
@@ -472,13 +472,13 @@ export default function TrailPage() {
                     className="py-2 px-1 rounded-xl text-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
                       background: active ? `${meta.color}14` : 'rgba(255,255,255,0.03)',
-                      border:     `1px solid ${active ? `${meta.color}55` : '#1A2E22'}`,
+                      border:     `1px solid ${active ? `${meta.color}55` : '#1A2238'}`,
                     }}
                   >
                     <p className="text-[11px] font-black" style={{ color: active ? meta.color : '#F5E8C8' }}>
                       {meta.label}
                     </p>
-                    <p className="text-[9px] mt-0.5" style={{ color: '#8FA899' }}>{meta.sub}</p>
+                    <p className="text-[9px] mt-0.5" style={{ color: '#8FA3B8' }}>{meta.sub}</p>
                   </button>
                 );
               })}
@@ -493,7 +493,7 @@ export default function TrailPage() {
               className="w-full py-3.5 rounded-xl font-display text-base font-black transition-all hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: `linear-gradient(135deg, ${accent}, ${accentSec})`,
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: `0 6px 24px ${accent}40`,
               }}
             >
@@ -515,7 +515,7 @@ export default function TrailPage() {
                 background: path.length === 0
                   ? 'rgba(255,255,255,0.04)'
                   : `linear-gradient(135deg, ${accent}, ${accentSec})`,
-                color: path.length === 0 ? '#8FA899' : '#060E0A',
+                color: path.length === 0 ? '#8FA3B8' : '#040814',
                 boxShadow: path.length === 0 ? 'none' : `0 6px 24px ${accent}40`,
               }}
             >
@@ -532,7 +532,7 @@ export default function TrailPage() {
               type="button"
               onClick={reset}
               className="w-full py-2 rounded-xl text-xs font-bold transition-colors hover:bg-white/5 flex items-center justify-center gap-1.5"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
             >
               <RotateCcw className="w-3 h-3" />
               New round
@@ -540,9 +540,9 @@ export default function TrailPage() {
           )}
 
           {/* Recent rounds (your local history) */}
-          <div className="pt-2" style={{ borderTop: '1px solid #1A2E22' }}>
+          <div className="pt-2" style={{ borderTop: '1px solid #1A2238' }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>
                 Your last rounds
               </span>
               {history.length > 0 && (
@@ -550,14 +550,14 @@ export default function TrailPage() {
                   type="button"
                   onClick={() => setHistory([])}
                   className="text-[10px] underline opacity-60 hover:opacity-100 transition-opacity"
-                  style={{ color: '#8FA899' }}
+                  style={{ color: '#8FA3B8' }}
                 >
                   clear
                 </button>
               )}
             </div>
             {history.length === 0 ? (
-              <p className="text-[11px]" style={{ color: '#4A6A55' }}>Your wins and busts will show here.</p>
+              <p className="text-[11px]" style={{ color: '#4A5878' }}>Your wins and busts will show here.</p>
             ) : (
               <div className="flex flex-wrap gap-1">
                 {history.map((h, i) => (
@@ -581,8 +581,8 @@ export default function TrailPage() {
       </div>
 
       {/* ── Lower tabs: Recent, Leaderboard, Rules, Fairness ─────── */}
-      <div className="rounded-3xl" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
-        <div className="flex border-b" style={{ borderColor: '#1A2E22' }}>
+      <div className="rounded-3xl" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
+        <div className="flex border-b" style={{ borderColor: '#1A2238' }}>
           {([
             { id: 'recent',      label: 'Recent Plays',   icon: TrendingUp },
             { id: 'leaderboard', label: 'Leaderboard',    icon: BarChart3 },
@@ -597,7 +597,7 @@ export default function TrailPage() {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[11px] font-bold transition-colors relative"
-                style={{ color: active ? accent : '#8FA899' }}
+                style={{ color: active ? accent : '#8FA3B8' }}
               >
                 <Icon className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{tab.label}</span>
@@ -627,8 +627,8 @@ export default function TrailPage() {
 
 function StatChip({ label, value }: { label: string; value: string }) {
   return (
-    <div className="px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
-      <p className="text-[8px] font-bold uppercase tracking-widest leading-none" style={{ color: '#8FA899' }}>{label}</p>
+    <div className="px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
+      <p className="text-[8px] font-bold uppercase tracking-widest leading-none" style={{ color: '#8FA3B8' }}>{label}</p>
       <p className="text-[11px] font-mono font-black leading-tight mt-0.5" style={{ color: '#F5E8C8' }}>{value}</p>
     </div>
   );
@@ -643,7 +643,7 @@ function GameStatus({
   if (phase === 'idle') {
     return (
       <div className="text-center py-2 px-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }}>
-        <p className="text-[11px]" style={{ color: '#8FA899' }}>
+        <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
           Set your bet on the right, then press <span className="font-bold" style={{ color: '#F5E8C8' }}>Bet</span> to begin.
         </p>
       </div>
@@ -654,19 +654,19 @@ function GameStatus({
       <div className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl" style={{ background: `${accent}0F`, border: `1px solid ${accent}33` }}>
         <div className="flex items-center gap-3">
           <div>
-            <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Multiplier</p>
+            <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Multiplier</p>
             <p className="font-mono font-black text-2xl leading-tight mt-1" style={{ color: accent }}>{currentMult.toFixed(2)}×</p>
           </div>
-          <div className="h-9 w-px" style={{ background: '#1A2E22' }} />
+          <div className="h-9 w-px" style={{ background: '#1A2238' }} />
           <div>
-            <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Tiles revealed</p>
+            <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Tiles revealed</p>
             <p className="font-mono font-black text-lg leading-tight mt-1" style={{ color: '#F5E8C8' }}>{path.length}</p>
           </div>
         </div>
         <div className="text-right">
-          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Potential</p>
+          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Potential</p>
           <p className="font-mono font-black text-lg leading-tight mt-1" style={{ color: '#F5E8C8' }}>
-            {potential.toFixed(2)} <span className="text-[10px]" style={{ color: '#8FA899' }}>{activeCurrency}</span>
+            {potential.toFixed(2)} <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{activeCurrency}</span>
           </p>
         </div>
       </div>
@@ -677,7 +677,7 @@ function GameStatus({
       <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl" style={{ background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.30)' }}>
         <Skull className="w-4 h-4" style={{ color: '#EF4444' }} />
         <p className="text-sm font-black uppercase tracking-widest" style={{ color: '#EF4444' }}>Bust</p>
-        <span className="text-[11px]" style={{ color: '#8FA899' }}>· after {path.length} {path.length === 1 ? 'tile' : 'tiles'}</span>
+        <span className="text-[11px]" style={{ color: '#8FA3B8' }}>· after {path.length} {path.length === 1 ? 'tile' : 'tiles'}</span>
       </div>
     );
   }
@@ -707,7 +707,7 @@ function NextMultBar({
 }) {
   if (phase !== 'playing' || path.length === 0) {
     return (
-      <p className="text-center text-[10px]" style={{ color: '#4A6A55' }}>
+      <p className="text-center text-[10px]" style={{ color: '#4A5878' }}>
         {phase === 'playing'
           ? 'Click any EDGE tile to start your trail'
           : `Trail · ${hazardCount} hazards on a 6×6 grid · cash out anytime`}
@@ -716,9 +716,9 @@ function NextMultBar({
   }
   const delta = nextMult - currentMult;
   return (
-    <p className="text-center text-[10px]" style={{ color: '#8FA899' }}>
+    <p className="text-center text-[10px]" style={{ color: '#8FA3B8' }}>
       Next safe tile → <span className="font-mono font-bold" style={{ color: accent }}>{nextMult.toFixed(2)}×</span>{' '}
-      <span style={{ color: '#4A6A55' }}>(+{delta.toFixed(2)}×)</span>
+      <span style={{ color: '#4A5878' }}>(+{delta.toFixed(2)}×)</span>
     </p>
   );
 }
@@ -757,7 +757,7 @@ function TrailBoard({
 
         // Decide background
         let bg = 'rgba(255,255,255,0.025)';
-        let border = '1px solid #1A2E22';
+        let border = '1px solid #1A2238';
         let text: React.ReactNode = null;
         let glow = 'none';
 
@@ -770,7 +770,7 @@ function TrailBoard({
           border = `1px solid ${accent}77`;
           glow   = `0 0 14px ${accent}55, inset 0 0 12px ${accent}22`;
           text   = (
-            <span className="text-[10px] font-mono font-black" style={{ color: '#0A1410' }}>
+            <span className="text-[10px] font-mono font-black" style={{ color: '#08121C' }}>
               {pathIdx + 1}
             </span>
           );
@@ -836,22 +836,22 @@ function RecentPlaysList({ accent }: { accent: string }) {
               <YalaAvatar initials={p.avatar} tier={p.tier} size={26} hideBadge />
               <div className="min-w-0">
                 <p className="text-[12px] font-bold truncate" style={{ color: tierColor }}>{p.user}</p>
-                <p className="text-[9px] font-mono" style={{ color: '#4A6A55' }}>{p.time} ago</p>
+                <p className="text-[9px] font-mono" style={{ color: '#4A5878' }}>{p.time} ago</p>
               </div>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
               <div className="text-right">
-                <p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Bet</p>
+                <p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Bet</p>
                 <p className="font-mono font-bold text-[11px]" style={{ color: '#F5E8C8' }}>{p.bet}</p>
               </div>
               <div className="text-right w-12">
-                <p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>×</p>
+                <p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>×</p>
                 <p className="font-mono font-bold text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>
                   {p.won ? `${p.mult.toFixed(2)}×` : '—'}
                 </p>
               </div>
               <div className="text-right w-16">
-                <p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Payout</p>
+                <p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Payout</p>
                 <p className="font-mono font-black text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>
                   {p.won ? `+${p.payout}` : '0'}
                 </p>
@@ -873,13 +873,13 @@ function LeaderboardList({ accent }: { accent: string }) {
         const pct = (p.profit / max) * 100;
         return (
           <div key={p.rank} className="flex items-center gap-3 px-2 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)' }}>
-            <span className="font-mono font-black text-sm w-6 text-center" style={{ color: p.rank <= 3 ? accent : '#8FA899' }}>
+            <span className="font-mono font-black text-sm w-6 text-center" style={{ color: p.rank <= 3 ? accent : '#8FA3B8' }}>
               {p.rank}
             </span>
             <YalaAvatar initials={p.avatar} tier={p.tier} size={26} hideBadge />
             <div className="flex-1 min-w-0">
               <p className="text-[12px] font-bold truncate" style={{ color: tierColor }}>{p.user}</p>
-              <div className="h-1 mt-1 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+              <div className="h-1 mt-1 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                 <div
                   className="h-full rounded-full"
                   style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${accent}, ${tierColor})` }}
@@ -910,7 +910,7 @@ function RulesPanel() {
     <ol className="space-y-2.5 list-decimal list-inside">
       {rules.map((r, i) => (
         <li key={i} className="text-[13px] leading-relaxed" style={{ color: '#F5E8C8' }}>
-          <span style={{ color: '#8FA899' }}>{r}</span>
+          <span style={{ color: '#8FA3B8' }}>{r}</span>
         </li>
       ))}
     </ol>
@@ -920,20 +920,20 @@ function RulesPanel() {
 function FairnessPanel({ seed, nonce }: { seed: string; nonce: number }) {
   return (
     <div className="space-y-3">
-      <p className="text-[12px] leading-relaxed" style={{ color: '#8FA899' }}>
+      <p className="text-[12px] leading-relaxed" style={{ color: '#8FA3B8' }}>
         Trail uses a provably fair seed. Hazard locations are determined before your first reveal from a hash of (server seed + client seed + nonce). The starting tile is always safe.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Active server seed (hashed)</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Active server seed (hashed)</p>
           <p className="font-mono text-[11px] break-all mt-1" style={{ color: '#F5E8C8' }}>{seed || '—'}</p>
         </div>
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Nonce</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Nonce</p>
           <p className="font-mono text-[11px] mt-1" style={{ color: '#F5E8C8' }}>{nonce}</p>
         </div>
       </div>
-      <p className="text-[10px]" style={{ color: '#4A6A55' }}>
+      <p className="text-[10px]" style={{ color: '#4A5878' }}>
         After each round the server seed rotates. Full verification tooling will ship with the production build.
       </p>
     </div>

@@ -3,11 +3,11 @@
 
 @theme {
   /* Yala Brand Colors — #16 Inspired: Teal-Forest + Warm Amber */
-  --color-obsidian: #060E0A;
-  --color-charcoal: #0C1812;
-  --color-panel: #101C16;
-  --color-panel-light: #162218;
-  --color-panel-mid: #1C2E22;
+  --color-obsidian: #040814;
+  --color-charcoal: #0A101C;
+  --color-panel: #101C28;
+  --color-panel-light: #162238;
+  --color-panel-mid: #1C2E3A;
   --color-sand: #C4922A;
   --color-light-sand: #E8C97A;
   --color-gold: #F0B232;
@@ -20,8 +20,8 @@
   --color-emerald-dark: #064E3B;
   --color-emerald-light: #34D399;
   --color-bone: #F5E8C8;
-  --color-muted: #8FA899;
-  --color-border: #1A2E22;
+  --color-muted: #8FA3B8;
+  --color-border: #1A2238;
   --color-border-gold: rgba(240,178,50,0.25);
   --color-border-emerald: rgba(16,185,129,0.3);
   --color-border-teal: rgba(45,201,122,0.25);
@@ -133,14 +133,14 @@ html {
 }
 
 body {
-  background-color: #060E0A;
+  background-color: #040814;
   color: #F5E8C8;
   font-family: 'Manrope', system-ui, sans-serif;
   min-height: 100vh;
 }
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: #0C1812; }
+::-webkit-scrollbar-track { background: #0A101C; }
 ::-webkit-scrollbar-thumb { background: #F0B232; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #FFD166; }
 
@@ -189,7 +189,7 @@ body {
     radial-gradient(ellipse at 15% 60%, rgba(45,201,122,0.14) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 25%, rgba(240,178,50,0.10) 0%, transparent 55%),
     radial-gradient(ellipse at 50% 110%, rgba(26,107,69,0.10) 0%, transparent 50%),
-    #0C1812;
+    #0A101C;
 }
 
 .accent-text { color: var(--accent); }
@@ -294,11 +294,11 @@ body {
 }
 .category-chip.active {
   background: linear-gradient(135deg, #2DC97A, #F0B232);
-  color: #060E0A;
+  color: #040814;
 }
 .category-chip:not(.active) {
   background: rgba(255,255,255,0.04);
-  color: #8FA899;
+  color: #8FA3B8;
   border-color: rgba(255,255,255,0.06);
 }
 .category-chip:not(.active):hover {
@@ -311,7 +311,7 @@ body {
 .gradient-border-card {
   position: relative;
   border-radius: 14px;
-  background: #101C16;
+  background: #101C28;
 }
 .gradient-border-card::before {
   content: '';

@@ -119,7 +119,7 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
     return (
       <div className="group relative w-full aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer" style={{ background: '#0A1810', border: '1px solid rgba(255,255,255,0.08)' }}>
         <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover opacity-35 group-hover:opacity-50 transition-opacity duration-300 scale-110" unoptimized />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 40%, rgba(6,14,10,0.96) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 40%, rgba(4,8,20,0.96) 100%)' }} />
         <div className="absolute top-2 right-2 flex gap-1"><HotBadge /></div>
         <div className="absolute bottom-0 left-0 right-0 p-3 space-y-1">
           <p className="text-sm font-bold text-white">{GAME.name}</p>
@@ -135,7 +135,7 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   // 3 ─ Neon border glow
   { id: 3, name: 'Neon Glow', desc: 'Electric border, hover intensifies', component: function GC3() {
     return (
-      <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ background: '#060E0A', boxShadow: '0 0 0 1px rgba(45,201,122,0.3), 0 0 20px rgba(45,201,122,0.05)' }}>
+      <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ background: '#040814', boxShadow: '0 0 0 1px rgba(45,201,122,0.3), 0 0 20px rgba(45,201,122,0.05)' }}>
         <div className="absolute inset-0 rounded-xl transition-all duration-300 group-hover:shadow-[0_0_0_1.5px_#2DC97A,0_0_30px_rgba(45,201,122,0.25)] pointer-events-none z-10" />
         <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-300" unoptimized />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
@@ -168,9 +168,9 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   // 5 ─ Data dense
   { id: 5, name: 'Data Dense', desc: 'RTP, max win, players, tags visible', component: function GC5() {
     return (
-      <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
         <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover opacity-50 group-hover:opacity-65 transition-opacity" unoptimized />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#060E0A] via-[#060E0A]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#040814] via-[#040814]/60 to-transparent" />
         <div className="absolute top-2 left-2 flex gap-1"><HotBadge /></div>
         <div className="absolute bottom-0 left-0 right-0 p-2.5 space-y-1.5">
           <p className="text-[11px] font-bold text-white truncate">{GAME.name}</p>
@@ -185,8 +185,8 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Users className="w-2.5 h-2.5" style={{ color: '#8FA899' }} />
-            <span className="text-[9px]" style={{ color: '#8FA899' }}>{GAME.playerCount.toLocaleString()} playing</span>
+            <Users className="w-2.5 h-2.5" style={{ color: '#8FA3B8' }} />
+            <span className="text-[9px]" style={{ color: '#8FA3B8' }}>{GAME.playerCount.toLocaleString()} playing</span>
           </div>
         </div>
       </div>
@@ -196,7 +196,7 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   // 6 ─ Horizontal landscape
   { id: 6, name: 'Horizontal Strip', desc: 'Landscape — image left, info right', component: function GC6() {
     return (
-      <div className="group relative w-full rounded-xl overflow-hidden cursor-pointer flex" style={{ height: 80, background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="group relative w-full rounded-xl overflow-hidden cursor-pointer flex" style={{ height: 80, background: '#0A101C', border: '1px solid #1A2238' }}>
         <div className="relative w-20 flex-shrink-0">
           <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="80px" className="object-cover group-hover:scale-105 transition-transform duration-300" unoptimized />
         </div>
@@ -205,11 +205,11 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
             <p className="text-xs font-bold text-white leading-tight">{GAME.name}</p>
             <HotBadge />
           </div>
-          <p className="text-[10px]" style={{ color: '#8FA899' }}>{GAME.provider}</p>
+          <p className="text-[10px]" style={{ color: '#8FA3B8' }}>{GAME.provider}</p>
           <div className="flex items-center gap-2">
             <span className="text-[9px] font-bold" style={{ color: '#F0B232' }}>Max {GAME.maxWin}</span>
-            <span className="text-[9px]" style={{ color: '#4A6A55' }}>·</span>
-            <span className="text-[9px]" style={{ color: '#4A6A55' }}>RTP {GAME.rtp}%</span>
+            <span className="text-[9px]" style={{ color: '#4A5878' }}>·</span>
+            <span className="text-[9px]" style={{ color: '#4A5878' }}>RTP {GAME.rtp}%</span>
           </div>
         </div>
       </div>
@@ -301,14 +301,14 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   // 11 ─ Split half
   { id: 11, name: 'Split Half', desc: 'Top image, bottom solid info panel', component: function GC11() {
     return (
-      <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ border: '1px solid #1A2E22' }}>
+      <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ border: '1px solid #1A2238' }}>
         <div className="relative h-[55%]">
           <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
           <div className="absolute top-2 left-2"><HotBadge /></div>
         </div>
-        <div className="h-[45%] flex flex-col justify-center px-3 py-2 space-y-1.5" style={{ background: '#0C1812' }}>
+        <div className="h-[45%] flex flex-col justify-center px-3 py-2 space-y-1.5" style={{ background: '#0A101C' }}>
           <p className="text-xs font-bold text-white">{GAME.name}</p>
-          <p className="text-[10px]" style={{ color: '#8FA899' }}>{GAME.provider}</p>
+          <p className="text-[10px]" style={{ color: '#8FA3B8' }}>{GAME.provider}</p>
           <div className="flex items-center gap-2">
             <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232' }}>RTP {GAME.rtp}%</span>
             <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: 'rgba(45,201,122,0.1)', color: '#2DC97A' }}>{GAME.maxWin}</span>
@@ -322,13 +322,13 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   { id: 12, name: 'Outlined', desc: 'Transparent with gradient border', component: function GC12() {
     return (
       <div className="group relative w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer p-px" style={{ background: 'linear-gradient(135deg, rgba(45,201,122,0.4), rgba(240,178,50,0.2), rgba(45,201,122,0.1))' }}>
-        <div className="relative w-full h-full rounded-xl overflow-hidden" style={{ background: '#060E0A' }}>
+        <div className="relative w-full h-full rounded-xl overflow-hidden" style={{ background: '#040814' }}>
           <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover opacity-30 group-hover:opacity-50 transition-opacity" unoptimized />
           <div className="absolute inset-0 flex flex-col justify-between p-3">
             <div className="flex gap-1">{GAME.isHot && <HotBadge />}</div>
             <div className="space-y-1">
               <p className="text-xs font-bold" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{GAME.name}</p>
-              <p className="text-[10px]" style={{ color: '#8FA899' }}>{GAME.provider}</p>
+              <p className="text-[10px]" style={{ color: '#8FA3B8' }}>{GAME.provider}</p>
             </div>
           </div>
         </div>
@@ -340,7 +340,7 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   { id: 13, name: 'Trio Showcase', desc: 'Three games stacked, premium editorial', component: function GC13() {
     const games = [GAME, GAME2, GAME3];
     return (
-      <div className="w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="w-full aspect-[3/4] rounded-xl overflow-hidden cursor-pointer" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
         <div className="p-2 space-y-1.5 h-full flex flex-col">
           {games.map((g, i) => (
             <div key={i} className="group relative flex-1 rounded-lg overflow-hidden flex items-end" style={{ background: g.gradient }}>
@@ -439,7 +439,7 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           {GAME.isHot && <div className="absolute top-2 left-2"><HotBadge /></div>}
         </div>
-        <div className="rounded-b-xl px-2 py-1.5 space-y-1" style={{ background: '#0C1812', border: '1px solid #1A2E22', borderTop: 'none' }}>
+        <div className="rounded-b-xl px-2 py-1.5 space-y-1" style={{ background: '#0A101C', border: '1px solid #1A2238', borderTop: 'none' }}>
           <p className="text-[11px] font-bold text-white truncate">{GAME.name}</p>
           <div className="flex flex-wrap gap-1">
             {GAME.tags.map(t => (
@@ -455,11 +455,11 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   // 19 ─ Diagonal split
   { id: 19, name: 'Diagonal Split', desc: 'Two-tone card with diagonal accent', component: function GC19() {
     return (
-      <div className="group relative w-full aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer" style={{ background: '#060E0A' }}>
+      <div className="group relative w-full aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer" style={{ background: '#040814' }}>
         <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover opacity-55 group-hover:opacity-70 transition-opacity duration-300" unoptimized />
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#060E0A]/95" />
-          <div className="absolute bottom-0 right-0 w-full h-1/2 bg-gradient-to-t from-[#060E0A] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#040814]/95" />
+          <div className="absolute bottom-0 right-0 w-full h-1/2 bg-gradient-to-t from-[#040814] to-transparent" />
         </div>
         <div className="absolute left-0 bottom-0 w-2 h-full" style={{ background: 'linear-gradient(180deg, #F0B232, #2DC97A, #1A5C8A)' }} />
         <div className="absolute top-2 right-2"><HotBadge /></div>
@@ -478,10 +478,10 @@ const GC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
         <Image src={GAME.imageUrl} alt={GAME.name} fill sizes="200px" className="object-cover scale-125 group-hover:scale-110 transition-transform duration-700" style={{ filter: 'blur(0px)' }} unoptimized />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-4 px-3">
-          <div className="w-full rounded-xl p-3" style={{ background: 'rgba(12,24,18,0.85)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="w-full rounded-xl p-3" style={{ background: 'rgba(10,16,28,0.85)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)' }}>
             <p className="text-xs font-bold text-white">{GAME.name}</p>
             <div className="flex items-center justify-between mt-1">
-              <p className="text-[9px]" style={{ color: '#8FA899' }}>{GAME.provider}</p>
+              <p className="text-[9px]" style={{ color: '#8FA3B8' }}>{GAME.provider}</p>
               <span className="text-[9px] font-bold" style={{ color: '#F0B232' }}>{GAME.maxWin}</span>
             </div>
           </div>
@@ -500,7 +500,7 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
 
   { id: 1, name: 'Dark Radial', desc: 'Current style — radial glow, centered', component: function H1() {
     return (
-      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: 'radial-gradient(ellipse at 15% 60%, rgba(45,201,122,0.18), transparent 55%), radial-gradient(ellipse at 85% 25%, rgba(240,178,50,0.14), transparent 55%), #0C1812', border: '1px solid #1A2E22' }}>
+      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: 'radial-gradient(ellipse at 15% 60%, rgba(45,201,122,0.18), transparent 55%), radial-gradient(ellipse at 85% 25%, rgba(240,178,50,0.14), transparent 55%), #0A101C', border: '1px solid #1A2238' }}>
         <div className="relative z-10 p-5 flex items-center justify-between h-full">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -528,7 +528,7 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
             <div key={i} className="relative"><Image src={src} alt="" fill className="object-cover" unoptimized sizes="80px" /></div>
           ))}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#060E0A] via-[#060E0A]/80 to-[#060E0A]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#040814] via-[#040814]/80 to-[#040814]/40" />
         <div className="relative z-10 p-5 h-full flex flex-col justify-center">
           <h1 className="text-2xl font-black text-white mb-1">200+ Games</h1>
           <p className="text-sm text-white/60 mb-3">Casino, Sports, Originals — all in one place</p>
@@ -540,8 +540,8 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
 
   { id: 3, name: 'Split Panel', desc: 'Casino left / Sportsbook right', component: function H3() {
     return (
-      <div className="relative w-full rounded-xl overflow-hidden flex" style={{ height: 160, border: '1px solid #1A2E22' }}>
-        <div className="flex-1 relative p-4 flex flex-col justify-between" style={{ background: 'linear-gradient(135deg, #0C1812, #1A2E22)' }}>
+      <div className="relative w-full rounded-xl overflow-hidden flex" style={{ height: 160, border: '1px solid #1A2238' }}>
+        <div className="flex-1 relative p-4 flex flex-col justify-between" style={{ background: 'linear-gradient(135deg, #0A101C, #1A2238)' }}>
           <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Casino</span>
           <div>
             <p className="text-lg font-black text-white">100+<br/>Games</p>
@@ -600,7 +600,7 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
 
   { id: 6, name: 'Floating Cards', desc: 'Game cards float above hero', component: function H6() {
     return (
-      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: 'linear-gradient(135deg, #060E0A, #0C1812)' }}>
+      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: 'linear-gradient(135deg, #040814, #0A101C)' }}>
         <div className="absolute right-4 top-2 bottom-2 flex items-center gap-2">
           {[GAME.imageUrl, GAME2.imageUrl, GAME3.imageUrl].map((src, i) => (
             <div key={i} className="relative w-16 h-full rounded-lg overflow-hidden" style={{ transform: `rotate(${i === 0 ? -3 : i === 2 ? 3 : 0}deg)`, opacity: i === 1 ? 1 : 0.6, zIndex: i === 1 ? 2 : 1 }}>
@@ -620,8 +620,8 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
   { id: 7, name: 'Stats Bar', desc: 'Trust stats across the top', component: function H7() {
     const stats = [['2,847', 'Players Now'], ['$4.2M', 'Paid Out Today'], ['200+', 'Games'], ['99%', 'Uptime']];
     return (
-      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: '#0C1812', border: '1px solid #1A2E22' }}>
-        <div className="border-b px-4 py-2 flex items-center justify-between" style={{ borderColor: '#1A2E22', background: 'rgba(45,201,122,0.04)' }}>
+      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: '#0A101C', border: '1px solid #1A2238' }}>
+        <div className="border-b px-4 py-2 flex items-center justify-between" style={{ borderColor: '#1A2238', background: 'rgba(45,201,122,0.04)' }}>
           {stats.map(([val, label]) => (
             <div key={label} className="text-center">
               <p className="text-base font-black number-display" style={{ color: '#F0B232' }}>{val}</p>
@@ -664,7 +664,7 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
 
   { id: 9, name: 'Promo Banner', desc: 'Bold promotional style', component: function H9() {
     return (
-      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: 'linear-gradient(135deg, #0C1812 0%, #1A2E22 100%)', border: '1px solid rgba(240,178,50,0.2)' }}>
+      <div className="relative w-full rounded-xl overflow-hidden" style={{ height: 160, background: 'linear-gradient(135deg, #0A101C 0%, #1A2238 100%)', border: '1px solid rgba(240,178,50,0.2)' }}>
         <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, #2DC97A, #F0B232, #84CC16)' }} />
         <div className="relative z-10 p-5 h-full flex items-center justify-between">
           <div>
@@ -707,20 +707,20 @@ const HERO_VARIANTS: { id: number; name: string; desc: string; component: React.
 const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC }[] = [
   { id: 1, name: 'Current Style', desc: 'Baseline odds row', component: function SC1() {
     return (
-      <div className="w-full rounded-xl p-3 space-y-2" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="w-full rounded-xl p-3 space-y-2" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
         <div className="flex items-center justify-between">
-          <span className="text-[10px]" style={{ color: '#8FA899' }}>{SPORT.league}</span>
+          <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{SPORT.league}</span>
           <span className="text-[10px] font-bold" style={{ color: '#EF4444' }}>{SPORT.time}</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 flex-1">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-[#1A2E22]"><Image src={SPORT.awayLogo} alt={SPORT.awayAbbr} width={28} height={28} unoptimized /></div>
+            <div className="w-7 h-7 rounded-full overflow-hidden bg-[#1A2238]"><Image src={SPORT.awayLogo} alt={SPORT.awayAbbr} width={28} height={28} unoptimized /></div>
             <span className="text-xs font-bold text-white">{SPORT.awayAbbr}</span>
             <span className="text-sm font-black text-white ml-auto">{SPORT.awayScore}</span>
           </div>
           <span className="text-[10px] text-white/20">vs</span>
           <div className="flex items-center gap-2 flex-1 flex-row-reverse">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-[#1A2E22]"><Image src={SPORT.homeLogo} alt={SPORT.homeAbbr} width={28} height={28} unoptimized /></div>
+            <div className="w-7 h-7 rounded-full overflow-hidden bg-[#1A2238]"><Image src={SPORT.homeLogo} alt={SPORT.homeAbbr} width={28} height={28} unoptimized /></div>
             <span className="text-xs font-bold text-white">{SPORT.homeAbbr}</span>
             <span className="text-sm font-black text-white mr-auto">{SPORT.homeScore}</span>
           </div>
@@ -739,11 +739,11 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
       <div className="w-full rounded-xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #0A0C10, #101820)', border: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="px-3 py-1.5 flex items-center justify-between" style={{ background: 'rgba(239,68,68,0.1)', borderBottom: '1px solid rgba(239,68,68,0.15)' }}>
           <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" /><span className="text-[9px] font-bold text-red-400">{SPORT.time}</span></div>
-          <span className="text-[9px]" style={{ color: '#8FA899' }}>{SPORT.league}</span>
+          <span className="text-[9px]" style={{ color: '#8FA3B8' }}>{SPORT.league}</span>
         </div>
         <div className="p-4 flex items-center justify-between">
           <div className="text-center space-y-1">
-            <div className="w-14 h-14 rounded-full overflow-hidden bg-[#1A2E22] mx-auto"><Image src={SPORT.awayLogo} alt="" width={56} height={56} unoptimized /></div>
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-[#1A2238] mx-auto"><Image src={SPORT.awayLogo} alt="" width={56} height={56} unoptimized /></div>
             <p className="text-xs font-bold text-white">{SPORT.awayAbbr}</p>
             <p className="text-2xl font-black text-white">{SPORT.awayScore}</p>
           </div>
@@ -752,7 +752,7 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
             <div className="text-xs font-bold text-white/50 my-1">VS</div>
           </div>
           <div className="text-center space-y-1">
-            <div className="w-14 h-14 rounded-full overflow-hidden bg-[#1A2E22] mx-auto"><Image src={SPORT.homeLogo} alt="" width={56} height={56} unoptimized /></div>
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-[#1A2238] mx-auto"><Image src={SPORT.homeLogo} alt="" width={56} height={56} unoptimized /></div>
             <p className="text-xs font-bold text-white">{SPORT.homeAbbr}</p>
             <p className="text-2xl font-black text-white">{SPORT.homeScore}</p>
           </div>
@@ -768,26 +768,26 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
 
   { id: 3, name: 'Compact Row', desc: 'DraftKings-style tight row', component: function SC3() {
     return (
-      <div className="w-full rounded-xl" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
-        <div className="px-3 py-1 flex items-center gap-2 border-b" style={{ borderColor: '#1A2E22' }}>
-          <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: '#8FA899' }}>{SPORT.league}</span>
+      <div className="w-full rounded-xl" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
+        <div className="px-3 py-1 flex items-center gap-2 border-b" style={{ borderColor: '#1A2238' }}>
+          <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: '#8FA3B8' }}>{SPORT.league}</span>
           <span className="ml-auto text-[8px] font-bold text-red-400 flex items-center gap-1"><div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />{SPORT.time}</span>
         </div>
         <div className="px-3 py-2 grid grid-cols-[1fr,auto,auto,auto] items-center gap-2">
           <div className="space-y-1.5">
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-full overflow-hidden bg-[#1A2E22] flex-shrink-0"><Image src={SPORT.awayLogo} alt="" width={20} height={20} unoptimized /></div>
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-[#1A2238] flex-shrink-0"><Image src={SPORT.awayLogo} alt="" width={20} height={20} unoptimized /></div>
               <span className="text-[11px] font-medium text-white">{SPORT.away.split(' ').slice(-1)[0]}</span>
               <span className="ml-auto text-[11px] font-black text-white">{SPORT.awayScore}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-full overflow-hidden bg-[#1A2E22] flex-shrink-0"><Image src={SPORT.homeLogo} alt="" width={20} height={20} unoptimized /></div>
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-[#1A2238] flex-shrink-0"><Image src={SPORT.homeLogo} alt="" width={20} height={20} unoptimized /></div>
               <span className="text-[11px] font-medium text-white">{SPORT.home.split(' ').slice(-1)[0]}</span>
               <span className="ml-auto text-[11px] font-black text-white">{SPORT.homeScore}</span>
             </div>
           </div>
           {[{l:'SPR',v:fmtOdds(SPORT.spreadOdds)},{l:'ML',v:fmtOdds(SPORT.mlHome)},{l:'OU',v:fmtOdds(SPORT.overOdds)}].map(b=>(
-            <div key={b.l} className="text-center rounded-lg px-2 py-1.5 w-12" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
+            <div key={b.l} className="text-center rounded-lg px-2 py-1.5 w-12" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
               <p className="text-[8px] text-white/30">{b.l}</p>
               <p className="text-xs font-bold" style={{ color: '#F5E8C8' }}>{b.v}</p>
             </div>
@@ -799,23 +799,23 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
 
   { id: 4, name: 'Glass Dark', desc: 'Glass card, logo watermark', component: function SC4() {
     return (
-      <div className="w-full rounded-2xl overflow-hidden relative" style={{ background: 'rgba(12,24,18,0.8)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.07)', boxShadow: '0 4px 32px rgba(0,0,0,0.3)' }}>
+      <div className="w-full rounded-2xl overflow-hidden relative" style={{ background: 'rgba(10,16,28,0.8)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.07)', boxShadow: '0 4px 32px rgba(0,0,0,0.3)' }}>
         <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none">
           <Image src={SPORT.homeLogo} alt="" width={80} height={80} unoptimized />
         </div>
         <div className="px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#8FA899' }}>{SPORT.league}</span>
+            <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#8FA3B8' }}>{SPORT.league}</span>
             <span className="text-[9px] font-bold text-red-400">{SPORT.time}</span>
           </div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1A2E22]"><Image src={SPORT.awayLogo} alt="" width={32} height={32} unoptimized /></div>
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1A2238]"><Image src={SPORT.awayLogo} alt="" width={32} height={32} unoptimized /></div>
               <span className="text-sm font-bold text-white">{SPORT.awayAbbr}</span>
             </div>
             <div className="text-center"><span className="text-xl font-black text-white">{SPORT.awayScore} – {SPORT.homeScore}</span></div>
             <div className="flex items-center gap-2 flex-row-reverse">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1A2E22]"><Image src={SPORT.homeLogo} alt="" width={32} height={32} unoptimized /></div>
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1A2238]"><Image src={SPORT.homeLogo} alt="" width={32} height={32} unoptimized /></div>
               <span className="text-sm font-bold text-white">{SPORT.homeAbbr}</span>
             </div>
           </div>
@@ -834,22 +834,22 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
 
   { id: 5, name: 'Color Band', desc: 'Team color accent on left edge', component: function SC5() {
     return (
-      <div className="w-full rounded-xl overflow-hidden flex" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="w-full rounded-xl overflow-hidden flex" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
         <div className="w-1 flex-shrink-0" style={{ background: 'linear-gradient(180deg, #EF4444, #DC2626)' }} />
         <div className="flex-1 p-3 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[9px]" style={{ color: '#8FA899' }}>{SPORT.league}</span>
+            <span className="text-[9px]" style={{ color: '#8FA3B8' }}>{SPORT.league}</span>
             <div className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" /><span className="text-[9px] font-bold text-red-400">LIVE {SPORT.time}</span></div>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 flex-1">
-              <div className="w-6 h-6 rounded-full overflow-hidden bg-[#1A2E22]"><Image src={SPORT.awayLogo} alt="" width={24} height={24} unoptimized /></div>
+              <div className="w-6 h-6 rounded-full overflow-hidden bg-[#1A2238]"><Image src={SPORT.awayLogo} alt="" width={24} height={24} unoptimized /></div>
               <span className="text-xs font-bold text-white">{SPORT.away.split(' ').slice(-1)}</span>
               <span className="ml-auto text-sm font-black text-white">{SPORT.awayScore}</span>
             </div>
             <span className="text-[10px] text-white/20">·</span>
             <div className="flex items-center gap-1.5 flex-1 flex-row-reverse">
-              <div className="w-6 h-6 rounded-full overflow-hidden bg-[#1A2E22]"><Image src={SPORT.homeLogo} alt="" width={24} height={24} unoptimized /></div>
+              <div className="w-6 h-6 rounded-full overflow-hidden bg-[#1A2238]"><Image src={SPORT.homeLogo} alt="" width={24} height={24} unoptimized /></div>
               <span className="text-xs font-bold text-white">{SPORT.home.split(' ').slice(-1)}</span>
               <span className="mr-auto text-sm font-black text-white">{SPORT.homeScore}</span>
             </div>
@@ -866,11 +866,11 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
 
   { id: 6, name: 'Wide Card', desc: 'Full-width game card, detailed', component: function SC6() {
     return (
-      <div className="w-full rounded-xl p-3" style={{ background: '#0C1812', border: '1px solid #1A2E22' }}>
+      <div className="w-full rounded-xl p-3" style={{ background: '#0A101C', border: '1px solid #1A2238' }}>
         <div className="flex items-center gap-3 mb-3">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#1A2E22] p-1"><Image src={SPORT.awayLogo} alt="" width={40} height={40} unoptimized /></div>
-            <div><p className="text-sm font-black text-white">{SPORT.awayAbbr}</p><p className="text-[9px]" style={{ color: '#8FA899' }}>{SPORT.away.split(' ').slice(-1)}</p></div>
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#1A2238] p-1"><Image src={SPORT.awayLogo} alt="" width={40} height={40} unoptimized /></div>
+            <div><p className="text-sm font-black text-white">{SPORT.awayAbbr}</p><p className="text-[9px]" style={{ color: '#8FA3B8' }}>{SPORT.away.split(' ').slice(-1)}</p></div>
           </div>
           <div className="flex-1 text-center">
             <div className="flex items-center justify-center gap-2">
@@ -881,13 +881,13 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
             <div className="flex items-center justify-center gap-1 mt-0.5"><div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" /><span className="text-[8px] text-red-400 font-bold">{SPORT.time}</span></div>
           </div>
           <div className="flex items-center gap-2 flex-row-reverse">
-            <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#1A2E22] p-1"><Image src={SPORT.homeLogo} alt="" width={40} height={40} unoptimized /></div>
-            <div className="text-right"><p className="text-sm font-black text-white">{SPORT.homeAbbr}</p><p className="text-[9px]" style={{ color: '#8FA899' }}>{SPORT.home.split(' ').slice(-1)}</p></div>
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#1A2238] p-1"><Image src={SPORT.homeLogo} alt="" width={40} height={40} unoptimized /></div>
+            <div className="text-right"><p className="text-sm font-black text-white">{SPORT.homeAbbr}</p><p className="text-[9px]" style={{ color: '#8FA3B8' }}>{SPORT.home.split(' ').slice(-1)}</p></div>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-2">
           {[{l:'Spread',top:SPORT.awayAbbr,v:fmtOdds(SPORT.spreadOdds)},{l:'Moneyline',top:SPORT.homeAbbr,v:fmtOdds(SPORT.mlHome)},{l:'Total',top:`O ${SPORT.total}`,v:fmtOdds(SPORT.overOdds)}].map(b=>(
-            <button key={b.l} className="rounded-xl p-2 text-center transition-all hover:border-[rgba(45,201,122,0.4)]" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
+            <button key={b.l} className="rounded-xl p-2 text-center transition-all hover:border-[rgba(45,201,122,0.4)]" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
               <p className="text-[8px] text-white/30 uppercase tracking-wide">{b.l}</p>
               <p className="text-[9px] text-white/50 mt-0.5">{b.top}</p>
               <p className="text-sm font-bold text-white mt-0.5">{b.v}</p>
@@ -901,7 +901,7 @@ const SC_VARIANTS: { id: number; name: string; desc: string; component: React.FC
   ...[7,8,9,10].map(id => ({
     id, name: `Variant ${id}`, desc: 'Coming soon',
     component: function SCN() {
-      return <div className="w-full rounded-xl p-4 text-center text-xs" style={{ background: '#0C1812', border: '1px dashed #1A2E22', color: '#4A6A55' }}>Variant {id} — Coming Soon</div>;
+      return <div className="w-full rounded-xl p-4 text-center text-xs" style={{ background: '#0A101C', border: '1px dashed #1A2238', color: '#4A5878' }}>Variant {id} — Coming Soon</div>;
     }
   })),
 ];
@@ -961,15 +961,15 @@ export default function DesignLabPage() {
                activeSection === 'sportscard' ? 'grid-cols-2 xl:grid-cols-3' : 'grid-cols-4';
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#060E0A', color: '#F5E8C8' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#040814', color: '#F5E8C8' }}>
       {/* ── Header ─────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-30 px-6 py-3 flex items-center justify-between" style={{ backgroundColor: '#0C1812', borderBottom: '1px solid #1A2E22' }}>
+      <div className="sticky top-0 z-30 px-6 py-3 flex items-center justify-between" style={{ backgroundColor: '#0A101C', borderBottom: '1px solid #1A2238' }}>
         <div className="flex items-center gap-3">
           <div>
             <h1 className="font-display text-lg font-black" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Design Lab
             </h1>
-            <p className="text-[10px] -mt-0.5" style={{ color: '#8FA899' }}>Pick your favorite — then tell Claude to apply it</p>
+            <p className="text-[10px] -mt-0.5" style={{ color: '#8FA3B8' }}>Pick your favorite — then tell Claude to apply it</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -989,16 +989,16 @@ export default function DesignLabPage() {
       </div>
 
       {/* ── Section tabs ────────────────────────────────────────── */}
-      <div className="px-6 pt-4 pb-0 flex items-center gap-1" style={{ borderBottom: '1px solid #1A2E22' }}>
+      <div className="px-6 pt-4 pb-0 flex items-center gap-1" style={{ borderBottom: '1px solid #1A2238' }}>
         {SECTIONS.map(s => (
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
             className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-all relative"
-            style={{ color: activeSection === s.id ? '#F0B232' : '#8FA899', borderBottom: activeSection === s.id ? '2px solid #F0B232' : '2px solid transparent' }}
+            style={{ color: activeSection === s.id ? '#F0B232' : '#8FA3B8', borderBottom: activeSection === s.id ? '2px solid #F0B232' : '2px solid transparent' }}
           >
             <span>{s.emoji}</span> {s.label}
-            <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', color: '#8FA899' }}>{s.count}</span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', color: '#8FA3B8' }}>{s.count}</span>
           </button>
         ))}
       </div>
@@ -1007,11 +1007,11 @@ export default function DesignLabPage() {
       <div className="mx-6 mt-4 mb-0 px-4 py-2.5 rounded-xl flex items-center gap-3" style={{ background: 'rgba(45,201,122,0.06)', border: '1px solid rgba(45,201,122,0.15)' }}>
         <Sparkles className="w-4 h-4 flex-shrink-0" style={{ color: '#2DC97A' }} />
         {activeSection === 'icons' ? (
-          <p className="text-xs" style={{ color: '#8FA899' }}>
+          <p className="text-xs" style={{ color: '#8FA3B8' }}>
             <span style={{ color: '#F5E8C8' }}>Icon picker:</span> Click to select icons. Where a Lucide equivalent exists it&apos;s shown for comparison. Copy the JSX snippets and tell Claude which swaps to make.
           </p>
         ) : (
-          <p className="text-xs" style={{ color: '#8FA899' }}>
+          <p className="text-xs" style={{ color: '#8FA3B8' }}>
             <span style={{ color: '#F5E8C8' }}>How to use:</span> Click ❤️ to like variants you love. Click 📋 to copy the apply command, then paste it in Claude to ship it.
           </p>
         )}
@@ -1025,7 +1025,7 @@ export default function DesignLabPage() {
               <div className="flex items-center gap-3 mb-4">
                 <h3 className="text-sm font-black uppercase tracking-wider" style={{ color: '#F5E8C8' }}>{cat.label}</h3>
                 <span className="text-[10px] px-2 py-0.5 rounded-full font-bold" style={{ background: 'rgba(240,178,50,0.1)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.2)' }}>{cat.icons.length}</span>
-                <div className="flex-1 h-px" style={{ background: '#1A2E22' }} />
+                <div className="flex-1 h-px" style={{ background: '#1A2238' }} />
               </div>
               <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 xl:grid-cols-8 gap-3">
                 {cat.icons.map(icon => {
@@ -1037,8 +1037,8 @@ export default function DesignLabPage() {
                       onClick={() => toggleIcon(icon.name)}
                       className="group flex flex-col items-center gap-2 p-3 rounded-xl transition-all"
                       style={{
-                        background: sel ? 'rgba(240,178,50,0.08)' : '#0C1812',
-                        border: `1px solid ${sel ? 'rgba(240,178,50,0.5)' : '#1A2E22'}`,
+                        background: sel ? 'rgba(240,178,50,0.08)' : '#0A101C',
+                        border: `1px solid ${sel ? 'rgba(240,178,50,0.5)' : '#1A2238'}`,
                         boxShadow: sel ? '0 0 12px rgba(240,178,50,0.12)' : 'none',
                       }}
                     >
@@ -1058,8 +1058,8 @@ export default function DesignLabPage() {
                       {LIcon ? (
                         <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg w-full justify-center"
                           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                          <LIcon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#8FA899' }} />
-                          <span className="text-[8px] font-mono leading-none" style={{ color: '#8FA899' }}>{icon.lucideName}</span>
+                          <LIcon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#8FA3B8' }} />
+                          <span className="text-[8px] font-mono leading-none" style={{ color: '#8FA3B8' }}>{icon.lucideName}</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-1 px-2 py-1 rounded-lg w-full justify-center"
@@ -1071,7 +1071,7 @@ export default function DesignLabPage() {
                       {/* Name */}
                       <div className="w-full text-center">
                         <p className="text-[10px] font-semibold leading-tight" style={{ color: sel ? '#F0B232' : '#F5E8C8' }}>{icon.label}</p>
-                        <p className="text-[8px] font-mono mt-0.5 truncate w-full" style={{ color: '#4A6A55' }}>{icon.name}</p>
+                        <p className="text-[8px] font-mono mt-0.5 truncate w-full" style={{ color: '#4A5878' }}>{icon.name}</p>
                       </div>
                     </button>
                   );
@@ -1101,12 +1101,12 @@ export default function DesignLabPage() {
               )}
 
               {/* Variant number pill */}
-              <div className="absolute top-2 right-2 z-20 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black" style={{ background: '#060E0A', border: '1px solid #1A2E22', color: '#8FA899' }}>
+              <div className="absolute top-2 right-2 z-20 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black" style={{ background: '#040814', border: '1px solid #1A2238', color: '#8FA3B8' }}>
                 {id}
               </div>
 
               {/* Preview */}
-              <div className="rounded-xl overflow-hidden" style={{ background: '#060E0A', padding: activeSection === 'gamecard' ? 0 : '10px' }}>
+              <div className="rounded-xl overflow-hidden" style={{ background: '#040814', padding: activeSection === 'gamecard' ? 0 : '10px' }}>
                 <VariantComponent />
               </div>
 
@@ -1114,7 +1114,7 @@ export default function DesignLabPage() {
               <div className="mt-2 flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <p className="text-[11px] font-bold text-white truncate">{name}</p>
-                  <p className="text-[9px] truncate" style={{ color: '#4A6A55' }}>{desc}</p>
+                  <p className="text-[9px] truncate" style={{ color: '#4A5878' }}>{desc}</p>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
                   {/* Eye / preview */}
@@ -1122,7 +1122,7 @@ export default function DesignLabPage() {
                     onClick={() => setPreview({ section: activeSection, id })}
                     className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors hover:bg-white/10"
                   >
-                    <Eye className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />
+                    <Eye className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} />
                   </button>
                   {/* Copy command */}
                   <button
@@ -1131,7 +1131,7 @@ export default function DesignLabPage() {
                   >
                     {copied === id
                       ? <Check className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />
-                      : <Copy className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />}
+                      : <Copy className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} />}
                   </button>
                   {/* Like */}
                   <button
@@ -1139,7 +1139,7 @@ export default function DesignLabPage() {
                     className="w-7 h-7 rounded-lg flex items-center justify-center transition-all hover:scale-110"
                     style={{ background: liked_ ? 'rgba(240,178,50,0.12)' : 'transparent' }}
                   >
-                    <Heart className="w-3.5 h-3.5" style={{ color: liked_ ? '#F0B232' : '#8FA899' }} fill={liked_ ? '#F0B232' : 'none'} />
+                    <Heart className="w-3.5 h-3.5" style={{ color: liked_ ? '#F0B232' : '#8FA3B8' }} fill={liked_ ? '#F0B232' : 'none'} />
                   </button>
                 </div>
               </div>
@@ -1156,7 +1156,7 @@ export default function DesignLabPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             className="fixed bottom-0 left-0 right-0 z-50 px-6 py-4"
-            style={{ background: 'linear-gradient(0deg, #060E0A 0%, rgba(6,14,10,0.95) 100%)', borderTop: '1px solid #1A2E22', backdropFilter: 'blur(16px)' }}
+            style={{ background: 'linear-gradient(0deg, #040814 0%, rgba(4,8,20,0.95) 100%)', borderTop: '1px solid #1A2238', backdropFilter: 'blur(16px)' }}
           >
             <div className="max-w-screen-xl mx-auto flex items-center gap-4">
               <div className="flex items-center gap-2 flex-shrink-0">
@@ -1169,7 +1169,7 @@ export default function DesignLabPage() {
                     <YalaIcon name={name} size={14} />
                     <span className="text-[9px] font-mono" style={{ color: '#2DC97A' }}>{name}</span>
                     <button onClick={() => toggleIcon(name)}>
-                      <X className="w-2.5 h-2.5" style={{ color: '#4A6A55' }} />
+                      <X className="w-2.5 h-2.5" style={{ color: '#4A5878' }} />
                     </button>
                   </div>
                 ))}
@@ -1178,7 +1178,7 @@ export default function DesignLabPage() {
                 <button
                   onClick={() => setSelectedIcons([])}
                   className="px-3 py-2 rounded-xl text-xs font-bold transition-all"
-                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #1A2E22', color: '#8FA899' }}
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid #1A2238', color: '#8FA3B8' }}
                 >
                   Clear
                 </button>
@@ -1203,7 +1203,7 @@ export default function DesignLabPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             className="fixed bottom-0 left-0 right-0 z-50 px-6 py-4"
-            style={{ background: 'linear-gradient(0deg, #060E0A 0%, rgba(6,14,10,0.95) 100%)', borderTop: '1px solid #1A2E22', backdropFilter: 'blur(16px)' }}
+            style={{ background: 'linear-gradient(0deg, #040814 0%, rgba(4,8,20,0.95) 100%)', borderTop: '1px solid #1A2238', backdropFilter: 'blur(16px)' }}
           >
             <div className="max-w-screen-xl mx-auto flex items-center gap-4">
               <div className="flex items-center gap-2">
@@ -1259,14 +1259,14 @@ export default function DesignLabPage() {
                 exit={{ scale: 0.9 }}
                 onClick={e => e.stopPropagation()}
                 className="rounded-2xl overflow-hidden max-w-md w-full"
-                style={{ background: '#101C16', border: '1px solid #1A2E22', padding: 24 }}
+                style={{ background: '#101C28', border: '1px solid #1A2238', padding: 24 }}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <p className="font-bold text-white">Variant #{v.id} — {v.name}</p>
-                    <p className="text-xs" style={{ color: '#8FA899' }}>{v.desc}</p>
+                    <p className="text-xs" style={{ color: '#8FA3B8' }}>{v.desc}</p>
                   </div>
-                  <button onClick={() => setPreview(null)} className="p-2 rounded-lg hover:bg-white/10"><X className="w-4 h-4" style={{ color: '#8FA899' }} /></button>
+                  <button onClick={() => setPreview(null)} className="p-2 rounded-lg hover:bg-white/10"><X className="w-4 h-4" style={{ color: '#8FA3B8' }} /></button>
                 </div>
                 <div style={{ maxWidth: activeSection === 'gamecard' ? 280 : '100%', margin: '0 auto' }}>
                   <VC />
@@ -1275,7 +1275,7 @@ export default function DesignLabPage() {
                   <button
                     onClick={() => { toggleLike(activeSection, v.id); }}
                     className="flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
-                    style={{ background: isLiked(v.id) ? 'rgba(240,178,50,0.15)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked(v.id) ? 'rgba(240,178,50,0.3)' : '#1A2E22'}`, color: isLiked(v.id) ? '#F0B232' : '#8FA899' }}
+                    style={{ background: isLiked(v.id) ? 'rgba(240,178,50,0.15)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked(v.id) ? 'rgba(240,178,50,0.3)' : '#1A2238'}`, color: isLiked(v.id) ? '#F0B232' : '#8FA3B8' }}
                   >
                     <Heart className="w-3.5 h-3.5" fill={isLiked(v.id) ? '#F0B232' : 'none'} />
                     {isLiked(v.id) ? 'Liked' : 'Like This'}

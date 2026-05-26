@@ -122,7 +122,7 @@ export function YalaAvatar({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      border: '2px solid #0c1812',
+      border: '2px solid #0A101C',
     };
 
     if (resolved === 'gold') {
@@ -145,7 +145,7 @@ export function YalaAvatar({
     }
     // jackpot
     return (
-      <div style={{ ...style, background: '#0c1812', border: '2px solid #F0B232' }}>
+      <div style={{ ...style, background: '#0A101C', border: '2px solid #F0B232' }}>
         <span style={{ fontFamily: 'Archivo Black,sans-serif', fontSize: badgeSize * 0.55, color: '#F0B232', lineHeight: 1 }}>7</span>
       </div>
     );
@@ -163,10 +163,10 @@ export function YalaAvatar({
         className="absolute rounded-full overflow-hidden flex items-center justify-center"
         style={{
           inset: inset,
-          background: src ? undefined : 'radial-gradient(circle at 30% 30%, #1f3a2a 0%, #0a1a12 100%)',
+          background: src ? undefined : 'radial-gradient(circle at 30% 30%, #1F2E48 0%, #0A1828 100%)',
           backgroundImage: src
             ? `url(${src})`
-            : 'repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 6px, transparent 6px 12px), radial-gradient(circle at 30% 30%, #1f3a2a 0%, #0a1a12 100%)',
+            : 'repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 6px, transparent 6px 12px), radial-gradient(circle at 30% 30%, #1F2E48 0%, #0A1828 100%)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

@@ -219,7 +219,7 @@ export default function CaravanCrossPage() {
       <Link
         href="/originals"
         className="inline-flex items-center gap-1.5 text-sm transition-opacity hover:opacity-80"
-        style={{ color: '#8FA899' }}
+        style={{ color: '#8FA3B8' }}
       >
         <ChevronLeft className="w-4 h-4" />
         All Originals
@@ -230,13 +230,13 @@ export default function CaravanCrossPage() {
         <div
           className="rounded-3xl overflow-hidden"
           style={{
-            background: `radial-gradient(ellipse at 50% -10%, ${accent}14, transparent 60%), #0C1812`,
-            border: '1px solid #1A2E22',
+            background: `radial-gradient(ellipse at 50% -10%, ${accent}14, transparent 60%), #0A101C`,
+            border: '1px solid #1A2238',
           }}
         >
           <header
             className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4"
-            style={{ borderBottom: '1px solid #1A2E22' }}
+            style={{ borderBottom: '1px solid #1A2238' }}
           >
             <div className="flex items-center gap-3 min-w-0">
               <div
@@ -257,7 +257,7 @@ export default function CaravanCrossPage() {
                     New · Yala Original
                   </span>
                 </div>
-                <p className="text-[11px] truncate" style={{ color: '#8FA899' }}>
+                <p className="text-[11px] truncate" style={{ color: '#8FA3B8' }}>
                   Side-scrolling crash · 99% RTP · sandstorm warning ~1.5s before bust
                 </p>
               </div>
@@ -301,10 +301,10 @@ export default function CaravanCrossPage() {
         {/* RIGHT — control panel */}
         <div
           className="rounded-3xl p-5 space-y-5 self-start"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>
               Balance
             </span>
             <div className="flex items-center gap-1.5">
@@ -312,13 +312,13 @@ export default function CaravanCrossPage() {
               <span className="font-mono font-black text-sm" style={{ color: accent }}>
                 {isGC ? formatGC(goldCoins) : sweepCoins.toFixed(2)}
               </span>
-              <span className="text-[10px]" style={{ color: '#8FA899' }}>{activeCurrency}</span>
+              <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{activeCurrency}</span>
             </div>
           </div>
 
           {/* Bet */}
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>
+            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>
               Bet amount
             </label>
             <div className="relative">
@@ -333,17 +333,17 @@ export default function CaravanCrossPage() {
                 min={0}
                 step={isGC ? 1 : 0.1}
                 className="w-full pl-3 pr-20 py-2.5 rounded-xl text-sm font-mono font-bold focus:outline-none transition-colors disabled:opacity-60"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = `${accent}66`)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
               />
               <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex gap-1">
                 <button type="button" disabled={phase === 'running'} onClick={() => setBet((b) => Math.max(isGC ? 1 : 0.1, +(b / 2).toFixed(2)))}
                   className="px-2 py-1 rounded-lg text-[10px] font-black transition-colors hover:bg-white/10 disabled:opacity-50"
-                  style={{ color: '#8FA899', background: 'rgba(255,255,255,0.04)' }}>½</button>
+                  style={{ color: '#8FA3B8', background: 'rgba(255,255,255,0.04)' }}>½</button>
                 <button type="button" disabled={phase === 'running'} onClick={() => setBet((b) => Math.min(balance, +(b * 2).toFixed(2)) || (isGC ? 1 : 0.1))}
                   className="px-2 py-1 rounded-lg text-[10px] font-black transition-colors hover:bg-white/10 disabled:opacity-50"
-                  style={{ color: '#8FA899', background: 'rgba(255,255,255,0.04)' }}>2×</button>
+                  style={{ color: '#8FA3B8', background: 'rgba(255,255,255,0.04)' }}>2×</button>
               </div>
             </div>
             <div className="flex gap-1 mt-2 flex-wrap">
@@ -352,8 +352,8 @@ export default function CaravanCrossPage() {
                   className="px-2 py-1 rounded-md text-[10px] font-bold transition-colors disabled:opacity-50"
                   style={{
                     background: bet === v ? `${accent}1A` : 'rgba(255,255,255,0.03)',
-                    color:      bet === v ? accent : '#8FA899',
-                    border:     `1px solid ${bet === v ? `${accent}44` : '#1A2E22'}`,
+                    color:      bet === v ? accent : '#8FA3B8',
+                    border:     `1px solid ${bet === v ? `${accent}44` : '#1A2238'}`,
                   }}>{v < 10 ? v.toFixed(1) : v}</button>
               ))}
             </div>
@@ -361,7 +361,7 @@ export default function CaravanCrossPage() {
 
           {/* Auto cash-out */}
           <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>
+            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>
               Auto cash-out (optional)
             </label>
             <div className="relative">
@@ -374,13 +374,13 @@ export default function CaravanCrossPage() {
                 min={1.01}
                 step={0.05}
                 className="w-full pl-3 pr-8 py-2 rounded-xl text-sm font-mono focus:outline-none transition-colors disabled:opacity-60"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = `${accent}66`)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-mono font-bold" style={{ color: '#8FA899' }}>×</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-mono font-bold" style={{ color: '#8FA3B8' }}>×</span>
             </div>
-            <p className="text-[9px] mt-1" style={{ color: '#4A6A55' }}>Cashes out automatically if multiplier hits this value.</p>
+            <p className="text-[9px] mt-1" style={{ color: '#4A5878' }}>Cashes out automatically if multiplier hits this value.</p>
           </div>
 
           {/* Primary CTA */}
@@ -395,7 +395,7 @@ export default function CaravanCrossPage() {
                 : phase === 'idle'
                   ? `linear-gradient(135deg, ${accent}, ${accentSec})`
                   : 'rgba(255,255,255,0.04)',
-              color:      phase === 'idle' || phase === 'running' ? '#060E0A' : '#8FA899',
+              color:      phase === 'idle' || phase === 'running' ? '#040814' : '#8FA3B8',
               boxShadow:  phase === 'idle' || phase === 'running' ? `0 6px 24px ${accent}40` : 'none',
             }}
           >
@@ -419,22 +419,22 @@ export default function CaravanCrossPage() {
               type="button"
               onClick={() => { setPhase('idle'); phaseRef.current = 'idle'; setMult(1); multRef.current = 1; setLastMult(null); }}
               className="w-full py-2 rounded-xl text-xs font-bold transition-colors hover:bg-white/5 flex items-center justify-center gap-1.5"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
             >
               <RotateCcw className="w-3 h-3" /> Skip countdown
             </button>
           ) : null}
 
           {/* Local history */}
-          <div className="pt-2" style={{ borderTop: '1px solid #1A2E22' }}>
+          <div className="pt-2" style={{ borderTop: '1px solid #1A2238' }}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Your last rounds</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Your last rounds</span>
               {history.length > 0 && (
-                <button type="button" onClick={() => setHistory([])} className="text-[10px] underline opacity-60 hover:opacity-100" style={{ color: '#8FA899' }}>clear</button>
+                <button type="button" onClick={() => setHistory([])} className="text-[10px] underline opacity-60 hover:opacity-100" style={{ color: '#8FA3B8' }}>clear</button>
               )}
             </div>
             {history.length === 0 ? (
-              <p className="text-[11px]" style={{ color: '#4A6A55' }}>Your wins and busts will show here.</p>
+              <p className="text-[11px]" style={{ color: '#4A5878' }}>Your wins and busts will show here.</p>
             ) : (
               <div className="flex flex-wrap gap-1">
                 {history.map((h, i) => (
@@ -456,8 +456,8 @@ export default function CaravanCrossPage() {
       </div>
 
       {/* Lower tabs */}
-      <div className="rounded-3xl" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
-        <div className="flex border-b" style={{ borderColor: '#1A2E22' }}>
+      <div className="rounded-3xl" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
+        <div className="flex border-b" style={{ borderColor: '#1A2238' }}>
           {([
             { id: 'recent',      label: 'Recent Plays',   icon: TrendingUp },
             { id: 'leaderboard', label: 'Leaderboard',    icon: BarChart3 },
@@ -469,7 +469,7 @@ export default function CaravanCrossPage() {
             return (
               <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
                 className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[11px] font-bold transition-colors relative"
-                style={{ color: active ? accent : '#8FA899' }}>
+                style={{ color: active ? accent : '#8FA3B8' }}>
                 <Icon className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{tab.label}</span>
                 {active && <motion.div layoutId="caravan-tab" className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: accent }} />}
@@ -492,8 +492,8 @@ export default function CaravanCrossPage() {
 
 function StatChip({ label, value }: { label: string; value: string }) {
   return (
-    <div className="px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}>
-      <p className="text-[8px] font-bold uppercase tracking-widest leading-none" style={{ color: '#8FA899' }}>{label}</p>
+    <div className="px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}>
+      <p className="text-[8px] font-bold uppercase tracking-widest leading-none" style={{ color: '#8FA3B8' }}>{label}</p>
       <p className="text-[11px] font-mono font-black leading-tight mt-0.5" style={{ color: '#F5E8C8' }}>{value}</p>
     </div>
   );
@@ -508,7 +508,7 @@ function MultBanner({
   if (phase === 'idle') {
     return (
       <div className="text-center py-3 px-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }}>
-        <p className="text-[11px]" style={{ color: '#8FA899' }}>
+        <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
           Place a bet to send the caravan. Watch the horizon.
         </p>
       </div>
@@ -518,13 +518,13 @@ function MultBanner({
     return (
       <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl" style={{ background: `${accent}10`, border: `1px solid ${accent}33` }}>
         <div>
-          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>Multiplier</p>
+          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>Multiplier</p>
           <p className="font-mono font-black text-3xl leading-tight mt-1" style={{ color: accent }}>{mult.toFixed(2)}×</p>
         </div>
         <div className="text-right">
-          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA899' }}>If you cash out now</p>
+          <p className="text-[9px] uppercase font-bold tracking-widest leading-none" style={{ color: '#8FA3B8' }}>If you cash out now</p>
           <p className="font-mono font-black text-xl leading-tight mt-1" style={{ color: '#F5E8C8' }}>
-            {(bet * mult).toFixed(2)} <span className="text-[10px]" style={{ color: '#8FA899' }}>{activeCurrency}</span>
+            {(bet * mult).toFixed(2)} <span className="text-[10px]" style={{ color: '#8FA3B8' }}>{activeCurrency}</span>
           </p>
         </div>
       </div>
@@ -537,7 +537,7 @@ function MultBanner({
         <p className="text-sm font-black uppercase tracking-widest" style={{ color: accent }}>
           Cashed out at {(lastMult || 1).toFixed(2)}×
         </p>
-        <span className="text-[11px]" style={{ color: '#8FA899' }}>· bust was {bust.toFixed(2)}×</span>
+        <span className="text-[11px]" style={{ color: '#8FA3B8' }}>· bust was {bust.toFixed(2)}×</span>
       </div>
     );
   }
@@ -554,7 +554,7 @@ function MultBanner({
   // countdown — currently unused since we don't gate idle on countdown
   return (
     <div className="text-center py-3 px-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }}>
-      <p className="text-[11px]" style={{ color: '#8FA899' }}>Next round in {Math.ceil(countdownMs / 1000)}s…</p>
+      <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Next round in {Math.ceil(countdownMs / 1000)}s…</p>
     </div>
   );
 }
@@ -724,7 +724,7 @@ function LastRoundsStrip({ history, accent }: { history: HistoryEntry[]; accent:
   if (history.length === 0) return null;
   return (
     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-      <span className="text-[9px] font-bold uppercase tracking-widest flex-shrink-0" style={{ color: '#4A6A55' }}>Last rounds</span>
+      <span className="text-[9px] font-bold uppercase tracking-widest flex-shrink-0" style={{ color: '#4A5878' }}>Last rounds</span>
       {history.map((h, i) => (
         <div key={i}
           className="px-2 py-1 rounded-md text-[10px] font-mono font-black flex-shrink-0"
@@ -751,13 +751,13 @@ function RecentPlaysList({ accent }: { accent: string }) {
               <YalaAvatar initials={p.avatar} tier={p.tier} size={26} hideBadge />
               <div className="min-w-0">
                 <p className="text-[12px] font-bold truncate" style={{ color: tierColor }}>{p.user}</p>
-                <p className="text-[9px] font-mono" style={{ color: '#4A6A55' }}>{p.time} ago</p>
+                <p className="text-[9px] font-mono" style={{ color: '#4A5878' }}>{p.time} ago</p>
               </div>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="text-right"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Bet</p><p className="font-mono font-bold text-[11px]" style={{ color: '#F5E8C8' }}>{p.bet}</p></div>
-              <div className="text-right w-14"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>×</p><p className="font-mono font-bold text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `${p.mult.toFixed(2)}×` : 'BUST'}</p></div>
-              <div className="text-right w-16"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA899' }}>Payout</p><p className="font-mono font-black text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `+${p.payout}` : '0'}</p></div>
+              <div className="text-right"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Bet</p><p className="font-mono font-bold text-[11px]" style={{ color: '#F5E8C8' }}>{p.bet}</p></div>
+              <div className="text-right w-14"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>×</p><p className="font-mono font-bold text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `${p.mult.toFixed(2)}×` : 'BUST'}</p></div>
+              <div className="text-right w-16"><p className="text-[9px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Payout</p><p className="font-mono font-black text-[11px]" style={{ color: p.won ? accent : '#EF4444' }}>{p.won ? `+${p.payout}` : '0'}</p></div>
             </div>
           </div>
         );
@@ -775,11 +775,11 @@ function LeaderboardList({ accent }: { accent: string }) {
         const pct = (p.profit / max) * 100;
         return (
           <div key={p.rank} className="flex items-center gap-3 px-2 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)' }}>
-            <span className="font-mono font-black text-sm w-6 text-center" style={{ color: p.rank <= 3 ? accent : '#8FA899' }}>{p.rank}</span>
+            <span className="font-mono font-black text-sm w-6 text-center" style={{ color: p.rank <= 3 ? accent : '#8FA3B8' }}>{p.rank}</span>
             <YalaAvatar initials={p.avatar} tier={p.tier} size={26} hideBadge />
             <div className="flex-1 min-w-0">
               <p className="text-[12px] font-bold truncate" style={{ color: tierColor }}>{p.user}</p>
-              <div className="h-1 mt-1 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+              <div className="h-1 mt-1 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                 <div className="h-full rounded-full" style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${accent}, ${tierColor})` }} />
               </div>
             </div>
@@ -805,7 +805,7 @@ function RulesPanel() {
     <ol className="space-y-2.5 list-decimal list-inside">
       {rules.map((r, i) => (
         <li key={i} className="text-[13px] leading-relaxed" style={{ color: '#F5E8C8' }}>
-          <span style={{ color: '#8FA899' }}>{r}</span>
+          <span style={{ color: '#8FA3B8' }}>{r}</span>
         </li>
       ))}
     </ol>
@@ -815,25 +815,25 @@ function RulesPanel() {
 function FairnessPanel({ seed, nonce, lastBust }: { seed: string; nonce: number; lastBust: number | null }) {
   return (
     <div className="space-y-3">
-      <p className="text-[12px] leading-relaxed" style={{ color: '#8FA899' }}>
+      <p className="text-[12px] leading-relaxed" style={{ color: '#8FA3B8' }}>
         Caravan Cross uses the standard Crash bust distribution: <code className="font-mono text-[11px]" style={{ color: '#F5E8C8' }}>bust = max(1.00, 0.99 / (1 - r))</code>{' '}
         where r is uniform random in [0, 1). This produces a 99% RTP with the typical Crash long tail and ~1% insta-crashes.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Server seed (hashed)</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Server seed (hashed)</p>
           <p className="font-mono text-[10px] break-all mt-1" style={{ color: '#F5E8C8' }}>{seed || '—'}</p>
         </div>
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Nonce</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Nonce</p>
           <p className="font-mono text-[11px] mt-1" style={{ color: '#F5E8C8' }}>{nonce}</p>
         </div>
-        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22' }}>
-          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Last bust</p>
+        <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238' }}>
+          <p className="text-[9px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Last bust</p>
           <p className="font-mono text-[11px] mt-1" style={{ color: '#F5E8C8' }}>{lastBust != null ? `${lastBust.toFixed(2)}×` : '—'}</p>
         </div>
       </div>
-      <p className="text-[10px]" style={{ color: '#4A6A55' }}>
+      <p className="text-[10px]" style={{ color: '#4A5878' }}>
         Seed rotates after each round. Full verification tooling will ship with the production build.
       </p>
     </div>

@@ -65,7 +65,7 @@ export default function ProfilePage() {
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-64 gap-4">
-        <p style={{ color: '#8FA899' }}>Sign in to view your profile</p>
+        <p style={{ color: '#8FA3B8' }}>Sign in to view your profile</p>
         <button
           onClick={() => openAuthModal()}
           className="px-6 py-3 rounded-xl font-semibold text-sm text-black"
@@ -99,7 +99,7 @@ export default function ProfilePage() {
       <div
         className="relative rounded-2xl overflow-hidden p-6"
         style={{
-          background: `radial-gradient(ellipse at 10% 50%, ${tierColor}12 0%, transparent 55%), #0C1812`,
+          background: `radial-gradient(ellipse at 10% 50%, ${tierColor}12 0%, transparent 55%), #0A101C`,
           border: `1px solid ${tierColor}25`,
         }}
       >
@@ -144,7 +144,7 @@ export default function ProfilePage() {
               {/* Hover overlay */}
               <div
                 className="absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: 'rgba(6,14,10,0.65)' }}
+                style={{ background: 'rgba(4,8,20,0.65)' }}
               >
                 <Camera className="w-5 h-5" style={{ color: '#F5E8C8' }} />
               </div>
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                       onClick={() => setEditingName(false)}
                       aria-label="Cancel"
                       className="p-1.5 rounded-lg transition-colors hover:bg-white/5"
-                      style={{ color: '#8FA899' }}
+                      style={{ color: '#8FA3B8' }}
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -209,13 +209,13 @@ export default function ProfilePage() {
                       aria-label="Edit display name"
                       title="Edit display name"
                       className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-white/5"
-                      style={{ color: '#8FA899' }}
+                      style={{ color: '#8FA3B8' }}
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 )}
-                <p className="text-sm mb-1" style={{ color: '#8FA899' }}>{user?.email}</p>
+                <p className="text-sm mb-1" style={{ color: '#8FA3B8' }}>{user?.email}</p>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-bold flex items-center gap-1.5" style={{ color: tierColor }}>
                     <YalaIcon name={currentTier.icon} size={14} />
@@ -231,7 +231,7 @@ export default function ProfilePage() {
               <Link
                 href="/kyc"
                 className="flex items-center gap-1.5 text-xs border px-3 py-1.5 rounded-lg transition-colors hover:border-[#2DC97A]/40"
-                style={{ borderColor: '#1A2E22', color: '#8FA899' }}
+                style={{ borderColor: '#1A2238', color: '#8FA3B8' }}
               >
                 <Shield className="w-3 h-3" />
                 {user?.isVerified ? 'Verified' : 'Get Verified'}
@@ -241,14 +241,14 @@ export default function ProfilePage() {
             {/* XP bar */}
             <div className="mt-4">
               <div className="flex justify-between text-xs mb-1.5">
-                <span style={{ color: '#8FA899' }}>{formatXP(xp)} XP</span>
+                <span style={{ color: '#8FA3B8' }}>{formatXP(xp)} XP</span>
                 {nextTier && (
-                  <span style={{ color: '#4A6A55' }}>
+                  <span style={{ color: '#4A5878' }}>
                     {(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}
                   </span>
                 )}
               </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
@@ -257,7 +257,7 @@ export default function ProfilePage() {
                   style={{ background: `linear-gradient(90deg, ${tierColor}, ${nextTier ? getVIPColor(nextTier.tier) : tierColor})` }}
                 />
               </div>
-              <p className="text-[10px] text-right mt-1" style={{ color: '#4A6A55' }}>{progress.toFixed(1)}%</p>
+              <p className="text-[10px] text-right mt-1" style={{ color: '#4A5878' }}>{progress.toFixed(1)}%</p>
             </div>
           </div>
         </div>
@@ -270,12 +270,12 @@ export default function ProfilePage() {
       {/* ── ALL-TIME STATS ── */}
       <div
         className="rounded-2xl p-5"
-        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+        style={{ background: '#0F1828', border: '1px solid #1A2238' }}
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(to bottom, #F0B232, #2DC97A)' }} />
           <h3 className="font-display text-base font-bold" style={{ color: '#F5E8C8' }}>All-Time Stats</h3>
-          <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: '#4A6A55' }}>since {user?.joinDate}</span>
+          <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: '#4A5878' }}>since {user?.joinDate}</span>
         </div>
         {(() => {
           const wagered   = user?.totalWagered      || 0;
@@ -299,14 +299,14 @@ export default function ProfilePage() {
                 <div
                   key={s.label}
                   className="rounded-xl p-4"
-                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2238' }}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     {s.icon}
-                    <span className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA899' }}>{s.label}</span>
+                    <span className="text-[10px] uppercase tracking-widest" style={{ color: '#8FA3B8' }}>{s.label}</span>
                   </div>
                   <p className="font-display text-xl font-black number-display leading-none" style={{ color: s.color }}>{s.value}</p>
-                  <p className="text-[10px] mt-1" style={{ color: '#4A6A55' }}>{s.sub}</p>
+                  <p className="text-[10px] mt-1" style={{ color: '#4A5878' }}>{s.sub}</p>
                 </div>
               ))}
             </div>
@@ -318,7 +318,7 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
         {/* Account Details */}
-        <div className="rounded-2xl p-5 space-y-4" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+        <div className="rounded-2xl p-5 space-y-4" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
           <h3 className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Account Details</h3>
           {[
             { label: 'Member Since', value: user?.joinDate || '2025-01-14', icon: Calendar },
@@ -328,7 +328,7 @@ export default function ProfilePage() {
             const Icon = item.icon;
             return (
               <div key={item.label} className="flex items-center justify-between py-1">
-                <div className="flex items-center gap-2 text-sm" style={{ color: '#8FA899' }}>
+                <div className="flex items-center gap-2 text-sm" style={{ color: '#8FA3B8' }}>
                   <Icon className="w-3.5 h-3.5 flex-shrink-0" />
                   {item.label}
                 </div>
@@ -338,16 +338,16 @@ export default function ProfilePage() {
           })}
 
           {/* Privacy toggle — controls what other players see in the chat profile popover */}
-          <div className="pt-3" style={{ borderTop: '1px solid #1A2E22' }}>
+          <div className="pt-3" style={{ borderTop: '1px solid #1A2238' }}>
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-2 min-w-0">
                 {user?.profilePrivate
                   ? <EyeOff className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#F0B232' }} />
-                  : <Eye className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#8FA899' }} />
+                  : <Eye className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#8FA3B8' }} />
                 }
                 <div className="min-w-0">
                   <p className="text-sm font-semibold" style={{ color: '#F5E8C8' }}>Private profile</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: '#4A6A55' }}>
+                  <p className="text-[11px] mt-0.5" style={{ color: '#4A5878' }}>
                     Hide your stats from other players in chat. They&apos;ll still see your name and tier.
                   </p>
                 </div>
@@ -364,12 +364,12 @@ export default function ProfilePage() {
                   });
                 }}
                 className="relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors mt-0.5"
-                style={{ background: user?.profilePrivate ? '#F0B232' : '#1A2E22' }}
+                style={{ background: user?.profilePrivate ? '#F0B232' : '#1A2238' }}
               >
                 <span
                   className="inline-block h-5 w-5 rounded-full transform transition-transform"
                   style={{
-                    background: user?.profilePrivate ? '#060E0A' : '#8FA899',
+                    background: user?.profilePrivate ? '#040814' : '#8FA3B8',
                     transform: user?.profilePrivate ? 'translateX(22px)' : 'translateX(2px)',
                   }}
                 />
@@ -379,7 +379,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Referral Code */}
-        <div className="rounded-2xl p-5 space-y-4" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+        <div className="rounded-2xl p-5 space-y-4" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
           <div className="flex items-center gap-2">
             <Star className="w-4 h-4 text-[#F0B232]" />
             <h3 className="font-semibold text-sm" style={{ color: '#F5E8C8' }}>Referral Code</h3>
@@ -391,10 +391,10 @@ export default function ProfilePage() {
           >
             <span className="font-mono font-black text-xl flex-1" style={{ color: '#F0B232' }}>{user?.referralCode}</span>
             <button className="p-1.5 rounded-lg transition-colors hover:bg-white/10">
-              {copied ? <CheckCircle2 className="w-4 h-4 text-[#2DC97A]" /> : <Copy className="w-4 h-4" style={{ color: '#4A6A55' }} />}
+              {copied ? <CheckCircle2 className="w-4 h-4 text-[#2DC97A]" /> : <Copy className="w-4 h-4" style={{ color: '#4A5878' }} />}
             </button>
           </div>
-          <p className="text-xs" style={{ color: '#4A6A55' }}>Share this code and earn 5,000 GC per successful referral.</p>
+          <p className="text-xs" style={{ color: '#4A5878' }}>Share this code and earn 5,000 GC per successful referral.</p>
           <Link
             href="/affiliate"
             className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl text-xs font-bold border transition-all hover:border-[#F0B232]/40"
@@ -405,10 +405,10 @@ export default function ProfilePage() {
         </div>
 
         {/* Quick Links */}
-        <div className="rounded-2xl p-5 space-y-2" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+        <div className="rounded-2xl p-5 space-y-2" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
           <h3 className="font-semibold text-sm mb-4" style={{ color: '#F5E8C8' }}>Quick Links</h3>
           {[
-            { label: 'Transaction History', href: '/profile/transactions', icon: Clock,   color: '#8FA899' },
+            { label: 'Transaction History', href: '/profile/transactions', icon: Clock,   color: '#8FA3B8' },
             { label: 'Wallet',              href: '/wallet',               icon: Wallet,  color: '#F0B232' },
             { label: 'VIP Club',            href: '/vip',                  icon: Star,    color: '#A78BFA' },
             { label: 'KYC / Verify',        href: '/kyc',                  icon: Shield,  color: '#2DC97A' },
@@ -419,7 +419,7 @@ export default function ProfilePage() {
                 key={link.href}
                 href={link.href}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all hover:bg-white/5"
-                style={{ color: '#8FA899' }}
+                style={{ color: '#8FA3B8' }}
               >
                 <Icon className="w-4 h-4 flex-shrink-0" style={{ color: link.color }} />
                 {link.label}

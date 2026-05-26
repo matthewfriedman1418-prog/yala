@@ -104,7 +104,7 @@ const ACCENT_COLORS: Record<string, string> = {
   'oasis-plinko': '#2DC97A',
   'dune-mines': '#F0B232',
   'golden-dice': '#FBBF24',
-  'sandstorm-limbo': '#8FA899',
+  'sandstorm-limbo': '#8FA3B8',
   'emerald-wheel': '#34D399',
   'caravan-keno': '#F97316',
   'night-bazaar-blackjack': '#60A5FA',
@@ -156,7 +156,7 @@ export default function OriginalsPage() {
                   <div className="absolute top-3 left-3">
                     <span
                       className="text-[9px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: cardAccent, color: '#060E0A' }}
+                      style={{ background: cardAccent, color: '#040814' }}
                     >
                       {game.type}
                     </span>
@@ -164,7 +164,7 @@ export default function OriginalsPage() {
 
                   {/* RTP badge */}
                   <div className="absolute top-3 right-3">
-                    <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-black/60 text-[#8FA899]">
+                    <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-black/60 text-[#8FA3B8]">
                       {game.rtp}%
                     </span>
                   </div>
@@ -187,7 +187,7 @@ export default function OriginalsPage() {
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
                     <div
                       className="px-5 py-2 rounded-xl text-sm font-bold transition-transform"
-                      style={{ background: cardAccent, color: '#060E0A' }}
+                      style={{ background: cardAccent, color: '#040814' }}
                     >
                       Play Now
                     </div>
@@ -212,8 +212,8 @@ export default function OriginalsPage() {
       </div>
 
       {/* Legal */}
-      <div className="border-t pt-6 text-center" style={{ borderColor: '#1A2E22' }}>
-        <p className="text-xs" style={{ color: 'rgba(143,168,153,0.5)' }}>
+      <div className="border-t pt-6 text-center" style={{ borderColor: '#1A2238' }}>
+        <p className="text-xs" style={{ color: 'rgba(143,163,184,0.5)' }}>
           18+ · No Purchase Necessary · Gold Coins have no cash value · Void Where Prohibited
         </p>
       </div>
@@ -239,7 +239,7 @@ function OriginalsHero({ accent }: { accent: string }) {
         background: `
           radial-gradient(ellipse at 0% 0%, rgba(45,201,122,0.16) 0%, transparent 55%),
           radial-gradient(ellipse at 100% 100%, rgba(240,178,50,0.14) 0%, transparent 50%),
-          linear-gradient(135deg, #0F1A14 0%, #0A1410 100%)
+          linear-gradient(135deg, #0F1828 0%, #08121C 100%)
         `,
         border: '1px solid rgba(45,201,122,0.20)',
       }}
@@ -265,7 +265,7 @@ function OriginalsHero({ accent }: { accent: string }) {
             </span>
             <span
               className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
-              style={{ background: 'rgba(143,168,153,0.10)', color: '#8FA899', border: '1px solid #1A2E22' }}
+              style={{ background: 'rgba(143,163,184,0.10)', color: '#8FA3B8', border: '1px solid #1A2238' }}
             >
               {totalCount - playable.length} more coming
             </span>
@@ -276,7 +276,7 @@ function OriginalsHero({ accent }: { accent: string }) {
             <br className="hidden sm:block" />
             <span style={{ color: accent }}>Played nowhere else.</span>
           </h1>
-          <p className="text-sm sm:text-base max-w-md mb-5" style={{ color: '#8FA899' }}>
+          <p className="text-sm sm:text-base max-w-md mb-5" style={{ color: '#8FA3B8' }}>
             Provably-fair games designed by us. Every result is cryptographically verifiable and every Original supports both Gold Coins and Sweep Coins.
           </p>
 
@@ -314,7 +314,7 @@ function OriginalsHero({ accent }: { accent: string }) {
                 href={`/originals/${g.slug}`}
                 className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-end p-3 transition-transform hover:-translate-y-0.5"
                 style={{
-                  background: `radial-gradient(ellipse at 50% 30%, ${cardAccent}22, transparent 60%), #0A1410`,
+                  background: `radial-gradient(ellipse at 50% 30%, ${cardAccent}22, transparent 60%), #08121C`,
                   border: `1px solid ${cardAccent}44`,
                   minHeight: 140,
                   animationDelay: `${i * 80}ms`,
@@ -334,7 +334,7 @@ function OriginalsHero({ accent }: { accent: string }) {
                 <p className="font-display font-black text-xs text-center leading-tight" style={{ color: '#F5E8C8' }}>
                   {g.name}
                 </p>
-                <p className="text-[9px] text-center mt-0.5" style={{ color: '#8FA899' }}>{g.type}</p>
+                <p className="text-[9px] text-center mt-0.5" style={{ color: '#8FA3B8' }}>{g.type}</p>
               </Link>
             );
           })}

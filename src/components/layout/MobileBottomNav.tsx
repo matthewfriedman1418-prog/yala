@@ -19,8 +19,8 @@ export function MobileBottomNav() {
     <nav
       className="fixed bottom-0 left-0 right-0 h-16 flex items-center z-40 safe-bottom"
       style={{
-        backgroundColor: '#0C1812',
-        borderTop: '1px solid #1A2E22',
+        backgroundColor: '#0A101C',
+        borderTop: '1px solid #1A2238',
         boxShadow: '0 -4px 24px rgba(0,0,0,0.5)',
       }}
     >
@@ -31,7 +31,7 @@ export function MobileBottomNav() {
             key={item.href}
             href={item.href}
             className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 relative transition-colors"
-            style={{ color: isActive ? '#F0B232' : '#8FA899' }}
+            style={{ color: isActive ? '#F0B232' : '#8FA3B8' }}
           >
             <YalaIcon name={item.icon} size={20} />
             <span className="text-[10px] font-medium">{item.label}</span>
@@ -49,7 +49,7 @@ export function MobileBottomNav() {
       <button
         onClick={toggleChat}
         className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 relative transition-colors"
-        style={{ color: chatOpen ? '#2DC97A' : '#8FA899' }}
+        style={{ color: chatOpen ? '#2DC97A' : '#8FA3B8' }}
       >
         <div className="relative">
           <MessageCircle className="w-5 h-5" />
@@ -68,7 +68,7 @@ export function MobileBottomNav() {
       <button
         onClick={toggleMobileMenu}
         className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 transition-colors"
-        style={{ color: '#8FA899' }}
+        style={{ color: '#8FA3B8' }}
       >
         <Menu className="w-5 h-5" />
         <span className="text-[10px] font-medium">More</span>

@@ -85,8 +85,8 @@ export function AuthModal() {
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
           className="relative w-full max-w-md rounded-2xl overflow-hidden z-10"
           style={{
-            backgroundColor: '#0F1A14',
-            border: '1px solid #1A2E22',
+            backgroundColor: '#0F1828',
+            border: '1px solid #1A2238',
             boxShadow: '0 24px 64px rgba(0,0,0,0.75), 0 0 0 1px rgba(240,178,50,0.04)',
           }}
         >
@@ -103,7 +103,7 @@ export function AuthModal() {
             aria-label="Close"
             className="absolute right-3 top-4 z-20 p-1.5 rounded-lg transition-colors hover:bg-white/10"
           >
-            <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+            <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
           </button>
 
           {/* Header */}
@@ -126,19 +126,19 @@ export function AuthModal() {
             <h2 className="font-display text-xl font-bold mb-1" style={{ color: '#F5E8C8' }}>
               {isLogin ? 'Welcome back' : "Let's play"}
             </h2>
-            <p className="text-xs" style={{ color: '#8FA899' }}>
+            <p className="text-xs" style={{ color: '#8FA3B8' }}>
               {isLogin ? 'Sign in to keep your streak going' : 'Free to play, redeem real prizes'}
             </p>
           </div>
 
           {/* Tab switcher — sliding gold underline */}
-          <div className="relative mx-6 mt-3 flex" style={{ borderBottom: '1px solid #1A2E22' }}>
+          <div className="relative mx-6 mt-3 flex" style={{ borderBottom: '1px solid #1A2238' }}>
             {(['login', 'register'] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => openAuthModal(t)}
                 className="relative flex-1 py-2.5 text-sm font-bold transition-colors"
-                style={{ color: (t === 'login') === isLogin ? '#F0B232' : '#8FA899' }}
+                style={{ color: (t === 'login') === isLogin ? '#F0B232' : '#8FA3B8' }}
               >
                 {t === 'login' ? 'Sign In' : 'Create Account'}
               </button>
@@ -173,7 +173,7 @@ export function AuthModal() {
                     {STARTING_GC.toLocaleString()} GC
                   </span>
                 </div>
-                <span style={{ color: '#4A6A55' }}>+</span>
+                <span style={{ color: '#4A5878' }}>+</span>
                 <div className="flex items-center gap-2">
                   <SweepCoinIcon size={28} />
                   <span className="font-bold number-display text-sm" style={{ color: '#2DC97A' }}>
@@ -191,9 +191,9 @@ export function AuthModal() {
           </div>
 
           <div className="flex items-center gap-3 px-6 my-4">
-            <div className="flex-1 h-px" style={{ background: '#1A2E22' }} />
-            <span className="text-[10px] font-bold tracking-wider" style={{ color: '#4A6A55' }}>OR</span>
-            <div className="flex-1 h-px" style={{ background: '#1A2E22' }} />
+            <div className="flex-1 h-px" style={{ background: '#1A2238' }} />
+            <span className="text-[10px] font-bold tracking-wider" style={{ color: '#4A5878' }}>OR</span>
+            <div className="flex-1 h-px" style={{ background: '#1A2238' }} />
           </div>
 
           <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-3.5">
@@ -226,7 +226,7 @@ export function AuthModal() {
             <Field
               label="Password"
               right={isLogin && (
-                <button type="button" className="text-[10px] font-semibold transition-colors hover:text-[#F0B232]" style={{ color: '#8FA899' }}>
+                <button type="button" className="text-[10px] font-semibold transition-colors hover:text-[#F0B232]" style={{ color: '#8FA3B8' }}>
                   Forgot?
                 </button>
               )}
@@ -245,7 +245,7 @@ export function AuthModal() {
                   type="button"
                   onClick={() => setShowPass(!showPass)}
                   aria-label={showPass ? 'Hide password' : 'Show password'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#8FA899] hover:text-[#F5E8C8] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#8FA3B8] hover:text-[#F5E8C8] transition-colors"
                 >
                   {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -266,7 +266,7 @@ export function AuthModal() {
             )}
 
             {isLogin && (
-              <label className="flex items-center gap-2 cursor-pointer text-xs select-none" style={{ color: '#8FA899' }}>
+              <label className="flex items-center gap-2 cursor-pointer text-xs select-none" style={{ color: '#8FA3B8' }}>
                 <CheckboxControl checked={form.remember} onChange={() => setForm({ ...form, remember: !form.remember })} />
                 Remember me on this device
               </label>
@@ -277,7 +277,7 @@ export function AuthModal() {
                 <div className="mt-0.5">
                   <CheckboxControl checked={form.agreed} onChange={() => setForm({ ...form, agreed: !form.agreed })} />
                 </div>
-                <span className="text-[11px] leading-relaxed" style={{ color: '#8FA899' }}>
+                <span className="text-[11px] leading-relaxed" style={{ color: '#8FA3B8' }}>
                   I&apos;m 18+ and agree to the{' '}
                   <a href="/terms" className="font-semibold transition-colors hover:opacity-80" style={{ color: '#F0B232' }} target="_blank" rel="noreferrer">Terms</a>,{' '}
                   <a href="/privacy" className="font-semibold transition-colors hover:opacity-80" style={{ color: '#F0B232' }} target="_blank" rel="noreferrer">Privacy</a>, and{' '}
@@ -299,7 +299,7 @@ export function AuthModal() {
               className="w-full py-3 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60 disabled:cursor-wait"
               style={{
                 background: 'linear-gradient(135deg, #10B981, #2DC97A)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: '0 4px 20px rgba(45,201,122,0.35), inset 0 1px 0 rgba(255,255,255,0.2)',
               }}
             >
@@ -309,7 +309,7 @@ export function AuthModal() {
             </button>
 
             {/* Switch link */}
-            <p className="text-center text-xs pt-1" style={{ color: '#8FA899' }}>
+            <p className="text-center text-xs pt-1" style={{ color: '#8FA3B8' }}>
               {isLogin
                 ? <>New to Yala? <button type="button" onClick={() => openAuthModal('register')} className="font-bold transition-colors hover:opacity-80" style={{ color: '#F0B232' }}>Create an account</button></>
                 : <>Already have one? <button type="button" onClick={() => openAuthModal('login')} className="font-bold transition-colors hover:opacity-80" style={{ color: '#F0B232' }}>Sign in</button></>
@@ -317,7 +317,7 @@ export function AuthModal() {
             </p>
 
             {!isLogin && (
-              <p className="text-[10px] text-center leading-relaxed pt-1" style={{ color: '#4A6A55' }}>
+              <p className="text-[10px] text-center leading-relaxed pt-1" style={{ color: '#4A5878' }}>
                 No Purchase Necessary · Gold Coins have no cash value · 18+ · Void where prohibited
               </p>
             )}
@@ -332,11 +332,11 @@ export function AuthModal() {
               font-size: 14px;
               color: #F5E8C8;
               background: rgba(255,255,255,0.04);
-              border: 1px solid #1A2E22;
+              border: 1px solid #1A2238;
               outline: none;
               transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
             }
-            .auth-input::placeholder { color: #4A6A55; }
+            .auth-input::placeholder { color: #4A5878; }
             .auth-input:focus {
               border-color: rgba(240,178,50,0.45);
               background: rgba(240,178,50,0.04);
@@ -359,9 +359,9 @@ function Field({ label, right, optional, children }: {
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>
+        <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>
           {label}
-          {optional && <span className="ml-1.5 font-normal normal-case tracking-normal" style={{ color: '#4A6A55' }}>optional</span>}
+          {optional && <span className="ml-1.5 font-normal normal-case tracking-normal" style={{ color: '#4A5878' }}>optional</span>}
         </label>
         {right}
       </div>
@@ -383,7 +383,7 @@ function CheckboxControl({ checked, onChange }: { checked: boolean; onChange: ()
         border: `1px solid ${checked ? '#F0B232' : '#2A3A30'}`,
       }}
     >
-      {checked && <Check className="w-3 h-3" style={{ color: '#060E0A' }} strokeWidth={3} />}
+      {checked && <Check className="w-3 h-3" style={{ color: '#040814' }} strokeWidth={3} />}
     </button>
   );
 }
@@ -398,11 +398,11 @@ function StrengthMeter({ level }: { level: number }) {
           <div
             key={i}
             className="flex-1 h-1 rounded-full transition-colors"
-            style={{ background: i <= level ? colors[level] : '#1A2E22' }}
+            style={{ background: i <= level ? colors[level] : '#1A2238' }}
           />
         ))}
       </div>
-      <p className="text-[10px] mt-1 font-semibold" style={{ color: colors[level] || '#8FA899' }}>
+      <p className="text-[10px] mt-1 font-semibold" style={{ color: colors[level] || '#8FA3B8' }}>
         {labels[level]}
       </p>
     </div>
@@ -415,7 +415,7 @@ function SocialButton({ provider, onClick }: { provider: 'google' | 'apple'; onC
       type="button"
       onClick={onClick}
       className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-white/5"
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#F5E8C8' }}
     >
       {provider === 'google' ? (
         <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true">

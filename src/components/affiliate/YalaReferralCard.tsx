@@ -43,7 +43,7 @@ export function YalaReferralCard({ code, displayName, variant, className }: Prop
         aspectRatio: '4 / 5',
         borderRadius: 24,
         overflow: 'hidden',
-        background: v === 10 ? '#f4eee1' : '#060E0A',
+        background: v === 10 ? '#f4eee1' : '#040814',
         fontFamily: 'Manrope, system-ui, sans-serif',
         color: '#F5F7F2',
         boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(240,178,50,0.18)',
@@ -161,7 +161,7 @@ function PokerChip({ color, accent }: { color: string; accent: string }) {
 function Card1({ code }: { code: string }) {
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 50% at 50% 60%, rgba(45,201,122,0.18) 0%, transparent 70%), radial-gradient(ellipse 80% 60% at 50% 60%, #0d2418 0%, #060E0A 75%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 50% at 50% 60%, rgba(45,201,122,0.18) 0%, transparent 70%), radial-gradient(ellipse 80% 60% at 50% 60%, #0d2418 0%, #040814 75%)' }} />
       <div style={goldFrame} />
       <div style={{ position: 'absolute', top: '8cqi', left: 0, right: 0, textAlign: 'center', zIndex: 5 }}>
         <Eyebrow />
@@ -196,7 +196,7 @@ function Card1({ code }: { code: string }) {
 function Card2({ code }: { code: string }) {
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle 50% at 50% 52%, rgba(240,178,50,0.22) 0%, transparent 60%), radial-gradient(ellipse 80% 60% at 50% 50%, #0d2418 0%, #060E0A 75%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle 50% at 50% 52%, rgba(240,178,50,0.22) 0%, transparent 60%), radial-gradient(ellipse 80% 60% at 50% 50%, #0d2418 0%, #040814 75%)' }} />
       <div style={goldFrame} />
       <div style={{ position: 'absolute', top: '7cqi', left: 0, right: 0, textAlign: 'center', zIndex: 5 }}>
         <Eyebrow />
@@ -231,11 +231,11 @@ function Card2({ code }: { code: string }) {
 function Card3({ code }: { code: string }) {
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 60% at 50% 60%, rgba(45,201,122,0.25) 0%, transparent 70%), linear-gradient(180deg, #050d09 0%, #060E0A 100%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 60% at 50% 60%, rgba(45,201,122,0.25) 0%, transparent 70%), linear-gradient(180deg, #050d09 0%, #040814 100%)' }} />
       {/* grid floor */}
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0, height: '36%',
-        background: 'linear-gradient(180deg, transparent 0%, #060E0A 100%), repeating-linear-gradient(0deg, transparent 0px, transparent 28px, rgba(45,201,122,0.18) 28px, rgba(45,201,122,0.18) 29px), repeating-linear-gradient(90deg, transparent 0px, transparent 36px, rgba(45,201,122,0.12) 36px, rgba(45,201,122,0.12) 37px)',
+        background: 'linear-gradient(180deg, transparent 0%, #040814 100%), repeating-linear-gradient(0deg, transparent 0px, transparent 28px, rgba(45,201,122,0.18) 28px, rgba(45,201,122,0.18) 29px), repeating-linear-gradient(90deg, transparent 0px, transparent 36px, rgba(45,201,122,0.12) 36px, rgba(45,201,122,0.12) 37px)',
         transform: 'perspective(700px) rotateX(60deg)', transformOrigin: '50% 100%', opacity: 0.5,
       }} />
       <div style={{ ...goldFrame, borderColor: 'rgba(45,201,122,0.35)' }} />
@@ -342,7 +342,7 @@ function Card5({ code }: { code: string }) {
   }, []);
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle 50% at 50% 50%, rgba(45,201,122,0.32) 0%, rgba(45,201,122,0.05) 50%, transparent 75%), #060E0A' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle 50% at 50% 50%, rgba(45,201,122,0.32) 0%, rgba(45,201,122,0.05) 50%, transparent 75%), #040814' }} />
       {parts.map((p, i) => (
         <div key={i} style={{
           position: 'absolute', left: `${p.x}%`, top: `${p.y}%`,
@@ -386,7 +386,7 @@ function Card5({ code }: { code: string }) {
 function Card6({ code }: { code: string }) {
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(45,201,122,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 80% at 50% 50%, #0e1b14 0%, #060E0A 80%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(45,201,122,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 80% at 50% 50%, #0e1b14 0%, #040814 80%)' }} />
       <div style={goldFrame} />
       <div style={{ position: 'absolute', top: '7cqi', left: 0, right: 0, textAlign: 'center', zIndex: 5 }}>
         <Eyebrow />
@@ -483,7 +483,7 @@ function Card7({ code }: { code: string }) {
 function Card8({ code, displayName }: { code: string; displayName?: string }) {
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 70% at 50% 45%, #0d1b13 0%, #060E0A 80%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 70% at 50% 45%, #0d1b13 0%, #040814 80%)' }} />
       <div style={goldFrame} />
       <div style={{ position: 'absolute', top: '7cqi', left: 0, right: 0, textAlign: 'center', zIndex: 5 }}>
         <Eyebrow />
@@ -546,7 +546,7 @@ function Card8({ code, displayName }: { code: string; displayName?: string }) {
 function Card9({ code }: { code: string }) {
   return (
     <>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle 45% at 50% 50%, rgba(0,0,0,0.85) 0%, rgba(6,14,10,0.95) 50%, rgba(6,14,10,1) 100%), #060E0A' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle 45% at 50% 50%, rgba(0,0,0,0.85) 0%, rgba(4,8,20,0.95) 50%, rgba(4,8,20,1) 100%), #040814' }} />
       <div style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridAutoRows: '16.66%', placeItems: 'center', opacity: 0.55 }}>
         {Array.from({ length: 36 }).map((_, i) => (
           <span key={i} style={{

@@ -23,7 +23,7 @@ export function WalletToggle() {
       aria-label={`Switch to ${isGC ? 'Sweep Coins' : 'Gold Coins'}`}
       className="relative flex items-center h-[34px] w-[88px] rounded-full p-[3px] transition-colors duration-300"
       style={{
-        backgroundColor: '#0A1410',
+        backgroundColor: '#08121C',
         border: `1px solid ${isGC ? 'rgba(240,178,50,0.45)' : 'rgba(45,201,122,0.45)'}`,
       }}
     >

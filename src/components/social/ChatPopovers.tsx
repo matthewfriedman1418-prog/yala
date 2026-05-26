@@ -51,15 +51,15 @@ export function EmojiPicker({ open, onClose, onPick, anchor = 'bottom-left' }: E
       transition={{ type: 'spring', damping: 26, stiffness: 380 }}
       className={`absolute left-0 z-50 w-[280px] rounded-xl overflow-hidden shadow-2xl ${anchor === 'bottom-left' ? 'bottom-full mb-2' : 'top-full mt-2'}`}
       style={{
-        background: '#0F1A14',
-        border: '1px solid #1A2E22',
+        background: '#0F1828',
+        border: '1px solid #1A2238',
         boxShadow: '0 16px 40px rgba(0,0,0,0.7)',
       }}
     >
       <div className="max-h-[280px] overflow-y-auto p-3 no-scrollbar">
         {EMOJI_GROUPS.map((g) => (
           <div key={g.label} className="mb-3 last:mb-0">
-            <p className="text-[9px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA899' }}>
+            <p className="text-[9px] font-bold uppercase tracking-widest mb-1.5" style={{ color: '#8FA3B8' }}>
               {g.label}
             </p>
             <div className="grid grid-cols-8 gap-1">
@@ -144,7 +144,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
       className="fixed z-[60] w-[260px] rounded-2xl overflow-hidden shadow-2xl"
       style={{
         top, left,
-        background: '#0F1A14',
+        background: '#0F1828',
         border: `1px solid ${tierColor}40`,
         boxShadow: `0 20px 50px rgba(0,0,0,0.7), 0 0 28px ${tierColor}14`,
       }}
@@ -153,7 +153,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
       <div
         className="px-4 pt-4 pb-3 flex items-center gap-3"
         style={{
-          borderBottom: '1px solid #1A2E22',
+          borderBottom: '1px solid #1A2238',
           background: `radial-gradient(ellipse at 0% 100%, ${tierColor}10, transparent 60%)`,
         }}
       >
@@ -173,11 +173,11 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
         {isPrivate && (
           <div
             className="absolute inset-0 z-10 backdrop-blur-sm flex flex-col items-center justify-center"
-            style={{ background: 'rgba(15,26,20,0.7)' }}
+            style={{ background: 'rgba(15,24,40,0.7)' }}
           >
-            <Lock className="w-4 h-4 mb-1" style={{ color: '#8FA899' }} />
+            <Lock className="w-4 h-4 mb-1" style={{ color: '#8FA3B8' }} />
             <p className="text-[11px] font-bold" style={{ color: '#F5E8C8' }}>Private profile</p>
-            <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>Stats hidden by this user</p>
+            <p className="text-[10px] mt-0.5" style={{ color: '#8FA3B8' }}>Stats hidden by this user</p>
           </div>
         )}
 
@@ -202,7 +202,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
       {/* Actions */}
       <div
         className="grid grid-cols-2 gap-1.5 p-2"
-        style={{ borderTop: '1px solid #1A2E22', background: '#0A1410' }}
+        style={{ borderTop: '1px solid #1A2238', background: '#08121C' }}
       >
         {user.isYou ? (
           <>
@@ -210,7 +210,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
               href="/profile"
               onClick={onClose}
               className="text-center py-2 rounded-lg text-xs font-bold transition-all hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
             >
               Edit profile
             </Link>
@@ -218,7 +218,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
               href="/profile"
               onClick={onClose}
               className="text-center py-2 rounded-lg text-xs font-black transition-all hover:brightness-110"
-              style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
+              style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
             >
               Privacy
             </Link>
@@ -239,8 +239,8 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
               className="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all hover:bg-white/5"
               style={{
                 background: isBlocked ? 'rgba(45,201,122,0.10)' : 'rgba(255,255,255,0.04)',
-                border:     `1px solid ${isBlocked ? 'rgba(45,201,122,0.30)' : '#1A2E22'}`,
-                color:      isBlocked ? '#2DC97A' : '#8FA899',
+                border:     `1px solid ${isBlocked ? 'rgba(45,201,122,0.30)' : '#1A2238'}`,
+                color:      isBlocked ? '#2DC97A' : '#8FA3B8',
               }}
             >
               {isBlocked ? <UserCheck className="w-3 h-3" /> : <UserX className="w-3 h-3" />}
@@ -249,7 +249,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
             <button
               onClick={() => { onTip?.(user); onClose(); }}
               className="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-black transition-all hover:brightness-110"
-              style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
+              style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
             >
               <YalaIcon name="gift" size={12} />
               Tip
@@ -264,7 +264,7 @@ export function UserProfilePopover({ user, open, onClose, anchorRect, onTip }: U
 function StatRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>{label}</span>
+      <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>{label}</span>
       <span className="text-xs font-bold" style={{ color: '#F5E8C8' }}>{value}</span>
     </div>
   );

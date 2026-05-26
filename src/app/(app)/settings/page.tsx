@@ -61,12 +61,12 @@ export default function SettingsPage() {
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-64 gap-4">
-        <Shield className="w-10 h-10" style={{ color: '#4A6A55' }} />
-        <p style={{ color: '#8FA899' }}>Sign in to view your settings.</p>
+        <Shield className="w-10 h-10" style={{ color: '#4A5878' }} />
+        <p style={{ color: '#8FA3B8' }}>Sign in to view your settings.</p>
         <button
           onClick={() => openAuthModal()}
           className="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:brightness-110"
-          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+          style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814' }}
         >
           Sign in
         </button>
@@ -95,7 +95,7 @@ export default function SettingsPage() {
         <h1 className="font-display text-2xl font-black tracking-tight" style={{ color: '#F5E8C8' }}>
           Settings
         </h1>
-        <p className="text-xs mt-0.5" style={{ color: '#8FA899' }}>
+        <p className="text-xs mt-0.5" style={{ color: '#8FA3B8' }}>
           Preferences, security, sessions. Changes save automatically.
         </p>
       </div>
@@ -104,7 +104,7 @@ export default function SettingsPage() {
         {/* ── Section nav ─────────────────────── */}
         <nav
           className="rounded-2xl p-2 lg:sticky lg:top-20 h-fit"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
           <ul className="flex lg:flex-col gap-1 overflow-x-auto no-scrollbar">
             {SECTIONS.map((s) => {
@@ -119,7 +119,7 @@ export default function SettingsPage() {
                     className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] font-bold transition-colors whitespace-nowrap"
                     style={{
                       background: isActive ? (isDanger ? 'rgba(239,68,68,0.10)' : 'rgba(240,178,50,0.10)') : 'transparent',
-                      color:      isActive ? (isDanger ? '#EF4444' : '#F0B232') : '#8FA899',
+                      color:      isActive ? (isDanger ? '#EF4444' : '#F0B232') : '#8FA3B8',
                       border:     `1px solid ${isActive ? (isDanger ? 'rgba(239,68,68,0.30)' : 'rgba(240,178,50,0.30)') : 'transparent'}`,
                     }}
                   >
@@ -155,7 +155,7 @@ export default function SettingsPage() {
                     <button onClick={handleSaveName} aria-label="Save" className="p-1.5 rounded-lg hover:bg-emerald-500/10" style={{ color: '#2DC97A' }}>
                       <Check className="w-4 h-4" />
                     </button>
-                    <button onClick={() => setEditingName(false)} aria-label="Cancel" className="p-1.5 rounded-lg hover:bg-white/5" style={{ color: '#8FA899' }}>
+                    <button onClick={() => setEditingName(false)} aria-label="Cancel" className="p-1.5 rounded-lg hover:bg-white/5" style={{ color: '#8FA3B8' }}>
                       <X className="w-4 h-4" />
                     </button>
                   </div>
@@ -168,7 +168,7 @@ export default function SettingsPage() {
                       onClick={() => { setNameDraft(user?.displayName || user?.username || ''); setEditingName(true); }}
                       aria-label="Edit display name"
                       className="p-1 rounded-lg hover:bg-white/5"
-                      style={{ color: '#8FA899' }}
+                      style={{ color: '#8FA3B8' }}
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
@@ -280,9 +280,9 @@ export default function SettingsPage() {
                   value={settings.display.language}
                   onChange={(e) => { settings.setDisplay('language', e.target.value as Language); toast.success('Language updated'); }}
                   className="text-sm font-bold rounded-lg px-3 py-1.5 focus:outline-none"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 >
-                  {LANGUAGES.map((l) => <option key={l.id} value={l.id} style={{ background: '#0F1A14' }}>{l.label}</option>)}
+                  {LANGUAGES.map((l) => <option key={l.id} value={l.id} style={{ background: '#0F1828' }}>{l.label}</option>)}
                 </select>
               </Row>
               <Row label="Density" hint="Compact mode trims padding in lists and tables.">
@@ -329,7 +329,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={() => toast('Password change flow coming soon')}
                   className="text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:bg-white/5"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 >
                   Change password
                 </button>
@@ -360,14 +360,14 @@ export default function SettingsPage() {
                   <div
                     key={s.id}
                     className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2238' }}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
                         className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}
                       >
-                        <Smartphone className="w-4 h-4" style={{ color: s.current ? '#2DC97A' : '#8FA899' }} />
+                        <Smartphone className="w-4 h-4" style={{ color: s.current ? '#2DC97A' : '#8FA3B8' }} />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
@@ -381,7 +381,7 @@ export default function SettingsPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-[11px] truncate" style={{ color: '#8FA899' }}>
+                        <p className="text-[11px] truncate" style={{ color: '#8FA3B8' }}>
                           <Globe className="inline w-3 h-3 mr-1 -mt-0.5" />
                           {s.location} · {s.lastActive}
                         </p>
@@ -392,7 +392,7 @@ export default function SettingsPage() {
                         type="button"
                         onClick={() => { settings.endSession(s.id); toast(`Ended session: ${s.device}`); }}
                         className="text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors hover:bg-red-500/10"
-                        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+                        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
                       >
                         End
                       </button>
@@ -419,7 +419,7 @@ export default function SettingsPage() {
                     toast.success('Settings restored to defaults');
                   }}
                   className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-colors hover:bg-white/5"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#F5E8C8' }}
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   Reset settings
@@ -466,21 +466,21 @@ function Card({
   footer?: React.ReactNode;
   tone?: 'danger';
 }) {
-  const borderColor = tone === 'danger' ? 'rgba(239,68,68,0.25)' : '#1A2E22';
+  const borderColor = tone === 'danger' ? 'rgba(239,68,68,0.25)' : '#1A2238';
   return (
     <section
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#0F1A14', border: `1px solid ${borderColor}` }}
+      style={{ background: '#0F1828', border: `1px solid ${borderColor}` }}
     >
       <header className="px-5 py-4" style={{ borderBottom: `1px solid ${borderColor}` }}>
         <h2 className="text-sm font-bold" style={{ color: tone === 'danger' ? '#EF4444' : '#F5E8C8' }}>{title}</h2>
-        {subtitle && <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>{subtitle}</p>}
+        {subtitle && <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }}>{subtitle}</p>}
       </header>
-      <div className="px-5 py-3 divide-y" style={{ borderColor: '#1A2E22' }}>{children}</div>
+      <div className="px-5 py-3 divide-y" style={{ borderColor: '#1A2238' }}>{children}</div>
       {footer && (
         <footer
           className="px-5 py-3 flex items-center justify-end gap-2"
-          style={{ borderTop: `1px solid ${borderColor}`, background: '#0A1410' }}
+          style={{ borderTop: `1px solid ${borderColor}`, background: '#08121C' }}
         >
           {footer}
         </footer>
@@ -491,10 +491,10 @@ function Card({
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0" style={{ borderColor: '#1A2E22' }}>
+    <div className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0" style={{ borderColor: '#1A2238' }}>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold" style={{ color: '#F5E8C8' }}>{label}</p>
-        {hint && <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>{hint}</p>}
+        {hint && <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }}>{hint}</p>}
       </div>
       <div className="flex-shrink-0">{children}</div>
     </div>
@@ -504,8 +504,8 @@ function Row({ label, hint, children }: { label: string; hint?: string; children
 function Group({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="py-3 first:pt-0 last:pb-0">
-      <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: '#4A6A55' }}>{label}</p>
-      <div className="divide-y" style={{ borderColor: '#1A2E22' }}>{children}</div>
+      <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: '#4A5878' }}>{label}</p>
+      <div className="divide-y" style={{ borderColor: '#1A2238' }}>{children}</div>
     </div>
   );
 }
@@ -526,13 +526,13 @@ function Toggle({
       disabled={disabled}
       onClick={() => onChange(!on)}
       className="relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors disabled:opacity-40"
-      style={{ background: on ? '#F0B232' : '#1A2E22' }}
+      style={{ background: on ? '#F0B232' : '#1A2238' }}
     >
       <span
         className="inline-flex items-center justify-center h-5 w-5 rounded-full transition-transform"
         style={{
-          background: on ? '#060E0A' : '#8FA899',
-          color:      on ? '#F0B232' : '#0F1A14',
+          background: on ? '#040814' : '#8FA3B8',
+          color:      on ? '#F0B232' : '#0F1828',
           transform:  on ? 'translateX(22px)' : 'translateX(2px)',
         }}
       >
@@ -552,7 +552,7 @@ function SegmentedControl<T extends string>({
   return (
     <div
       className="inline-flex rounded-lg p-0.5"
-      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
+      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}
     >
       {options.map((o) => {
         const active = value === o.id;
@@ -564,7 +564,7 @@ function SegmentedControl<T extends string>({
             className="px-3 py-1 rounded-md text-[11px] font-bold transition-colors"
             style={{
               background: active ? 'rgba(240,178,50,0.14)' : 'transparent',
-              color:      active ? '#F0B232' : '#8FA899',
+              color:      active ? '#F0B232' : '#8FA3B8',
             }}
           >
             {o.label}

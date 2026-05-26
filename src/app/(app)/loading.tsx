@@ -7,15 +7,15 @@ export default function AppLoading() {
     <div className="space-y-6 animate-[fade-in_0.2s_ease-out]">
       {/* Header skeleton */}
       <div className="space-y-2">
-        <div className="h-3 w-24 rounded-full" style={{ background: '#1A2E22' }} />
-        <div className="h-8 w-64 rounded-lg" style={{ background: '#1A2E22' }} />
-        <div className="h-3 w-80 rounded-full" style={{ background: '#101C16' }} />
+        <div className="h-3 w-24 rounded-full" style={{ background: '#1A2238' }} />
+        <div className="h-8 w-64 rounded-lg" style={{ background: '#1A2238' }} />
+        <div className="h-3 w-80 rounded-full" style={{ background: '#101C28' }} />
       </div>
 
       {/* Hero block skeleton */}
       <div
         className="rounded-2xl overflow-hidden relative"
-        style={{ background: '#0C1812', border: '1px solid #1A2E22', height: 260 }}
+        style={{ background: '#0A101C', border: '1px solid #1A2238', height: 260 }}
       >
         <div className="absolute inset-0 _shimmer" />
       </div>
@@ -26,7 +26,7 @@ export default function AppLoading() {
           <div
             key={i}
             className="aspect-[3/4] rounded-xl relative overflow-hidden"
-            style={{ background: '#0C1812', border: '1px solid #1A2E22' }}
+            style={{ background: '#0A101C', border: '1px solid #1A2238' }}
           >
             <div className="absolute inset-0 _shimmer" />
           </div>

@@ -82,13 +82,13 @@ export default function KYCPage() {
             </div>
           </div>
           <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Identity verified</h1>
-          <p style={{ color: '#8FA899' }}>You&apos;re eligible to redeem Sweep Coins where permitted by law.</p>
+          <p style={{ color: '#8FA3B8' }}>You&apos;re eligible to redeem Sweep Coins where permitted by law.</p>
         </div>
 
         <div
           className="rounded-2xl p-6 sm:p-7 flex items-center gap-5"
           style={{
-            background: 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.14) 0%, transparent 55%), #0F1A14',
+            background: 'radial-gradient(ellipse at 15% 80%, rgba(45,201,122,0.14) 0%, transparent 55%), #0F1828',
             border: '1px solid rgba(45,201,122,0.28)',
           }}
         >
@@ -102,7 +102,7 @@ export default function KYCPage() {
             <p className="font-display text-xl font-bold mb-1" style={{ color: '#F5E8C8' }}>
               KYC complete · No action needed
             </p>
-            <p className="text-sm" style={{ color: '#8FA899' }}>
+            <p className="text-sm" style={{ color: '#8FA3B8' }}>
               Your account is fully verified. Redeem Sweep Coins anytime from{' '}
               <Link href="/wallet/redeem" className="font-semibold underline transition-colors hover:opacity-80" style={{ color: '#2DC97A' }}>Wallet → Redeem</Link>.
             </p>
@@ -139,7 +139,7 @@ export default function KYCPage() {
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
           className="rounded-2xl p-8 text-center"
           style={{
-            background: 'radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.10) 0%, transparent 55%), #0F1A14',
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.10) 0%, transparent 55%), #0F1828',
             border: '1px solid rgba(245,158,11,0.28)',
           }}
         >
@@ -152,7 +152,7 @@ export default function KYCPage() {
           <h1 className="font-display text-2xl font-bold mb-1" style={{ color: '#F5E8C8' }}>
             Verification submitted
           </h1>
-          <p className="text-sm" style={{ color: '#8FA899' }}>
+          <p className="text-sm" style={{ color: '#8FA3B8' }}>
             Most reviews complete within <span className="font-bold" style={{ color: '#F5E8C8' }}>1–3 business days</span>.
             We&apos;ll email you the moment your status changes.
           </p>
@@ -161,12 +161,12 @@ export default function KYCPage() {
         {/* What's next */}
         <div
           className="rounded-2xl overflow-hidden"
-          style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+          style={{ background: '#0F1828', border: '1px solid #1A2238' }}
         >
-          <div className="px-5 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
-            <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>What happens next</p>
+          <div className="px-5 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
+            <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>What happens next</p>
           </div>
-          <div className="divide-y" style={{ borderColor: '#1A2E22' }}>
+          <div className="divide-y" style={{ borderColor: '#1A2238' }}>
             {[
               { step: '1', label: 'Submitted', sub: 'Your documents are in our review queue', state: 'done' as const },
               { step: '2', label: 'Reviewing', sub: 'Our compliance team checks your ID + address', state: 'active' as const },
@@ -184,7 +184,7 @@ export default function KYCPage() {
                     border: `1px solid ${
                       s.state === 'done'   ? 'rgba(45,201,122,0.35)' :
                       s.state === 'active' ? 'rgba(245,158,11,0.35)' :
-                      '#1A2E22'
+                      '#1A2238'
                     }`,
                   }}
                 >
@@ -192,12 +192,12 @@ export default function KYCPage() {
                     ? <CheckCircle2 className="w-4 h-4" style={{ color: '#2DC97A' }} />
                     : s.state === 'active'
                       ? <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#F59E0B' }} />
-                      : <span className="text-[10px] font-bold" style={{ color: '#4A6A55' }}>{s.step}</span>
+                      : <span className="text-[10px] font-bold" style={{ color: '#4A5878' }}>{s.step}</span>
                   }
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-bold" style={{ color: s.state === 'pending' ? '#8FA899' : '#F5E8C8' }}>{s.label}</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }} dangerouslySetInnerHTML={{ __html: s.sub }} />
+                  <p className="text-sm font-bold" style={{ color: s.state === 'pending' ? '#8FA3B8' : '#F5E8C8' }}>{s.label}</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }} dangerouslySetInnerHTML={{ __html: s.sub }} />
                 </div>
               </div>
             ))}
@@ -211,7 +211,7 @@ export default function KYCPage() {
           <YalaIcon name="check" size={18} />
           <div>
             <p className="font-bold text-sm" style={{ color: '#F5E8C8' }}>Keep playing while we review</p>
-            <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>
+            <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }}>
               Your GC balance and SC balance are unaffected. The only thing locked is SC redemption.
             </p>
           </div>
@@ -239,7 +239,7 @@ export default function KYCPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold mb-1" style={{ color: '#F5E8C8' }}>Verify your identity</h1>
-        <p style={{ color: '#8FA899' }}>
+        <p style={{ color: '#8FA3B8' }}>
           Required to redeem Sweep Coins. Takes about <span className="font-bold" style={{ color: '#F5E8C8' }}>2 minutes</span>.
         </p>
       </div>
@@ -266,8 +266,8 @@ export default function KYCPage() {
                       ? 'linear-gradient(135deg, #2DC97A, #10B981)'
                       : isActive
                         ? 'linear-gradient(135deg, #F0B232, #FFD166)'
-                        : '#1A2E22',
-                    color: isDone || isActive ? '#060E0A' : '#8FA899',
+                        : '#1A2238',
+                    color: isDone || isActive ? '#040814' : '#8FA3B8',
                     boxShadow: isActive ? '0 0 14px rgba(240,178,50,0.4)' : 'none',
                   }}
                 >
@@ -275,7 +275,7 @@ export default function KYCPage() {
                 </div>
                 <p
                   className="text-[10px] mt-1.5 text-center font-bold hidden sm:block"
-                  style={{ color: isActive ? '#F0B232' : isDone ? '#2DC97A' : '#8FA899' }}
+                  style={{ color: isActive ? '#F0B232' : isDone ? '#2DC97A' : '#8FA3B8' }}
                 >
                   {s.title}
                 </p>
@@ -283,7 +283,7 @@ export default function KYCPage() {
               {i < STEPS.length - 1 && (
                 <div
                   className="h-px flex-1 mt-4 mx-0.5"
-                  style={{ background: currentStep > s.id + 1 ? '#2DC97A' : '#1A2E22' }}
+                  style={{ background: currentStep > s.id + 1 ? '#2DC97A' : '#1A2238' }}
                 />
               )}
             </div>
@@ -294,13 +294,13 @@ export default function KYCPage() {
       {/* Form card */}
       <div
         className="rounded-2xl p-5 sm:p-6"
-        style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+        style={{ background: '#0F1828', border: '1px solid #1A2238' }}
       >
         <div className="flex items-baseline justify-between mb-4">
           <h3 className="font-display text-lg font-bold" style={{ color: '#F5E8C8' }}>
             {step.title}
           </h3>
-          <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>
+          <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>
             Step {currentStep} of {STEPS.length}
           </span>
         </div>
@@ -386,7 +386,7 @@ export default function KYCPage() {
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
               className="space-y-4"
             >
-              <p className="text-sm" style={{ color: '#8FA899' }}>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>
                 Pick the document type you&apos;ll upload. Make sure all four corners are visible and text is readable.
               </p>
 
@@ -399,14 +399,14 @@ export default function KYCPage() {
                     className="text-left p-3 rounded-xl transition-all"
                     style={{
                       background: docType === d.id ? 'rgba(240,178,50,0.10)' : 'rgba(255,255,255,0.02)',
-                      border: `1px solid ${docType === d.id ? 'rgba(240,178,50,0.45)' : '#1A2E22'}`,
+                      border: `1px solid ${docType === d.id ? 'rgba(240,178,50,0.45)' : '#1A2238'}`,
                     }}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-bold" style={{ color: docType === d.id ? '#F0B232' : '#F5E8C8' }}>{d.label}</span>
                       {docType === d.id && <CheckCircle2 className="w-4 h-4" style={{ color: '#F0B232' }} />}
                     </div>
-                    <p className="text-[10px]" style={{ color: '#8FA899' }}>{d.sub}</p>
+                    <p className="text-[10px]" style={{ color: '#8FA3B8' }}>{d.sub}</p>
                   </button>
                 ))}
               </div>
@@ -426,7 +426,7 @@ export default function KYCPage() {
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
               className="space-y-4"
             >
-              <p className="text-sm" style={{ color: '#8FA899' }}>
+              <p className="text-sm" style={{ color: '#8FA3B8' }}>
                 Upload a recent utility bill, bank statement, or government letter showing your name and address.
                 Must be dated within the <span className="font-bold" style={{ color: '#F5E8C8' }}>last 90 days</span>.
               </p>
@@ -447,7 +447,7 @@ export default function KYCPage() {
             >
               <div
                 className="rounded-xl p-4 divide-y"
-                style={{ background: 'rgba(255,255,255,0.02)', borderColor: '#1A2E22', border: '1px solid #1A2E22' }}
+                style={{ background: 'rgba(255,255,255,0.02)', borderColor: '#1A2238', border: '1px solid #1A2238' }}
               >
                 <ReviewRow label="Name"     value={`${form.firstName} ${form.lastName}`} />
                 <ReviewRow label="Date of birth" value={form.dob || '—'} />
@@ -461,7 +461,7 @@ export default function KYCPage() {
                 style={{ background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.22)' }}
               >
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#60A5FA' }} />
-                <p className="text-xs" style={{ color: '#8FA899' }}>
+                <p className="text-xs" style={{ color: '#8FA3B8' }}>
                   Reviews complete within <span className="font-bold" style={{ color: '#F5E8C8' }}>1–3 business days</span>.
                   You&apos;ll get an email the moment we&apos;re done.
                 </p>
@@ -476,7 +476,7 @@ export default function KYCPage() {
             <button
               onClick={() => setCurrentStep((s) => s - 1)}
               className="flex items-center gap-1.5 px-5 py-3 rounded-xl text-sm font-semibold transition-all hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#8FA3B8' }}
             >
               <ChevronLeft className="w-4 h-4" /> Back
             </button>
@@ -488,7 +488,7 @@ export default function KYCPage() {
               className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
               style={{
                 background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: canContinue ? '0 4px 16px rgba(240,178,50,0.3)' : 'none',
               }}
             >
@@ -500,7 +500,7 @@ export default function KYCPage() {
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: 'linear-gradient(135deg, #2DC97A, #10B981)',
-                color: '#060E0A',
+                color: '#040814',
                 boxShadow: '0 4px 16px rgba(45,201,122,0.35)',
               }}
             >
@@ -519,7 +519,7 @@ export default function KYCPage() {
 function Field({ label, full, children }: { label: string; full?: boolean; children: React.ReactNode }) {
   return (
     <div className={full ? 'col-span-2' : ''}>
-      <label className="text-[10px] uppercase tracking-widest font-bold block mb-1.5" style={{ color: '#8FA899' }}>{label}</label>
+      <label className="text-[10px] uppercase tracking-widest font-bold block mb-1.5" style={{ color: '#8FA3B8' }}>{label}</label>
       {children}
       <style>{`
         .kyc-input {
@@ -529,11 +529,11 @@ function Field({ label, full, children }: { label: string; full?: boolean; child
           font-size: 14px;
           color: #F5E8C8;
           background: rgba(255,255,255,0.04);
-          border: 1px solid #1A2E22;
+          border: 1px solid #1A2238;
           outline: none;
           transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
         }
-        .kyc-input::placeholder { color: #4A6A55; }
+        .kyc-input::placeholder { color: #4A5878; }
         .kyc-input:focus {
           border-color: rgba(240,178,50,0.45);
           background: rgba(240,178,50,0.04);
@@ -551,7 +551,7 @@ function Benefit({ icon, color, title, body }: {
   return (
     <div
       className="rounded-xl p-3.5"
-      style={{ background: '#0F1A14', border: `1px solid ${color}22` }}
+      style={{ background: '#0F1828', border: `1px solid ${color}22` }}
     >
       <div
         className="w-9 h-9 rounded-lg flex items-center justify-center mb-2.5"
@@ -560,7 +560,7 @@ function Benefit({ icon, color, title, body }: {
         <YalaIcon name={icon} size={18} />
       </div>
       <p className="font-bold text-sm" style={{ color: '#F5E8C8' }}>{title}</p>
-      <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8FA899' }}>{body}</p>
+      <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8FA3B8' }}>{body}</p>
     </div>
   );
 }
@@ -582,12 +582,12 @@ function UploadBox({ value, onPick, onClear, label }: {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold truncate" style={{ color: '#F5E8C8' }}>{value}</p>
-          <p className="text-[11px]" style={{ color: '#8FA899' }}>Uploaded · ready to submit</p>
+          <p className="text-[11px]" style={{ color: '#8FA3B8' }}>Uploaded · ready to submit</p>
         </div>
         <button
           onClick={onClear}
           className="text-[11px] font-bold transition-colors hover:opacity-80"
-          style={{ color: '#8FA899' }}
+          style={{ color: '#8FA3B8' }}
         >
           Replace
         </button>
@@ -600,7 +600,7 @@ function UploadBox({ value, onPick, onClear, label }: {
       className="w-full rounded-xl p-7 flex flex-col items-center text-center transition-all hover:bg-white/[0.03]"
       style={{
         background: 'rgba(255,255,255,0.02)',
-        border: '2px dashed #1A2E22',
+        border: '2px dashed #1A2238',
       }}
     >
       <div
@@ -610,7 +610,7 @@ function UploadBox({ value, onPick, onClear, label }: {
         <Upload className="w-5 h-5" style={{ color: '#F0B232' }} />
       </div>
       <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>{label}</p>
-      <p className="text-[11px]" style={{ color: '#8FA899' }}>PNG, JPG, or PDF up to 10MB · Demo will fake upload</p>
+      <p className="text-[11px]" style={{ color: '#8FA3B8' }}>PNG, JPG, or PDF up to 10MB · Demo will fake upload</p>
     </button>
   );
 }
@@ -618,7 +618,7 @@ function UploadBox({ value, onPick, onClear, label }: {
 function ReviewRow({ label, value, hasFile }: { label: string; value: string; hasFile?: boolean }) {
   return (
     <div className="flex items-center justify-between py-2 first:pt-0 last:pb-0">
-      <span className="text-[11px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>{label}</span>
+      <span className="text-[11px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>{label}</span>
       <span className="text-sm font-bold flex items-center gap-1.5" style={{ color: '#F5E8C8' }}>
         {hasFile && <CheckCircle2 className="w-3.5 h-3.5" style={{ color: '#2DC97A' }} />}
         {value}
@@ -645,12 +645,12 @@ function DemoSwitcher({ state, onChange }: { state: DemoState; onChange: (s: Dem
       }}
     >
       <div className="flex items-center gap-2 min-w-0">
-        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-widest flex-shrink-0" style={{ background: '#F59E0B', color: '#060E0A' }}>
+        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-widest flex-shrink-0" style={{ background: '#F59E0B', color: '#040814' }}>
           Demo
         </span>
-        <span className="text-[11px] truncate" style={{ color: '#8FA899' }}>Preview KYC states — not visible in production</span>
+        <span className="text-[11px] truncate" style={{ color: '#8FA3B8' }}>Preview KYC states — not visible in production</span>
       </div>
-      <div className="flex gap-1 p-0.5 rounded-lg flex-shrink-0" style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid #1A2E22' }}>
+      <div className="flex gap-1 p-0.5 rounded-lg flex-shrink-0" style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid #1A2238' }}>
         {STATES.map((s) => (
           <button
             key={s.id}
@@ -658,7 +658,7 @@ function DemoSwitcher({ state, onChange }: { state: DemoState; onChange: (s: Dem
             className="px-2.5 py-1 rounded-md text-[10px] font-bold transition-all"
             style={state === s.id
               ? { background: 'rgba(240,178,50,0.18)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.35)' }
-              : { color: '#8FA899', border: '1px solid transparent' }
+              : { color: '#8FA3B8', border: '1px solid transparent' }
             }
           >
             {s.label}
@@ -673,7 +673,7 @@ function TrustSignals() {
   return (
     <div
       className="rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4"
-      style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+      style={{ background: '#0F1828', border: '1px solid #1A2238' }}
     >
       <div className="flex items-center gap-3 flex-1">
         <div
@@ -684,16 +684,16 @@ function TrustSignals() {
         </div>
         <div>
           <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>End-to-end encrypted</p>
-          <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>
+          <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }}>
             Your documents are encrypted in transit and at rest. Verified by our regulated KYC partner.
           </p>
         </div>
       </div>
-      <div className="hidden sm:block w-px h-12" style={{ background: '#1A2E22' }} />
+      <div className="hidden sm:block w-px h-12" style={{ background: '#1A2238' }} />
       <div className="flex items-center gap-3 sm:flex-1">
         <div className="hidden sm:block w-px h-8" />
         <div>
-          <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA899' }}>Required for</p>
+          <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: '#8FA3B8' }}>Required for</p>
           <p className="text-sm font-bold mt-0.5" style={{ color: '#F5E8C8' }}>
             Sweep Coin redemption + higher limits
           </p>

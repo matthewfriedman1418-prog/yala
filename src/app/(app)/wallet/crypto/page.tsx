@@ -43,7 +43,7 @@ export default function CryptoPage() {
       <Link
         href="/wallet"
         className="inline-flex items-center gap-1 text-xs font-semibold transition-colors hover:text-[#F0B232]"
-        style={{ color: '#8FA899' }}
+        style={{ color: '#8FA3B8' }}
       >
         <ChevronLeft className="w-3 h-3" /> Back to wallet
       </Link>
@@ -60,7 +60,7 @@ export default function CryptoPage() {
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold" style={{ color: '#F5E8C8' }}>Crypto deposits & withdrawals</h1>
-        <p className="text-sm mt-1" style={{ color: '#8FA899' }}>
+        <p className="text-sm mt-1" style={{ color: '#8FA3B8' }}>
           Send BTC, ETH, SOL, USDT, or LTC. Funds credit your wallet after network confirmations.
         </p>
       </div>
@@ -69,7 +69,7 @@ export default function CryptoPage() {
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl"
         style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.22)' }}>
         <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#F59E0B' }} />
-        <p className="text-xs leading-relaxed" style={{ color: '#8FA899' }}>
+        <p className="text-xs leading-relaxed" style={{ color: '#8FA3B8' }}>
           <span className="font-bold" style={{ color: '#F59E0B' }}>Demo mode.</span>{' '}
           Addresses below are not real and no funds will be processed. Live crypto wires up with the real payment integration.
         </p>
@@ -77,7 +77,7 @@ export default function CryptoPage() {
 
       {/* Coin selector */}
       <div>
-        <p className="text-[10px] uppercase tracking-widest font-bold mb-2" style={{ color: '#8FA899' }}>
+        <p className="text-[10px] uppercase tracking-widest font-bold mb-2" style={{ color: '#8FA3B8' }}>
           Asset
         </p>
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
@@ -88,11 +88,11 @@ export default function CryptoPage() {
               className="flex-shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-bold transition-all"
               style={selectedCoin === c.symbol
                 ? { background: 'rgba(96,165,250,0.12)', border: '1px solid rgba(96,165,250,0.4)', color: '#60A5FA' }
-                : { background: '#0F1A14', border: '1px solid #1A2E22', color: '#8FA899' }
+                : { background: '#0F1828', border: '1px solid #1A2238', color: '#8FA3B8' }
               }
             >
               <span className="font-display">{c.symbol}</span>
-              <span className="text-[10px] font-normal" style={{ color: '#4A6A55' }}>{c.name}</span>
+              <span className="text-[10px] font-normal" style={{ color: '#4A5878' }}>{c.name}</span>
             </button>
           ))}
         </div>
@@ -101,7 +101,7 @@ export default function CryptoPage() {
       {/* Tabs */}
       <div
         className="flex gap-1 p-1 rounded-xl"
-        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22' }}
+        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238' }}
       >
         {(['deposit', 'withdraw'] as const).map((t) => (
           <button
@@ -109,8 +109,8 @@ export default function CryptoPage() {
             onClick={() => setTab(t)}
             className="flex-1 py-2.5 rounded-lg text-sm font-bold capitalize transition-all"
             style={tab === t
-              ? { background: 'linear-gradient(135deg, #60A5FA, #3B82F6)', color: '#060E0A' }
-              : { color: '#8FA899' }
+              ? { background: 'linear-gradient(135deg, #60A5FA, #3B82F6)', color: '#040814' }
+              : { color: '#8FA3B8' }
             }
           >
             {t}
@@ -124,7 +124,7 @@ export default function CryptoPage() {
             key="deposit"
             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
             className="rounded-2xl p-5 space-y-4"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238' }}
           >
             <p className="text-sm" style={{ color: '#F5E8C8' }}>
               Deposit <span className="font-bold" style={{ color: '#60A5FA' }}>{coin.name}</span> on the{' '}
@@ -147,13 +147,13 @@ export default function CryptoPage() {
                     ))}
                   </div>
                 </div>
-                <p className="text-[10px] font-mono" style={{ color: '#4A6A55' }}>scan with wallet app</p>
+                <p className="text-[10px] font-mono" style={{ color: '#4A5878' }}>scan with wallet app</p>
               </div>
 
               {/* Address + meta */}
               <div className="flex-1 space-y-3">
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest font-bold mb-1.5" style={{ color: '#8FA899' }}>
+                  <p className="text-[10px] uppercase tracking-widest font-bold mb-1.5" style={{ color: '#8FA3B8' }}>
                     Deposit address
                   </p>
                   <div className="flex items-center gap-2 px-3 py-3 rounded-xl"
@@ -166,7 +166,7 @@ export default function CryptoPage() {
                     >
                       {copied
                         ? <CheckCircle2 className="w-4 h-4" style={{ color: '#2DC97A' }} />
-                        : <Copy className="w-4 h-4" style={{ color: '#8FA899' }} />
+                        : <Copy className="w-4 h-4" style={{ color: '#8FA3B8' }} />
                       }
                     </button>
                   </div>
@@ -186,7 +186,7 @@ export default function CryptoPage() {
               style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.18)' }}
             >
               <AlertCircle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: '#EF4444' }} />
-              <p className="text-[11px]" style={{ color: '#8FA899' }}>
+              <p className="text-[11px]" style={{ color: '#8FA3B8' }}>
                 Send <span style={{ color: '#F5E8C8' }}>only</span> {coin.symbol} on the {coin.network} network.
                 Wrong-network or wrong-asset transfers may be lost.
               </p>
@@ -197,14 +197,14 @@ export default function CryptoPage() {
             key="withdraw"
             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
             className="rounded-2xl p-5 space-y-4"
-            style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            style={{ background: '#0F1828', border: '1px solid #1A2238' }}
           >
             <p className="text-sm" style={{ color: '#F5E8C8' }}>
               Withdraw <span className="font-bold" style={{ color: '#60A5FA' }}>{coin.symbol}</span> to an external wallet
             </p>
 
             <div>
-              <label className="text-[10px] uppercase tracking-widest font-bold block mb-1.5" style={{ color: '#8FA899' }}>
+              <label className="text-[10px] uppercase tracking-widest font-bold block mb-1.5" style={{ color: '#8FA3B8' }}>
                 Destination address
               </label>
               <input
@@ -215,16 +215,16 @@ export default function CryptoPage() {
                 className="w-full px-4 py-3 rounded-xl text-sm font-mono focus:outline-none transition-colors"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid #1A2E22',
+                  border: '1px solid #1A2238',
                   color: '#F5E8C8',
                 }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
               />
             </div>
 
             <div>
-              <label className="text-[10px] uppercase tracking-widest font-bold block mb-1.5" style={{ color: '#8FA899' }}>
+              <label className="text-[10px] uppercase tracking-widest font-bold block mb-1.5" style={{ color: '#8FA3B8' }}>
                 Amount ({coin.symbol})
               </label>
               <input
@@ -235,11 +235,11 @@ export default function CryptoPage() {
                 className="w-full px-4 py-3 rounded-xl text-sm number-display focus:outline-none transition-colors"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid #1A2E22',
+                  border: '1px solid #1A2238',
                   color: '#F5E8C8',
                 }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2E22')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#1A2238')}
               />
             </div>
 
@@ -250,7 +250,7 @@ export default function CryptoPage() {
             >
               Withdraw (demo disabled)
             </button>
-            <p className="text-[10px] text-center" style={{ color: '#4A6A55' }}>
+            <p className="text-[10px] text-center" style={{ color: '#4A5878' }}>
               Live withdrawals enabled once the production payment integration ships.
             </p>
           </motion.div>
@@ -260,7 +260,7 @@ export default function CryptoPage() {
       <Link
         href="/sweepstakes-rules"
         className="inline-flex items-center gap-1.5 text-[11px] font-semibold pt-1 transition-colors hover:opacity-80"
-        style={{ color: '#8FA899' }}
+        style={{ color: '#8FA3B8' }}
       >
         Sweepstakes rules + redemption policy <ExternalLink className="w-3 h-3" />
       </Link>
@@ -270,8 +270,8 @@ export default function CryptoPage() {
 
 function MetaCell({ label, value, accent }: { label: string; value: string; accent?: string }) {
   return (
-    <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2E22' }}>
-      <p className="text-[10px] uppercase tracking-widest font-bold mb-0.5" style={{ color: '#8FA899' }}>{label}</p>
+    <div className="px-3 py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid #1A2238' }}>
+      <p className="text-[10px] uppercase tracking-widest font-bold mb-0.5" style={{ color: '#8FA3B8' }}>{label}</p>
       <p className="text-sm font-bold" style={{ color: accent || '#F5E8C8' }}>{value}</p>
     </div>
   );

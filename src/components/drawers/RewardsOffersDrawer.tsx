@@ -163,27 +163,27 @@ export function RewardsOffersDrawer() {
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
             className="fixed right-0 top-14 bottom-0 w-[420px] max-w-[92vw] z-40 flex flex-col"
-            style={{ backgroundColor: '#0C1812', borderLeft: '1px solid #1A2E22' }}
+            style={{ backgroundColor: '#0A101C', borderLeft: '1px solid #1A2238' }}
             role="dialog"
             aria-modal="true"
             aria-label="Rewards and offers"
           >
             {/* ── Header ─────────────────────────────────────── */}
-            <div className="flex-shrink-0 flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
+            <div className="flex-shrink-0 flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
               <div className="flex items-center gap-2">
                 <YalaIcon name="gift" size={16} />
                 <span className="font-display font-bold" style={{ color: '#F5E8C8' }}>Rewards &amp; Offers</span>
               </div>
               <button onClick={closeRewardsOffersDrawer} aria-label="Close" className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-                <X className="w-4 h-4" style={{ color: '#8FA899' }} />
+                <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
               </button>
             </div>
 
             {/* ── Tab strip ──────────────────────────────────── */}
-            <div className="flex-shrink-0 px-3 py-2" style={{ borderBottom: '1px solid #1A2E22', background: '#0A1410' }}>
+            <div className="flex-shrink-0 px-3 py-2" style={{ borderBottom: '1px solid #1A2238', background: '#08121C' }}>
               <div
                 className="grid grid-cols-2 gap-0.5 rounded-xl p-0.5"
-                style={{ background: '#07110A', border: '1px solid #1A2E22' }}
+                style={{ background: '#06101C', border: '1px solid #1A2238' }}
               >
                 <TabButton
                   active={rewardsOffersDrawerTab === 'rewards'}
@@ -259,7 +259,7 @@ function TabButton({
       style={
         active
           ? { background: `${accent}14`, color: accent, border: `1px solid ${accent}44`, boxShadow: `0 0 12px ${accent}1F` }
-          : { color: '#8FA899', border: '1px solid transparent' }
+          : { color: '#8FA3B8', border: '1px solid transparent' }
       }
     >
       {label}
@@ -314,7 +314,7 @@ function RewardsTab(props: {
         <div
           className="m-4 rounded-2xl p-4"
           style={{
-            background: `radial-gradient(ellipse at 0% 50%, ${tierColor}14, transparent 65%), #0F1A14`,
+            background: `radial-gradient(ellipse at 0% 50%, ${tierColor}14, transparent 65%), #0F1828`,
             border: `1px solid ${tierColor}33`,
           }}
         >
@@ -326,7 +326,7 @@ function RewardsTab(props: {
               <YalaIcon name={currentTier.icon} size={22} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA899' }}>Your VIP Progress</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#8FA3B8' }}>Your VIP Progress</p>
               <p className="font-display font-bold text-sm" style={{ color: tierColor }}>{getVIPName(user?.vipTier || 1)}</p>
             </div>
             <span className="font-mono font-black text-sm flex-shrink-0" style={{ color: tierColor }}>
@@ -335,7 +335,7 @@ function RewardsTab(props: {
           </div>
           {nextTier ? (
             <>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progress}%` }}
@@ -344,7 +344,7 @@ function RewardsTab(props: {
                   style={{ background: `linear-gradient(90deg, ${tierColor}, ${getVIPColor(nextTier.tier)})` }}
                 />
               </div>
-              <p className="text-[10px] mt-1.5 flex items-center justify-between" style={{ color: '#8FA899' }}>
+              <p className="text-[10px] mt-1.5 flex items-center justify-between" style={{ color: '#8FA3B8' }}>
                 <span>{formatXP(xp)} XP</span>
                 <span>{(nextTier.xpRequired - xp).toLocaleString()} XP to {nextTier.name}</span>
               </p>
@@ -356,14 +356,14 @@ function RewardsTab(props: {
       ) : (
         <div
           className="m-4 rounded-2xl p-5 text-center"
-          style={{ background: '#0F1A14', border: '1px solid rgba(240,178,50,0.20)' }}
+          style={{ background: '#0F1828', border: '1px solid rgba(240,178,50,0.20)' }}
         >
           <p className="font-bold mb-1" style={{ color: '#F5E8C8' }}>Sign in to claim rewards</p>
-          <p className="text-[11px] mb-3" style={{ color: '#8FA899' }}>Earn XP, climb tiers, unlock bonuses.</p>
+          <p className="text-[11px] mb-3" style={{ color: '#8FA3B8' }}>Earn XP, climb tiers, unlock bonuses.</p>
           <button
             onClick={() => openAuthModal('register')}
             className="px-4 py-2 rounded-xl text-xs font-bold transition-all hover:brightness-110"
-            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A' }}
+            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814' }}
           >
             Create free account
           </button>
@@ -416,7 +416,7 @@ function RewardsTab(props: {
                     color:
                       state === 'done'  ? '#2DC97A' :
                       state === 'today' ? '#F0B232' :
-                                          '#4A6A55',
+                                          '#4A5878',
                   }}
                 >
                   {d}
@@ -437,7 +437,7 @@ function RewardsTab(props: {
             className="w-full mt-2 py-2 rounded-lg text-[11px] font-black transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: 'linear-gradient(135deg, #F0B232, #FFD166)',
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: '0 3px 12px rgba(240,178,50,0.35)',
             }}
           >
@@ -481,7 +481,7 @@ function RewardsTab(props: {
       </div>
 
       {/* Redeem code stub */}
-      <div className="m-4 rounded-2xl p-4" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+      <div className="m-4 rounded-2xl p-4" style={{ background: '#0F1828', border: '1px solid #1A2238' }}>
         <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: '#F5E8C8' }}>Redeem code</p>
         <div className="flex gap-2">
           <input
@@ -493,13 +493,13 @@ function RewardsTab(props: {
               }
             }}
             className="flex-1 px-3 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider focus:outline-none transition-colors"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
           />
           <button
             type="button"
             onClick={() => toast.error('Codes are issued from in-app promotions', { description: 'Switch to the Promotions tab.' })}
             className="px-3 py-2 rounded-lg text-xs font-bold transition-colors hover:bg-white/5"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#8FA3B8' }}
           >
             Redeem
           </button>
@@ -514,7 +514,7 @@ function RewardsTab(props: {
           className="flex items-center justify-center gap-1.5 py-3 rounded-xl text-xs font-black transition-colors hover:brightness-110"
           style={{
             background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
-            color: '#060E0A',
+            color: '#040814',
             boxShadow: '0 4px 16px rgba(45,201,122,0.35)',
           }}
         >
@@ -523,7 +523,7 @@ function RewardsTab(props: {
       </div>
 
       <div className="px-5 pb-6 text-center">
-        <p className="text-[10px]" style={{ color: 'rgba(143,168,153,0.45)' }}>
+        <p className="text-[10px]" style={{ color: 'rgba(143,163,184,0.45)' }}>
           18+ · No Purchase Necessary · Void Where Prohibited
         </p>
       </div>
@@ -585,7 +585,7 @@ function PromotionsTab({
                 href="/missions"
                 onClick={closeDrawer}
                 className="block rounded-xl p-3 transition-colors hover:bg-white/[0.025]"
-                style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+                style={{ background: '#0F1828', border: '1px solid #1A2238' }}
               >
                 <div className="flex items-start gap-3">
                   <div
@@ -614,15 +614,15 @@ function PromotionsTab({
                         )}
                       </div>
                     </div>
-                    <p className="text-[10px] mb-1.5" style={{ color: '#8FA899' }}>{m.desc}</p>
+                    <p className="text-[10px] mb-1.5" style={{ color: '#8FA3B8' }}>{m.desc}</p>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: '#1A2E22' }}>
+                      <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: '#1A2238' }}>
                         <div
                           className="h-full rounded-full"
                           style={{ width: `${pct}%`, background: done ? '#2DC97A' : '#A78BFA' }}
                         />
                       </div>
-                      <span className="text-[10px] font-mono flex-shrink-0" style={{ color: '#4A6A55' }}>
+                      <span className="text-[10px] font-mono flex-shrink-0" style={{ color: '#4A5878' }}>
                         {m.progress}/{m.total}
                       </span>
                     </div>
@@ -635,7 +635,7 @@ function PromotionsTab({
       </section>
 
       <div className="px-5 py-6 mt-2 text-center">
-        <p className="text-[10px]" style={{ color: 'rgba(143,168,153,0.45)' }}>
+        <p className="text-[10px]" style={{ color: 'rgba(143,163,184,0.45)' }}>
           18+ · No Purchase Necessary · Void Where Prohibited
         </p>
       </div>
@@ -660,15 +660,15 @@ function BonusCard({
     <div
       className="rounded-2xl p-4"
       style={{
-        background: '#0F1A14',
-        border: `1px solid ${ready ? `${accent}55` : '#1A2E22'}`,
+        background: '#0F1828',
+        border: `1px solid ${ready ? `${accent}55` : '#1A2238'}`,
         boxShadow: ready ? `0 0 20px ${accent}1A` : 'none',
       }}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="min-w-0 flex-1">
           <p className="font-display font-black text-base leading-tight" style={{ color: '#F5E8C8' }}>{title}</p>
-          <p className="text-[10px] mt-0.5" style={{ color: '#8FA899' }}>{subtitle}</p>
+          <p className="text-[10px] mt-0.5" style={{ color: '#8FA3B8' }}>{subtitle}</p>
         </div>
         <span
           className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full flex-shrink-0"
@@ -679,8 +679,8 @@ function BonusCard({
       </div>
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[10px] uppercase font-bold tracking-widest" style={{ color: '#8FA899' }}>Ready</p>
-          <p className="font-mono font-black text-xl leading-tight mt-0.5" style={{ color: ready ? accent : '#4A6A55' }}>
+          <p className="text-[10px] uppercase font-bold tracking-widest" style={{ color: '#8FA3B8' }}>Ready</p>
+          <p className="font-mono font-black text-xl leading-tight mt-0.5" style={{ color: ready ? accent : '#4A5878' }}>
             {ready ? readyAmount : '0.00'}
           </p>
         </div>
@@ -691,7 +691,7 @@ function BonusCard({
             className="flex-shrink-0 px-4 py-2.5 rounded-xl text-xs font-black transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-              color: '#060E0A',
+              color: '#040814',
               boxShadow: `0 4px 16px ${accent}40`,
             }}
           >
@@ -700,7 +700,7 @@ function BonusCard({
         ) : (
           <div
             className="flex-shrink-0 flex items-center gap-1 px-3 py-2.5 rounded-xl text-[11px] font-bold"
-            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2E22', color: '#8FA899' }}
+            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid #1A2238', color: '#8FA3B8' }}
           >
             <Clock className="w-3 h-3" />
             {countdown}

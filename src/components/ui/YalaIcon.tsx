@@ -73,7 +73,7 @@ const PATHS: Record<YalaIconName, string> = {
     <polygon points="50,50 64,76 36,76" fill="none" stroke="#6B4910" stroke-width="1"/>
     <line x1="50" y1="10" x2="50" y2="86" stroke="#6B4910" stroke-width="1" opacity="0.5"/>`,
 
-  'pyramid-ring': `<circle cx="50" cy="50" r="46" fill="#060E0A" stroke="#F0B232" stroke-width="2.5"/>
+  'pyramid-ring': `<circle cx="50" cy="50" r="46" fill="#040814" stroke="#F0B232" stroke-width="2.5"/>
     <polygon points="50,26 76,68 24,68" fill="none" stroke="#F0B232" stroke-width="2.5"/>
     <polygon points="50,40 65,62 35,62" fill="none" stroke="#F0B232" stroke-width="1.4"/>`,
 
@@ -91,7 +91,7 @@ const PATHS: Record<YalaIconName, string> = {
     <text x="50" y="35" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="11" fill="#6B4910">Y</text>`,
 
   'chip-green': `<circle cx="50" cy="50" r="44" fill="#2DC97A"/>
-    <g fill="#0a1a12">
+    <g fill="#0A1828">
       <rect x="47.5" y="6" width="5" height="14" transform="rotate(0 50 50)"/>
       <rect x="47.5" y="6" width="5" height="14" transform="rotate(45 50 50)"/>
       <rect x="47.5" y="6" width="5" height="14" transform="rotate(90 50 50)"/>
@@ -176,7 +176,7 @@ const PATHS: Record<YalaIconName, string> = {
     <circle cx="32" cy="68" r="5" fill="#6B4910"/>
     <circle cx="68" cy="68" r="5" fill="#6B4910"/>`,
 
-  'slot-reels': `<rect x="14" y="22" width="72" height="56" rx="10" fill="#0c1812" stroke="#F0B232" stroke-width="2.5"/>
+  'slot-reels': `<rect x="14" y="22" width="72" height="56" rx="10" fill="#0A101C" stroke="#F0B232" stroke-width="2.5"/>
     <line x1="36" y1="22" x2="36" y2="78" stroke="#F0B232" stroke-width="2"/>
     <line x1="64" y1="22" x2="64" y2="78" stroke="#F0B232" stroke-width="2"/>
     <text x="25" y="58" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="22" fill="#F0B232">Y</text>
@@ -230,8 +230,8 @@ const PATHS: Record<YalaIconName, string> = {
   'ticket': `<defs><clipPath id="yi-tc"><rect x="10" y="22" width="80" height="56" rx="8"/></clipPath></defs>
     <g clip-path="url(#yi-tc)">
       <rect x="10" y="22" width="80" height="56" fill="url(#yi-goldFlat)"/>
-      <circle cx="10" cy="50" r="7" fill="#060E0A"/>
-      <circle cx="90" cy="50" r="7" fill="#060E0A"/>
+      <circle cx="10" cy="50" r="7" fill="#040814"/>
+      <circle cx="90" cy="50" r="7" fill="#040814"/>
     </g>
     <rect x="10" y="22" width="80" height="56" rx="8" fill="none" stroke="#6B4910" stroke-width="2.5"/>
     <line x1="50" y1="30" x2="50" y2="70" stroke="#6B4910" stroke-width="1.5" stroke-dasharray="3 4"/>
