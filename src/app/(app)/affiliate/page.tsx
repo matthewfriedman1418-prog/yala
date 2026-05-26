@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { YalaReferralCard, CARD_OPTIONS } from '@/components/affiliate/YalaReferralCard';
 import type { CardVariant } from '@/lib/store/auth';
+import { toast } from 'sonner';
 
 // Pyramid SVG (for the sharing card)
 function CardPyramid({ size = 32 }: { size?: number }) {
@@ -619,7 +620,12 @@ export default function AffiliatePage() {
 
             <div className="px-5 py-3 flex items-center justify-between" style={{ background: '#0F1A14' }}>
               <p className="text-xs" style={{ color: '#4A6A55' }}>Showing {MOCK_REFERRALS.length} of {MOCK_REFERRALS.length} referrals</p>
-              <button className="flex items-center gap-1 text-xs font-semibold hover:opacity-70 transition-opacity" style={{ color: '#F0B232' }}>
+              <button
+                type="button"
+                onClick={() => toast('Full report exports as CSV', { description: 'Real download lands with the backend; this is a 5-row preview.' })}
+                className="flex items-center gap-1 text-xs font-semibold hover:opacity-70 transition-opacity"
+                style={{ color: '#F0B232' }}
+              >
                 Full Report <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>

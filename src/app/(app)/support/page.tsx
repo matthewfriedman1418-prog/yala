@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { HelpCircle, MessageCircle, ChevronDown, ChevronUp, Mail } from 'lucide-react';
+import { toast } from 'sonner';
 
 const FAQS = [
   { q: 'What is Yala?', a: 'Yala is a social sweepstakes casino platform. We offer free-to-play games using virtual Gold Coins and Sweep Coins. No real money gambling occurs on Yala.' },
@@ -39,8 +40,12 @@ export default function SupportPage() {
         <div className="space-y-6">
           {/* Contact options — compact row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
-              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+            <button
+              type="button"
+              onClick={() => toast('Live chat opens here', { description: 'Real chat widget (Intercom/Zendesk) ships with the backend.' })}
+              className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
+              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
                 <MessageCircle className="w-5 h-5" style={{ color: '#F0B232' }} />
@@ -54,8 +59,11 @@ export default function SupportPage() {
                 </div>
               </div>
             </button>
-            <button className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
-              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+            <a
+              href="mailto:support@yala.com?subject=Yala%20Support%20Request"
+              className="rounded-2xl p-4 text-left transition-all hover:border-[#F0B232]/30 flex items-start gap-3"
+              style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
+            >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.2)' }}>
                 <Mail className="w-5 h-5" style={{ color: '#F0B232' }} />
@@ -65,7 +73,7 @@ export default function SupportPage() {
                 <p className="text-xs leading-snug truncate" style={{ color: '#8FA899' }}>support@yala.com</p>
                 <p className="text-[10px] mt-1.5 font-semibold" style={{ color: '#8FA899' }}>&lt; 24h response</p>
               </div>
-            </button>
+            </a>
           </div>
 
           {/* FAQ — tighter spacing */}
@@ -102,7 +110,22 @@ export default function SupportPage() {
               <input type="email" value={ticketForm.email} onChange={(e) => setTicketForm({ ...ticketForm, email: e.target.value })} placeholder="Your email" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
               <input type="text" value={ticketForm.subject} onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })} placeholder="Subject" className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
               <textarea value={ticketForm.message} onChange={(e) => setTicketForm({ ...ticketForm, message: e.target.value })} placeholder="Describe your issue…" rows={5} className="w-full px-3 py-2 rounded-lg text-sm border text-[#F5E8C8] focus:outline-none focus:border-[#F0B232]/50 resize-none" style={{ background: 'rgba(255,255,255,0.04)', borderColor: '#1A2E22' }} />
-              <button onClick={() => { if (ticketForm.email && ticketForm.message) setSubmitted(true); }} className="w-full py-2.5 rounded-xl font-bold text-sm text-black transition-all hover:opacity-90 active:scale-95" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}>
+              <button
+                onClick={() => {
+                  if (!ticketForm.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ticketForm.email)) {
+                    toast.error('Enter a valid email');
+                    return;
+                  }
+                  if (!ticketForm.message.trim()) {
+                    toast.error('Add a description of your issue');
+                    return;
+                  }
+                  setSubmitted(true);
+                  toast.success('Ticket submitted', { description: `We'll reply to ${ticketForm.email} within 24h.` });
+                }}
+                className="w-full py-2.5 rounded-xl font-bold text-sm text-black transition-all hover:opacity-90 active:scale-95"
+                style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
+              >
                 Submit Ticket
               </button>
               <p className="text-[10px] text-center pt-1" style={{ color: '#4A6A55' }}>
