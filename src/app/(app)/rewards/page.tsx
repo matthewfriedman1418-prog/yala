@@ -63,7 +63,7 @@ function useCountdown(getMs: () => number): string {
 export default function RewardsPage() {
   const { isLoggedIn, user }                = useAuthStore();
   const { xp, rakebackBalance, claimRakeback, addGC, addSC } = useWalletStore();
-  const { openAuthModal }                   = useUIStore();
+  const { openAuthModal, openPromotionsDrawer } = useUIStore();
   const canClaimDaily                       = useRewardsStore((s) => s.canClaimDailyToday());
   const pendingStreakDay                    = useRewardsStore((s) => s.pendingStreakDay());
   const claimDaily                          = useRewardsStore((s) => s.claimDaily);
@@ -332,9 +332,10 @@ export default function RewardsPage() {
       </Section>
 
       {/* ── FOOTER LINK ────────────────────────────────────── */}
-      <Link
-        href="/promotions"
-        className="flex items-center justify-between gap-3 rounded-2xl p-4 transition-colors hover:bg-white/[0.025]"
+      <button
+        type="button"
+        onClick={openPromotionsDrawer}
+        className="w-full flex items-center justify-between gap-3 rounded-2xl p-4 transition-colors hover:bg-white/[0.025] text-left"
         style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}
       >
         <div className="flex items-center gap-3">
@@ -345,12 +346,12 @@ export default function RewardsPage() {
             <Gift className="w-5 h-5" style={{ color: '#F0B232' }} />
           </div>
           <div>
-            <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>All promotions</p>
-            <p className="text-[11px]" style={{ color: '#8FA899' }}>Reload bonuses, races, tournaments, referrals — every active offer.</p>
+            <p className="text-sm font-bold" style={{ color: '#F5E8C8' }}>Special offers &amp; missions</p>
+            <p className="text-[11px]" style={{ color: '#8FA899' }}>Welcome pack, tournaments, referral, daily missions.</p>
           </div>
         </div>
         <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#8FA899' }} />
-      </Link>
+      </button>
 
       <div className="border-t pt-4 text-center" style={{ borderColor: '#1A2E22' }}>
         <p className="text-[11px]" style={{ color: 'rgba(143,168,153,0.5)' }}>

@@ -108,7 +108,7 @@ interface NavSection { label: string; items: NavItem[]; }
 export function Sidebar() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuthStore();
-  const { openAuthModal, openBuyCoins, sidebarCollapsed, toggleSidebar } = useUIStore();
+  const { openAuthModal, openBuyCoins, openPromotionsDrawer, sidebarCollapsed, toggleSidebar } = useUIStore();
   const unreadNotifs = useNotificationsStore((s) => s.items.filter((n) => n.unread).length);
   const [originalsOpen, setOriginalsOpen] = useState(
     pathname === '/originals' || pathname.startsWith('/originals/')
@@ -119,8 +119,9 @@ export function Sidebar() {
     {
       label: 'REWARDS',
       items: [
-        { href: '/rewards',      label: 'Rewards Hub',  icon: yalaNavIcon('gift') },
-        { href: '/daily-bonus',  label: 'Daily Bonus',  icon: yalaNavIcon('chip-gold') },
+        { href: '/rewards',                 label: 'Rewards Hub',  icon: yalaNavIcon('gift') },
+        { action: openPromotionsDrawer,     label: 'Promotions',   icon: yalaNavIcon('badge-star') },
+        { href: '/daily-bonus',             label: 'Daily Bonus',  icon: yalaNavIcon('chip-gold') },
         { href: '/vip',          label: 'VIP Club',     icon: yalaNavIcon('ticket') },
         { href: '/missions',     label: 'Missions',     icon: yalaNavIcon('crown') },
         { href: '/leaderboards', label: 'Leaderboards', icon: yalaNavIcon('trophy') },

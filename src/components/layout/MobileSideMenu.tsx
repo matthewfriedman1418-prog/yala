@@ -50,7 +50,7 @@ const MENU_SECTIONS = [
 ] as const;
 
 export function MobileSideMenu() {
-  const { mobileMenuOpen, closeMobileMenu, openAuthModal, openBuyCoins } = useUIStore();
+  const { mobileMenuOpen, closeMobileMenu, openAuthModal, openBuyCoins, openPromotionsDrawer } = useUIStore();
   const { isLoggedIn, user, logout } = useAuthStore();
   const { goldCoins, sweepCoins, activeCurrency } = useWalletStore();
 
@@ -140,7 +140,7 @@ export function MobileSideMenu() {
               {/* Quick actions */}
               <div className="grid grid-cols-3 gap-2 px-4 mt-4">
                 {[
-                  { label: 'Promotions', color: '#F0B232', href: '/promotions', iconEl: <YalaIcon name="gift" size={22} /> },
+                  { label: 'Promotions', color: '#F0B232', action: () => { openPromotionsDrawer(); handleClose(); }, iconEl: <YalaIcon name="gift" size={22} /> },
                   { label: 'Sportsbook', color: '#2DC97A', href: '/sportsbook', iconEl: <YalaIcon name="sports-ball" size={22} /> },
                   { label: 'Originals',  color: '#84CC16', href: '/originals',  iconEl: <YalaIcon name="lightning" size={22} /> },
                 ].map((item) => {
@@ -155,10 +155,22 @@ export function MobileSideMenu() {
                       <span className="text-[11px] font-medium" style={{ color: '#8FA899' }}>{item.label}</span>
                     </>
                   );
+                  if ('action' in item && item.action) {
+                    return (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={item.action}
+                        className="flex flex-col items-center py-3 rounded-xl hover:bg-white/5 transition-colors"
+                      >
+                        {content}
+                      </button>
+                    );
+                  }
                   return (
                     <Link
                       key={item.label}
-                      href={item.href}
+                      href={item.href!}
                       onClick={handleClose}
                       className="flex flex-col items-center py-3 rounded-xl hover:bg-white/5 transition-colors"
                     >

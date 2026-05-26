@@ -19,6 +19,7 @@ import { NotificationsModal } from '../modals/NotificationsModal';
 import { StoreHydration } from '../system/StoreHydration';
 import { Toaster } from 'sonner';
 import { RainBanner } from '../social/RainBanner';
+import { PromotionsDrawer } from '../drawers/PromotionsDrawer';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -71,6 +72,7 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Side panels */}
       <GlobalChat />
+      <PromotionsDrawer />
 
       {/* Mobile bottom nav + slide-up menu */}
       <div className="lg:hidden">

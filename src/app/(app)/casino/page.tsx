@@ -681,6 +681,17 @@ export default function CasinoPage() {
   const [activeProvider, setActiveProvider] = useState<string>('all');
   const [search, setSearch] = useState('');
 
+  // Read ?provider= and ?category= on mount so /providers → "click a provider"
+  // can deep-link into the casino with that filter already applied.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('provider');
+    const c = params.get('category') ?? params.get('cat');
+    if (p) setActiveProvider(p);
+    if (c) setActiveCategory(c as GameCategory);
+  }, []);
+
   const isGC = activeCurrency === 'GC';
   const accent = isGC ? '#F0B232' : '#10B981';
   const accentLight = isGC ? '#FFD166' : '#34D399';
