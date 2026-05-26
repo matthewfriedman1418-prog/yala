@@ -1071,19 +1071,21 @@ export default function SportsbookPage() {
   const upcomingGames = filteredGames.filter((g) => !g.isLive);
   const featuredGame = SPORTSBOOK_GAMES.find((g) => g.isFeatured && g.isLive) ?? SPORTSBOOK_GAMES.find((g) => g.isFeatured);
 
+  // NOTE: Adding to the slip is intentionally NOT gated by login — matches
+  // DK/FD/Stake behavior where you can browse and build a slip logged out,
+  // and only the "Place Bet" step opens the auth modal. (See handlePlaceBet.)
   const toggleSelection = useCallback((sel: BetSelection) => {
-    if (!isLoggedIn) { openAuthModal(); return; }
     setSelections((prev) => {
       const exists = prev.find((s) => s.id === sel.id);
       if (exists) return prev.filter((s) => s.id !== sel.id);
-      // For game markets (not props), remove same game+market but different side
+      // For game markets (not props), replace same game+market with the new side
       if (sel.market !== 'prop') {
         const filtered = prev.filter((s) => !(s.gameId === sel.gameId && s.market === sel.market));
         return [...filtered, sel];
       }
       return [...prev, sel];
     });
-  }, [isLoggedIn, openAuthModal]);
+  }, []);
 
   const removeSelection = useCallback((idx: number) => {
     setSelections((prev) => prev.filter((_, i) => i !== idx));

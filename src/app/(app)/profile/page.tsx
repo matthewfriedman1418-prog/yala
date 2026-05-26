@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { Shield, Copy, Calendar, CheckCircle2, TrendingUp, Wallet, Clock, Star, Pencil, Check, X, Eye, EyeOff, Camera, Trash2 } from 'lucide-react';
 import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { GoldCoinIcon, SweepCoinIcon, YalaIcon } from '@/components/ui/YalaIcon';
+import { YalaIcon } from '@/components/ui/YalaIcon';
 import { YalaAvatar } from '@/components/ui/YalaAvatar';
 import { toast } from 'sonner';
 
@@ -36,7 +36,7 @@ export default function ProfilePage() {
     reader.onerror = () => toast.error('Could not read the image');
     reader.readAsDataURL(file);
   };
-  const { goldCoins, sweepCoins, xp } = useWalletStore();
+  const { xp } = useWalletStore();
   const { openAuthModal } = useUIStore();
   const [copied, setCopied] = useState(false);
   const [editingName, setEditingName] = useState(false);
@@ -262,24 +262,9 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Coin balances inline — Vault removed, real YalaIcons replacing the ◈/◇ glyphs */}
-        <div className="grid grid-cols-3 gap-3 mt-5 pt-5" style={{ borderTop: '1px solid #1A2E22' }}>
-          <div className="text-center">
-            <div className="flex justify-center mb-1.5"><GoldCoinIcon size={22} /></div>
-            <p className="font-black text-lg number-display" style={{ color: '#F0B232' }}>{formatGC(goldCoins)}</p>
-            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Gold Coins</p>
-          </div>
-          <div className="text-center">
-            <div className="flex justify-center mb-1.5"><SweepCoinIcon size={24} /></div>
-            <p className="font-black text-lg number-display" style={{ color: '#2DC97A' }}>{sweepCoins.toFixed(2)} SC</p>
-            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Sweep Coins</p>
-          </div>
-          <div className="text-center">
-            <div className="flex justify-center mb-1.5"><YalaIcon name="activity" size={22} /></div>
-            <p className="font-black text-lg number-display" style={{ color: '#A78BFA' }}>{formatGC(user?.totalWagered || 0)}</p>
-            <p className="text-[10px]" style={{ color: '#4A6A55' }}>Total Wagered</p>
-          </div>
-        </div>
+        {/* GC / SC / Total Wagered tiles removed — balances live in the header, and
+            wagered shows in the All-Time Stats card below. Keep this section
+            clean so the avatar + name + XP bar is the focus. */}
       </div>
 
       {/* ── ALL-TIME STATS ── */}
