@@ -264,22 +264,29 @@ export default function ResponsibleGamingPage() {
         open={excludeModalOpen}
         onClose={() => setExcludeModalOpen(false)}
         onConfirm={(length) => {
-          // Temporary windows reuse the existing cool-off plumbing.
-          if (length === '24h') startCooloff(1);
-          else if (length === '7d')  startCooloff(7);
-          else if (length === '30d') startCooloff(30);
-          else if (length === '6m')  startCooloff(180);
-          else {
-            // Permanent — same plumbing but a very long window. Backend handles real permanence.
-            startCooloff(3650);
-          }
-          toast.success(
-            length === 'permanent' ? 'Permanent self-exclusion set' : `Self-exclusion started`,
-            { description: length === 'permanent'
-                ? 'Your account is closed. Contact support if this was a mistake.'
-                : 'Your account is paused. Server-side enforcement ships with the real backend.',
-            },
-          );
+          // All windows reuse the cool-off plumbing in the settings store.
+          // Long-term ones (1y / 5y) are NJ/NV-style regulated periods that
+          // can't be lifted early — the backend will enforce that.
+          const days = ({
+            '24h':  1,
+            '7d':   7,
+            '30d':  30,
+            '6m':   180,
+            '1y':   365,
+            '5y':   1825,
+          } as const)[length];
+          startCooloff(days);
+          const label = ({
+            '24h':  '24 hours',
+            '7d':   '7 days',
+            '30d':  '30 days',
+            '6m':   '6 months',
+            '1y':   '1 year',
+            '5y':   '5 years',
+          } as const)[length];
+          toast.success(`Self-exclusion started · ${label}`, {
+            description: 'Your account is paused. Server-side enforcement ships with the real backend.',
+          });
         }}
       />
     </div>

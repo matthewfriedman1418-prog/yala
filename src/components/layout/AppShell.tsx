@@ -20,7 +20,6 @@ import { StoreHydration } from '../system/StoreHydration';
 import { Toaster } from 'sonner';
 import { RainBanner } from '../social/RainBanner';
 import { RewardsOffersDrawer } from '../drawers/RewardsOffersDrawer';
-import { AgeGate } from '../system/AgeGate';
 import { CookieBanner } from '../system/CookieBanner';
 
 interface AppShellProps {
@@ -96,7 +95,6 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Compliance overlays — render last so they sit above everything */}
       <CookieBanner />
-      <AgeGate />
 
       {/* Global toast outlet — replaces ad-hoc `msg`/`copied` state on individual pages */}
       <Toaster

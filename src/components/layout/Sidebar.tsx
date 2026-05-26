@@ -144,7 +144,6 @@ export function Sidebar() {
       items: [
         { href: '/support',             label: 'Help & Support',      icon: HelpOutlineIcon },
         { href: '/responsible-gaming',  label: 'Responsible Gaming',  icon: yalaNavIcon('shield') },
-        { href: '/free-entry',          label: 'Free Entry (AMOE)',   icon: yalaNavIcon('cash-bill') },
         { href: '/design-lab',          label: 'Design Lab',          icon: Paintbrush, badge: 'DEV' },
       ],
     },

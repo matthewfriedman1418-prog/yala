@@ -28,10 +28,10 @@ const MOCK_BACKUP_CODES = [
 
 function ShellHeader({ icon, title, onClose }: { icon: React.ReactNode; title: string; onClose: () => void }) {
   return (
-    <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid #1A2238' }}>
+    <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid #1A2E22' }}>
       <div className="flex items-center gap-2">{icon}<h3 className="text-sm font-bold" style={{ color: '#F5E8C8' }}>{title}</h3></div>
       <button onClick={onClose} aria-label="Close" className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-        <X className="w-4 h-4" style={{ color: '#8FA3B8' }} />
+        <X className="w-4 h-4" style={{ color: '#8FA899' }} />
       </button>
     </div>
   );
@@ -61,7 +61,7 @@ function ModalShell({ open, onClose, children, accent = '#F0B232' }: BaseModalPr
             transition={{ type: 'spring', damping: 26, stiffness: 320 }}
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[80] w-[420px] max-w-[calc(100vw-1.5rem)] rounded-2xl overflow-hidden shadow-2xl"
             style={{
-              background: '#0F1828',
+              background: '#0F1A14',
               border: `1px solid ${accent}40`,
               boxShadow: `0 20px 60px rgba(0,0,0,0.65), 0 0 28px ${accent}1F`,
             }}
@@ -103,29 +103,29 @@ export function TwoFactorSetupModal({
 
       {step === 'scan' && (
         <div className="p-5 space-y-3">
-          <p className="text-[12px] leading-relaxed" style={{ color: '#8FA3B8' }}>
+          <p className="text-[12px] leading-relaxed" style={{ color: '#8FA899' }}>
             Scan this code with an authenticator app (Authy, 1Password, Google Authenticator). Then enter the 6-digit code below to confirm.
           </p>
-          <div className="flex items-center gap-4 p-4 rounded-xl" style={{ background: '#08121C', border: '1px solid #1A2238' }}>
+          <div className="flex items-center gap-4 p-4 rounded-xl" style={{ background: '#0A1410', border: '1px solid #1A2E22' }}>
             {/* Mock QR placeholder — clean grid */}
             <div
               className="w-32 h-32 rounded-lg flex-shrink-0 grid grid-cols-8 grid-rows-8 gap-0"
-              style={{ background: '#F5E8C8', border: '1px solid #1A2238' }}
+              style={{ background: '#F5E8C8', border: '1px solid #1A2E22' }}
               aria-label="Mock QR code"
             >
               {Array.from({ length: 64 }).map((_, i) => {
                 // Deterministic pseudo-random pattern that looks QR-like
                 const on = (i * 37 + 7) % 5 < 2 || i < 8 || i > 55 || i % 8 === 0 || i % 8 === 7;
-                return <div key={i} style={{ background: on ? '#040814' : 'transparent' }} />;
+                return <div key={i} style={{ background: on ? '#060E0A' : 'transparent' }} />;
               })}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: '#8FA3B8' }}>Can&apos;t scan?</p>
-              <p className="text-[10px] mb-1.5" style={{ color: '#8FA3B8' }}>Enter this secret manually:</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: '#8FA899' }}>Can&apos;t scan?</p>
+              <p className="text-[10px] mb-1.5" style={{ color: '#8FA899' }}>Enter this secret manually:</p>
               <div className="flex items-center gap-1.5">
                 <code
                   className="font-mono text-[11px] font-bold px-2 py-1 rounded break-all"
-                  style={{ background: 'rgba(255,255,255,0.04)', color: '#F0B232', border: '1px solid #1A2238' }}
+                  style={{ background: 'rgba(255,255,255,0.04)', color: '#F0B232', border: '1px solid #1A2E22' }}
                 >
                   {MOCK_TOTP_SECRET}
                 </code>
@@ -139,7 +139,7 @@ export function TwoFactorSetupModal({
                   aria-label="Copy secret"
                   className="p-1.5 rounded-md hover:bg-white/5 transition-colors"
                 >
-                  {copiedSecret ? <Check className="w-3 h-3" style={{ color: '#2DC97A' }} /> : <Copy className="w-3 h-3" style={{ color: '#8FA3B8' }} />}
+                  {copiedSecret ? <Check className="w-3 h-3" style={{ color: '#2DC97A' }} /> : <Copy className="w-3 h-3" style={{ color: '#8FA899' }} />}
                 </button>
               </div>
             </div>
@@ -148,7 +148,7 @@ export function TwoFactorSetupModal({
             type="button"
             onClick={() => setStep('verify')}
             className="w-full py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98]"
-            style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
+            style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
           >
             Next — verify code
           </button>
@@ -157,7 +157,7 @@ export function TwoFactorSetupModal({
 
       {step === 'verify' && (
         <div className="p-5 space-y-3">
-          <p className="text-[12px] leading-relaxed" style={{ color: '#8FA3B8' }}>
+          <p className="text-[12px] leading-relaxed" style={{ color: '#8FA899' }}>
             Enter the 6-digit code your authenticator app is showing right now.
           </p>
           <input
@@ -173,7 +173,7 @@ export function TwoFactorSetupModal({
             className="w-full px-4 py-4 rounded-xl text-2xl font-mono font-black text-center tracking-[0.6em] focus:outline-none transition-colors"
             style={{
               background: 'rgba(255,255,255,0.04)',
-              border: `1px solid ${error ? '#EF4444' : '#1A2238'}`,
+              border: `1px solid ${error ? '#EF4444' : '#1A2E22'}`,
               color: '#F5E8C8',
             }}
           />
@@ -188,7 +188,7 @@ export function TwoFactorSetupModal({
               type="button"
               onClick={() => setStep('scan')}
               className="py-2.5 rounded-xl text-sm font-bold transition-colors hover:bg-white/5"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#8FA3B8' }}
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
             >
               Back
             </button>
@@ -196,7 +196,7 @@ export function TwoFactorSetupModal({
               type="button"
               onClick={handleVerify}
               className="py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98]"
-              style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
+              style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
             >
               Verify &amp; enable
             </button>
@@ -213,10 +213,10 @@ export function TwoFactorSetupModal({
             <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#2DC97A' }} />
             <div>
               <p className="text-sm font-bold" style={{ color: '#2DC97A' }}>Two-factor is on</p>
-              <p className="text-[11px] mt-0.5" style={{ color: '#8FA3B8' }}>Save these backup codes somewhere safe. Each works once if you lose your phone.</p>
+              <p className="text-[11px] mt-0.5" style={{ color: '#8FA899' }}>Save these backup codes somewhere safe. Each works once if you lose your phone.</p>
             </div>
           </div>
-          <div className="rounded-xl p-3 grid grid-cols-2 gap-1.5" style={{ background: '#08121C', border: '1px solid #1A2238' }}>
+          <div className="rounded-xl p-3 grid grid-cols-2 gap-1.5" style={{ background: '#0A1410', border: '1px solid #1A2E22' }}>
             {MOCK_BACKUP_CODES.map((c, i) => (
               <code key={i} className="font-mono text-[12px] font-bold text-center py-1.5 rounded" style={{ background: 'rgba(255,255,255,0.04)', color: '#F5E8C8' }}>
                 {c}
@@ -229,7 +229,7 @@ export function TwoFactorSetupModal({
               navigator.clipboard.writeText(MOCK_BACKUP_CODES.join('\n')).then(() => toast.success('Backup codes copied'));
             }}
             className="w-full py-2 rounded-lg text-xs font-bold transition-colors hover:bg-white/5"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
           >
             <Copy className="w-3 h-3 inline mr-1.5" />
             Copy all to clipboard
@@ -238,7 +238,7 @@ export function TwoFactorSetupModal({
             type="button"
             onClick={() => { onConfirm(); onClose(); }}
             className="w-full py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98]"
-            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#040814', boxShadow: '0 4px 16px rgba(45,201,122,0.30)' }}
+            style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', color: '#060E0A', boxShadow: '0 4px 16px rgba(45,201,122,0.30)' }}
           >
             Done
           </button>
@@ -271,7 +271,7 @@ export function PasswordChangeModal({ open, onClose }: BaseModalProps) {
     return Math.min(s, 4);
   }, [form.next]);
   const strengthLabel = ['none', 'weak', 'fair', 'strong', 'great'][strength];
-  const strengthColor = ['#4A5878', '#EF4444', '#F59E0B', '#34D399', '#2DC97A'][strength];
+  const strengthColor = ['#4A6A55', '#EF4444', '#F59E0B', '#34D399', '#2DC97A'][strength];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -314,7 +314,7 @@ export function PasswordChangeModal({ open, onClose }: BaseModalProps) {
                 <div
                   key={i}
                   className="h-1 rounded-full"
-                  style={{ background: i <= strength ? strengthColor : '#1A2238' }}
+                  style={{ background: i <= strength ? strengthColor : '#1A2E22' }}
                 />
               ))}
             </div>
@@ -334,14 +334,14 @@ export function PasswordChangeModal({ open, onClose }: BaseModalProps) {
             {error}
           </p>
         )}
-        <p className="text-[10px]" style={{ color: '#4A5878' }}>
+        <p className="text-[10px]" style={{ color: '#4A6A55' }}>
           Your other sessions will be signed out after a successful change.
         </p>
         <button
           type="submit"
           disabled={submitting}
           className="w-full py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#040814' }}
+          style={{ background: 'linear-gradient(135deg, #F0B232, #FFD166)', color: '#060E0A' }}
         >
           {submitting ? 'Updating…' : 'Update password'}
         </button>
@@ -362,7 +362,7 @@ function PassField({
 }) {
   return (
     <div>
-      <label className="block text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#8FA3B8' }}>{label}</label>
+      <label className="block text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#8FA899' }}>{label}</label>
       <div className="relative">
         <input
           type={show ? 'text' : 'password'}
@@ -371,7 +371,7 @@ function PassField({
           autoFocus={autoFocus}
           autoComplete={label.toLowerCase().includes('current') ? 'current-password' : 'new-password'}
           className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
+          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
         />
         <button
           type="button"
@@ -379,7 +379,7 @@ function PassField({
           aria-label={show ? 'Hide password' : 'Show password'}
           className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md hover:bg-white/5"
         >
-          {show ? <EyeOff className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} /> : <Eye className="w-3.5 h-3.5" style={{ color: '#8FA3B8' }} />}
+          {show ? <EyeOff className="w-3.5 h-3.5" style={{ color: '#8FA899' }} /> : <Eye className="w-3.5 h-3.5" style={{ color: '#8FA899' }} />}
         </button>
       </div>
     </div>
@@ -411,24 +411,24 @@ export function EmailVerifyModal({ open, onClose, email }: BaseModalProps & { em
   };
 
   return (
-    <ModalShell open={open} onClose={onClose} accent="#60A5FA">
-      <ShellHeader icon={<Mail className="w-4 h-4" style={{ color: '#60A5FA' }} />} title="Verify your email" onClose={onClose} />
+    <ModalShell open={open} onClose={onClose} accent="#2DC97A">
+      <ShellHeader icon={<Mail className="w-4 h-4" style={{ color: '#2DC97A' }} />} title="Verify your email" onClose={onClose} />
       <div className="p-5 text-center space-y-3">
         <div
           className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center"
-          style={{ background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.30)' }}
+          style={{ background: 'rgba(45,201,122,0.10)', border: '1px solid rgba(45,201,122,0.30)' }}
         >
-          <Mail className="w-7 h-7" style={{ color: '#60A5FA' }} />
+          <Mail className="w-7 h-7" style={{ color: '#2DC97A' }} />
         </div>
         <div>
           <p className="font-bold text-base" style={{ color: '#F5E8C8' }}>Check your inbox</p>
-          <p className="text-[12px] mt-1" style={{ color: '#8FA3B8' }}>
+          <p className="text-[12px] mt-1" style={{ color: '#8FA899' }}>
             We sent a verification link to{' '}
             <span className="font-bold" style={{ color: '#F5E8C8' }}>{email || 'your email'}</span>.
             Click the link to confirm — it expires in 24 hours.
           </p>
         </div>
-        <p className="text-[10px] leading-relaxed" style={{ color: '#4A5878' }}>
+        <p className="text-[10px] leading-relaxed" style={{ color: '#4A6A55' }}>
           Verifying lets us send withdrawal alerts and recover your account if you forget your password.
         </p>
         <div className="grid grid-cols-2 gap-2 pt-1">
@@ -436,7 +436,7 @@ export function EmailVerifyModal({ open, onClose, email }: BaseModalProps & { em
             type="button"
             onClick={onClose}
             className="py-2.5 rounded-xl text-sm font-bold transition-colors hover:bg-white/5"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#8FA3B8' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#8FA899' }}
           >
             Later
           </button>
@@ -445,7 +445,7 @@ export function EmailVerifyModal({ open, onClose, email }: BaseModalProps & { em
             disabled={cooldown > 0}
             onClick={handleResend}
             className="py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: 'linear-gradient(135deg, #60A5FA, #818CF8)', color: '#040814' }}
+            style={{ background: 'linear-gradient(135deg, #2DC97A, #34D399)', color: '#060E0A' }}
           >
             {cooldown > 0 ? `Resend in ${cooldown}s` : 'Resend email'}
           </button>

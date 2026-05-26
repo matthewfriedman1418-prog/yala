@@ -58,19 +58,19 @@ export default function GeoBlockedPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: '#040814', color: '#F5E8C8' }}
+      style={{ background: '#060E0A', color: '#F5E8C8' }}
     >
       <Toaster
         position="bottom-right"
         theme="dark"
         toastOptions={{
-          style: { background: '#0F1828', border: '1px solid #1A2238', color: '#F5E8C8' },
+          style: { background: '#0F1A14', border: '1px solid #1A2E22', color: '#F5E8C8' },
         }}
       />
       <div
         className="w-full max-w-xl rounded-3xl overflow-hidden"
         style={{
-          background: 'linear-gradient(180deg, #0F1828 0%, #08121C 100%)',
+          background: 'linear-gradient(180deg, #0F1A14 0%, #0A1410 100%)',
           border: '1px solid rgba(240,178,50,0.20)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.55)',
         }}
@@ -89,7 +89,7 @@ export default function GeoBlockedPage() {
           <h1 className="font-display text-3xl font-black tracking-tight mb-2">
             We can&apos;t serve you here — yet
           </h1>
-          <p className="text-sm leading-relaxed" style={{ color: '#8FA3B8' }}>
+          <p className="text-sm leading-relaxed" style={{ color: '#8FA899' }}>
             Yala is a US sweepstakes social casino. State laws on sweepstakes vary, and we currently don&apos;t operate in your state. The moment that changes, we&apos;ll let you know.
           </p>
         </div>
@@ -107,14 +107,14 @@ export default function GeoBlockedPage() {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#4A5878' }} />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#4A6A55' }} />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Get notified when Yala launches in your state"
                   className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm outline-none transition-colors"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2238', color: '#F5E8C8' }}
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #1A2E22', color: '#F5E8C8' }}
                 />
               </div>
               <button
@@ -122,7 +122,7 @@ export default function GeoBlockedPage() {
                 className="px-5 py-2.5 rounded-xl text-sm font-black transition-all hover:brightness-110 active:scale-[0.98] whitespace-nowrap"
                 style={{
                   background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
-                  color: '#040814',
+                  color: '#060E0A',
                   boxShadow: '0 3px 12px rgba(45,201,122,0.30)',
                 }}
               >
@@ -133,7 +133,7 @@ export default function GeoBlockedPage() {
         </div>
 
         {/* Served + restricted */}
-        <div className="px-6 sm:px-10 py-5 space-y-4" style={{ background: '#08121C', borderTop: '1px solid #1A2238' }}>
+        <div className="px-6 sm:px-10 py-5 space-y-4" style={{ background: '#0A1410', borderTop: '1px solid #1A2E22' }}>
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#2DC97A' }}>Currently served</p>
             <div className="flex flex-wrap gap-1">
@@ -149,13 +149,13 @@ export default function GeoBlockedPage() {
             </div>
           </div>
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#8FA3B8' }}>Not served</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#8FA899' }}>Not served</p>
             <div className="flex flex-wrap gap-1">
               {RESTRICTED_STATES.map((s) => (
                 <span
                   key={s.code}
                   className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md"
-                  style={{ background: 'rgba(143,163,184,0.06)', color: '#8FA3B8', border: '1px solid #1A2238' }}
+                  style={{ background: 'rgba(143,163,184,0.06)', color: '#8FA899', border: '1px solid #1A2E22' }}
                   title={s.name}
                 >
                   {s.code}
@@ -165,12 +165,12 @@ export default function GeoBlockedPage() {
           </div>
         </div>
 
-        <div className="px-6 sm:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2" style={{ borderTop: '1px solid #1A2238' }}>
+        <div className="px-6 sm:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2" style={{ borderTop: '1px solid #1A2E22' }}>
           <div className="flex items-center gap-2">
             <Shield className="w-3 h-3" style={{ color: '#2DC97A' }} />
-            <p className="text-[10px]" style={{ color: '#8FA3B8' }}>18+ · No Purchase Necessary · Void Where Prohibited</p>
+            <p className="text-[10px]" style={{ color: '#8FA899' }}>18+ · No Purchase Necessary · Void Where Prohibited</p>
           </div>
-          <div className="flex items-center gap-3 text-[11px]" style={{ color: '#8FA3B8' }}>
+          <div className="flex items-center gap-3 text-[11px]" style={{ color: '#8FA899' }}>
             <Link href="/sweepstakes-rules" className="hover:text-[#F0B232] transition-colors">Sweepstakes rules</Link>
             <Link href="/terms" className="hover:text-[#F0B232] transition-colors">Terms</Link>
             <Link href="/privacy" className="hover:text-[#F0B232] transition-colors">Privacy</Link>

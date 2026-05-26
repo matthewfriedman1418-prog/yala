@@ -143,39 +143,39 @@ export function OnboardingModal() {
           {/* STEP 0: Welcome */}
           {step === 0 && (
             <div className="text-center space-y-4">
-              {/* Animated pyramid */}
-              <div className="flex justify-center my-4">
+              {/* Animated pyramid with glow */}
+              <div className="relative flex justify-center my-6">
                 <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
+                  initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', damping: 14 }}
+                  className="relative"
                 >
-                  <svg width="80" height="68" viewBox="0 0 40 34" fill="none">
+                  <div
+                    className="absolute inset-0 blur-2xl"
+                    style={{ background: 'radial-gradient(circle, rgba(240,178,50,0.45) 0%, transparent 65%)' }}
+                  />
+                  <svg width="92" height="78" viewBox="0 0 40 34" fill="none" className="relative">
                     <defs>
                       <clipPath id="pyr-ob">
                         <polygon points="20,0 40,34 0,34" />
                       </clipPath>
                     </defs>
-                    <rect x="0" y="0" width="40" height="8.5" fill="#F0B232" clipPath="url(#pyr-ob)" />
-                    <rect x="0" y="8.5" width="40" height="8.5" fill="#84CC16" clipPath="url(#pyr-ob)" />
-                    <rect x="0" y="17" width="40" height="8.5" fill="#2DC97A" clipPath="url(#pyr-ob)" />
-                    <rect x="0" y="25.5" width="40" height="8.5" fill="#1A5C8A" clipPath="url(#pyr-ob)" />
+                    <rect x="0" y="0"    width="40" height="8.5"  fill="#F0B232" clipPath="url(#pyr-ob)" />
+                    <rect x="0" y="8.5"  width="40" height="8.5"  fill="#84CC16" clipPath="url(#pyr-ob)" />
+                    <rect x="0" y="17"   width="40" height="8.5"  fill="#2DC97A" clipPath="url(#pyr-ob)" />
+                    <rect x="0" y="25.5" width="40" height="8.5"  fill="#1A5C8A" clipPath="url(#pyr-ob)" />
                   </svg>
                 </motion.div>
               </div>
-              <h2 className="font-display text-2xl font-black" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <h2 className="font-display text-3xl font-black tracking-tight" style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 Welcome to Yala
               </h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#8FA899' }}>
-                You just unlocked one of the sharpest social casinos on the internet. Free to play, zero pressure, maximum fun.
+              <p className="text-sm leading-relaxed max-w-xs mx-auto" style={{ color: '#8FA899' }}>
+                A free-to-play sweepstakes casino with games <span className="font-bold" style={{ color: '#F5E8C8' }}>built in-house</span> and{' '}
+                <span className="font-bold" style={{ color: '#F5E8C8' }}>real cash prizes</span> on Sweep Coins.
               </p>
-              <div className="flex flex-wrap gap-2 justify-center pt-1">
-                {['100+ Casino Games', 'Live Sportsbook', 'Yala Originals', 'Daily Bonuses'].map((f) => (
-                  <span key={f} className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(45,201,122,0.1)', border: '1px solid rgba(45,201,122,0.2)', color: '#2DC97A' }}>
-                    {f}
-                  </span>
-                ))}
-              </div>
+              <p className="text-[10px]" style={{ color: '#4A6A55' }}>4 quick steps · about 30 seconds</p>
             </div>
           )}
 
@@ -183,29 +183,47 @@ export function OnboardingModal() {
           {step === 1 && (
             <div className="space-y-3">
               <div className="text-center mb-3">
-                <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Two Ways to Play</h2>
-                <p className="text-xs mt-1" style={{ color: '#8FA899' }}>Switch anytime. No pressure.</p>
+                <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Two ways to play</h2>
+                <p className="text-xs mt-1" style={{ color: '#8FA899' }}>Switch any time with the toggle in the header.</p>
               </div>
-              <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.2)' }}>
-                <div className="flex items-center gap-3">
-                  <GoldCoinIcon size={32} />
-                  <div>
-                    <p className="font-bold text-sm" style={{ color: '#F0B232' }}>Gold Coins</p>
-                    <p className="text-xs" style={{ color: '#8FA899' }}>Play for fun. Earn through missions, bonuses, and daily rewards. Zero cash value.</p>
+              <div
+                className="rounded-xl p-4"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(240,178,50,0.10), rgba(240,178,50,0.04))',
+                  border: '1px solid rgba(240,178,50,0.30)',
+                }}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <GoldCoinIcon size={28} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-display font-black text-base" style={{ color: '#F0B232' }}>Gold Coins</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Play for fun</p>
                   </div>
                 </div>
+                <p className="text-[11px] leading-relaxed" style={{ color: '#8FA899' }}>
+                  Virtual play currency. Free from daily bonuses, missions, and rewards. <span className="font-bold" style={{ color: '#F5E8C8' }}>No cash value.</span>
+                </p>
               </div>
-              <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
-                <div className="flex items-center gap-3">
-                  <SweepCoinIcon size={36} />
-                  <div>
-                    <p className="font-bold text-sm" style={{ color: '#10B981' }}>Sweep Coins</p>
-                    <p className="text-xs" style={{ color: '#8FA899' }}>Play the sweepstakes mode. Eligible for redemption under sweepstakes rules. No purchase necessary to enter or win.</p>
+              <div
+                className="rounded-xl p-4"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(45,201,122,0.10), rgba(45,201,122,0.04))',
+                  border: '1px solid rgba(45,201,122,0.30)',
+                }}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <SweepCoinIcon size={32} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-display font-black text-base" style={{ color: '#2DC97A' }}>Sweep Coins</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Play for prizes</p>
                   </div>
                 </div>
+                <p className="text-[11px] leading-relaxed" style={{ color: '#8FA899' }}>
+                  Sweepstakes currency. Redeemable for cash prizes after identity verification. <span className="font-bold" style={{ color: '#F5E8C8' }}>1 SC = $1 USD</span>.
+                </p>
               </div>
-              <p className="text-[10px] text-center pt-1" style={{ color: 'rgba(156,163,175,0.5)' }}>
-                18+ · No Purchase Necessary · Void Where Prohibited
+              <p className="text-[10px] text-center pt-1" style={{ color: 'rgba(143,168,153,0.5)' }}>
+                No Purchase Necessary · 18+ · Void Where Prohibited
               </p>
             </div>
           )}
@@ -213,100 +231,153 @@ export function OnboardingModal() {
           {/* STEP 2: Claim coins */}
           {step === 2 && (
             <div className="text-center space-y-4">
-              <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Your Starter Pack</h2>
-              <p className="text-sm" style={{ color: '#8FA899' }}>A gift from Yala. Yours the moment you click.</p>
+              <div>
+                <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Your starter pack</h2>
+                <p className="text-xs mt-1" style={{ color: '#8FA899' }}>On us. No strings, no card required.</p>
+              </div>
 
-              <div className="space-y-3">
-                <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(240,178,50,0.1)', border: '1px solid rgba(240,178,50,0.25)' }}>
-                  <div className="flex items-center gap-2.5">
-                    <GoldCoinIcon size={26} />
-                    <span className="font-bold" style={{ color: '#F0B232' }}>250,000 Gold Coins</span>
+              <div className="space-y-2">
+                <div
+                  className="rounded-xl p-4 flex items-center justify-between"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(240,178,50,0.14), rgba(240,178,50,0.06))',
+                    border: '1px solid rgba(240,178,50,0.35)',
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <GoldCoinIcon size={28} />
+                    <div className="text-left">
+                      <p className="font-display font-black text-lg leading-tight" style={{ color: '#F0B232' }}>250,000</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#F0B232' }}>Gold Coins</p>
+                    </div>
                   </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.2)', color: '#F0B232' }}>Free</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full" style={{ background: 'rgba(240,178,50,0.20)', color: '#F0B232' }}>Free</span>
                 </div>
-                <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)' }}>
-                  <div className="flex items-center gap-2.5">
-                    <SweepCoinIcon size={30} />
-                    <span className="font-bold" style={{ color: '#10B981' }}>5.00 Sweep Coins</span>
+                <div
+                  className="rounded-xl p-4 flex items-center justify-between"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(45,201,122,0.14), rgba(45,201,122,0.06))',
+                    border: '1px solid rgba(45,201,122,0.35)',
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <SweepCoinIcon size={32} />
+                    <div className="text-left">
+                      <p className="font-display font-black text-lg leading-tight" style={{ color: '#2DC97A' }}>5.00</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#2DC97A' }}>Sweep Coins</p>
+                    </div>
                   </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.2)', color: '#10B981' }}>Free</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full" style={{ background: 'rgba(45,201,122,0.20)', color: '#2DC97A' }}>Free</span>
                 </div>
               </div>
 
               {!claimed ? (
                 <button
                   onClick={handleClaim}
-                  className="w-full py-3 rounded-xl font-bold text-sm text-black transition-all hover:opacity-90 active:scale-95"
-                  style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)', boxShadow: '0 0 24px rgba(45,201,122,0.35)' }}
+                  className="w-full py-3 rounded-xl font-black text-sm transition-all hover:brightness-110 active:scale-[0.98]"
+                  style={{
+                    background: 'linear-gradient(135deg, #2DC97A, #F0B232)',
+                    color: '#060E0A',
+                    boxShadow: '0 4px 24px rgba(45,201,122,0.45)',
+                  }}
                 >
-                  Claim My Free Coins
+                  Claim my starter pack
                 </button>
               ) : (
                 <motion.div
-                  initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
+                  initial={{ scale: 0.92, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', damping: 14 }}
                   className="w-full py-3 rounded-xl flex items-center justify-center gap-2"
-                  style={{ background: 'rgba(45,201,122,0.15)', border: '1px solid rgba(45,201,122,0.3)' }}
+                  style={{ background: 'rgba(45,201,122,0.15)', border: '1px solid rgba(45,201,122,0.45)' }}
                 >
                   <Check className="w-4 h-4" style={{ color: '#2DC97A' }} />
-                  <span className="font-bold text-sm" style={{ color: '#2DC97A' }}>Coins Added to Wallet</span>
+                  <span className="font-bold text-sm" style={{ color: '#2DC97A' }}>Added to your wallet</span>
                 </motion.div>
               )}
             </div>
           )}
 
-          {/* STEP 3: Go play */}
+          {/* STEP 3: Pick where to start */}
           {step === 3 && (
-            <div className="text-center space-y-4">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', damping: 12 }}
-                className="text-5xl my-4"
-              >
-                🏆
-              </motion.div>
-              <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>You&apos;re All Set</h2>
-              <p className="text-sm" style={{ color: '#8FA899' }}>
-                Casino, sportsbook, originals, daily bonuses. It&apos;s all right here.
-              </p>
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <Link
-                  href="/casino"
-                  onClick={dismissAndRemember}
-                  className="py-3 rounded-xl text-sm font-bold text-black text-center"
-                  style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
-                >
-                  Hit the Casino
-                </Link>
-                <Link
-                  href="/sportsbook"
-                  onClick={dismissAndRemember}
-                  className="py-3 rounded-xl text-sm font-semibold text-center border"
-                  style={{ borderColor: 'rgba(45,201,122,0.35)', color: '#2DC97A' }}
-                >
-                  View Sportsbook
-                </Link>
+            <div className="text-center space-y-3">
+              <div>
+                <h2 className="font-display text-xl font-bold" style={{ color: '#F5E8C8' }}>Where to next?</h2>
+                <p className="text-xs mt-1" style={{ color: '#8FA899' }}>Pick anywhere — you can always come back.</p>
               </div>
-              <Link
-                href="/originals"
+
+              <div className="space-y-2 pt-1">
+                {[
+                  {
+                    href: '/originals',
+                    title: 'Yala Originals',
+                    sub: 'Trail, Caravan Cross, Mirage Auction — built in-house, provably fair.',
+                    accent: '#F0B232',
+                    accentSec: '#FFD166',
+                    badge: '3 playable',
+                  },
+                  {
+                    href: '/casino',
+                    title: 'Casino',
+                    sub: 'Slots, live dealer, table games from 12 studios.',
+                    accent: '#2DC97A',
+                    accentSec: '#34D399',
+                    badge: '1,000+ games',
+                  },
+                  {
+                    href: '/sportsbook',
+                    title: 'Sportsbook',
+                    sub: 'NFL, NBA, MMA, soccer. Singles + parlays.',
+                    accent: '#60A5FA',
+                    accentSec: '#818CF8',
+                    badge: 'Live now',
+                  },
+                ].map((dest) => (
+                  <Link
+                    key={dest.href}
+                    href={dest.href}
+                    onClick={dismissAndRemember}
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-all hover:bg-white/[0.025]"
+                    style={{
+                      background: `linear-gradient(135deg, ${dest.accent}12, ${dest.accent}06)`,
+                      border: `1px solid ${dest.accent}33`,
+                    }}
+                  >
+                    <div className="text-left flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="font-display font-black text-sm" style={{ color: dest.accent }}>{dest.title}</p>
+                        <span
+                          className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+                          style={{ background: `${dest.accent}1A`, color: dest.accent, border: `1px solid ${dest.accent}33` }}
+                        >
+                          {dest.badge}
+                        </span>
+                      </div>
+                      <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8FA899' }}>{dest.sub}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: dest.accent }} />
+                  </Link>
+                ))}
+              </div>
+              <button
+                type="button"
                 onClick={dismissAndRemember}
-                className="flex items-center justify-center gap-1 text-xs transition-colors"
+                className="text-[11px] underline opacity-70 hover:opacity-100 transition-opacity pt-1"
                 style={{ color: '#8FA899' }}
               >
-                Explore Yala Originals <ChevronRight className="w-3 h-3" />
-              </Link>
+                Skip — I&apos;ll explore
+              </button>
             </div>
           )}
 
-          {/* CTA button */}
-          {step !== 2 && (
+          {/* CTA button — hidden on steps 2 (claim) and 3 (destination picker) */}
+          {step !== 2 && step !== 3 && (
             <button
               onClick={handleNext}
               className="w-full mt-5 py-3 rounded-xl font-bold text-sm text-black flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-95"
               style={{ background: 'linear-gradient(135deg, #2DC97A, #F0B232)' }}
             >
-              {isLast ? 'Start Playing' : 'Next'}
+              Next
               <ArrowRight className="w-4 h-4" />
             </button>
           )}
