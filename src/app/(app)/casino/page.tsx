@@ -8,7 +8,7 @@ import { useUIStore } from '@/lib/store/ui';
 import { GameCard } from '@/components/casino/GameCard';
 import { ALL_GAMES, YALA_ORIGINALS, type GameCategory } from '@/lib/mock-data/games';
 import {
-  Search, Zap, TrendingUp, Sparkles, Clock, Users, ChevronRight,
+  Search, Zap, TrendingUp, Sparkles, Clock, ChevronRight,
   ChevronLeft, Play, Activity, Plus,
 } from 'lucide-react';
 import { cn, formatGC, formatSC } from '@/lib/utils';
@@ -695,10 +695,16 @@ export default function CasinoPage() {
     return matchCat && matchProv && matchSrch;
   });
 
-  const hotGames  = ALL_GAMES.filter(g => g.isHot).slice(0, 12);
-  const newGames  = ALL_GAMES.filter(g => g.isNew).slice(0, 12);
-  const liveGames = ALL_GAMES.filter(g => g.category === 'live' || g.category === 'gameshows').slice(0, 12);
-  const slotGames = ALL_GAMES.filter(g => g.category === 'slots' || g.category === 'megaways').slice(0, 14);
+  const hotGames     = ALL_GAMES.filter(g => g.isHot).slice(0, 12);
+  // New Releases — fresh slot launches (the bulk of provider-side new content).
+  const newReleases  = ALL_GAMES.filter(g => g.isNew && (g.category === 'slots' || g.category === 'megaways')).slice(0, 12);
+  // Arrivals — everything else that just landed (live / table / gameshows / fish / scratch).
+  const arrivals     = ALL_GAMES.filter(g => g.isNew && g.category !== 'slots' && g.category !== 'megaways').slice(0, 12);
+  const slotGames    = ALL_GAMES.filter(g => g.category === 'slots' || g.category === 'megaways').slice(0, 14);
+
+  // When the user is actively searching or filtering, suppress curated rows
+  // and just show the result row inline under the search bar (Stake-style).
+  const isSearching  = search.trim().length > 0 || activeCategory !== 'all' || activeProvider !== 'all';
 
   return (
     <div className="space-y-10">
@@ -711,25 +717,47 @@ export default function CasinoPage() {
         openAuthModal={openAuthModal}
       />
 
-      {/* ── 2. BROWSE GAMES ───────────────────────────────────── */}
+      {/* ── 2. YALA ORIGINALS ─────────────────────────────────── */}
       <section>
-        {/* Search */}
-        <div className="relative mb-4">
+        <SectionHeader icon={Zap} title="Yala Originals" badge="EXCLUSIVE" accentColor="#F0B232" badgeColor="#F0B232" href="/originals" />
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+          {YALA_ORIGINALS.map((orig, i) => (
+            <motion.div key={orig.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
+              <OriginalCard orig={orig} />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 3. SEARCH BAR (with category + provider filters) ─── */}
+      <section>
+        <div className="relative mb-3">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#4A6A55' }} />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search games or providers…"
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-colors"
+            className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm outline-none transition-colors"
             style={{ background: '#0F1A14', border: '1px solid #1A2E22', color: '#F5E8C8' }}
             onFocus={e  => (e.currentTarget.style.borderColor = `${accent}55`)}
             onBlur={e => (e.currentTarget.style.borderColor = '#1A2E22')}
           />
+          {isSearching && (
+            <button
+              type="button"
+              onClick={() => { setSearch(''); setActiveCategory('all'); setActiveProvider('all'); }}
+              aria-label="Clear search and filters"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md hover:bg-white/5 transition-colors"
+              style={{ color: '#8FA899' }}
+            >
+              Clear
+            </button>
+          )}
         </div>
 
         {/* Category chips */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-2">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
@@ -742,76 +770,82 @@ export default function CasinoPage() {
           ))}
         </div>
 
-        {/* Provider chips */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4">
-          <button
-            onClick={() => setActiveProvider('all')}
-            className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-            style={activeProvider === 'all' ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1A14', color: '#8FA899', border: '1px solid #1A2E22' }}
-          >
-            All Providers
-          </button>
-          {allProviders.map((prov) => (
+        {/* Provider chips — only show when actively filtering (saves vertical space when not) */}
+        {isSearching && (
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3 mt-2">
             <button
-              key={prov}
-              onClick={() => setActiveProvider(prov)}
-              className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap"
-              style={activeProvider === prov ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1A14', color: '#8FA899', border: '1px solid #1A2E22' }}
+              onClick={() => setActiveProvider('all')}
+              className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              style={activeProvider === 'all' ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1A14', color: '#8FA899', border: '1px solid #1A2E22' }}
             >
-              {prov}
+              All Providers
             </button>
-          ))}
-        </div>
+            {allProviders.map((prov) => (
+              <button
+                key={prov}
+                onClick={() => setActiveProvider(prov)}
+                className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap"
+                style={activeProvider === prov ? { background: 'rgba(240,178,50,0.15)', color: '#F0B232', border: '1px solid rgba(240,178,50,0.3)' } : { background: '#0F1A14', color: '#8FA899', border: '1px solid #1A2E22' }}
+              >
+                {prov}
+              </button>
+            ))}
+          </div>
+        )}
 
-        {/* Count + scroll row */}
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-xs" style={{ color: '#4A6A55' }}>
-            {filteredGames.length} game{filteredGames.length !== 1 ? 's' : ''}
-          </p>
-        </div>
-        <GameScrollRow key={`${activeCategory}-${activeProvider}-${search}`} games={filteredGames} />
+        {/* Results — inline under the search bar when actively searching */}
+        {isSearching && (
+          <div className="mt-2">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs" style={{ color: '#4A6A55' }}>
+                {filteredGames.length} game{filteredGames.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+            {filteredGames.length === 0 ? (
+              <div className="rounded-2xl p-10 text-center" style={{ background: '#0F1A14', border: '1px solid #1A2E22' }}>
+                <p className="text-sm font-bold mb-1" style={{ color: '#F5E8C8' }}>No games match those filters</p>
+                <p className="text-[11px]" style={{ color: '#8FA899' }}>Try clearing search or picking a different category or provider.</p>
+              </div>
+            ) : (
+              <GameScrollRow key={`${activeCategory}-${activeProvider}-${search}`} games={filteredGames} />
+            )}
+          </div>
+        )}
       </section>
 
-      {/* ── 4. YALA ORIGINALS ─────────────────────────────────── */}
-      <section>
-        <SectionHeader icon={Zap} title="Yala Originals" badge="EXCLUSIVE" accentColor="#F0B232" badgeColor="#F0B232" href="/originals" />
-        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-          {YALA_ORIGINALS.map((orig, i) => (
-            <motion.div key={orig.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
-              <OriginalCard orig={orig} />
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      {/* Curated rows — hidden while the user is actively searching/filtering. */}
+      {!isSearching && (
+        <>
+          {/* ── 4. TOP SLOTS ──────────────────────────────────── */}
+          <section>
+            <SectionHeader icon={Sparkles} title="Top Slots" badge="POPULAR" accentColor="#A78BFA" badgeColor="#A78BFA" />
+            <GameScrollRow games={slotGames} />
+          </section>
 
-      {/* ── 5. HOT RIGHT NOW ──────────────────────────────────── */}
-      <section>
-        <SectionHeader icon={TrendingUp} title="Hot Right Now" badge="🔥 TRENDING" accentColor="#EF4444" badgeColor="#EF4444" />
-        <GameScrollRow games={hotGames} />
-      </section>
+          {/* ── 5. HOT RIGHT NOW ──────────────────────────────── */}
+          <section>
+            <SectionHeader icon={TrendingUp} title="Hot Right Now" badge="🔥 TRENDING" accentColor="#EF4444" badgeColor="#EF4444" />
+            <GameScrollRow games={hotGames} />
+          </section>
 
-      {/* ── 6. LIVE CASINO ────────────────────────────────────── */}
-      <section>
-        <SectionHeader icon={Users} title="Live Casino" badge="LIVE NOW" accentColor="#2DC97A" badgeColor="#2DC97A" href="/casino" />
-        <GameScrollRow games={liveGames} />
-      </section>
+          {/* ── 6. NEW RELEASES (fresh slot launches) ─────────── */}
+          <section>
+            <SectionHeader icon={Sparkles} title="New Releases" badge="JUST DROPPED" accentColor="#F0B232" badgeColor="#F0B232" />
+            <GameScrollRow games={newReleases} />
+          </section>
 
-      {/* ── 7. TOP SLOTS ──────────────────────────────────────── */}
-      <section>
-        <SectionHeader icon={Sparkles} title="Top Slots" badge="POPULAR" accentColor="#A78BFA" badgeColor="#A78BFA" />
-        <GameScrollRow games={slotGames} />
-      </section>
+          {/* ── 7. ARRIVALS (live, table, specialty additions) ── */}
+          <section>
+            <SectionHeader icon={Clock} title="Arrivals" badge="✨ NEW TO YALA" accentColor="#60A5FA" badgeColor="#60A5FA" />
+            <GameScrollRow games={arrivals} />
+          </section>
 
-      {/* ── 8. NEW ARRIVALS ───────────────────────────────────── */}
-      <section>
-        <SectionHeader icon={Clock} title="New Arrivals" badge="✨ FRESH" accentColor="#60A5FA" badgeColor="#60A5FA" />
-        <GameScrollRow games={newGames} />
-      </section>
-
-      {/* ── 9. LIVE BETS FEED ─────────────────────────────────── */}
-      <section>
-        <LiveBetsFeed />
-      </section>
+          {/* ── 8. BETS TRACKER ───────────────────────────────── */}
+          <section>
+            <LiveBetsFeed />
+          </section>
+        </>
+      )}
 
     </div>
   );

@@ -245,7 +245,7 @@ export default function MirageAuctionPage() {
           border: '1px solid #1A2E22',
         }}>
           {/* Header */}
-          <header className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #1A2E22' }}>
+          <header className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4" style={{ borderBottom: '1px solid #1A2E22' }}>
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: `linear-gradient(135deg, ${accent}28, ${accent}08)`, border: `1px solid ${accent}40` }}>
@@ -269,7 +269,7 @@ export default function MirageAuctionPage() {
           </header>
 
           {/* Status banner */}
-          <div className="px-6 pt-5">
+          <div className="px-4 sm:px-6 pt-5">
             <StatusBanner
               phase={phase}
               round={round}
@@ -282,7 +282,7 @@ export default function MirageAuctionPage() {
           </div>
 
           {/* Bidder lanes */}
-          <div className="px-6 py-5">
+          <div className="px-3 sm:px-6 py-5">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               {bidders.map((b, i) => (
                 <BidderLane

@@ -296,7 +296,7 @@ export default function TrailPage() {
         >
           {/* Header strip */}
           <div
-            className="flex items-center justify-between px-6 py-4"
+            className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4"
             style={{ borderBottom: '1px solid #1A2E22' }}
           >
             <div className="flex items-center gap-3 min-w-0">
@@ -330,7 +330,7 @@ export default function TrailPage() {
           </div>
 
           {/* Game status banner */}
-          <div className="px-6 pt-5">
+          <div className="px-4 sm:px-6 pt-5">
             <GameStatus
               phase={phase}
               path={path}
@@ -342,7 +342,7 @@ export default function TrailPage() {
           </div>
 
           {/* The board */}
-          <div className="px-6 py-5 flex justify-center">
+          <div className="px-3 sm:px-6 py-5 flex justify-center">
             <TrailBoard
               phase={phase}
               path={path}
@@ -357,7 +357,7 @@ export default function TrailPage() {
           </div>
 
           {/* Hint / next-mult bar */}
-          <div className="px-6 pb-5">
+          <div className="px-4 sm:px-6 pb-5">
             <NextMultBar
               phase={phase}
               path={path}

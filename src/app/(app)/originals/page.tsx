@@ -123,64 +123,7 @@ export default function OriginalsPage() {
     <div className="space-y-8 animate-[fade-in_0.3s_ease-out]">
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <div
-        className="relative rounded-2xl overflow-hidden p-6 sm:p-10"
-        style={{
-          background: `radial-gradient(ellipse at 20% 60%, rgba(45,201,122,0.15) 0%, transparent 55%),
-                       radial-gradient(ellipse at 80% 20%, rgba(240,178,50,0.1) 0%, transparent 50%),
-                       #0C1812`,
-          border: '1px solid #1A2E22',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-        }}
-      >
-        <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-3">
-            <div
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-              style={{ background: `${accent}14`, border: `1px solid ${accent}28` }}
-            >
-              <Zap className="w-3.5 h-3.5" style={{ color: accent }} />
-              <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: accent }}>
-                Yala Originals
-              </span>
-            </div>
-            <span className="text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider text-red-400"
-              style={{ background: 'rgba(239,68,68,0.15)' }}>
-              Exclusive
-            </span>
-          </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2" style={{ color: '#F5E8C8' }}>
-            Desert-Crafted Games
-          </h1>
-          <p className="text-sm max-w-lg mb-5" style={{ color: '#8FA899' }}>
-            {YALA_ORIGINALS.length} in-house titles. Each provably fair. Each one a world of its own.
-          </p>
-
-          {/* Provably fair badge — prominent */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <div
-              className="flex items-center gap-2.5 px-4 py-2 rounded-xl"
-              style={{ background: 'rgba(45,201,122,0.08)', border: '1px solid rgba(45,201,122,0.2)' }}
-            >
-              <Shield className="w-4 h-4 text-[#2DC97A]" />
-              <div>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-[#2DC97A]">Provably Fair</p>
-                <p className="text-[10px]" style={{ color: '#8FA899' }}>Every result cryptographically verified</p>
-              </div>
-            </div>
-            <div
-              className="flex items-center gap-2.5 px-4 py-2 rounded-xl"
-              style={{ background: 'rgba(240,178,50,0.08)', border: '1px solid rgba(240,178,50,0.18)' }}
-            >
-              <span className="font-bold text-sm" style={{ color: accent }}>◈</span>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest font-bold" style={{ color: accent }}>Dual Currency</p>
-                <p className="text-[10px]" style={{ color: '#8FA899' }}>Gold Coins + Sweep Coins</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <OriginalsHero accent={accent} />
 
       {/* ── GAMES GRID ───────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -275,5 +218,128 @@ export default function OriginalsPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+// ─── Hero ──────────────────────────────────────────────────────────────────
+
+// The three Originals that are actually playable end-to-end (everything else
+// uses the generic slug-page template). We feature these in the hero strip so
+// users land on something they can immediately play.
+const PLAYABLE_SLUGS = ['trail', 'caravan-cross', 'mirage-auction'];
+
+function OriginalsHero({ accent }: { accent: string }) {
+  const playable    = YALA_ORIGINALS.filter((g) => PLAYABLE_SLUGS.includes(g.slug));
+  const totalCount  = YALA_ORIGINALS.length;
+
+  return (
+    <section
+      className="relative rounded-3xl overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(ellipse at 0% 0%, rgba(45,201,122,0.16) 0%, transparent 55%),
+          radial-gradient(ellipse at 100% 100%, rgba(240,178,50,0.14) 0%, transparent 50%),
+          linear-gradient(135deg, #0F1A14 0%, #0A1410 100%)
+        `,
+        border: '1px solid rgba(45,201,122,0.20)',
+      }}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 p-5 sm:p-8">
+        {/* LEFT — pitch + CTA */}
+        <div className="flex flex-col justify-center">
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <div
+              className="flex items-center gap-1.5 px-2 py-0.5 rounded-full"
+              style={{ background: `${accent}14`, border: `1px solid ${accent}33` }}
+            >
+              <Zap className="w-3 h-3" style={{ color: accent }} />
+              <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: accent }}>
+                Yala Originals
+              </span>
+            </div>
+            <span
+              className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(45,201,122,0.14)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.30)' }}
+            >
+              {playable.length} playable
+            </span>
+            <span
+              className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(143,168,153,0.10)', color: '#8FA899', border: '1px solid #1A2E22' }}
+            >
+              {totalCount - playable.length} more coming
+            </span>
+          </div>
+
+          <h1 className="font-display text-3xl sm:text-4xl font-black tracking-tight mb-2" style={{ color: '#F5E8C8' }}>
+            Built in‑house.
+            <br className="hidden sm:block" />
+            <span style={{ color: accent }}>Played nowhere else.</span>
+          </h1>
+          <p className="text-sm sm:text-base max-w-md mb-5" style={{ color: '#8FA899' }}>
+            Provably-fair games designed by us. Every result is cryptographically verifiable and every Original supports both Gold Coins and Sweep Coins.
+          </p>
+
+          {/* Inline trust badges */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg"
+              style={{ background: 'rgba(45,201,122,0.08)', border: '1px solid rgba(45,201,122,0.25)' }}
+            >
+              <Shield className="w-3 h-3" style={{ color: '#2DC97A' }} />
+              <span className="text-[10px] font-bold" style={{ color: '#2DC97A' }}>Provably fair</span>
+            </div>
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg"
+              style={{ background: `${accent}10`, border: `1px solid ${accent}28` }}
+            >
+              <span className="text-[10px] font-bold" style={{ color: accent }}>99% RTP</span>
+            </div>
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg"
+              style={{ background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.28)' }}
+            >
+              <span className="text-[10px] font-bold" style={{ color: '#A78BFA' }}>GC + SC</span>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT — playable mini-grid (only on >= sm so mobile stays light) */}
+        <div className="hidden sm:grid grid-cols-3 gap-2 items-stretch">
+          {playable.map((g, i) => {
+            const cardAccent = ACCENT_COLORS[g.slug] || accent;
+            return (
+              <Link
+                key={g.slug}
+                href={`/originals/${g.slug}`}
+                className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-end p-3 transition-transform hover:-translate-y-0.5"
+                style={{
+                  background: `radial-gradient(ellipse at 50% 30%, ${cardAccent}22, transparent 60%), #0A1410`,
+                  border: `1px solid ${cardAccent}44`,
+                  minHeight: 140,
+                  animationDelay: `${i * 80}ms`,
+                }}
+              >
+                <div className="absolute top-2 right-2">
+                  <span
+                    className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+                    style={{ background: 'rgba(45,201,122,0.14)', color: '#2DC97A', border: '1px solid rgba(45,201,122,0.28)' }}
+                  >
+                    Play
+                  </span>
+                </div>
+                <div className="mb-3 mt-3">
+                  <GameTypeIcon type={g.type} color={cardAccent} />
+                </div>
+                <p className="font-display font-black text-xs text-center leading-tight" style={{ color: '#F5E8C8' }}>
+                  {g.name}
+                </p>
+                <p className="text-[9px] text-center mt-0.5" style={{ color: '#8FA899' }}>{g.type}</p>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }

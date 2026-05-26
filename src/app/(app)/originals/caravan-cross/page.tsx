@@ -235,7 +235,7 @@ export default function CaravanCrossPage() {
           }}
         >
           <header
-            className="flex items-center justify-between px-6 py-4"
+            className="flex items-center justify-between gap-2 px-4 sm:px-6 py-4"
             style={{ borderBottom: '1px solid #1A2E22' }}
           >
             <div className="flex items-center gap-3 min-w-0">
@@ -269,7 +269,7 @@ export default function CaravanCrossPage() {
           </header>
 
           {/* Multiplier banner */}
-          <div className="px-6 pt-5">
+          <div className="px-4 sm:px-6 pt-5">
             <MultBanner
               phase={phase}
               mult={mult}
@@ -283,7 +283,7 @@ export default function CaravanCrossPage() {
           </div>
 
           {/* Canvas */}
-          <div className="px-6 py-5">
+          <div className="px-3 sm:px-6 py-5">
             <DesertCanvas
               phase={phase}
               mult={mult}
@@ -293,7 +293,7 @@ export default function CaravanCrossPage() {
           </div>
 
           {/* Last-rounds strip */}
-          <div className="px-6 pb-5">
+          <div className="px-4 sm:px-6 pb-5">
             <LastRoundsStrip history={history} accent={accent} />
           </div>
         </div>
