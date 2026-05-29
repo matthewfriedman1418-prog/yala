@@ -5,6 +5,7 @@ import { PageHeader, AdminCard, CardHeader, fmtUSD } from '@/components/admin/pr
 import { Table, THead, Th, Tr, Td } from '@/components/admin/table';
 import { Field, Input } from '@/components/admin/controls';
 import { PNL_SAMPLE } from '@/lib/mock-data/admin-extra';
+import { ngr as computeNgr } from '@/lib/admin/finance';
 
 export default function PnlPage() {
   const [username, setUsername] = useState('DesertFox88');
@@ -12,11 +13,15 @@ export default function PnlPage() {
   const [bonusAdj, setBonusAdj] = useState('0.6');
   const [searched, setSearched] = useState(true);
 
-  // Potential additional bonus = a safe slice of NGR, scaled by the adjustment knob.
+  // Canonical model: NGR = GGR − Bonuses (profit). Withdrawals back out of
+  // NGR = Deposits − Withdrawals. Potential bonus = safe slice of NGR headroom.
   const rows = PNL_SAMPLE.map((r) => {
-    const headroom = Math.max(0, r.ngr * (1 - Number(marginTarget)));
+    const ngrVal = computeNgr(r.ggr, r.bonus);
+    const withdrawals = r.deposits - ngrVal;
+    const margin = r.ggr ? (ngrVal / r.ggr) * 100 : 0;
+    const headroom = Math.max(0, ngrVal * (1 - Number(marginTarget)));
     const potential = Math.round(headroom * Number(bonusAdj));
-    return { ...r, potential, adjusted: Math.round(potential * 0.9) };
+    return { ...r, withdrawals, ngr: ngrVal, margin, potential, adjusted: Math.round(potential * 0.9) };
   });
 
   return (
@@ -36,18 +41,18 @@ export default function PnlPage() {
         <AdminCard>
           <CardHeader title={`PNL — ${username}`} sub="Per time range" />
           <Table>
-            <THead><Th>Range</Th><Th align="right">Deposits</Th><Th align="right">Bonus</Th><Th align="right">Bet</Th><Th align="right">GGR</Th><Th align="right">NGR</Th><Th align="right">Margin</Th><Th align="right">Potential bonus</Th></THead>
+            <THead><Th>Range</Th><Th align="right">Deposits</Th><Th align="right">Withdrawals</Th><Th align="right">Bonuses</Th><Th align="right">GGR</Th><Th align="right">NGR (profit)</Th><Th align="right">Margin</Th><Th align="right">Potential bonus</Th></THead>
             <tbody>
               {rows.map((r) => (
                 <Tr key={r.range}>
                   <Td className="font-semibold">{r.range}</Td>
                   <Td align="right" className="number-display">{fmtUSD(r.deposits)}</Td>
-                  <Td align="right" className="number-display">{fmtUSD(r.bonus)}</Td>
-                  <Td align="right" className="number-display text-[#8FA899]">{fmtUSD(r.bet, { compact: true })}</Td>
-                  <Td align="right" className={r.ggr >= 0 ? 'number-display text-emerald-400' : 'number-display text-red-400'}>{fmtUSD(r.ggr)}</Td>
-                  <Td align="right" className={r.ngr >= 0 ? 'number-display text-emerald-400' : 'number-display text-red-400'}>{fmtUSD(r.ngr)}</Td>
-                  <Td align="right" className={r.marginPct >= 0 ? 'number-display' : 'number-display text-red-400'}>{r.marginPct.toFixed(1)}%</Td>
-                  <Td align="right" className="number-display font-semibold" ><span style={{ color: '#F0B232' }}>{r.potential > 0 ? fmtUSD(r.potential) : '—'}</span></Td>
+                  <Td align="right" className="number-display text-amber-400">{fmtUSD(r.withdrawals)}</Td>
+                  <Td align="right" className="number-display text-purple-400">{fmtUSD(r.bonus)}</Td>
+                  <Td align="right" className="number-display"><span style={{ color: '#F0B232' }}>{fmtUSD(r.ggr)}</span></Td>
+                  <Td align="right" className={r.ngr >= 0 ? 'number-display text-emerald-400 font-semibold' : 'number-display text-red-400 font-semibold'}>{fmtUSD(r.ngr)}</Td>
+                  <Td align="right" className={r.margin >= 0 ? 'number-display' : 'number-display text-red-400'}>{r.margin.toFixed(1)}%</Td>
+                  <Td align="right" className="number-display font-semibold"><span style={{ color: '#F0B232' }}>{r.potential > 0 ? fmtUSD(r.potential) : '—'}</span></Td>
                 </Tr>
               ))}
             </tbody>

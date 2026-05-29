@@ -307,6 +307,10 @@ body {
   border-color: rgba(45,201,122,0.2);
 }
 
+/* Admin compact density — tighter table rows for data-heavy operators */
+[data-density="compact"] table td { padding-top: 0.35rem; padding-bottom: 0.35rem; }
+[data-density="compact"] table th { padding-top: 0.3rem; padding-bottom: 0.3rem; }
+
 /* Gamified gradient border card */
 .gradient-border-card {
   position: relative;

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { useAdminStore } from '@/lib/store/admin';
 import {
   LayoutDashboard, Users, Wallet, ShieldAlert, Gamepad2, Megaphone, Crown,
-  Send, FileText, LifeBuoy, SlidersHorizontal, UserCog, ScrollText, BarChart3,
+  Send, LifeBuoy, SlidersHorizontal,
   ChevronsLeft, ChevronsRight, ChevronDown, ExternalLink,
 } from 'lucide-react';
 import type { ComponentType } from 'react';
@@ -68,26 +68,24 @@ function nav(): Group[] {
       { href: '/admin/vip/adjustments', label: 'Manual Adjustments' },
       { href: '/admin/vip/creators', label: 'Creator Program' },
     ] },
-    { label: 'CRM & Messaging', icon: Send, children: [
+    { label: 'Marketing', icon: Send, children: [
       { href: '/admin/crm/segments', label: 'Segments' },
       { href: '/admin/crm/campaigns', label: 'Campaigns' },
       { href: '/admin/crm/bulk-assign', label: 'Bulk Assign (CSV)' },
-    ] },
-    { label: 'Content (CMS)', icon: FileText, children: [
-      { href: '/admin/content/pages', label: 'Pages' },
+      { href: '/admin/content/pages', label: 'CMS Pages' },
       { href: '/admin/content/banners', label: 'Banners' },
       { href: '/admin/content/promo-content', label: 'Promo Content' },
     ] },
     { label: 'Support', icon: LifeBuoy, href: '/admin/support' },
-    { label: 'System Settings', icon: SlidersHorizontal, children: [
+    { label: 'Platform', icon: SlidersHorizontal, children: [
+      { href: '/admin/staff', label: 'Staff & Roles' },
+      { href: '/admin/audit', label: 'Audit Log' },
+      { href: '/admin/reports', label: 'Reports' },
       { href: '/admin/system/flags', label: 'Feature Flags' },
       { href: '/admin/system/jobs', label: 'Jobs & Monitors' },
       { href: '/admin/system/webhooks', label: 'Webhooks' },
       { href: '/admin/system/health', label: 'System Health' },
     ] },
-    { label: 'Administrator', icon: UserCog, href: '/admin/staff' },
-    { label: 'Audit Log', icon: ScrollText, href: '/admin/audit' },
-    { label: 'Reports', icon: BarChart3, href: '/admin/reports' },
   ];
 }
 

@@ -4,10 +4,13 @@ import { Toaster } from 'sonner';
 import { X } from 'lucide-react';
 import { AdminSidebar } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
+import { ConfirmHost } from './confirm';
+import { Breadcrumbs } from './feedback';
 import { useAdminStore } from '@/lib/store/admin';
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const density = useAdminStore((s) => s.density);
 
   // Persisted sidebar state uses skipHydration — rehydrate after mount.
   useEffect(() => {
@@ -15,7 +18,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: '#060E0A' }} data-currency="GC">
+    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: '#060E0A' }} data-currency="GC" data-density={density}>
       {/* Desktop sidebar */}
       <div className="hidden lg:flex">
         <AdminSidebar />
@@ -41,9 +44,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <AdminTopbar onOpenMobileNav={() => setMobileNavOpen(true)} />
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 pb-16">{children}</div>
+          <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 pb-16">
+            <Breadcrumbs />
+            {children}
+          </div>
         </main>
       </div>
+
+      <ConfirmHost />
 
       <Toaster
         position="bottom-right"

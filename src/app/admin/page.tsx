@@ -1,11 +1,15 @@
 'use client';
 import Link from 'next/link';
-import { PageHeader, StatCard, AdminCard, CardHeader, fmtNum, fmtUSD, fmtAgo, Avatar } from '@/components/admin/primitives';
-import { AreaChart, BarChart, Donut } from '@/components/admin/charts';
+import { PageHeader, StatCard, AdminCard, CardHeader, fmtNum, fmtUSD, Avatar } from '@/components/admin/primitives';
+import { AreaChart, BarChart, Donut, Sparkline } from '@/components/admin/charts';
+import { TimeAgo } from '@/components/admin/feedback';
 import {
   KPIS, REVENUE_30D, DAU_14D, COIN_CIRCULATION, TOP_GAMES_BY_HANDLE, AUDIT_LOG, ALERTS,
 } from '@/lib/mock-data/admin';
-import { AlertTriangle, Info, OctagonAlert, ArrowRight } from 'lucide-react';
+import { FINANCE_KPIS } from '@/lib/admin/finance';
+import { AlertTriangle, Info, OctagonAlert, ArrowRight, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+
+const ACCENT_HEX = { gold: '#F0B232', teal: '#2DC97A', blue: '#3B82F6', purple: '#8B5CF6', amber: '#F59E0B' } as const;
 
 const SEV = {
   critical: { icon: OctagonAlert, cls: 'text-red-400 bg-red-500/10 border-red-500/25' },
@@ -24,9 +28,34 @@ export default function AdminOverview() {
         </div>
       </PageHeader>
 
-      {/* KPI grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 mb-5">
-        {KPIS.map((k) => <StatCard key={k.key} kpi={k} />)}
+      {/* Headline revenue stack: Deposits · Withdrawals · Bonuses · GGR · NGR(profit) */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mb-3">
+        {FINANCE_KPIS.map((k) => {
+          const hex = ACCENT_HEX[k.accent];
+          const positive = k.delta >= 0;
+          const good = positive === k.upIsGood;
+          return (
+            <AdminCard key={k.key} className="p-4 relative overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-0.5" style={{ background: hex, opacity: 0.7 }} />
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-[#8FA899]">{k.label}</p>
+              <div className="flex items-end justify-between gap-2 mt-1.5">
+                <p className="text-2xl font-extrabold text-[#F5E8C8] number-display">{fmtUSD(k.value, { compact: true })}</p>
+                <Sparkline data={k.spark} color={hex} />
+              </div>
+              <div className="flex items-center gap-1.5 mt-2">
+                <span className={`inline-flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded ${good ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'}`}>
+                  {positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}{Math.abs(k.delta)}%
+                </span>
+                <span className="text-[11px] text-[#8FA899]">{k.note ?? 'vs prev. 30d'}</span>
+              </div>
+            </AdminCard>
+          );
+        })}
+      </div>
+
+      {/* Secondary engagement KPIs */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+        {KPIS.filter((k) => ['dau', 'signups', 'arpu', 'kyc'].includes(k.key)).map((k) => <StatCard key={k.key} kpi={k} />)}
       </div>
 
       {/* Alerts */}
@@ -147,7 +176,7 @@ export default function AdminOverview() {
                   <span className="font-medium">{e.target}</span>
                 </p>
               </div>
-              <span className="text-[11px] text-[#8FA899] whitespace-nowrap">{fmtAgo(e.ts)}</span>
+              <span className="text-[11px] text-[#8FA899] whitespace-nowrap"><TimeAgo ts={e.ts} /></span>
             </div>
           ))}
         </div>

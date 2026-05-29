@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { PageHeader, StatusBadge, RiskBadge, AdminCard, fmtUSD, fmtAgo } from '@/components/admin/primitives';
 import { Table, THead, Th, Tr, Td, Toolbar, FilterTabs, EmptyRow } from '@/components/admin/table';
 import { REDEMPTIONS, type Redemption, type RedemptionStatus } from '@/lib/mock-data/admin';
+import { confirm } from '@/components/admin/confirm';
 import { Check, X, AlertTriangle } from 'lucide-react';
+
+// Redemptions at or above this USD value require a second approver (dual control).
+const DUAL_CONTROL_THRESHOLD = 2000;
 
 type Filter = 'all' | RedemptionStatus;
 
@@ -95,7 +99,16 @@ export default function RedemptionsPage() {
                   {actionable ? (
                     <div className="flex items-center justify-end gap-1.5">
                       <button
-                        onClick={() => act(r.id, 'approved', `Approved ${r.id} · ${fmtUSD(r.usd)}`)}
+                        onClick={async () => {
+                          const dual = r.usd >= DUAL_CONTROL_THRESHOLD;
+                          const res = await confirm({
+                            title: `Approve ${fmtUSD(r.usd)} to ${r.player}?`,
+                            message: `Payout via ${r.method}.${dual ? '' : ' This releases funds immediately.'}`,
+                            dualControl: dual,
+                            confirmLabel: dual ? 'Send for 2nd approval' : 'Approve payout',
+                          });
+                          if (res.confirmed) act(r.id, dual ? 'in_review' : 'approved', dual ? `${r.id} sent for second approval` : `Approved ${r.id} · ${fmtUSD(r.usd)}`);
+                        }}
                         disabled={r.kyc !== 'verified'}
                         title={r.kyc !== 'verified' ? 'KYC must be verified first' : 'Approve'}
                         className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 disabled:opacity-30 disabled:cursor-not-allowed"
@@ -103,7 +116,10 @@ export default function RedemptionsPage() {
                         <Check className="w-3.5 h-3.5" /> Approve
                       </button>
                       <button
-                        onClick={() => act(r.id, 'rejected', `Rejected ${r.id}`)}
+                        onClick={async () => {
+                          const res = await confirm({ title: `Reject redemption ${r.id}?`, message: `${fmtUSD(r.usd)} for ${r.player}. Funds return to the player's withdrawable balance.`, danger: true, requireReason: true, reasonOptions: ['Failed KYC', 'Fraud / risk', 'Playthrough not met', 'Duplicate request', 'Other'] });
+                          if (res.confirmed) act(r.id, 'rejected', `Rejected ${r.id} · ${res.reason}`);
+                        }}
                         className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-red-500/15 text-red-400 hover:bg-red-500/25"
                       >
                         <X className="w-3.5 h-3.5" /> Reject

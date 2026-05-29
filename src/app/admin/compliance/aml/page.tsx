@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PageHeader, Badge, RiskBadge, AdminCard, fmtAgo } from '@/components/admin/primitives';
 import { Table, THead, Th, Tr, Td, Toolbar, FilterTabs, EmptyRow } from '@/components/admin/table';
 import { AML_CASES, type AmlCase } from '@/lib/mock-data/admin-extra';
+import { confirm } from '@/components/admin/confirm';
 
 type Filter = 'all' | 'open' | 'escalated' | 'cleared' | 'sar_filed';
 const TYPE_TONE = { sanctions: 'red', pep: 'purple', structuring: 'amber', velocity: 'blue' } as const;
@@ -40,7 +41,7 @@ export default function AmlPage() {
                 {(c.status === 'open' || c.status === 'escalated') ? (
                   <div className="flex items-center justify-end gap-1.5">
                     <button onClick={() => act(c.id, 'cleared', `${c.id} cleared`)} className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25">Clear</button>
-                    <button onClick={() => act(c.id, 'sar_filed', `SAR filed for ${c.id}`)} className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-500/15 text-purple-400 hover:bg-purple-500/25">File SAR</button>
+                    <button onClick={async () => { const r = await confirm({ title: `File a SAR for ${c.player}?`, message: 'Files a Suspicious Activity Report with FinCEN. This cannot be unfiled.', danger: true, requireReason: true, reasonOptions: ['Structuring', 'Sanctions match', 'Suspected fraud', 'Unusual velocity', 'Other'] }); if (r.confirmed) act(c.id, 'sar_filed', `SAR filed for ${c.id} · ${r.reason}`); }} className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-500/15 text-purple-400 hover:bg-purple-500/25">File SAR</button>
                   </div>
                 ) : <span className="text-xs text-[#8FA899]">—</span>}
               </Td>

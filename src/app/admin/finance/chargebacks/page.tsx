@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PageHeader, StatusBadge, AdminCard, fmtUSD, fmtAgo } from '@/components/admin/primitives';
 import { Table, THead, Th, Tr, Td, EmptyRow } from '@/components/admin/table';
 import { CHARGEBACKS, type Chargeback } from '@/lib/mock-data/admin-extra';
+import { confirm } from '@/components/admin/confirm';
 
 export default function ChargebacksPage() {
   const [items, setItems] = useState<Chargeback[]>(CHARGEBACKS);
@@ -34,7 +35,7 @@ export default function ChargebacksPage() {
                 {(c.status === 'new' || c.status === 'representing') ? (
                   <div className="flex items-center justify-end gap-1.5">
                     <button onClick={() => act(c.id, 'representing', `Representing ${c.id}`)} className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-500/15 text-blue-400 hover:bg-blue-500/25">Represent</button>
-                    <button onClick={() => act(c.id, 'lost', `Accepted ${c.id}`)} className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/5 text-[#8FA899] hover:text-[#F5E8C8]">Accept</button>
+                    <button onClick={async () => { const r = await confirm({ title: `Accept chargeback ${c.id}?`, message: `Forfeits ${fmtUSD(c.amount)} and counts as a loss. Use only when the dispute isn't worth contesting.`, danger: true }); if (r.confirmed) act(c.id, 'lost', `Accepted ${c.id}`); }} className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/5 text-[#8FA899] hover:text-[#F5E8C8]">Accept</button>
                   </div>
                 ) : <span className="text-xs text-[#8FA899]">—</span>}
               </Td>

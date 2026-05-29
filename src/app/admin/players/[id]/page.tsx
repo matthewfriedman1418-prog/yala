@@ -9,6 +9,8 @@ import { Tabs, Modal, Field, Input, Select } from '@/components/admin/controls';
 import { getPlayer, PLAYER_EVENTS, RG_RECORDS, RG_LABELS } from '@/lib/mock-data/admin';
 import { ROUNDS, DEVICE_CLUSTERS } from '@/lib/mock-data/admin-extra';
 import { useLedgerStore, balancesFor, entriesFor, playthroughsFor, type LedgerCurrency } from '@/lib/admin/ledger';
+import { playerRevenue } from '@/lib/admin/finance';
+import { confirm } from '@/components/admin/confirm';
 import { useAdminStore } from '@/lib/store/admin';
 import {
   ArrowLeft, Ban, Flag, Coins, ShieldCheck, Mail, Calendar, Globe,
@@ -86,7 +88,12 @@ export default function PlayerDetail() {
           <button onClick={() => setAdjustOpen(true)} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-[#060E0A] bg-[var(--accent)] hover:brightness-110"><Coins className="w-4 h-4" /> Manage Balance</button>
           <button onClick={() => toast.success(`${player.username} promoted to VIP`)} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold border border-purple-500/30 text-purple-400 hover:bg-purple-500/10"><Crown className="w-4 h-4" /> Promote VIP</button>
           <button onClick={() => toast(`Documentary KYC required for ${player.username}`)} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold border border-[#1A2E22] text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5"><BadgeCheck className="w-4 h-4" /> Require Doc KYC</button>
-          <button onClick={() => toast.error(`${player.username} ban submitted (mock)`)} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold border border-red-500/30 text-red-400 hover:bg-red-500/10"><Ban className="w-4 h-4" /> Ban</button>
+          <button
+            onClick={async () => {
+              const r = await confirm({ title: `Ban ${player.username}?`, message: 'They lose access immediately and any pending redemptions are held. Reversible by an admin.', danger: true, requireReason: true, reasonOptions: ['Fraud confirmed', 'Multi-account abuse', 'Chargeback fraud', 'Compliance / sanctions', 'Other'], confirmLabel: 'Ban player' });
+              if (r.confirmed) toast.error(`${player.username} banned · ${r.reason}`);
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold border border-red-500/30 text-red-400 hover:bg-red-500/10"><Ban className="w-4 h-4" /> Ban</button>
         </div>
       </div>
 
@@ -129,10 +136,16 @@ export default function PlayerDetail() {
 
           {tab === 'details' && (
             <AdminCard>
-              <CardHeader title="Lifetime value" />
-              <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#15241B]">
-                {([['Wagered', fmtUSD(player.totalWagered, { compact: true })], ['Deposited', fmtUSD(player.totalDeposited)], ['Redeemed', fmtUSD(player.totalRedeemed)], ['Net rev.', fmtUSD(player.netRevenue)]] as const).map(([l, v]) => (
-                  <div key={l} className="p-4"><p className="text-lg font-extrabold text-[#F5E8C8] number-display">{v}</p><p className="text-[11px] text-[#8FA899]">{l}</p></div>
+              <CardHeader title="Revenue" sub="NGR (profit) = GGR − Bonuses" />
+              <div className="grid grid-cols-2 sm:grid-cols-5 divide-x divide-[#15241B]">
+                {(() => { const r = playerRevenue(player); return [
+                  ['Deposits', fmtUSD(r.deposits), '#F5E8C8'],
+                  ['Withdrawals', fmtUSD(r.withdrawals), '#F59E0B'],
+                  ['Bonuses', fmtUSD(r.bonuses), '#8B5CF6'],
+                  ['GGR', fmtUSD(r.ggr), '#F0B232'],
+                  ['NGR (profit)', fmtUSD(r.ngr), r.ngr >= 0 ? '#2DC97A' : '#EF4444'],
+                ] as const; })().map(([l, v, c]) => (
+                  <div key={l} className="p-4"><p className="text-lg font-extrabold number-display" style={{ color: c }}>{v}</p><p className="text-[11px] text-[#8FA899]">{l}</p></div>
                 ))}
               </div>
               <div className="border-t border-[#1A2E22] grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 p-4 text-sm">
@@ -158,7 +171,7 @@ export default function PlayerDetail() {
                         <Td align="right" className="number-display">{p.playRequirement}</Td>
                         <Td align="right" className="number-display">{p.totalBet}</Td>
                         <Td>{p.achieved ? <Badge tone="green">Met</Badge> : <Badge tone="amber">{Math.round((p.totalBet / p.playRequirement) * 100)}%</Badge>}</Td>
-                        <Td align="right">{!p.achieved && <button onClick={() => voidPlaythrough(p.id, 'manual void', operator.email)} className="text-red-400 hover:text-red-300" title="Void playthrough"><Trash2 className="w-4 h-4" /></button>}</Td>
+                        <Td align="right">{!p.achieved && <button onClick={async () => { const r = await confirm({ title: 'Void this playthrough?', message: 'Marks the requirement met and writes a reversal to the ledger.', danger: true, requireReason: true, reasonOptions: ['Goodwill', 'Support correction', 'Bonus error', 'Other'] }); if (r.confirmed) voidPlaythrough(p.id, r.reason ?? 'manual void', operator.email); }} className="text-red-400 hover:text-red-300" title="Void playthrough"><Trash2 className="w-4 h-4" /></button>}</Td>
                       </Tr>
                     ))}
                   </tbody>

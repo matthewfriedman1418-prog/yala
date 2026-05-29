@@ -1,6 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
+import { EmptyState } from './feedback';
 
 // Composable table primitives — pages own their column config and row rendering,
 // these just provide consistent styling, sticky headers, and hover states.
@@ -103,10 +104,12 @@ export function FilterTabs<T extends string>({ tabs, value, onChange }: {
   );
 }
 
-export function EmptyRow({ colSpan, message = 'No results.' }: { colSpan: number; message?: string }) {
+export function EmptyRow({ colSpan, message = 'Nothing matches your filters yet.', title = 'No results' }: { colSpan: number; message?: string; title?: string }) {
   return (
     <tr>
-      <td colSpan={colSpan} className="px-4 py-12 text-center text-sm text-[#8FA899]">{message}</td>
+      <td colSpan={colSpan} className="p-0">
+        <EmptyState title={title} message={message} />
+      </td>
     </tr>
   );
 }
