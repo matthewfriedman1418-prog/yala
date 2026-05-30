@@ -21,8 +21,18 @@ const SEV = {
   info: { icon: Info, cls: 'text-blue-400 bg-blue-500/10 border-blue-500/25' },
 } as const;
 
+// Deterministic 30-day daily series whose sum ≈ total, shaped like the spark.
+function genDaily(total: number, seed: number, days = 30): number[] {
+  const raw = Array.from({ length: days }, (_, i) => Math.max(0.05, 0.65 + 0.5 * Math.sin((i + seed) / 3.3) + (i / days) * 0.3));
+  const sum = raw.reduce((a, b) => a + b, 0);
+  return raw.map((v) => Math.round((v * total) / sum));
+}
+
+interface Drill { label: string; valueLabel: string; daily: number[]; money: boolean }
+
 export default function AdminOverview() {
   const [signupsOpen, setSignupsOpen] = useState(false);
+  const [drill, setDrill] = useState<Drill | null>(null);
   const signupsTotal = SIGNUPS_DAILY.reduce((s, d) => s + d.value, 0);
   const maxSignup = Math.max(...SIGNUPS_DAILY.map((d) => d.value));
   return (
@@ -42,20 +52,22 @@ export default function AdminOverview() {
           const positive = k.delta >= 0;
           const good = positive === k.upIsGood;
           return (
-            <AdminCard key={k.key} className="p-4 relative overflow-hidden">
-              <div className="absolute inset-x-0 top-0 h-0.5" style={{ background: hex, opacity: 0.7 }} />
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-[#8FA899]">{k.label}</p>
-              <div className="flex items-end justify-between gap-2 mt-1.5">
-                <p className="text-2xl font-extrabold text-[#F5E8C8] number-display">{fmtUSD(k.value, { compact: true })}</p>
-                <Sparkline data={k.spark} color={hex} />
-              </div>
-              <div className="flex items-center gap-1.5 mt-2">
-                <span className={`inline-flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded ${good ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'}`}>
-                  {positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}{Math.abs(k.delta)}%
-                </span>
-                <span className="text-[11px] text-[#8FA899]">{k.note ?? 'vs prev. 30d'}</span>
-              </div>
-            </AdminCard>
+            <button key={k.key} onClick={() => setDrill({ label: k.label, valueLabel: fmtUSD(k.value, { compact: true }), daily: genDaily(k.value, k.label.length), money: true })} className="text-left">
+              <AdminCard className="p-4 relative overflow-hidden hover:border-[var(--accent)]/40 transition-colors">
+                <div className="absolute inset-x-0 top-0 h-0.5" style={{ background: hex, opacity: 0.7 }} />
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-[#8FA899]">{k.label}</p>
+                <div className="flex items-end justify-between gap-2 mt-1.5">
+                  <p className="text-2xl font-extrabold text-[#F5E8C8] number-display">{fmtUSD(k.value, { compact: true })}</p>
+                  <Sparkline data={k.spark} color={hex} />
+                </div>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <span className={`inline-flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded ${good ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'}`}>
+                    {positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}{Math.abs(k.delta)}%
+                  </span>
+                  <span className="text-[11px] text-[#8FA899]">{k.note ?? 'vs prev. 30d'}</span>
+                </div>
+              </AdminCard>
+            </button>
           );
         })}
       </div>
@@ -240,6 +252,27 @@ export default function AdminOverview() {
           </Table>
           <p className="text-xs text-[#8FA899]">This is the pattern every KPI gets once real data flows in — click a metric, drill to its daily series and dimensional split.</p>
         </div>
+      </Drawer>
+
+      {/* Generic KPI drill-down (finance KPIs) */}
+      <Drawer open={!!drill} onClose={() => setDrill(null)} title={drill ? `${drill.label} — daily breakdown` : ''} width="max-w-2xl">
+        {drill && (() => {
+          const max = Math.max(...drill.daily);
+          const base = new Date('2026-04-29T00:00:00Z');
+          const days = drill.daily.map((v, i) => { const d = new Date(base); d.setUTCDate(d.getUTCDate() + i); return { day: d.toISOString().slice(0, 10), v }; });
+          return (
+            <div className="space-y-4">
+              <div><p className="text-2xl font-extrabold text-[#F5E8C8] number-display">{drill.valueLabel}</p><p className="text-xs text-[#8FA899]">last 30 days</p></div>
+              <div className="flex items-end gap-[3px] h-32">
+                {days.map((d) => <div key={d.day} className="flex-1 rounded-t-sm bg-[var(--accent)]" style={{ height: `${(d.v / max) * 100}%` }} title={`${d.day}: ${drill.money ? '$' : ''}${d.v.toLocaleString()}`} />)}
+              </div>
+              <Table>
+                <THead><Th>Day</Th><Th align="right">{drill.label}</Th></THead>
+                <tbody>{[...days].reverse().slice(0, 14).map((d) => <Tr key={d.day}><Td className="text-xs">{d.day}</Td><Td align="right" className="number-display font-semibold">{drill.money ? fmtUSD(d.v) : d.v.toLocaleString()}</Td></Tr>)}</tbody>
+              </Table>
+            </div>
+          );
+        })()}
       </Drawer>
     </>
   );

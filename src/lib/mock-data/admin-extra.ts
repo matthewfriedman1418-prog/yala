@@ -204,6 +204,20 @@ export const AMOE_ENTRIES: AmoeEntry[] = [
   { id: 'amoe_4', name: 'Postcard #4818', player: '(no match)', playerId: '', received: '2026-05-24T00:00:00Z', status: 'rejected', scGranted: 0 },
 ];
 
+// ── Crypto deposits (on-chain) ───────────────────────────────────────────────
+export interface CryptoDeposit {
+  id: string; player: string; playerId: string; asset: 'BTC' | 'ETH' | 'USDC' | 'USDT' | 'LTC';
+  amount: number; usd: number; confirmations: number; required: number;
+  status: 'pending' | 'confirming' | 'credited' | 'failed'; txHash: string; receivedAt: string;
+}
+export const CRYPTO_DEPOSITS: CryptoDeposit[] = [
+  { id: 'cd_1', player: 'NightHunter', playerId: 'usr_1', asset: 'USDC', amount: 250, usd: 250, confirmations: 14, required: 12, status: 'credited', txHash: '0x8a3f…c91e', receivedAt: '2026-05-28T08:40:00Z' },
+  { id: 'cd_2', player: 'ThunderX', playerId: 'usr_4', asset: 'ETH', amount: 0.12, usd: 384.2, confirmations: 6, required: 12, status: 'confirming', txHash: '0x44c2…7b21', receivedAt: '2026-05-28T09:05:00Z' },
+  { id: 'cd_3', player: 'JackpotJin', playerId: 'usr_5', asset: 'BTC', amount: 0.011, usd: 742.5, confirmations: 1, required: 3, status: 'confirming', txHash: 'bc1q…9x4d', receivedAt: '2026-05-28T09:18:00Z' },
+  { id: 'cd_4', player: 'EmeraldWave', playerId: 'usr_2', asset: 'USDT', amount: 100, usd: 100, confirmations: 0, required: 12, status: 'pending', txHash: '0x19ab…44ff', receivedAt: '2026-05-28T09:26:00Z' },
+  { id: 'cd_5', player: 'DuneRider', playerId: 'usr_8', asset: 'LTC', amount: 2.4, usd: 196.8, confirmations: 0, required: 6, status: 'failed', txHash: 'ltc1…0a7c', receivedAt: '2026-05-27T22:10:00Z' },
+];
+
 // ── Tax statements ───────────────────────────────────────────────────────────
 export interface TaxRecord { id: string; player: string; playerId: string; form: 'W-2G' | '1099-MISC'; year: number; amount: number; status: 'draft' | 'issued'; }
 export const TAX_RECORDS: TaxRecord[] = [

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PageHeader, StatusBadge, Badge, AdminCard, fmtAgo } from '@/components/admin/primitives';
 import { Table, THead, Th, Tr, Td, Toolbar, FilterTabs, EmptyRow } from '@/components/admin/table';
 import { RG_RECORDS, RG_LABELS, type RgRecord, type RgType } from '@/lib/mock-data/admin';
+import { confirm } from '@/components/admin/confirm';
 import { Check, ShieldAlert, UserX, Clock } from 'lucide-react';
 
 type Filter = 'all' | 'requested' | 'active' | 'expired' | 'self_exclusion';
@@ -15,9 +16,12 @@ export default function CompliancePage() {
   const [records, setRecords] = useState<RgRecord[]>(RG_RECORDS);
   const [filter, setFilter] = useState<Filter>('all');
 
-  const confirm = (id: string) => {
-    setRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'active' } : r)));
-    toast.success('Self-exclusion confirmed & enforced');
+  const enforce = async (r: RgRecord) => {
+    const res = await confirm({ title: `Enforce self-exclusion for ${r.player}?`, message: `${r.detail} exclusion. This is irreversible for the full term — the player cannot play or deposit until it ends.`, danger: true, confirmLabel: 'Confirm & enforce' });
+    if (res.confirmed) {
+      setRecords((prev) => prev.map((x) => (x.id === r.id ? { ...x, status: 'active' } : x)));
+      toast.success('Self-exclusion confirmed & enforced');
+    }
   };
 
   const rows = useMemo(() => records.filter((r) => {
@@ -90,7 +94,7 @@ export default function CompliancePage() {
               <Td><StatusBadge status={r.status} /></Td>
               <Td align="right">
                 {r.status === 'requested' ? (
-                  <button onClick={() => confirm(r.id)} className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25">
+                  <button onClick={() => enforce(r)} className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25">
                     <Check className="w-3.5 h-3.5" /> Confirm
                   </button>
                 ) : <span className="text-xs text-[#8FA899]">—</span>}

@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, ChevronUp, ChevronDown } from 'lucide-react';
 import { EmptyState } from './feedback';
 
 // Composable table primitives — pages own their column config and row rendering,
@@ -19,6 +19,20 @@ export function THead({ children }: { children: React.ReactNode }) {
     <thead className="bg-[#101C16] sticky top-0 z-10">
       <tr className="text-left">{children}</tr>
     </thead>
+  );
+}
+
+// Sortable header cell — pages own the sort state, this renders the affordance.
+export function SortHeader({ label, active, dir, onClick, align }: {
+  label: string; active: boolean; dir: 'asc' | 'desc'; onClick: () => void; align?: 'right' | 'left';
+}) {
+  return (
+    <Th align={align}>
+      <button onClick={onClick} className={cn('inline-flex items-center gap-1 hover:text-[#F5E8C8]', align === 'right' && 'flex-row-reverse')}>
+        {label}
+        {active && (dir === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
+      </button>
+    </Th>
   );
 }
 

@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { PageHeader, StatusBadge, Badge, AdminCard, fmtUSD, fmtNum } from '@/components/admin/primitives';
 import { Table, THead, Th, Tr, Td, Toolbar, SearchInput, FilterTabs, EmptyRow } from '@/components/admin/table';
 import { AFFILIATES, type Affiliate } from '@/lib/mock-data/admin';
+import { confirm } from '@/components/admin/confirm';
 import { Check, Ban, DollarSign } from 'lucide-react';
 
 type Filter = 'all' | 'active' | 'review' | 'paused';
@@ -88,7 +89,7 @@ export default function AffiliatesPage() {
               <Td align="right">
                 <div className="flex items-center justify-end gap-1.5">
                   {a.unpaidUSD > 0 && (
-                    <button onClick={() => { setAffs((p) => p.map((x) => x.id === a.id ? { ...x, unpaidUSD: 0 } : x)); toast.success(`Paid ${fmtUSD(a.unpaidUSD)} to ${a.name}`); }} title="Pay out" className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25">
+                    <button onClick={async () => { const r = await confirm({ title: `Pay ${fmtUSD(a.unpaidUSD)} to ${a.name}?`, message: 'Sends the affiliate payout. Dual-control applies above $10k.', dualControl: a.unpaidUSD >= 10000, confirmLabel: 'Pay out' }); if (r.confirmed) { setAffs((p) => p.map((x) => x.id === a.id ? { ...x, unpaidUSD: 0 } : x)); toast.success(`Paid ${fmtUSD(a.unpaidUSD)} to ${a.name}`); } }} title="Pay out" className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25">
                       <DollarSign className="w-3.5 h-3.5" /> Pay
                     </button>
                   )}

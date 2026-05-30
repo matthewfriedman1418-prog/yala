@@ -29,6 +29,7 @@ function nav(): Group[] {
     { label: 'Payments & Finance', icon: Wallet, children: [
       { href: '/admin/transactions', label: 'Transactions' },
       { href: '/admin/redemptions', label: 'Redemptions', badge: pendRedemptions },
+      { href: '/admin/finance/crypto', label: 'Crypto Deposits' },
       { href: '/admin/finance/ledger', label: 'Ledger & Recon' },
       { href: '/admin/finance/packages', label: 'Packages & Pricing' },
       { href: '/admin/finance/chargebacks', label: 'Chargebacks', badge: cbNew },

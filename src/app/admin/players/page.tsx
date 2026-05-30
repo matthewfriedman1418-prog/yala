@@ -3,30 +3,16 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { PageHeader, StatusBadge, Avatar, Badge, fmtUSD } from '@/components/admin/primitives';
-import { Table, THead, Th, Tr, Td, Toolbar, SearchInput, FilterTabs, EmptyRow } from '@/components/admin/table';
+import { Table, THead, Th, Tr, Td, Toolbar, SearchInput, FilterTabs, EmptyRow, SortHeader, Pagination } from '@/components/admin/table';
 import { TimeAgo } from '@/components/admin/feedback';
 import { confirm } from '@/components/admin/confirm';
 import { PLAYERS, type PlayerStatus, type AdminPlayer } from '@/lib/mock-data/admin';
-import { Download, Flag, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Download, Flag, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type Filter = 'all' | PlayerStatus;
 type SortKey = 'username' | 'totalDeposited' | 'netRevenue' | 'lastSeen' | 'vipTier';
 const PER_PAGE = 12;
-
-// Module-level so it isn't recreated each render (react-hooks/static-components).
-function SortHeader({ label, active, dir, onClick, align }: {
-  label: string; active: boolean; dir: 'asc' | 'desc'; onClick: () => void; align?: 'right' | 'left';
-}) {
-  return (
-    <Th align={align}>
-      <button onClick={onClick} className={cn('inline-flex items-center gap-1 hover:text-[#F5E8C8]', align === 'right' && 'flex-row-reverse')}>
-        {label}
-        {active && (dir === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
-      </button>
-    </Th>
-  );
-}
 
 export default function PlayersPage() {
   const router = useRouter();
@@ -161,15 +147,7 @@ export default function PlayersPage() {
         </tbody>
       </Table>
 
-      {/* Pagination */}
-      <div className="flex items-center justify-between mt-3">
-        <p className="text-xs text-[#8FA899]">Showing {rows.length ? safePage * PER_PAGE + 1 : 0}–{safePage * PER_PAGE + rows.length} of {filtered.length}</p>
-        <div className="flex items-center gap-1">
-          <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={safePage === 0} className="p-1.5 rounded-lg border border-[#1A2E22] text-[#8FA899] hover:text-[#F5E8C8] disabled:opacity-30"><ChevronLeft className="w-4 h-4" /></button>
-          <span className="text-xs text-[#8FA899] px-2">Page {safePage + 1} / {pageCount}</span>
-          <button onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))} disabled={safePage >= pageCount - 1} className="p-1.5 rounded-lg border border-[#1A2E22] text-[#8FA899] hover:text-[#F5E8C8] disabled:opacity-30"><ChevronRight className="w-4 h-4" /></button>
-        </div>
-      </div>
+      <Pagination page={safePage} pageCount={pageCount} total={filtered.length} from={safePage * PER_PAGE + 1} to={safePage * PER_PAGE + rows.length} onPage={setPage} />
     </>
   );
 }
