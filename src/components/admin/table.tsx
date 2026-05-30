@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { EmptyState } from './feedback';
 
 // Composable table primitives — pages own their column config and row rendering,
@@ -100,6 +100,26 @@ export function FilterTabs<T extends string>({ tabs, value, onChange }: {
           )}
         </button>
       ))}
+    </div>
+  );
+}
+
+// Reusable pagination footer.
+export function Pagination({ page, pageCount, total, from, to, onPage }: {
+  page: number; pageCount: number; total: number; from: number; to: number; onPage: (p: number) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between mt-3">
+      <p className="text-xs text-[#8FA899]">Showing {total ? from : 0}–{to} of {total.toLocaleString()}</p>
+      <div className="flex items-center gap-1">
+        <button onClick={() => onPage(Math.max(0, page - 1))} disabled={page === 0} className="p-1.5 rounded-lg border border-[#1A2E22] text-[#8FA899] hover:text-[#F5E8C8] disabled:opacity-30" aria-label="Previous page">
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <span className="text-xs text-[#8FA899] px-2">Page {page + 1} / {pageCount}</span>
+        <button onClick={() => onPage(Math.min(pageCount - 1, page + 1))} disabled={page >= pageCount - 1} className="p-1.5 rounded-lg border border-[#1A2E22] text-[#8FA899] hover:text-[#F5E8C8] disabled:opacity-30" aria-label="Next page">
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }

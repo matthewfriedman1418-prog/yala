@@ -10,6 +10,9 @@ const TONE = { live: 'green', scheduled: 'blue', ended: 'gray' } as const;
 export default function TournamentsPage() {
   return (
     <>
+      <div className="mb-4 rounded-lg border border-amber-500/25 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-400">
+        Planned feature — tournaments aren&apos;t live in the player app yet. This is the operator UI, ready to wire up.
+      </div>
       <PageHeader title="Tournaments · Races" subtitle="Competitive events & prize pools">
         <button onClick={() => toast('New tournament (mock)')} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-[#060E0A] bg-[var(--accent)] hover:brightness-110"><Plus className="w-4 h-4" /> New tournament</button>
       </PageHeader>

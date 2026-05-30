@@ -7,6 +7,9 @@ import { Trophy } from 'lucide-react';
 export default function JackpotsPage() {
   return (
     <>
+      <div className="mb-4 rounded-lg border border-amber-500/25 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-400">
+        Planned feature — no live jackpot in the player app yet. Operator config shown for when it ships.
+      </div>
       <PageHeader title="Jackpots" subtitle="Progressive pools & contribution rates" />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {JACKPOTS.map((j) => (

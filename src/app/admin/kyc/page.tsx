@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PageHeader, StatusBadge, RiskBadge, AdminCard, CardHeader, Avatar, fmtAgo } from '@/components/admin/primitives';
 import { FilterTabs } from '@/components/admin/table';
 import { KYC_CASES, type KycCase } from '@/lib/mock-data/admin';
+import { confirm } from '@/components/admin/confirm';
 import { Check, X, FileText, Camera, MapPin, ShieldCheck, ScanFace } from 'lucide-react';
 
 type Filter = 'all' | 'pending' | 'in_review' | 'approved' | 'rejected';
@@ -17,10 +18,16 @@ export default function KycPage() {
   const list = cases.filter((c) => filter === 'all' || c.status === filter);
   const selected = cases.find((c) => c.id === selectedId) ?? list[0];
 
-  const decide = (id: string, status: 'approved' | 'rejected') => {
+  const decide = async (id: string, status: 'approved' | 'rejected') => {
+    if (status === 'rejected') {
+      const r = await confirm({ title: `Reject KYC ${id}?`, message: 'The player stays unverified and cannot redeem. They can re-submit documents.', danger: true, requireReason: true, reasonOptions: ['Document authenticity fail', 'Face/selfie mismatch', 'Address proof missing', 'Sanctions / PEP hit', 'Underage', 'Other'] });
+      if (!r.confirmed) return;
+      setCases((prev) => prev.map((c) => (c.id === id ? { ...c, status } : c)));
+      toast.error(`KYC ${id} rejected · ${r.reason}`);
+      return;
+    }
     setCases((prev) => prev.map((c) => (c.id === id ? { ...c, status } : c)));
-    if (status === 'approved') toast.success(`KYC ${id} approved`);
-    else toast.error(`KYC ${id} rejected`);
+    toast.success(`KYC ${id} approved`);
   };
 
   const counts = cases.reduce((acc, c) => { acc[c.status] = (acc[c.status] ?? 0) + 1; return acc; }, {} as Record<string, number>);

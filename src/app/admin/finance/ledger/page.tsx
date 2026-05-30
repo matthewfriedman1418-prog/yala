@@ -2,26 +2,31 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { PageHeader, Badge, AdminCard, fmtAgo } from '@/components/admin/primitives';
-import { Table, THead, Th, Tr, Td, Toolbar, SearchInput, FilterTabs, EmptyRow } from '@/components/admin/table';
+import { Table, THead, Th, Tr, Td, Toolbar, SearchInput, FilterTabs, EmptyRow, Pagination } from '@/components/admin/table';
 import { useLedgerStore, type EntryType } from '@/lib/admin/ledger';
 import { PLAYERS } from '@/lib/mock-data/admin';
 
 const nameById = (id: string) => PLAYERS.find((p) => p.id === id)?.username ?? id;
 type Filter = 'all' | EntryType;
+const PER_PAGE = 25;
 
 export default function LedgerPage() {
   const entries = useLedgerStore((s) => s.entries);
   const [q, setQ] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
+  const [page, setPage] = useState(0);
 
-  const rows = useMemo(() => {
+  const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return entries
       .filter((e) => filter === 'all' || e.type === filter)
       .filter((e) => !needle || nameById(e.playerId).toLowerCase().includes(needle) || e.reason.toLowerCase().includes(needle) || e.playerId.includes(needle))
-      .sort((a, b) => +new Date(b.ts) - +new Date(a.ts))
-      .slice(0, 80);
+      .sort((a, b) => +new Date(b.ts) - +new Date(a.ts));
   }, [entries, q, filter]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const safePage = Math.min(page, pageCount - 1);
+  const rows = filtered.slice(safePage * PER_PAGE, safePage * PER_PAGE + PER_PAGE);
 
   const adjustments = entries.filter((e) => e.type === 'adjustment').length;
 
@@ -39,8 +44,8 @@ export default function LedgerPage() {
       </div>
 
       <Toolbar>
-        <SearchInput value={q} onChange={setQ} placeholder="Search player or reason…" />
-        <FilterTabs<Filter> value={filter} onChange={setFilter} tabs={[{ value: 'all', label: 'All' }, { value: 'purchase', label: 'Purchase' }, { value: 'redeem', label: 'Redeem' }, { value: 'bet', label: 'Bet' }, { value: 'win', label: 'Win' }, { value: 'bonus_grant', label: 'Bonus' }, { value: 'adjustment', label: 'Adjustment' }]} />
+        <SearchInput value={q} onChange={(v) => { setQ(v); setPage(0); }} placeholder="Search player or reason…" />
+        <FilterTabs<Filter> value={filter} onChange={(v) => { setFilter(v); setPage(0); }} tabs={[{ value: 'all', label: 'All' }, { value: 'purchase', label: 'Purchase' }, { value: 'redeem', label: 'Redeem' }, { value: 'bet', label: 'Bet' }, { value: 'win', label: 'Win' }, { value: 'bonus_grant', label: 'Bonus' }, { value: 'adjustment', label: 'Adjustment' }]} />
       </Toolbar>
 
       <Table>
@@ -59,6 +64,7 @@ export default function LedgerPage() {
           ))}
         </tbody>
       </Table>
+      <Pagination page={safePage} pageCount={pageCount} total={filtered.length} from={safePage * PER_PAGE + 1} to={safePage * PER_PAGE + rows.length} onPage={setPage} />
     </>
   );
 }

@@ -13,7 +13,7 @@ import type { ComponentType } from 'react';
 import { REDEMPTIONS, KYC_CASES, RG_RECORDS } from '@/lib/mock-data/admin';
 import { AML_CASES, CHARGEBACKS, AMOE_ENTRIES } from '@/lib/mock-data/admin-extra';
 
-interface Leaf { href: string; label: string; badge?: number; }
+interface Leaf { href: string; label: string; badge?: number; tag?: string; }
 interface Group { label: string; icon: ComponentType<{ className?: string }>; href?: string; children?: Leaf[]; }
 
 function nav(): Group[] {
@@ -49,14 +49,14 @@ function nav(): Group[] {
       { href: '/admin/games/categories', label: 'Categories' },
       { href: '/admin/games/rtp', label: 'RTP & Weighting' },
       { href: '/admin/games/rounds', label: 'Bet / Round Explorer' },
-      { href: '/admin/games/jackpots', label: 'Jackpots' },
+      { href: '/admin/games/jackpots', label: 'Jackpots', tag: 'Soon' },
       { href: '/admin/games/monitors', label: 'Provider Monitors' },
     ] },
     { label: 'Engagement', icon: Megaphone, children: [
       { href: '/admin/engagement/bonuses', label: 'Bonuses' },
       { href: '/admin/promotions', label: 'Promos & Drops' },
       { href: '/admin/engagement/missions', label: 'Missions' },
-      { href: '/admin/engagement/tournaments', label: 'Tournaments' },
+      { href: '/admin/engagement/tournaments', label: 'Tournaments', tag: 'Soon' },
       { href: '/admin/engagement/leaderboards', label: 'Leaderboards' },
       { href: '/admin/affiliates', label: 'Referrals & Affiliates' },
     ] },
@@ -70,7 +70,6 @@ function nav(): Group[] {
       { href: '/admin/crm/bulk-assign', label: 'Bulk Assign (CSV)' },
       { href: '/admin/content/pages', label: 'CMS Pages' },
       { href: '/admin/content/banners', label: 'Banners' },
-      { href: '/admin/content/promo-content', label: 'Promo Content' },
     ] },
     { label: 'Support', icon: LifeBuoy, href: '/admin/support' },
     { label: 'Platform', icon: SlidersHorizontal, children: [
@@ -174,6 +173,7 @@ export function AdminSidebar() {
                         leafActive(c.href) ? 'nav-item-active font-semibold' : 'text-[#8FA899] hover:text-[#F5E8C8] hover:bg-white/5')}
                     >
                       <span className="flex-1">{c.label}</span>
+                      {c.tag && <span className="text-[8px] font-black uppercase tracking-wider px-1 py-0.5 rounded bg-white/5 text-[#8FA899] border border-[#1A2E22]">{c.tag}</span>}
                       {badge(c.badge)}
                     </Link>
                   ))}
