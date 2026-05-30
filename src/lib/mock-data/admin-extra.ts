@@ -3,29 +3,56 @@
 // Self-contained; original; no real PII or money.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ── SC economy (we only track SWEEP COINS for circulation — GC has no value) ──
+export const SC_ECONOMY = {
+  issued: 8_420_000,          // total SC ever issued
+  inCirculation: 1_284_900,   // SC currently held by players
+  redeemed: 6_519_400,        // SC redeemed for cash to date
+  pendingRedemption: 18_400,  // SC in the redemption pipeline
+  redemptionRatePct: 77.4,    // redeemed / issued
+};
+
+// 30 days of new signups, for the KPI drill-down (most recent last).
+export const SIGNUPS_DAILY: { day: string; value: number; source: { organic: number; paid: number; affiliate: number } }[] =
+  Array.from({ length: 30 }, (_, i) => {
+    const base = 380 + Math.round(140 * Math.sin(i / 3.5) + i * 6 + (i % 7 >= 5 ? 120 : 0));
+    const paid = Math.round(base * 0.38);
+    const affiliate = Math.round(base * 0.22);
+    const organic = base - paid - affiliate;
+    const d = new Date('2026-04-29T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() + i);
+    return { day: d.toISOString().slice(0, 10), value: base, source: { organic, paid, affiliate } };
+  });
+
 // ── Bonuses (typed library) ──────────────────────────────────────────────────
-export type BonusType =
-  | 'welcome' | 'weekly_commission' | 'weekly_cashback' | 'birthday'
-  | 'early_user' | 'referral' | 'boost' | 'reload';
+// Bonus type is a free-form key so operators can invent new ones (monthly,
+// seasonal, whatever). These are just the seeded defaults.
+export type BonusFrequency = 'one_time' | 'daily' | 'weekly' | 'monthly' | 'event';
+export type PercentBasis = 'deposit' | 'net_losses' | 'wager';
 export interface Bonus {
   id: number;
   title: string;
-  type: BonusType;
-  gcAmount: number;
-  scAmount: number;
+  type: string;
+  frequency: BonusFrequency;
+  /** When true, the award is a percentage of `percentBasis` rather than a flat amount. */
   isPercentage: boolean;
+  percent: number;          // used when isPercentage
+  percentBasis: PercentBasis;
+  gcAmount: number;         // used when flat
+  scAmount: number;         // used when flat
   active: boolean;
   validity: string;
   eligibility: string;
 }
 export const BONUSES: Bonus[] = [
-  { id: 32, title: 'Weekly Commission Bonus', type: 'weekly_commission', gcAmount: 0, scAmount: 0, isPercentage: true, active: true, validity: 'Calculated weekly', eligibility: 'Based on referral activity' },
-  { id: 31, title: 'Weekly Cashback Bonus', type: 'weekly_cashback', gcAmount: 0, scAmount: 0, isPercentage: true, active: true, validity: 'Calculated weekly', eligibility: 'Net losses prior week' },
-  { id: 30, title: 'Birthday Bonus', type: 'birthday', gcAmount: 25_000, scAmount: 5, isPercentage: false, active: true, validity: 'On birthday', eligibility: 'Verified DOB' },
-  { id: 29, title: 'Early User Bonus', type: 'early_user', gcAmount: 100_000, scAmount: 25, isPercentage: false, active: true, validity: 'First 30 days', eligibility: 'Accounts before launch+30d' },
-  { id: 28, title: 'Referral Bonus', type: 'referral', gcAmount: 50_000, scAmount: 10, isPercentage: false, active: true, validity: 'On referred FTD', eligibility: 'Referred user first purchase' },
-  { id: 2, title: 'Boost Bonus', type: 'boost', gcAmount: 0, scAmount: 0, isPercentage: true, active: true, validity: 'Event windows', eligibility: 'Opted-in players' },
-  { id: 1, title: 'Welcome Bonus', type: 'welcome', gcAmount: 100_000, scAmount: 50, isPercentage: false, active: true, validity: 'First purchase', eligibility: 'New accounts' },
+  { id: 32, title: 'Weekly Commission Bonus', type: 'weekly_commission', frequency: 'weekly', isPercentage: true, percent: 10, percentBasis: 'wager', gcAmount: 0, scAmount: 0, active: true, validity: 'Calculated weekly', eligibility: 'Based on referral activity' },
+  { id: 31, title: 'Weekly Cashback Bonus', type: 'weekly_cashback', frequency: 'weekly', isPercentage: true, percent: 15, percentBasis: 'net_losses', gcAmount: 0, scAmount: 0, active: true, validity: 'Calculated weekly', eligibility: 'Net losses prior week' },
+  { id: 33, title: 'Monthly Loyalty Bonus', type: 'monthly_loyalty', frequency: 'monthly', isPercentage: true, percent: 5, percentBasis: 'net_losses', gcAmount: 0, scAmount: 0, active: true, validity: '1st of each month', eligibility: 'Active players, prior month' },
+  { id: 30, title: 'Birthday Bonus', type: 'birthday', frequency: 'one_time', isPercentage: false, percent: 0, percentBasis: 'deposit', gcAmount: 25_000, scAmount: 5, active: true, validity: 'On birthday', eligibility: 'Verified DOB' },
+  { id: 29, title: 'Early User Bonus', type: 'early_user', frequency: 'one_time', isPercentage: false, percent: 0, percentBasis: 'deposit', gcAmount: 100_000, scAmount: 25, active: true, validity: 'First 30 days', eligibility: 'Accounts before launch+30d' },
+  { id: 28, title: 'Referral Bonus', type: 'referral', frequency: 'event', isPercentage: false, percent: 0, percentBasis: 'deposit', gcAmount: 50_000, scAmount: 10, active: true, validity: 'On referred FTD', eligibility: 'Referred user first purchase' },
+  { id: 2, title: 'Reload Boost', type: 'boost', frequency: 'event', isPercentage: true, percent: 100, percentBasis: 'deposit', gcAmount: 0, scAmount: 0, active: true, validity: 'Event windows', eligibility: 'Opted-in players' },
+  { id: 1, title: 'Welcome Bonus', type: 'welcome', frequency: 'one_time', isPercentage: false, percent: 0, percentBasis: 'deposit', gcAmount: 100_000, scAmount: 50, active: true, validity: 'First purchase', eligibility: 'New accounts' },
 ];
 
 // ── Coin packages / store ────────────────────────────────────────────────────

@@ -58,6 +58,33 @@ export const PLATFORM_30D: RevenueStack = {
   ngr: NGR_30D,
 };
 
+// ── Player RTP / money-laundering signal ─────────────────────────────────────
+// RTP = won / wagered. A player who wagers large volume but consistently loses
+// almost nothing (RTP near 100%) is cycling money, not gambling — the classic
+// sweeps-laundering pattern. We surface RTP per window and flag sustained highs.
+export const RTP_LAUNDERING_THRESHOLD = 97; // % — sustained RTP at/above this is suspicious
+
+export interface RtpWindow { label: string; rtp: number; wagered: number; flagged: boolean; }
+
+export function playerRtp(p: AdminPlayer): { windows: RtpWindow[]; allTime: number; flagged: boolean } {
+  // Deterministic per-player realized RTP, seeded from id, centred ~94% but a
+  // few players land in the laundering zone.
+  const seed = p.id.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
+  const high = seed % 5 === 0; // ~1 in 5 looks suspicious in the demo
+  const baseAll = high ? 98.4 + (seed % 12) / 10 : 92 + (seed % 50) / 10; // 92.0–97.0 normal
+  const windows: RtpWindow[] = [
+    { label: 'Last 24h', d: 1 }, { label: 'Last 7d', d: 7 }, { label: 'Last 14d', d: 14 },
+    { label: 'Last 30d', d: 30 }, { label: 'All time', d: 0 },
+  ].map(({ label, d }, i) => {
+    const jitter = high ? ((seed + i) % 8) / 10 : ((seed + i) % 60) / 10 - 3;
+    const rtp = Math.min(100, Math.max(80, +(baseAll + jitter).toFixed(2)));
+    const wagered = Math.round((p.totalWagered / (d || 6)) * (d ? 0.8 : 1));
+    return { label, rtp, wagered, flagged: rtp >= RTP_LAUNDERING_THRESHOLD };
+  });
+  const flagged = windows.filter((w) => w.flagged).length >= 2;
+  return { windows, allTime: windows[windows.length - 1].rtp, flagged };
+}
+
 // Headline finance KPI cards for the dashboard (with prior-period deltas + trend).
 export interface FinanceKpi {
   key: string;

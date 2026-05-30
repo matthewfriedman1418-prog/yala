@@ -9,7 +9,9 @@ import { Tabs, Modal, Field, Input, Select } from '@/components/admin/controls';
 import { getPlayer, PLAYER_EVENTS, RG_RECORDS, RG_LABELS } from '@/lib/mock-data/admin';
 import { ROUNDS, DEVICE_CLUSTERS } from '@/lib/mock-data/admin-extra';
 import { useLedgerStore, balancesFor, entriesFor, playthroughsFor, type LedgerCurrency } from '@/lib/admin/ledger';
-import { playerRevenue } from '@/lib/admin/finance';
+import { playerRevenue, playerRtp, ngr as computeNgr, RTP_LAUNDERING_THRESHOLD, type RevenueStack } from '@/lib/admin/finance';
+import type { AdminPlayer } from '@/lib/mock-data/admin';
+import { cn } from '@/lib/utils';
 import { confirm } from '@/components/admin/confirm';
 import { useAdminStore } from '@/lib/store/admin';
 import {
@@ -17,7 +19,7 @@ import {
   BadgeCheck, Crown, Sparkles, Trash2, Users as UsersIcon,
 } from 'lucide-react';
 
-type Tab = 'details' | 'balances' | 'activity' | 'bets' | 'referrals' | 'duplicates' | 'notes' | 'promos';
+type Tab = 'details' | 'balances' | 'activity' | 'bets' | 'rtp' | 'vip' | 'referrals' | 'duplicates' | 'notes' | 'promos';
 type LimitTab = 'self_exclusion' | 'withdrawal' | 'deposit';
 
 export default function PlayerDetail() {
@@ -49,6 +51,8 @@ export default function PlayerDetail() {
   const limits = RG_RECORDS.filter((r) => r.player === player.username);
   const playerRounds = ROUNDS.filter((_, i) => i % 5 === 0).slice(0, 8); // sample
   const dupes = DEVICE_CLUSTERS.filter((d) => d.accounts.some((a) => a.username === player.username));
+  const rtp = playerRtp(player);
+  const rev = playerRevenue(player);
 
   const submitAdjust = () => {
     const amt = Number(adj.amount);
@@ -75,6 +79,7 @@ export default function PlayerDetail() {
               <StatusBadge status={player.status} />
               <Badge tone="gray">T{player.vipTier} · {player.vipName}</Badge>
               <StatusBadge status={player.kyc} />
+              {rtp.flagged && <Badge tone="red">⚠ High RTP — AML</Badge>}
             </div>
             <div className="flex items-center gap-3 text-xs text-[#8FA899] mt-1 flex-wrap">
               <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{player.email}</span>
@@ -126,6 +131,8 @@ export default function PlayerDetail() {
                 { value: 'balances', label: 'Balances & Playthroughs', count: pts.length },
                 { value: 'activity', label: 'Activity' },
                 { value: 'bets', label: 'Bet History' },
+                { value: 'rtp', label: 'RTP' },
+                { value: 'vip', label: 'VIP / PNL' },
                 { value: 'referrals', label: 'Referrals' },
                 { value: 'duplicates', label: 'Duplicates', count: dupes.length || undefined },
                 { value: 'promos', label: 'Promos' },
@@ -231,6 +238,36 @@ export default function PlayerDetail() {
                 </tbody>
               </Table>
             </AdminCard>
+          )}
+
+          {tab === 'rtp' && (
+            <AdminCard>
+              <CardHeader title="Weighted RTP by window" sub={`Sustained RTP ≥ ${RTP_LAUNDERING_THRESHOLD}% is a laundering signal (cycling money, not gambling)`} />
+              {rtp.flagged && (
+                <div className="m-4 rounded-lg border border-red-500/25 bg-red-500/10 px-4 py-3">
+                  <p className="text-sm font-bold text-red-400 flex items-center gap-2"><ShieldCheck className="w-4 h-4" /> AML alert: RTP in the laundering zone across multiple windows</p>
+                  <p className="text-xs text-[#F5E8C8] mt-1">This player wins back almost everything they wager. Review deposits/redemptions for structuring and consider a hold.</p>
+                  <button onClick={() => toast.error(`AML case opened for ${player.username}`)} className="mt-2 px-3 py-1.5 rounded-lg text-xs font-bold bg-red-500/20 text-red-400 hover:bg-red-500/30">Open AML case</button>
+                </div>
+              )}
+              <Table>
+                <THead><Th>Window</Th><Th align="right">RTP</Th><Th align="right">Wagered</Th><Th>Assessment</Th></THead>
+                <tbody>
+                  {rtp.windows.map((w) => (
+                    <Tr key={w.label}>
+                      <Td className="font-semibold">{w.label}</Td>
+                      <Td align="right" className={cn('number-display font-bold', w.flagged ? 'text-red-400' : w.rtp >= 95 ? 'text-amber-400' : 'text-emerald-400')}>{w.rtp.toFixed(2)}%</Td>
+                      <Td align="right" className="number-display text-[#8FA899]">{fmtUSD(w.wagered, { compact: true })}</Td>
+                      <Td>{w.flagged ? <Badge tone="red">Suspicious</Badge> : w.rtp >= 95 ? <Badge tone="amber">Elevated</Badge> : <Badge tone="green">Normal</Badge>}</Td>
+                    </Tr>
+                  ))}
+                </tbody>
+              </Table>
+            </AdminCard>
+          )}
+
+          {tab === 'vip' && (
+            <PlayerPnl player={player} rev={rev} />
           )}
 
           {tab === 'referrals' && (
@@ -346,4 +383,70 @@ export default function PlayerDetail() {
 
 function cnAmount(n: number) {
   return n >= 0 ? 'number-display text-emerald-400 font-semibold' : 'number-display text-red-400 font-semibold';
+}
+
+// Per-player PNL calculator + manual VIP adjustments (moved out of standalone pages).
+function PlayerPnl({ player, rev }: { player: AdminPlayer; rev: RevenueStack }) {
+  const [marginTarget, setMarginTarget] = useState('0.4');
+  const [bonusAdj, setBonusAdj] = useState('0.6');
+  const [xp, setXp] = useState('');
+  const [tier, setTier] = useState('');
+  const [fastTrack, setFastTrack] = useState('');
+
+  const ranges: { label: string; scale: number }[] = [
+    { label: 'Last 7 days', scale: 0.08 }, { label: 'Last 30 days', scale: 0.3 }, { label: 'All time', scale: 1 },
+  ];
+  const rows = ranges.map((r) => {
+    const deposits = Math.round(rev.deposits * r.scale);
+    const withdrawals = Math.round(rev.withdrawals * r.scale);
+    const bonuses = Math.round(rev.bonuses * r.scale);
+    const ggr = Math.round(rev.ggr * r.scale);
+    const ngrVal = computeNgr(ggr, bonuses);
+    const headroom = Math.max(0, ngrVal * (1 - Number(marginTarget)));
+    const potential = Math.round(headroom * Number(bonusAdj));
+    return { ...r, deposits, withdrawals, bonuses, ggr, ngr: ngrVal, potential };
+  });
+  const recommended = rows[2].potential;
+
+  return (
+    <div className="space-y-4">
+      <AdminCard>
+        <CardHeader title="Player PNL" sub="NGR (profit) = GGR − Bonuses · safe bonus headroom" action={
+          <div className="flex items-center gap-2">
+            <input value={marginTarget} onChange={(e) => setMarginTarget(e.target.value)} className="w-16 px-2 py-1 rounded-md bg-[#0C1812] border border-[#1A2E22] text-xs text-[#F5E8C8]" title="Margin target" />
+            <input value={bonusAdj} onChange={(e) => setBonusAdj(e.target.value)} className="w-16 px-2 py-1 rounded-md bg-[#0C1812] border border-[#1A2E22] text-xs text-[#F5E8C8]" title="Bonus adjustment" />
+          </div>
+        } />
+        <Table>
+          <THead><Th>Range</Th><Th align="right">Deposits</Th><Th align="right">Withdrawals</Th><Th align="right">Bonuses</Th><Th align="right">GGR</Th><Th align="right">NGR</Th><Th align="right">Potential bonus</Th></THead>
+          <tbody>
+            {rows.map((r) => (
+              <Tr key={r.label}>
+                <Td className="font-semibold">{r.label}</Td>
+                <Td align="right" className="number-display">{fmtUSD(r.deposits)}</Td>
+                <Td align="right" className="number-display text-amber-400">{fmtUSD(r.withdrawals)}</Td>
+                <Td align="right" className="number-display text-purple-400">{fmtUSD(r.bonuses)}</Td>
+                <Td align="right" className="number-display"><span style={{ color: '#F0B232' }}>{fmtUSD(r.ggr)}</span></Td>
+                <Td align="right" className={r.ngr >= 0 ? 'number-display text-emerald-400 font-semibold' : 'number-display text-red-400 font-semibold'}>{fmtUSD(r.ngr)}</Td>
+                <Td align="right" className="number-display font-semibold"><span style={{ color: '#F0B232' }}>{r.potential > 0 ? fmtUSD(r.potential) : '—'}</span></Td>
+              </Tr>
+            ))}
+          </tbody>
+        </Table>
+        <div className="p-4 border-t border-[#1A2E22] flex items-center justify-between flex-wrap gap-2">
+          <p className="text-sm text-[#8FA899]">Recommended safe grant: <span className="font-bold text-[#F0B232]">{fmtUSD(recommended)}</span></p>
+          <button onClick={() => toast.success(`Granted ${fmtUSD(recommended)} to ${player.username}`)} className="px-4 py-2 rounded-lg text-sm font-bold text-[#060E0A] bg-[var(--accent)]">Grant recommended bonus</button>
+        </div>
+      </AdminCard>
+
+      <AdminCard>
+        <CardHeader title="Manual VIP adjustments" sub="XP, tier & fast-track (audited)" />
+        <div className="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Field label="Set XP"><div className="flex gap-2"><Input type="number" value={xp} onChange={(e) => setXp(e.target.value)} placeholder="e.g. 500000" /><button onClick={() => { if (xp) toast.success(`XP set to ${Number(xp).toLocaleString()}`); }} disabled={!xp} className="px-3 rounded-lg text-sm font-semibold text-[#060E0A] bg-[var(--accent)] disabled:opacity-40">Set</button></div></Field>
+          <Field label="Promote to tier"><div className="flex gap-2"><Select value={tier} onChange={(e) => setTier(e.target.value)}><option value="">Tier…</option><option>Silver</option><option>Gold</option><option>Platinum</option><option>Ruby</option><option>Obsidian</option></Select><button onClick={() => { if (tier) toast.success(`Promoted to ${tier}`); }} disabled={!tier} className="px-3 rounded-lg text-sm font-semibold text-[#060E0A] bg-[var(--accent)] disabled:opacity-40">Go</button></div></Field>
+          <Field label="Fast-track until"><div className="flex gap-2"><Input type="date" value={fastTrack} onChange={(e) => setFastTrack(e.target.value)} /><button onClick={() => { if (fastTrack) toast.success(`Fast-track set to ${fastTrack}`); }} disabled={!fastTrack} className="px-3 rounded-lg text-sm font-semibold text-[#060E0A] bg-[var(--accent)] disabled:opacity-40">Set</button></div></Field>
+        </div>
+      </AdminCard>
+    </div>
+  );
 }

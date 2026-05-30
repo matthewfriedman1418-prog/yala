@@ -55,8 +55,6 @@ function nav(): Group[] {
     { label: 'Engagement', icon: Megaphone, children: [
       { href: '/admin/engagement/bonuses', label: 'Bonuses' },
       { href: '/admin/promotions', label: 'Promos & Drops' },
-      { href: '/admin/engagement/tags', label: 'Tags & Widgets' },
-      { href: '/admin/engagement/spin-wheel', label: 'Spin Wheel' },
       { href: '/admin/engagement/missions', label: 'Missions' },
       { href: '/admin/engagement/tournaments', label: 'Tournaments' },
       { href: '/admin/engagement/leaderboards', label: 'Leaderboards' },
@@ -64,8 +62,6 @@ function nav(): Group[] {
     ] },
     { label: 'VIP & Hosts', icon: Crown, children: [
       { href: '/admin/vip/tiers', label: 'Tiers & Benefits' },
-      { href: '/admin/vip/pnl', label: 'Player PNL Calculator' },
-      { href: '/admin/vip/adjustments', label: 'Manual Adjustments' },
       { href: '/admin/vip/creators', label: 'Creator Program' },
     ] },
     { label: 'Marketing', icon: Send, children: [

@@ -1,13 +1,17 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import { PageHeader, StatCard, AdminCard, CardHeader, fmtNum, fmtUSD, Avatar } from '@/components/admin/primitives';
-import { AreaChart, BarChart, Donut, Sparkline } from '@/components/admin/charts';
+import { AreaChart, BarChart, Sparkline } from '@/components/admin/charts';
 import { TimeAgo } from '@/components/admin/feedback';
+import { Drawer } from '@/components/admin/controls';
+import { Table, THead, Th, Tr, Td } from '@/components/admin/table';
 import {
-  KPIS, REVENUE_30D, DAU_14D, COIN_CIRCULATION, TOP_GAMES_BY_HANDLE, AUDIT_LOG, ALERTS,
+  KPIS, REVENUE_30D, DAU_14D, TOP_GAMES_BY_HANDLE, AUDIT_LOG, ALERTS,
 } from '@/lib/mock-data/admin';
+import { SC_ECONOMY, SIGNUPS_DAILY } from '@/lib/mock-data/admin-extra';
 import { FINANCE_KPIS } from '@/lib/admin/finance';
-import { AlertTriangle, Info, OctagonAlert, ArrowRight, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { AlertTriangle, Info, OctagonAlert, ArrowRight, ArrowUpRight, ArrowDownRight, ChevronRight } from 'lucide-react';
 
 const ACCENT_HEX = { gold: '#F0B232', teal: '#2DC97A', blue: '#3B82F6', purple: '#8B5CF6', amber: '#F59E0B' } as const;
 
@@ -18,6 +22,9 @@ const SEV = {
 } as const;
 
 export default function AdminOverview() {
+  const [signupsOpen, setSignupsOpen] = useState(false);
+  const signupsTotal = SIGNUPS_DAILY.reduce((s, d) => s + d.value, 0);
+  const maxSignup = Math.max(...SIGNUPS_DAILY.map((d) => d.value));
   return (
     <>
       <PageHeader title="Dashboard" subtitle="Platform health at a glance — last 30 days">
@@ -53,9 +60,16 @@ export default function AdminOverview() {
         })}
       </div>
 
-      {/* Secondary engagement KPIs */}
+      {/* Secondary engagement KPIs — New Signups drills into a daily breakdown */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-        {KPIS.filter((k) => ['dau', 'signups', 'arpu', 'kyc'].includes(k.key)).map((k) => <StatCard key={k.key} kpi={k} />)}
+        {KPIS.filter((k) => ['dau', 'signups', 'arpu', 'kyc'].includes(k.key)).map((k) =>
+          k.key === 'signups' ? (
+            <button key={k.key} onClick={() => setSignupsOpen(true)} className="text-left group relative">
+              <StatCard kpi={k} />
+              <span className="absolute bottom-3 right-3 text-[11px] font-semibold text-[var(--accent)] inline-flex items-center gap-0.5 opacity-80 group-hover:opacity-100">Daily<ChevronRight className="w-3 h-3" /></span>
+            </button>
+          ) : <StatCard key={k.key} kpi={k} />,
+        )}
       </div>
 
       {/* Alerts */}
@@ -112,16 +126,23 @@ export default function AdminOverview() {
         </AdminCard>
 
         <AdminCard>
-          <CardHeader title="Coins in circulation" />
-          <div className="p-4 flex flex-col items-center">
-            <Donut data={COIN_CIRCULATION} />
-            <div className="w-full space-y-1.5 mt-4">
-              {COIN_CIRCULATION.map((c) => (
-                <div key={c.label} className="flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 text-[#8FA899]">
-                    <span className="w-2.5 h-2.5 rounded-sm" style={{ background: c.color }} />{c.label}
-                  </span>
-                  <span className="font-semibold text-[#F5E8C8] number-display">{fmtNum(c.value)}</span>
+          <CardHeader title="Sweep Coin economy" sub="GC has no cash value — only SC is tracked" />
+          <div className="p-4 space-y-3">
+            <div>
+              <div className="flex items-end justify-between mb-1">
+                <span className="text-xs text-[#8FA899]">In circulation</span>
+                <span className="text-xl font-extrabold number-display" style={{ color: '#10B981' }}>{fmtNum(SC_ECONOMY.inCirculation)} SC</span>
+              </div>
+              {/* circulation vs issued bar */}
+              <div className="h-2 rounded-full bg-[#101C16] overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${(SC_ECONOMY.inCirculation / SC_ECONOMY.issued) * 100}%`, background: '#10B981' }} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              {([['Total issued', `${fmtNum(SC_ECONOMY.issued)} SC`], ['Redeemed to date', `${fmtNum(SC_ECONOMY.redeemed)} SC`], ['Pending redemption', `${fmtNum(SC_ECONOMY.pendingRedemption)} SC`], ['Redemption rate', `${SC_ECONOMY.redemptionRatePct}%`]] as const).map(([l, v]) => (
+                <div key={l} className="rounded-lg bg-white/[0.02] border border-[#1A2E22] px-3 py-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#8FA899]">{l}</p>
+                  <p className="text-sm font-bold text-[#F5E8C8] number-display mt-0.5">{v}</p>
                 </div>
               ))}
             </div>
@@ -181,6 +202,45 @@ export default function AdminOverview() {
           ))}
         </div>
       </AdminCard>
+
+      {/* New Signups — daily breakdown drill-down */}
+      <Drawer open={signupsOpen} onClose={() => setSignupsOpen(false)} title="New signups — daily breakdown" width="max-w-2xl">
+        <div className="space-y-4">
+          <div className="flex items-center gap-6">
+            <div><p className="text-2xl font-extrabold text-[#F5E8C8] number-display">{fmtNum(signupsTotal)}</p><p className="text-xs text-[#8FA899]">last 30 days</p></div>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="flex items-center gap-1.5 text-[#8FA899]"><span className="w-2.5 h-2.5 rounded-sm bg-[#2DC97A]" />Organic</span>
+              <span className="flex items-center gap-1.5 text-[#8FA899]"><span className="w-2.5 h-2.5 rounded-sm bg-[#3B82F6]" />Paid</span>
+              <span className="flex items-center gap-1.5 text-[#8FA899]"><span className="w-2.5 h-2.5 rounded-sm bg-[#F0B232]" />Affiliate</span>
+            </div>
+          </div>
+          {/* stacked daily bars */}
+          <div className="flex items-end gap-[3px] h-32">
+            {SIGNUPS_DAILY.map((d) => (
+              <div key={d.day} className="flex-1 flex flex-col justify-end" title={`${d.day}: ${d.value}`}>
+                <div style={{ height: `${(d.source.affiliate / maxSignup) * 100}%`, background: '#F0B232' }} />
+                <div style={{ height: `${(d.source.paid / maxSignup) * 100}%`, background: '#3B82F6' }} />
+                <div style={{ height: `${(d.source.organic / maxSignup) * 100}%`, background: '#2DC97A' }} className="rounded-b-sm" />
+              </div>
+            ))}
+          </div>
+          <Table>
+            <THead><Th>Day</Th><Th align="right">Total</Th><Th align="right">Organic</Th><Th align="right">Paid</Th><Th align="right">Affiliate</Th></THead>
+            <tbody>
+              {[...SIGNUPS_DAILY].reverse().slice(0, 14).map((d) => (
+                <Tr key={d.day}>
+                  <Td className="text-xs">{d.day}</Td>
+                  <Td align="right" className="number-display font-semibold">{d.value}</Td>
+                  <Td align="right" className="number-display text-[#8FA899]">{d.source.organic}</Td>
+                  <Td align="right" className="number-display text-[#8FA899]">{d.source.paid}</Td>
+                  <Td align="right" className="number-display text-[#8FA899]">{d.source.affiliate}</Td>
+                </Tr>
+              ))}
+            </tbody>
+          </Table>
+          <p className="text-xs text-[#8FA899]">This is the pattern every KPI gets once real data flows in — click a metric, drill to its daily series and dimensional split.</p>
+        </div>
+      </Drawer>
     </>
   );
 }
